@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  db:
+    container_name: my_sql
+    image: mysql
+    environment:
+      MYSQL_DATABASE: testdb
+      MYSQL_ROOT_PASSWORD: sa
+    volumes:
+      - ./db:/var/lib/mysql:rw
+    ports:
+      - "3306:3306"
+    restart: always
+
+
+
+  backend:
+    build:
+      context: backend/
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    container_name: "backend"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://my_sql:3306/testdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: sa
