@@ -1,0 +1,50 @@
+.placecard-container {
+  width: 240px;
+  overflow: hidden;
+  box-shadow: 0px 0px 15px -5px;
+  transition: 0.3s;
+  background-color: #ffffff;
+  animation: ease-in;
+  cursor: pointer;
+}
+
+.placecard-container:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 0px 15px 0px;
+}
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid gray;
+}
+
+.image-container img {
+  overflow: hidden;
+  height: 180px;
+}
+
+.placecard-content {
+  margin: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+.placecard-title h3 {
+  /* TODO: resetting default value */
+  margin: 0;
+  padding: 0;
+}
+
+.placecard-title {
+  margin: 0.2rem 0 0.5rem;
+}
+
+.placecard-desc p {
+  display: -webkit-box;
+  height: 4rem;
+  line-height: 1.2;
+  height: 3.6em;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
