@@ -19,6 +19,9 @@ public class User {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String email;
+
     private String imageName;
     private String originName;
     private String imageURL;
@@ -27,4 +30,16 @@ public class User {
     private Role role;
     private boolean isActive;
     private int stopCount;
+
+    public User(String name, String email, Role role) {
+        this.name = name;
+        this.email = email;
+        this.role = role;
+    }
+
+    // OAuth 서버에서 사용자의 정보가 변경될 수 있기때문
+    public User update(String name) {
+        this.name = name;
+        return this;
+    }
 }
