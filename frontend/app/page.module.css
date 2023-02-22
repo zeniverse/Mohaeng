@@ -1,3 +1,69 @@
+/* banner-container안에 image-container 안에 banner-image */
+/* Home Banner */
+.home-banner-container {
+  display: flex;
+  justify-content: center;
+  /* position: relative; */
+  align-items: center;
+  padding: 1.4rem 5rem 0.8rem;
+  /* z-index: 3; */
+  /* margin: 0 4rem; */
+}
+
+.banner-search-container {
+  position: relative;
+  width: 1080px;
+  height: 300px;
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  object-position: bottom;
+}
+
+.banner-input-container {
+  width: 60%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.banner-input-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-40%) translateX(1rem);
+  font-size: 1.4rem;
+}
+
+.banner-input-container input {
+  width: 100%;
+  font-size: 18px;
+  height: 60px;
+  padding-left: 42px;
+  border-radius: 1.7rem;
+  box-shadow: none;
+  outline: none;
+  border: none;
+}
+
+/* body */
+
+.home-body-container {
+  width: 100%;
+  margin: 0;
+  background-color: #fff;
+  display: inline-block;
+  min-height: 600px;
+  position: relative;
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+  padding-top: 24px;
+}
+
 /* Top 5 Place CSS */
 .topfive-place-container {
   display: flex;

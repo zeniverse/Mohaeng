@@ -21,11 +21,14 @@ interface items {
   imgUrl: string;
 }
 
-import PlaceCard from "@/src/components/main/PlaceCard";
+import PlaceCard from "@/components/Main/PlaceCard";
 import styles from "./page.module.css";
 import { useEffect, useState } from "react";
-import CourseCard from "@/src/components/main/CourseCard";
+import CourseCard from "@/components/Main/CourseCard";
 import Slider from "react-slick";
+import bannerImg from "../public/assets/banner-img.png";
+import Image from "next/image";
+import { AiOutlineSearch } from "react-icons/ai";
 
 export default function Home() {
   const [placeData, setPlaceData] = useState<Place[]>([]);
@@ -57,42 +60,55 @@ export default function Home() {
 
   return (
     <main>
-      <section className={styles["topfive-place-container"]}>
-        <div className={styles["topfive-place-title"]}>
-          <h2>🔥 별점 Top 5 여행지</h2>
+      <div className={styles["home-banner-container"]}>
+        <div className={styles["banner-search-container"]}>
+          <Image className={styles["banner-image"]} src={bannerImg} alt="" />
+          <div className={styles["banner-input-container"]}>
+            <input type="text" placeholder="어디로 가시나요?" />
+            <div className={styles["banner-input-icon"]}>
+              <AiOutlineSearch />
+            </div>
+          </div>
         </div>
-        {/* <Slider {...settings}> */}
-        <div className={styles["topfive-place-card"]}>
-          {placeData?.map((place) => (
-            <PlaceCard
-              key={place.id}
-              id={place.id}
-              placeTitle={place.title}
-              placeDesc={place.description}
-              placeImg={place.firstimage}
-              placeRating={place.rating}
-            />
-          ))}
-        </div>
-        {/* </Slider> */}
-      </section>
-      <section className={styles["recommand-course-container"]}>
-        <div className={styles["recommand-course-title"]}>
-          <h2>❤️ 추천 코스 </h2>
-        </div>
-        <div className={styles["recommand-course-card"]}>
-          {courseData?.map((course) => (
-            <CourseCard
-              key={course.id}
-              id={course.id}
-              courseTitle={course.title}
-              courseDesc={course.courseDesc}
-              courseLike={course.like}
-              courseList={course.items}
-            />
-          ))}
-        </div>
-      </section>
+      </div>
+      <div className={styles["home-body-container"]}>
+        <section className={styles["topfive-place-container"]}>
+          <div className={styles["topfive-place-title"]}>
+            <h2>🔥 별점 Top 5 여행지</h2>
+          </div>
+          {/* <Slider {...settings}> */}
+          <div className={styles["topfive-place-card"]}>
+            {placeData?.map((place) => (
+              <PlaceCard
+                key={place.id}
+                id={place.id}
+                placeTitle={place.title}
+                placeDesc={place.description}
+                placeImg={place.firstimage}
+                placeRating={place.rating}
+              />
+            ))}
+          </div>
+          {/* </Slider> */}
+        </section>
+        <section className={styles["recommand-course-container"]}>
+          <div className={styles["recommand-course-title"]}>
+            <h2>❤️ 추천 코스 </h2>
+          </div>
+          <div className={styles["recommand-course-card"]}>
+            {courseData?.map((course) => (
+              <CourseCard
+                key={course.id}
+                id={course.id}
+                courseTitle={course.title}
+                courseDesc={course.courseDesc}
+                courseLike={course.like}
+                courseList={course.items}
+              />
+            ))}
+          </div>
+        </section>
+      </div>
     </main>
   );
 }
