@@ -1,9 +1,6 @@
 import Link from "next/link";
 import React from "react";
 import styles from "./header.module.css";
-import buttonStyles from "./button.module.css";
-import MenuStyles from "./search.module.css";
-import LogoStyles from "./logo.module.css";
 import { BsSearch } from "react-icons/bs";
 import styled from "styled-components";
 
@@ -19,19 +16,15 @@ function Header({}: Props) {
       <nav>
         <div className={styles.nav}>
           <Link href="/">
-            <img
-              src="/assets/logo.png"
-              alt="logo"
-              className={LogoStyles.logo}
-            />
+            <img src="/assets/logo.png" alt="logo" className={styles.logo} />
           </Link>
-          <div className={MenuStyles["search-bar"]}>
+          <div className={styles["search-bar"]}>
             <input
-              className={MenuStyles["search-input"]}
+              className={styles["search-input"]}
               type="text"
               placeholder="어디 가고 싶으세요?"
             />
-            <button className={MenuStyles["search-icon"]}>
+            <button className={styles["search-icon"]}>
               <StyledIcon size={20} />
             </button>
           </div>
@@ -43,10 +36,10 @@ function Header({}: Props) {
         </div>
       </nav>
       <div className={styles.btn}>
-        <button id="login-btn" className={buttonStyles["login-btn"]}>
+        <button id="login-btn" className={styles["login-btn"]}>
           로그인
         </button>
-        <button id="signup-btn" className={buttonStyles["signup-btn"]}>
+        <button id="signup-btn" className={styles["signup-btn"]}>
           회원가입
         </button>
       </div>
