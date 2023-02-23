@@ -54,4 +54,4 @@ import { useDispatch } from "react-redux";
 // 성공하면 메인으로 가고, 실패하면 로딩 메시지
 // return <>{valid ? <Home /> : <p>Loading...</p>}</>;
 
-export default KakaoLogin;
+// export default KakaoLogin;
