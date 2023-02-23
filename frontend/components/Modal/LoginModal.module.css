@@ -1,0 +1,32 @@
+.h1 {
+  margin-bottom: 1rem;
+}
+
+.mainLogo {
+  margin: auto;
+  display: block;
+}
+
+.desc {
+  font-size: medium;
+  color: #878787;
+  margin-bottom: 6rem;
+}
+
+.link {
+  text-decoration-line: none;
+}
+
+.btn {
+  margin-bottom: 0.5rem;
+}
+
+.p {
+  margin-left: 78px;
+  cursor: pointer;
+}
+
+.footer {
+  font-size: small;
+  color: #878787;
+}
