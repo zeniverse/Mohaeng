@@ -20,15 +20,22 @@ interface items {
   content: string;
   imgUrl: string;
 }
+import bannerImg from "../public/assets/banner-img.png";
+
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
+
+import styles from "./page.module.css";
 
 import PlaceCard from "@/components/Main/PlaceCard";
-import styles from "./page.module.css";
-import { useEffect, useState } from "react";
 import CourseCard from "@/components/Main/CourseCard";
-import Slider from "react-slick";
-import bannerImg from "../public/assets/banner-img.png";
-import Image from "next/image";
+
 import { AiOutlineSearch } from "react-icons/ai";
+import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 
 export default function Home() {
   const [placeData, setPlaceData] = useState<Place[]>([]);
@@ -50,12 +57,29 @@ export default function Home() {
     fetchData();
   }, []);
 
+  const PreviousBtn = (props: any) => {
+    const { className, onClick } = props;
+    return (
+      <div className={className} onClick={onClick}>
+        <SlArrowLeft style={{ color: "blue", fontSize: "30px" }} />
+      </div>
+    );
+  };
+  const NextBtn = (props: any) => {
+    const { className, onClick } = props;
+    return (
+      <div className={className} onClick={onClick}>
+        <SlArrowRight style={{ color: "blue", fontSize: "30px" }} />
+      </div>
+    );
+  };
+
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 3,
+    slidesToShow: 4,
+    slidesToScroll: 4,
   };
 
   return (
@@ -71,26 +95,33 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {/* TODO: 두 컴포넌트의 형식이 같기 때문에 재사용 가능함. */}
       <div className={styles["home-body-container"]}>
-        <section className={styles["topfive-place-container"]}>
-          <div className={styles["topfive-place-title"]}>
-            <h2>🔥 별점 Top 5 여행지</h2>
-          </div>
-          {/* <Slider {...settings}> */}
-          <div className={styles["topfive-place-card"]}>
-            {placeData?.map((place) => (
-              <PlaceCard
-                key={place.id}
-                id={place.id}
-                placeTitle={place.title}
-                placeDesc={place.description}
-                placeImg={place.firstimage}
-                placeRating={place.rating}
-              />
-            ))}
-          </div>
-          {/* </Slider> */}
-        </section>
+        <div className={styles["home-content-container"]}>
+          <section className={styles["topfive-place-container"]}>
+            <div className={styles["topfive-place-title"]}>
+              <h2>🔥 별점 Top 5 여행지</h2>
+            </div>
+            <div className={styles["slider-container"]}>
+              <Slider
+                {...settings}
+                prevArrow={<PreviousBtn />}
+                nextArrow={<NextBtn />}
+              >
+                {placeData?.map((place) => (
+                  <PlaceCard
+                    key={place.id}
+                    id={place.id}
+                    placeTitle={place.title}
+                    placeDesc={place.description}
+                    placeImg={place.firstimage}
+                    placeRating={place.rating}
+                  />
+                ))}
+              </Slider>
+            </div>
+          </section>
+        </div>
         <section className={styles["recommand-course-container"]}>
           <div className={styles["recommand-course-title"]}>
             <h2>❤️ 추천 코스 </h2>

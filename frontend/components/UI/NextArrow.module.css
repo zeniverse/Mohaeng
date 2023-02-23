@@ -1,0 +1,39 @@
+.next-arrow {
+  color: black;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: antiquewhite;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 99;
+  cursor: pointer;
+  opacity: 1;
+}
+
+.prev {
+  left: 3px;
+  top: 50%;
+  -webkit-transform: translate(0, -50%);
+  -ms-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+  padding: 0;
+}
+.next {
+  right: 3px;
+  top: 50%;
+  -webkit-transform: translate(0, -50%);
+  -ms-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+  padding: 0;
+}
+
+.slick-list {
+  margin-right: -20px;
+}
+
+.slick-slide {
+  padding-right: 20px;
+}

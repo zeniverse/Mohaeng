@@ -17,16 +17,16 @@ const PlaceCard = ({
   placeRating,
 }: PlaceProps) => {
   return (
-    <div className={styles["placecard-container"]}>
-      <div className={styles["image-container"]}>
+    <div className={styles["place-card-container"]}>
+      <div className={styles["place-image-container"]}>
         <img src={placeImg} alt={placeTitle} />
       </div>
-      <div className={styles["placecard-content"]}>
-        <div className={styles["placecard-rating"]}>{`⭐ ${placeRating}`}</div>
-        <div className={styles["placecard-title"]}>
+      <div className={styles["place-card-content"]}>
+        <div className={styles["place-card-rating"]}>{`⭐ ${placeRating}`}</div>
+        <div className={styles["place-card-title"]}>
           <h3>{placeTitle}</h3>
         </div>
-        <div className={styles["placecard-desc"]}>
+        <div className={styles["place-card-desc"]}>
           <p>{placeDesc}</p>
         </div>
       </div>

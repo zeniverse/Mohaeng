@@ -25,19 +25,19 @@ const CourseCard = ({
 }: CourseProps) => {
   const Img = courseList[0].imgUrl;
   return (
-    <div className={styles["coursecard-container"]}>
-      <div className={styles["image-container"]}>
+    <div className={styles["course-card-container"]}>
+      <div className={styles["course-image-container"]}>
         <img src={Img} />
-        <div className={styles["like-container"]}>
+        <div className={styles["course-like-container"]}>
           <BsFillHeartFill color="red" size={20} />
           <span>{courseLike}</span>
         </div>
       </div>
-      <div className={styles["coursecard-content"]}>
-        <div className={styles["coursecard-title"]}>
+      <div className={styles["course-card-content"]}>
+        <div className={styles["course-card-title"]}>
           <h3>{courseTitle}</h3>
         </div>
-        <div className={styles["coursecard-desc"]}>
+        <div className={styles["course-card-desc"]}>
           <p>{courseDesc}</p>
         </div>
       </div>

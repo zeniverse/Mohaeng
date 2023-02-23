@@ -1,4 +1,4 @@
-.coursecard-container {
+.course-card-container {
   width: 240px;
   overflow: hidden;
   box-shadow: 0px 0px 15px -5px;
@@ -8,11 +8,11 @@
   cursor: pointer;
 }
 
-.placecard-container:hover {
+.course-card-container:hover {
   transform: scale(1.02);
   box-shadow: 0px 0px 15px 0px;
 }
-.image-container {
+.course-image-container {
   position: relative;
   display: flex;
   justify-content: center;
@@ -20,12 +20,12 @@
   border-bottom: 1px solid gray;
 }
 
-.image-container img {
+.course-image-container img {
   overflow: hidden;
   height: 180px;
 }
 
-.like-container {
+.course-like-container {
   width: 3rem;
   height: 3rem;
   border-radius: 100%;
@@ -39,28 +39,28 @@
   border: 1px solid gray;
   color: red;
 }
-.like-container span {
+.course-like-container span {
   position: absolute;
   bottom: 2px;
   font-size: 0.4rem;
 }
 
-.coursecard-content {
+.course-coursecard-content {
   margin: 0.8rem;
   margin-top: 0.3rem;
 }
 
-.coursecard-title h3 {
+.course-coursecard-title h3 {
   /* TODO: resetting default value */
   margin: 0;
   padding: 0;
 }
 
-.coursecard-title {
+.course-coursecard-title {
   margin: 0.2rem 0 0.5rem;
 }
 
-.coursecard-desc p {
+.course-coursecard-desc p {
   display: -webkit-box;
   height: 4rem;
   line-height: 1.2;

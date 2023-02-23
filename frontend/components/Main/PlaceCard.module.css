@@ -1,4 +1,4 @@
-.placecard-container {
+.place-card-container {
   width: 240px;
   overflow: hidden;
   box-shadow: 0px 0px 15px -5px;
@@ -8,38 +8,38 @@
   cursor: pointer;
 }
 
-.placecard-container:hover {
+.place-card-container:hover {
   transform: scale(1.02);
   box-shadow: 0px 0px 15px 0px;
 }
-.image-container {
+.place-image-container {
   display: flex;
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid gray;
 }
 
-.image-container img {
+.place-image-container img {
   overflow: hidden;
   height: 180px;
 }
 
-.placecard-content {
+.place-card-content {
   margin: 0.8rem;
   margin-top: 0.3rem;
 }
 
-.placecard-title h3 {
+.place-card-title h3 {
   /* TODO: resetting default value */
   margin: 0;
   padding: 0;
 }
 
-.placecard-title {
+.place-card-title {
   margin: 0.2rem 0 0.5rem;
 }
 
-.placecard-desc p {
+.place-card-desc p {
   display: -webkit-box;
   height: 4rem;
   line-height: 1.2;
