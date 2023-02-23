@@ -11,10 +11,12 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
 @RequiredArgsConstructor
+@Service
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final UserRepository userRepository;
@@ -35,7 +37,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 
         User user = save(attributes);
 
-        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
+        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(Role.NORMAL.getKey()))
                 , attributes.getAttributes()
                 , attributes.getNameAttributeKey());
     }
@@ -44,7 +46,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
     private User save(OAuthAttributes attributes) {
         User findUser = userRepository.findByEmail(attributes.getEmail())
                 .map(user -> user.update(attributes.getName()))
-                .orElse(new User(attributes.getName(), attributes.getEmail(), Role.NORMAL));
+                .orElse(new User(attributes.getName(), attributes.getEmail(), Role.NORMAL, "testNick"));
 
         return userRepository.save(findUser);
     }

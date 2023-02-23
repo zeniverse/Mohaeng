@@ -27,14 +27,16 @@ public class User {
     private String imageURL;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
     private boolean isActive;
     private int stopCount;
 
-    public User(String name, String email, Role role) {
+    public User(String name, String email, Role role, String nickName) {
         this.name = name;
         this.email = email;
         this.role = role;
+        this.nickName = nickName;
     }
 
     // OAuth 서버에서 사용자의 정보가 변경될 수 있기때문
