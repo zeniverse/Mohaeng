@@ -72,6 +72,72 @@
           "imgUrl": "http://tong.visitkorea.or.kr/cms/resource/95/2660695_image2_1.jpg"
         }
       ]
+    },
+    {
+      "id": 4,
+      "title": "대구 여행 코스",
+      "like": 50,
+      "courseDesc": "서울에서 혼자 여행하기 딱 좋은 코스 입니다. ",
+      "items": [
+        {
+          "courseId": 1,
+          "created_date": 20220214,
+          "coursetitle": "바다 코스",
+          "content": "여기에 핫플 다 모여있어요!",
+          "imgUrl": "http://tong.visitkorea.or.kr/cms/resource/06/2935206_image2_1.jpg"
+        },
+        {
+          "courseId": 2,
+          "created_date": 20220214,
+          "title": "남산에 잇는 남산 타워",
+          "content": "자물쇠가 있었던 것 같음.",
+          "imgUrl": "http://tong.visitkorea.or.kr/cms/resource/95/2660695_image2_1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "대구 여행 코스",
+      "like": 50,
+      "courseDesc": "서울에서 혼자 여행하기 딱 좋은 코스 입니다. ",
+      "items": [
+        {
+          "courseId": 1,
+          "created_date": 20220214,
+          "coursetitle": "바다 코스",
+          "content": "여기에 핫플 다 모여있어요!",
+          "imgUrl": "http://tong.visitkorea.or.kr/cms/resource/06/2935206_image2_1.jpg"
+        },
+        {
+          "courseId": 2,
+          "created_date": 20220214,
+          "title": "남산에 잇는 남산 타워",
+          "content": "자물쇠가 있었던 것 같음.",
+          "imgUrl": "http://tong.visitkorea.or.kr/cms/resource/95/2660695_image2_1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "대구 여행 코스",
+      "like": 50,
+      "courseDesc": "서울에서 혼자 여행하기 딱 좋은 코스 입니다. ",
+      "items": [
+        {
+          "courseId": 1,
+          "created_date": 20220214,
+          "coursetitle": "바다 코스",
+          "content": "여기에 핫플 다 모여있어요!",
+          "imgUrl": "http://tong.visitkorea.or.kr/cms/resource/06/2935206_image2_1.jpg"
+        },
+        {
+          "courseId": 2,
+          "created_date": 20220214,
+          "title": "남산에 잇는 남산 타워",
+          "content": "자물쇠가 있었던 것 같음.",
+          "imgUrl": "http://tong.visitkorea.or.kr/cms/resource/95/2660695_image2_1.jpg"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,50 @@
+[
+  {
+    "userName": "testName1",
+    "title": "testTitle1",
+    "createdDate": "2010-10-10",
+    "modifiedDate": "2010-10-10",
+    "viewCount": 10,
+    "place": "부산",
+    "recruiteMember": 2,
+    "nowMember": 1,
+    "isRecruited": false,
+    "imgURL": "../abc/def/g..."
+  },
+  {
+    "userName": "testName2",
+    "title": "testTitle2",
+    "createDate": "2010-10-10",
+    "createdDate": "2010-10-10",
+    "viewCount": 10,
+    "place": "서울",
+    "recruiteMember": 5,
+    "nowMember": 2,
+    "isRecruited": false,
+    "imgURL": "../abc/def/g..."
+  },
+  {
+    "userName": "testName3",
+    "title": "testTitle3",
+    "createDate": "2010-10-10",
+    "createdDate": "2010-10-10",
+    "viewCount": 10,
+    "place": "경기",
+    "recruiteMember": 4,
+    "nowMember": 4,
+    "isRecruited": true,
+    "imgURL": "../abc/def/g..."
+  },
+  {
+    "userName": "testName100",
+    "title": "testTitle100",
+    "createDate": "2010-10-10",
+    "createdDate": "2010-10-10",
+    "viewCount": 10,
+    "place": "서울",
+    "recruiteMember": 100,
+    "nowMember": 99,
+    "isRecruited": false,
+    "imgURL": "../abc/def/g..."
+  }
+]

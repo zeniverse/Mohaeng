@@ -5,7 +5,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const data1 = await require("./data.json");
-  const data2 = await require("./course.json");
-  res.status(200).json({ data1, data2 });
+  const placeData = await require("./place.json");
+  const courseData = await require("./course.json");
+  const boardData = await require("./board.json");
+  res.status(200).json({ placeData, courseData, boardData });
 }

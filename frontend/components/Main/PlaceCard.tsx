@@ -1,21 +1,9 @@
 import styles from "./PlaceCard.module.css";
 import React from "react";
+import { PlaceProps } from "@/interfaces/Place";
 
-type PlaceProps = {
-  id: string;
-  placeImg: string;
-  placeTitle: string;
-  placeDesc: string;
-  placeRating: string;
-};
-
-const PlaceCard = ({
-  id,
-  placeImg,
-  placeDesc,
-  placeTitle,
-  placeRating,
-}: PlaceProps) => {
+const PlaceCard = (props: PlaceProps) => {
+  const { id, placeImg, placeDesc, placeTitle, placeRating } = props;
   return (
     <div className={styles["place-card-container"]}>
       <div className={styles["place-image-container"]}>
