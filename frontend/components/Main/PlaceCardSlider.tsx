@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 import { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -37,11 +36,11 @@ const PlaceCardSlider = () => {
       slidesPerView={4}
       slidesPerGroup={3}
       navigation
-      onSwiper={(swiper) => console.log(swiper)}
-      onSlideChange={() => console.log("slide change")}
+      // onSwiper={(swiper) => console.log(swiper)}
+      // onSlideChange={() => console.log("slide change")}
     >
-      {placeData?.map((place) => (
-        <SwiperSlide key={uuidv4()}>
+      {placeData?.map((place, idx) => (
+        <SwiperSlide key={idx}>
           <PlaceCard
             key={place.id}
             id={place.id}

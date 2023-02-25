@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 import { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -20,7 +19,7 @@ const CourseCardSlider = () => {
     async function fetchData() {
       const res = await fetch("/api");
       const newData = await res.json();
-      const getCourseData = newData.courseData.data;
+      const getCourseData = newData.courseData;
       setCoueseData(getCourseData);
     }
     fetchData();
@@ -33,11 +32,9 @@ const CourseCardSlider = () => {
       slidesPerView={4}
       slidesPerGroup={3}
       navigation
-      onSwiper={(swiper) => console.log(swiper)}
-      onSlideChange={() => console.log("slide change")}
     >
-      {courseData?.map((course) => (
-        <SwiperSlide key={uuidv4()}>
+      {courseData?.map((course, idx) => (
+        <SwiperSlide key={idx}>
           <CourseCard
             key={course.id}
             id={course.id}

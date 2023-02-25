@@ -4,6 +4,7 @@ import PlaceCardSlider from "@/components/Main/PlaceCardSlider";
 import CourseCardSlider from "@/components/Main/CourseCardSlider";
 import BannerSearch from "@/components/Main/BannerSearch";
 import AccompanyBoard from "@/components/Main/AccompanyBoard";
+import BoardFilters from "@/components/Main/BoardFilters";
 
 export default function Home() {
   return (
@@ -18,10 +19,19 @@ export default function Home() {
           >
             <PlaceCardSlider />
           </RecommendedSection>
-          <RecommendedSection title="❤️추천 코스" bgColor="beige">
+          <RecommendedSection
+            title="❤️추천 코스"
+            bgColor="grey"
+            linkUrl="course"
+          >
             <CourseCardSlider />
           </RecommendedSection>
-          <RecommendedSection title="🧑‍🤝‍🧑동행 게시판" bgColor="green">
+          <RecommendedSection
+            title="🧑‍🤝‍🧑동행 게시판"
+            bgColor="grey"
+            linkUrl="accompany"
+          >
+            <BoardFilters />
             <AccompanyBoard />
           </RecommendedSection>
         </div>
