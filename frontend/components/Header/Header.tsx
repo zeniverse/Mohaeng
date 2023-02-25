@@ -3,11 +3,10 @@
 import Link from "next/link";
 import React from "react";
 import styles from "./header.module.css";
-import buttonStyles from "./button.module.css";
-import MenuStyles from "./search.module.css";
-import LogoStyles from "./logo.module.css";
 import { BsSearch } from "react-icons/bs";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { openModal } from "@/store/reducers/modalSlice";
 
 const StyledIcon = styled(BsSearch)`
   color: #004aad;
@@ -16,24 +15,39 @@ const StyledIcon = styled(BsSearch)`
 type Props = {};
 
 function Header({}: Props) {
+  const dispatch = useDispatch();
+
+  const handleOpenLoginModal = () => {
+    dispatch(
+      openModal({
+        modalType: "LoginModal",
+        isOpen: true,
+      })
+    );
+  };
+  const handleOpenBasicModal = () => {
+    dispatch(
+      openModal({
+        modalType: "BasicModal",
+        isOpen: true,
+      })
+    );
+  };
+
   return (
     <header className={styles.header}>
       <nav>
         <div className={styles.nav}>
           <Link href="/">
-            <img
-              src="/assets/logo.png"
-              alt="logo"
-              className={LogoStyles.logo}
-            />
+            <img src="/assets/logo.png" alt="logo" className={styles.logo} />
           </Link>
-          <div className={MenuStyles["search-bar"]}>
+          <div className={styles["search-bar"]}>
             <input
-              className={MenuStyles["search-input"]}
+              className={styles["search-input"]}
               type="text"
               placeholder="어디 가고 싶으세요?"
             />
-            <button className={MenuStyles["search-icon"]}>
+            <button className={styles["search-icon"]}>
               <StyledIcon size={20} />
             </button>
           </div>
@@ -45,11 +59,19 @@ function Header({}: Props) {
         </div>
       </nav>
       <div className={styles.btn}>
-        <button id="login-btn" className={buttonStyles["login-btn"]}>
+        <button
+          id="login-btn"
+          className={styles["login-btn"]}
+          onClick={handleOpenLoginModal}
+        >
           로그인
         </button>
-        <button id="signup-btn" className={buttonStyles["signup-btn"]}>
-          회원가입
+        <button
+          id="signup-btn"
+          className={styles["signup-btn"]}
+          onClick={handleOpenBasicModal}
+        >
+          기본 모달
         </button>
       </div>
     </header>
