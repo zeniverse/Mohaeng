@@ -52,7 +52,7 @@ function Header({}: Props) {
             </button>
           </div>
           <div className={styles.menu}>
-            <Link href="#">여행지</Link>
+            <Link href="/place">여행지</Link>
             <Link href="#">코스</Link>
             <Link href="#">동행 게시판</Link>
           </div>
