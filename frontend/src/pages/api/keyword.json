@@ -70,6 +70,16 @@
     "title": "하동재첩특화마을(재첩특화마을)"
   },
   {
+    "addr": "경상남도 하동군 하동읍 섬진강대로 2222",
+    "id": "130003",
+    "image": "http://tong.visitkorea.or.kr/cms/resource/81/1322181_image2_1.jpg",
+    "thumbnail": "http://tong.visitkorea.or.kr/cms/resource/81/1322181_image3_1.jpg",
+    "mapx": "127.7411147658",
+    "mapy": "35.0723002086",
+    "tel": "",
+    "title": "하동문화원"
+  },
+  {
     "addr": "경상남도 하동군 하동읍 군청로 36",
     "id": "1343990",
     "image": "",
@@ -98,16 +108,6 @@
     "mapy": "35.0723002086",
     "tel": "",
     "title": "하동문화예술회관"
-  },
-  {
-    "addr": "경상남도 하동군 하동읍 섬진강대로 2222",
-    "id": "130003",
-    "image": "http://tong.visitkorea.or.kr/cms/resource/81/1322181_image2_1.jpg",
-    "thumbnail": "http://tong.visitkorea.or.kr/cms/resource/81/1322181_image3_1.jpg",
-    "mapx": "127.7411147658",
-    "mapy": "35.0723002086",
-    "tel": "",
-    "title": "하동문화원"
   },
   {
     "addr": "경상남도 하동군 악양면 평사리 평사리공원",

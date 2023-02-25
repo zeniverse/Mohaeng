@@ -11,13 +11,13 @@ type PlaceData = {
   image: string;
 };
 
-function Place(): JSX.Element {
+export default function Place(): JSX.Element {
   const places: PlaceData[] = require("/public/data/place.json");
   return (
     <>
-      <section className={styles.placeList}>
+      <section className={styles.section}>
         <h2 className={styles.h2}>검색하신 결과 </h2>
-        <ul className={styles.container}>
+        <ul className={styles.placeList}>
           {places?.map((place) => (
             <li className={styles.item} key={place.id}>
               <Link className={styles.Link} href={`/place/${place.id}`}>
@@ -40,5 +40,3 @@ function Place(): JSX.Element {
     </>
   );
 }
-
-export default Place;
