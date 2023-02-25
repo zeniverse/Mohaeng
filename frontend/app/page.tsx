@@ -1,16 +1,43 @@
-"use client";
+import styles from "./page.module.css";
+import RecommendedSection from "@/components/Main/RecommendedSection";
+import PlaceCardSlider from "@/components/Main/PlaceCardSlider";
+import CourseCardSlider from "@/components/Main/CourseCardSlider";
+import BannerSearch from "@/components/Main/BannerSearch";
+import AccompanyBoard from "@/components/Main/AccompanyBoard";
+import BoardFilters from "@/components/Main/BoardFilters";
 
 import React from "react";
-<<<<<<< Updated upstream
-import MyPage from "./mypage";
-=======
-import Footer from "@/component/Footer/Footer";
->>>>>>> Stashed changes
 
 export default function Home() {
   return (
-    <div>
-      <h1>반갑습니다</h1>
-    </div>
+    <main>
+      <BannerSearch />
+      <div className={styles["home-body-container"]}>
+        <div className={styles["home-content-container"]}>
+          <RecommendedSection
+            title="🔥별점 Top 5 여행지"
+            bgColor="grey"
+            linkUrl="place"
+          >
+            <PlaceCardSlider />
+          </RecommendedSection>
+          <RecommendedSection
+            title="❤️추천 코스"
+            bgColor="grey"
+            linkUrl="course"
+          >
+            <CourseCardSlider />
+          </RecommendedSection>
+          <RecommendedSection
+            title="🧑‍🤝‍🧑동행 게시판"
+            bgColor="grey"
+            linkUrl="accompany"
+          >
+            <BoardFilters />
+            <AccompanyBoard />
+          </RecommendedSection>
+        </div>
+      </div>
+    </main>
   );
 }
