@@ -6,7 +6,7 @@ import styles from "./header.module.css";
 import { BsSearch } from "react-icons/bs";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { openModal } from "@/store/reducers/modalSlice";
+import { openModal } from "../../store/reducers/modalSlice";
 
 const StyledIcon = styled(BsSearch)`
   color: #004aad;

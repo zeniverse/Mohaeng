@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { closeModal } from "@/store/reducers/modalSlice";
+import { closeModal } from "../../store/reducers/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import LoginModal from "./LoginModal";
 import BasicModal from "./BasicModal";
@@ -63,5 +63,5 @@ const Container = styled.div`
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.7);
 `;

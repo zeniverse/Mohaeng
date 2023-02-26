@@ -1,14 +1,16 @@
-import React, { useCallback } from "react";
+"use client";
+
+import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import styles from "./LoginModal.module.css";
 import { GrFormClose } from "react-icons/gr";
-import { closeModal } from "@/store/reducers/modalSlice";
+import { closeModal } from "../../store/reducers/modalSlice";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
-import btnKakao from "@/public/assets/btnKakao.png";
-import btnGoogle from "@/public/assets/btnGoogle.png";
-import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL } from "@/Lib/OAuth";
+import btnKakao from "/public/assets/btnKakao.png";
+import btnGoogle from "/public/assets/btnGoogle.png";
+import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL } from "../../pages/api/auth/OAuth";
 
 export default function LoginModal() {
   const dispatch = useDispatch();
@@ -16,20 +18,13 @@ export default function LoginModal() {
     dispatch(closeModal());
   };
 
-  // 로그인 로직 (나중에 분리)
-  const onKakaoLogin = useCallback((e: { preventDefault: () => void }) => {
-    e.preventDefault();
-
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_REST_API_KEY}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
-  }, []);
-
   return (
-    <Content>
-      <h1 className={styles.h1}>로그인 / 회원가입</h1>
-      <p className={styles.desc}>
+    <Content className={styles.loginContent}>
+      <h1 className={styles.loginTitle}>로그인 / 회원가입</h1>
+      <p className={styles.loginInfo}>
         간편하게 로그인하고 모두의 여행을 경험해보세요
       </p>
-      <div className={styles.btnlist}>
+      <div className={styles.btnList}>
         <Link className={styles.link} href={KAKAO_AUTH_URL}>
           <KakaoBtn className={styles.btn}>
             <Image src={btnKakao} alt="카카오 로그인" width={320} height={48} />
@@ -38,7 +33,7 @@ export default function LoginModal() {
         <Link className={styles.link} href={GOOGLE_AUTH_URL}>
           <GoogleBtn className={styles.btn}>
             <Image src={btnGoogle} alt="구글 로그인" width={46} height={46} />
-            <p className={styles.p}>Google 로그인</p>
+            <p className={styles.loginGoogle}>Google 로그인</p>
           </GoogleBtn>
         </Link>
       </div>
@@ -47,7 +42,7 @@ export default function LoginModal() {
         것으로 간주합니다.
       </p>
       <CloseBtn onClick={handleModalClose}>
-        <GrFormClose />
+        <GrFormClose className={styles.closeBtn} />
       </CloseBtn>
     </Content>
   );
@@ -72,7 +67,6 @@ const GoogleBtn = styled.button`
   font-weight: 500;
   font-size: 16px;
   padding: 1px;
-  margin-bottom: 6rem;
   cursor: pointer;
 `;
 
@@ -85,8 +79,6 @@ const CloseBtn = styled.button`
   border: none;
   background-color: transparent;
   cursor: pointer;
-  &:hover {
-  }
 `;
 
 const Content = styled.section`
