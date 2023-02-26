@@ -23,12 +23,6 @@ export default function LoginModal() {
     window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_REST_API_KEY}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
   }, []);
 
-  // const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
-  // const HandleLogin = (): void => {
-  //   window.location.href = link;
-  // };
-
   return (
     <Content>
       <h1 className={styles.h1}>로그인 / 회원가입</h1>
