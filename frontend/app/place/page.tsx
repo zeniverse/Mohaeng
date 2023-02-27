@@ -9,10 +9,12 @@ type PlaceData = {
   id: string;
   title: string;
   image: string;
+  review: number;
 };
 
 export default function Place(): JSX.Element {
-  const places: PlaceData[] = require("/public/data/place.json");
+  const places: PlaceData[] = require("/public/data/keyword.json");
+
   return (
     <>
       <section className={styles.section}>
@@ -25,13 +27,13 @@ export default function Place(): JSX.Element {
                   className={styles.img}
                   src={place.image}
                   alt={place.title}
-                  width={250}
-                  height={150}
-                  style={{
-                    overflow: "hidden",
-                  }}
+                  width={257}
+                  height={233}
                 />
-                <p className={styles.title}>{place.title}</p>
+                <span className={styles.textBlock}>
+                  <p className={styles.title}>{place.title}</p>
+                  <p className={styles.review}>{place.review}건의 리뷰</p>
+                </span>
               </Link>
             </li>
           ))}
