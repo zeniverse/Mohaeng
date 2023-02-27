@@ -5,15 +5,15 @@ import styles from "./page.module.css";
 import Link from "next/link";
 import React, { useState } from "react";
 
-type PlaceData = {
+type KeywordData = {
   id: string;
   title: string;
   image: string;
   review: number;
 };
 
-export default function Place(): JSX.Element {
-  const places: PlaceData[] = require("/public/data/keyword.json");
+export default function SearchResult(): JSX.Element {
+  const places: KeywordData[] = require("/public/data/keyword.json");
 
   return (
     <>
