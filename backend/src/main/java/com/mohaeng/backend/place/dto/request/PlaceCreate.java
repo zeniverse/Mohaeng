@@ -1,18 +1,17 @@
 package com.mohaeng.backend.place.dto.request;
 
+import com.mohaeng.backend.place.entity.Category;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@Setter
 @ToString
 public class PlaceCreate {
 
     @NotBlank(message = "여행지 이름을 입력해주세요.")
-    private String title;
+    private String name;
 
     @NotBlank(message = "주소를 입력해주세요.")
     private String address;
@@ -32,13 +31,19 @@ public class PlaceCreate {
     @NotBlank(message = "이메일을 입력해주세요.")
     private String email;
 
+    private String latitude;
+
+    private String longitude;
+
     @Builder
-    public PlaceCreate(String title, String address, String category, String availableTime, String menu, String email) {
-        this.title = title;
+    public PlaceCreate(String name, String address, Category category, String availableTime, String menu, String email, String latitude, String longitude) {
+        this.name = name;
         this.address = address;
-        this.category = category;
+        this.category = String.valueOf(category);
         this.availableTime = availableTime;
         this.menu = menu;
         this.email = email;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

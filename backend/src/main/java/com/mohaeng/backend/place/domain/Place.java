@@ -1,41 +1,61 @@
 package com.mohaeng.backend.place.domain;
 
+import com.mohaeng.backend.place.dto.PlacePostDto;
 import com.mohaeng.backend.place.entity.Category;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.Table;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(appliesTo = "place")
 @Getter
 @RequiredArgsConstructor
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class Place {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "place_id")
     private Long id;
 
-    @Column(name = "name")
+    @NotBlank
     private String name;
 
-    @Column(name = "content")
-    private String content;
-
-    @Column(name = "address")
+    @NotBlank
     private String address;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "category")
+    @NotBlank
     private Category category;
 
-    @Column(name = "available_time")
     private String availableTime;
 
-    @Column(name = "menu")
     private String menu;
 
-    @Column(name = "email")
     private String email;
+
+    private String latitude;
+
+    private String longitude;
+
+
+    public void update(PlacePostDto placePostDto) {
+        this.name = placePostDto.getName();
+        this.address = placePostDto.getAddress();
+        this.category = placePostDto.getCategory();
+        this.availableTime = placePostDto.getAvailableTime();
+        this.menu = placePostDto.getMenu();
+        this.email = placePostDto.getEmail();
+        this.latitude = placePostDto.getLatitude();
+        this.longitude = placePostDto.getLongitude();
+
+    }
+
+//    @Builder.Default
+//    @OneToMany(mappedBy = "review")
+//    private List<Review> reviews = new ArrayList<>();
 }

@@ -1,14 +1,12 @@
 package com.mohaeng.backend.place.dto;
 
 import com.mohaeng.backend.place.entity.Category;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Data
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlacePostDto {
@@ -19,6 +17,8 @@ public class PlacePostDto {
     private String availableTime;
     private String menu;
     private String email;
+    private String latitude;
+    private String longitude;
 
     public PlacePostDto fromEntity(PlacePostDto placePostDto) {
         return PlacePostDto.builder()
@@ -26,9 +26,11 @@ public class PlacePostDto {
                 .address(placePostDto.getAddress())
                 .category(placePostDto.getCategory())
                 .availableTime(placePostDto.getAvailableTime())
-//                .image(placePostDto.getimage()) #
+//                .image(placePostDto.getimage()) #TODO 이미지 추가해야함
                 .menu(placePostDto.getMenu())
                 .email(placePostDto.getEmail())
+                .email(placePostDto.getLatitude())
+                .email(placePostDto.getLongitude())
                 .build();
     }
 }
