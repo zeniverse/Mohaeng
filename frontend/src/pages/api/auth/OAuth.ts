@@ -6,8 +6,4 @@ export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id
 // google_login
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_KEY;
 const GOOGLE_REDIRECT_URI = "";
-<<<<<<< HEAD:frontend/src/pages/api/auth/OAuth.ts
 export const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${GOOGLE_REDIRECT_URI}&scope=openid`;
-=======
-export const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${GOOGLE_REDIRECT_URI}&scope=openid https://www.googleapis.com/auth/userinfo.email`;
->>>>>>> 2096b28 (Feat: 검색결과 페이지 UI 추가[#10]):frontend/Lib/OAuth.ts
