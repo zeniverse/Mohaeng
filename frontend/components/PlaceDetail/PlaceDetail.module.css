@@ -1,0 +1,60 @@
+.placeDetail {
+  --color-bg: #f9f9f9;
+  --color-icon: #a1a1a1;
+  --color-like: #f20000;
+  --color-text: #42444a;
+  --color-accent: #99d9d9;
+}
+
+.detailTitle {
+  display: flex;
+  justify-content: space-between;
+  margin: 4rem 8rem 1rem;
+  padding: 2rem 3rem;
+  background-color: var(--color-bg);
+  border-radius: 12px;
+}
+
+.h1 {
+  font-size: 2rem;
+}
+
+.rating,
+.review {
+  font-size: 16px;
+}
+
+.likeBtn {
+  display: flex;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.likeText {
+  color: var(--color-text);
+  padding: 12px 4px;
+}
+
+.likeIcon {
+  color: var(--color-icon);
+  font-size: 36px;
+}
+
+.likeIcon:hover {
+  color: var(--color-like);
+}
+
+.detailContent {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 8rem;
+  padding: 2rem 3rem;
+  background-color: var(--color-bg);
+  border-radius: 8px;
+}
+
+.detailDesc {
+  width: 500px;
+}
