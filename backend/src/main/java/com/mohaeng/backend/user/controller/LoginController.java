@@ -2,12 +2,14 @@ package com.mohaeng.backend.user.controller;
 
 import com.mohaeng.backend.user.domain.User;
 import com.mohaeng.backend.user.dto.UserLoginDto;
-import com.mohaeng.backend.user.oauth.OAuthService;
 import com.mohaeng.backend.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,4 +45,15 @@ public class LoginController {
 
         return result;
     }
+
+    @GetMapping("/user/logout")
+    public HashMap<String, Object> logoutController(HttpServletRequest request, HttpServletResponse response) {
+        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("status", 200);
+        result.put("result", "ok");
+        return result;
+    }
+
 }
