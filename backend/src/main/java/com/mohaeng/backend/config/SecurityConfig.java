@@ -23,16 +23,17 @@ public class SecurityConfig {
                 .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/profile").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER) //세션사용 안함
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .logout()
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
                 .and()
                 .oauth2Login()
+                .defaultSuccessUrl("/loginInfo")
                 .userInfoEndpoint()
-                .userService(oAuthService)
-                .and()
-                .defaultSuccessUrl("/loginInfo");
+                .userService(oAuthService);
 
         return http.build();
     }
