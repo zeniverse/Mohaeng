@@ -7,7 +7,12 @@ const BannerSearch = () => {
   return (
     <div className={styles["home-banner-container"]}>
       <div className={styles["banner-search-container"]}>
-        <Image className={styles["banner-image"]} src={bannerImg} alt="" />
+        <Image
+          priority={true}
+          className={styles["banner-image"]}
+          src={bannerImg}
+          alt=""
+        />
         <div className={styles["banner-input-container"]}>
           <input type="text" placeholder="어디로 가시나요?" />
           <div className={styles["banner-input-icon"]}>

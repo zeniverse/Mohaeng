@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import PlaceCard from "@/components/Main/PlaceCard";
+import PlaceCard from "@/src/components/Main/PlaceCard";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -17,14 +17,13 @@ const PlaceCardSlider = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch("/api");
-      const newData = await res.json();
-      const getPlaceData = newData.placeData;
+      const res = await fetch("/api/place");
+      const data = await res.json();
       // if (getPlaceData && getPlaceData.length > 5) {
       //   let slicedData = getPlaceData.slice(0, 5);
       //   return setPlaceData(slicedData);
       // }
-      setPlaceData(getPlaceData);
+      setPlaceData(data);
     }
     fetchData();
   }, []);

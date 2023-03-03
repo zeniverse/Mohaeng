@@ -14,3 +14,10 @@ main {
   display: block;
   width: 100vw;
 }
+fieldset {
+  border: none;
+}
+
+li {
+  list-style: none;
+}

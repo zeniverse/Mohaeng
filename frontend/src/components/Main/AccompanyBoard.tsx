@@ -10,9 +10,9 @@ const AccompanyBoard = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch("/api");
+      const res = await fetch("/api/board");
       const newData = await res.json();
-      const getCourseData = newData.boardData;
+      const getCourseData = newData;
       setBoardData(getCourseData);
     }
     fetchData();

@@ -1,11 +1,11 @@
 "use client";
 
 import "../styles/globals.css";
-import Header from "@/components/Header/Header";
 import { Provider } from "react-redux";
 import store from "@/store/store";
-import GlobalModal from "@/components/Modal/GlobalModal";
-import Footer from "@/components/Footer/Footer";
+import GlobalModal from "@/src/components/Modal/GlobalModal";
+import Header from "@/src/components/Header/Header";
+import Footer from "@/src/components/Footer/Footer";
 
 export default function RootLayout({
   children,

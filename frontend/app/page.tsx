@@ -1,10 +1,10 @@
 import styles from "./page.module.css";
-import RecommendedSection from "@/components/Main/RecommendedSection";
-import PlaceCardSlider from "@/components/Main/PlaceCardSlider";
-import CourseCardSlider from "@/components/Main/CourseCardSlider";
-import BannerSearch from "@/components/Main/BannerSearch";
-import AccompanyBoard from "@/components/Main/AccompanyBoard";
-import BoardFilters from "@/components/Main/BoardFilters";
+import RecommendedSection from "@/src/components/Main/RecommendedSection";
+import PlaceCardSlider from "@/src/components/Main/PlaceCardSlider";
+import CourseCardSlider from "@/src/components/Main/CourseCardSlider";
+import BannerSearch from "@/src/components/Main/BannerSearch";
+import AccompanyBoard from "@/src/components/Main/AccompanyBoard";
+import BoardFilters from "@/src/components/Main/BoardFilters";
 
 import React from "react";
 
