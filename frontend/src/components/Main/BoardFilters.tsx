@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Select, SelectOptions } from "../Select/Select";
 import FilterTag from "../UI/FilterTag";
+import { GrPowerReset } from "react-icons/gr";
 
 import styles from "./BoardFilters.module.css";
 
@@ -38,6 +39,9 @@ const BoardFilters = () => {
   // const [doSingleValue, setDooSingleValue] = useState<
   //   SelectOptions | undefined
   // >();
+
+  // TODO: 컴포넌트화
+  // TODO: 컴포넌트화
   const [siguMultiValue, setSiGuMultiValue] = useState<SelectOptions[]>([]);
   const [ageMultiValue, setAgeMultiValue] = useState<SelectOptions[]>([]);
 
@@ -50,6 +54,11 @@ const BoardFilters = () => {
     if (ageMultiValue.includes(option)) {
       setAgeMultiValue(ageMultiValue.filter((o) => o !== option));
     }
+  };
+
+  const resetHandler = () => {
+    setSiGuMultiValue([]);
+    setAgeMultiValue([]);
   };
 
   return (
@@ -72,6 +81,12 @@ const BoardFilters = () => {
         {combinedList.map((item) => (
           <FilterTag item={item} onClick={deleteTagHandler} />
         ))}
+        {combinedList.length !== 0 && (
+          <button className={styles["reset-btn"]} onClick={resetHandler}>
+            <GrPowerReset />
+            초기화
+          </button>
+        )}
       </ul>
     </>
   );

@@ -25,7 +25,7 @@ type SelectProps = {
 export function Select({ multiple, value, onChange, options }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  // const containerRef = useRef<HTMLDivElement>(null);
 
   const clearOptions = () => {
     multiple ? onChange([]) : onChange(undefined);
@@ -47,6 +47,7 @@ export function Select({ multiple, value, onChange, options }: SelectProps) {
     return multiple ? value.includes(option) : option === value;
   };
 
+  // TODO: 변경 필요(사전에 text 받아옴.)
   const SelectComment = () => {
     let printText;
     if (multiple) {
@@ -64,16 +65,16 @@ export function Select({ multiple, value, onChange, options }: SelectProps) {
     return <span>{printText}</span>;
   };
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.target != containerRef.current) return;
-    };
-    containerRef.current?.addEventListener("keydown", handler);
+  // useEffect(() => {
+  //   const handler = (e: KeyboardEvent) => {
+  //     if (e.target != containerRef.current) return;
+  //   };
+  //   containerRef.current?.addEventListener("keydown", handler);
 
-    return () => {
-      containerRef.current?.addEventListener("keydown", handler);
-    };
-  }, []);
+  //   return () => {
+  //     containerRef.current?.addEventListener("keydown", handler);
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (isOpen) setHighlightedIndex(0);
@@ -82,7 +83,7 @@ export function Select({ multiple, value, onChange, options }: SelectProps) {
   return (
     <>
       <div
-        ref={containerRef}
+        // ref={containerRef}
         onBlur={() => setIsOpen(false)}
         onClick={() => setIsOpen((prev) => !prev)}
         tabIndex={0}
