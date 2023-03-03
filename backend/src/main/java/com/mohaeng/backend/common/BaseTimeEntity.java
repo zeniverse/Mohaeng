@@ -1,4 +1,4 @@
-package com.mohaeng.backend.course.domain;
+package com.mohaeng.backend.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
