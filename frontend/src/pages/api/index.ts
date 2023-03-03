@@ -8,5 +8,6 @@ export default async function handler(
   const placeData = await require("./place.json");
   const courseData = await require("./course.json");
   const boardData = await require("./board.json");
-  res.status(200).json({ placeData, courseData, boardData });
+  const keywordData = await require("./keyword.json");
+  res.status(200).json({ placeData, courseData, boardData, keywordData });
 }
