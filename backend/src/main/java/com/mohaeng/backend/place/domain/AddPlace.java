@@ -9,15 +9,16 @@ import lombok.*;
 import org.hibernate.annotations.Table;
 
 @Entity
-@Table(appliesTo = "place")
+@Table(appliesTo = "add_place")
 @Getter
 @RequiredArgsConstructor
 @Builder
 @AllArgsConstructor
-public class Place {
+public class AddPlace {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "place_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "add_place_id")
     private Long id;
 
     @NotBlank
@@ -25,9 +26,6 @@ public class Place {
 
     @NotBlank
     private String address;
-
-    @NotBlank
-    private String content;
 
     @Enumerated(EnumType.STRING)
     @NotNull
@@ -37,11 +35,13 @@ public class Place {
 
     private String menu;
 
+    private String email;
+
     private String latitude;
 
     private String longitude;
 
-
+    private boolean registered; // 등록 요청 여부
 
     public void update(AddPlacePostDto addPlacePostDto) {
         this.name = addPlacePostDto.getName();
@@ -49,12 +49,9 @@ public class Place {
         this.category = addPlacePostDto.getCategory();
         this.availableTime = addPlacePostDto.getAvailableTime();
         this.menu = addPlacePostDto.getMenu();
+        this.email = addPlacePostDto.getEmail();
         this.latitude = addPlacePostDto.getLatitude();
         this.longitude = addPlacePostDto.getLongitude();
-
+        this.registered = addPlacePostDto.isRegistered();
     }
-
-//    @Builder.Default
-//    @OneToMany(mappedBy = "review")
-//    private List<Review> reviews = new ArrayList<>();
 }

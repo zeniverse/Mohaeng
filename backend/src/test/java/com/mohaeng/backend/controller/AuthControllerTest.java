@@ -1,7 +1,6 @@
 package com.mohaeng.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mohaeng.backend.place.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,15 +1,14 @@
 package com.mohaeng.backend.course.domain;
 
+import com.mohaeng.backend.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
-public class Course extends BaseTimeEntity{
+public class Course extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
