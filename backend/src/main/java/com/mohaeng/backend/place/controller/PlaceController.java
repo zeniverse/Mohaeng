@@ -27,17 +27,17 @@ public class PlaceController {
 
     @PostConstruct
     public void init() throws Exception {
-        AddPlaceCreate addPlaceCreate1 = AddPlaceCreate.builder()
-                .username("hong")
-                .name("경복궁")
-                .address("서울시")
-                .email("binaryhong@gmail.com")
-                .category(Category.place)
-                .menu("성인 1만원, 소인 5천원")
-                .availableTime("9:00 ~ 18:00")
-                .latitude("latitude xxx")
-                .longitude("longitude xxx")
-                .registered(Boolean.TRUE)
+            AddPlaceCreate addPlaceCreate1 = AddPlaceCreate.builder()
+                    .username("hong")
+                    .name("경복궁")
+                    .address("서울시")
+                    .email("binaryhong@gmail.com")
+                    .category(Category.place)
+                    .menu("성인 1만원, 소인 5천원")
+                    .availableTime("9:00 ~ 18:00")
+                    .latitude("latitude xxx")
+                    .longitude("longitude xxx")
+                    .registered(Boolean.TRUE)
                 .build();
 
         addPlaceService.write(addPlaceCreate1);

@@ -41,8 +41,6 @@ public class Place {
 
     private String longitude;
 
-
-
     public void update(AddPlacePostDto addPlacePostDto) {
         this.name = addPlacePostDto.getName();
         this.address = addPlacePostDto.getAddress();
