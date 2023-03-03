@@ -1,6 +1,6 @@
 "use client";
 
-import { Board } from "@/interfaces/Board";
+import { Board } from "@/src/interfaces/Board";
 import React, { useEffect, useState } from "react";
 import styles from "./AccompanyBoard.module.css";
 import BoardCard from "./BoardCard";

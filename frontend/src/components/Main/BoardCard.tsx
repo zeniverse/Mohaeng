@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./BoardCard.module.css";
-import { Board } from "@/interfaces/Board";
+import { Board } from "@/src/interfaces/Board";
 import RecruitedLabel from "./RecruitedLabel";
 
 const BoardCard = ({

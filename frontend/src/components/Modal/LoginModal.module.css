@@ -1,13 +1,13 @@
-.h1 {
+.loginContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.loginTitle {
   margin-bottom: 1rem;
 }
 
-.mainLogo {
-  margin: auto;
-  display: block;
-}
-
-.desc {
+.loginInfo {
   font-size: medium;
   color: #878787;
   margin-bottom: 6rem;
@@ -21,12 +21,17 @@
   margin-bottom: 0.5rem;
 }
 
-.p {
+.loginGoogle {
   margin-left: 78px;
   cursor: pointer;
 }
 
+.closeBtn:hover {
+  color: gray;
+}
+
 .footer {
+  margin-top: 6rem;
   font-size: small;
   color: #878787;
 }

@@ -1,4 +1,4 @@
-import bannerImg from "../../public/assets/banner-img.png";
+import bannerImg from "/public/assets/banner-img.png";
 import Image from "next/image";
 import { AiOutlineSearch } from "react-icons/ai";
 import styles from "./BannerSearch.module.css";
