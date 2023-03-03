@@ -21,6 +21,9 @@ public class AddPlace {
     @Column(name = "add_place_id")
     private Long id;
 
+    @NotNull
+    private String username;
+
     @NotBlank
     private String name;
 
@@ -41,9 +44,10 @@ public class AddPlace {
 
     private String longitude;
 
-    private boolean registered; // 등록 요청 여부
+    private boolean isRegistered; // 등록 요청 여부
 
     public void update(AddPlacePostDto addPlacePostDto) {
+        this.username = addPlacePostDto.getUsername();
         this.name = addPlacePostDto.getName();
         this.address = addPlacePostDto.getAddress();
         this.category = addPlacePostDto.getCategory();
@@ -52,6 +56,6 @@ public class AddPlace {
         this.email = addPlacePostDto.getEmail();
         this.latitude = addPlacePostDto.getLatitude();
         this.longitude = addPlacePostDto.getLongitude();
-        this.registered = addPlacePostDto.isRegistered();
+        this.isRegistered = addPlacePostDto.isRegistered();
     }
 }

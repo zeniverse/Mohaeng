@@ -1,9 +1,10 @@
 package com.mohaeng.backend.place.controller;
 
 import com.mohaeng.backend.place.domain.AddPlace;
-import com.mohaeng.backend.place.dto.request.PlaceCreate;
+import com.mohaeng.backend.place.dto.request.AddPlaceCreate;
 import com.mohaeng.backend.place.dto.response.AddPlaceResponse;
 import com.mohaeng.backend.place.entity.Category;
+import com.mohaeng.backend.place.repository.AddPlaceRepository;
 import com.mohaeng.backend.place.service.ApiService;
 import com.mohaeng.backend.place.service.AddPlaceService;
 import jakarta.annotation.PostConstruct;
@@ -22,10 +23,12 @@ public class PlaceController {
 
     private final AddPlaceService addPlaceService;
     private final ApiService apiService;
+    private final AddPlaceRepository addPlaceRepository;
 
     @PostConstruct
     public void init() throws Exception {
-        PlaceCreate placeCreate1 = PlaceCreate.builder()
+        AddPlaceCreate addPlaceCreate1 = AddPlaceCreate.builder()
+                .username("hong")
                 .name("경복궁")
                 .address("서울시")
                 .email("binaryhong@gmail.com")
@@ -34,10 +37,13 @@ public class PlaceController {
                 .availableTime("9:00 ~ 18:00")
                 .latitude("latitude xxx")
                 .longitude("longitude xxx")
+                .registered(Boolean.TRUE)
                 .build();
 
-        addPlaceService.write(placeCreate1);
-        PlaceCreate placeCreate2 = PlaceCreate.builder()
+        addPlaceService.write(addPlaceCreate1);
+
+        AddPlaceCreate addPlaceCreate2 = AddPlaceCreate.builder()
+                .username("mong")
                 .name("카카오")
                 .address("성남시")
                 .email("binaryhong@kakao.com")
@@ -46,15 +52,42 @@ public class PlaceController {
                 .availableTime("9:00 ~ 18:00")
                 .latitude("latitude xxx")
                 .longitude("longitude xxx")
+                .registered(Boolean.TRUE)
                 .build();
-        addPlaceService.write(placeCreate2);
+        addPlaceService.write(addPlaceCreate2);
     }
 
 
     @PostMapping("/addPlace")
-    public PlaceCreate postPlace(@RequestBody @Valid PlaceCreate request) {
+    public AddPlaceCreate postPlace(@RequestBody @Valid AddPlaceCreate request) {
         addPlaceService.write(request);
         return request;
+    }
+
+    @PutMapping("/addPlace/{placeId}")
+    public ResponseEntity<AddPlace> updatePlace(@PathVariable Long placeId, @RequestBody AddPlace updatePlace) throws Exception {
+        // Retrieve the existing post from the database
+        AddPlace existingPlace = addPlaceRepository.findById(placeId)
+                .orElseThrow(() -> new Exception("error PlaceId Not Found"));
+
+
+        // Set the updated post properties
+        existingPlace = new AddPlace(
+                existingPlace.getId(),
+                existingPlace.getUsername(),
+                updatePlace.getName(),
+                updatePlace.getAddress(),
+                updatePlace.getCategory(),
+                updatePlace.getAvailableTime(),
+                updatePlace.getMenu(),
+                updatePlace.getEmail(),
+                updatePlace.getLatitude(),
+                updatePlace.getLongitude(),
+                updatePlace.isRegistered()
+        );
+        addPlaceRepository.save(existingPlace);
+
+        return ResponseEntity.ok(existingPlace);
     }
 
     @GetMapping("/addPlace/{placeId}")
@@ -63,7 +96,7 @@ public class PlaceController {
     }
 
     @GetMapping("/addPlace")
-    public ResponseEntity<List<AddPlace>> getList() {
+    public ResponseEntity<List<com.mohaeng.backend.place.domain.AddPlace>> getList() {
         return ResponseEntity.ok(addPlaceService.findAll());
     }
 

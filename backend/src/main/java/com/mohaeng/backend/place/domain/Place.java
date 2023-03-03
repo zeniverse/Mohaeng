@@ -26,8 +26,8 @@ public class Place {
     @NotBlank
     private String address;
 
-    @NotBlank
-    private String content;
+//    @NotBlank
+//    private String content;
 
     @Enumerated(EnumType.STRING)
     @NotNull

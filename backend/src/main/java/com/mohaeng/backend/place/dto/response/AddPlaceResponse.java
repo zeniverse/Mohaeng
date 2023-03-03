@@ -9,6 +9,7 @@ import lombok.Getter;
 public class AddPlaceResponse {
 
     private final Long id;
+    private final String username;
     private final String name;
     private final String address;
     private final Category category;
@@ -20,8 +21,9 @@ public class AddPlaceResponse {
     private final Boolean registered;
 
     //생성자 오버로딩
-    public AddPlaceResponse(AddPlace addPlace, Boolean registered) {
+    public AddPlaceResponse(AddPlace addPlace) {
         this.id = addPlace.getId();
+        this.username = addPlace.getUsername();
         this.name = addPlace.getName();
         this.address = addPlace.getAddress();
         this.category = addPlace.getCategory();
@@ -30,15 +32,16 @@ public class AddPlaceResponse {
         this.email = addPlace.getEmail();
         this.latitude = addPlace.getLatitude();
         this.longitude = addPlace.getLongitude();
-        this.registered = registered;
+        this.registered = addPlace.isRegistered();
     }
 
 
     @Builder
-    public AddPlaceResponse(Long id, String name, String address, Category category,
+    public AddPlaceResponse(Long id, String username, String name, String address, Category category,
                             String availableTime, String menu, String email,
                             String latitude, String longitude, Boolean registered) {
         this.id = id;
+        this.username = username;
         this.name = name;
         this.address = address;
         this.category = category;

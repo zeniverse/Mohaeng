@@ -7,7 +7,9 @@ import lombok.Getter;
 @Getter
 public class AddPlaceResponseDto {
 
+
     private Long id;
+    private String username;
     private String name;
 //    private List<String> imageUrl;
     private String theme;

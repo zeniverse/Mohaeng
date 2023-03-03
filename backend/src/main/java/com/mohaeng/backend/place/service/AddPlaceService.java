@@ -2,7 +2,7 @@ package com.mohaeng.backend.place.service;
 
 import com.mohaeng.backend.place.domain.AddPlace;
 import com.mohaeng.backend.place.dto.AddPlacePostDto;
-import com.mohaeng.backend.place.dto.request.PlaceCreate;
+import com.mohaeng.backend.place.dto.request.AddPlaceCreate;
 import com.mohaeng.backend.place.dto.response.AddPlaceResponse;
 import com.mohaeng.backend.place.entity.Category;
 import com.mohaeng.backend.place.repository.AddPlaceRepository;
@@ -21,8 +21,9 @@ public class AddPlaceService {
     private final AddPlaceRepository addPlaceRepository;
 
     @Transactional
-    public void write(PlaceCreate placeCreate){
+    public void write(AddPlaceCreate placeCreate){
         AddPlace addPlace = AddPlace.builder()
+                .username(placeCreate.getUsername())
                 .name(placeCreate.getName())
                 .address(placeCreate.getAddress())
                 .category(Category.valueOf(placeCreate.getCategory()))
@@ -31,6 +32,7 @@ public class AddPlaceService {
                 .email(placeCreate.getEmail())
                 .latitude(placeCreate.getLatitude())
                 .longitude(placeCreate.getLongitude())
+                .isRegistered(placeCreate.isRegistered())
                 .build();
         addPlaceRepository.save(addPlace);
     }
@@ -46,6 +48,7 @@ public class AddPlaceService {
 
         return AddPlaceResponse.builder()
             .id(addPlace.getId())
+            .username(addPlace.getUsername())
             .name(addPlace.getName())
             .address(addPlace.getAddress())
             .category(addPlace.getCategory())
@@ -54,6 +57,7 @@ public class AddPlaceService {
             .email(addPlace.getEmail())
             .latitude(addPlace.getLatitude())
             .longitude(addPlace.getLongitude())
+            .registered(addPlace.isRegistered())
             .build();
     }
 
