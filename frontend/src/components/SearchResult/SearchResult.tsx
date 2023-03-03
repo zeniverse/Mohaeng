@@ -30,14 +30,14 @@ type Keyword = {
 //   handler();
 // }, []);
 export default function SearchPlace(): JSX.Element {
-  const [keywordData, setkeywordData] = useState<Keyword[]>([]);
+  const [keywordData, setKeywordData] = useState<Keyword[]>([]);
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch("/api");
+      const res = await fetch("/api/keyword");
       const newData = await res.json();
-      const getKeywordData = newData.keywordData;
-      setkeywordData(getKeywordData);
+      const getKeywordData = newData;
+      setKeywordData(getKeywordData);
     }
     fetchData();
   }, []);
