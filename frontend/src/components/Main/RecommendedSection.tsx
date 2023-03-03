@@ -1,6 +1,6 @@
 "use client";
 
-import { palette, PaletteKeyTypes } from "@/styles/palette";
+import { palette, PaletteKeyTypes } from "@/src/styles/palette";
 import Link from "next/link";
 import styled from "styled-components";
 import styles from "./RecommendedSection.module.css";

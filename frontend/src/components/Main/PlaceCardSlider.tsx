@@ -5,12 +5,11 @@ import React, { useEffect, useState } from "react";
 import { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import PlaceCard from "@/components/Main/PlaceCard";
+import PlaceCard from "@/src/components/Main/PlaceCard";
 
 import "swiper/css";
 import "swiper/css/navigation";
-import "../../styles/slider.css";
-import { Place } from "@/interfaces/Place";
+import { Place } from "@/src/interfaces/Place";
 
 const PlaceCardSlider = () => {
   const [placeData, setPlaceData] = useState<Place[]>([]);

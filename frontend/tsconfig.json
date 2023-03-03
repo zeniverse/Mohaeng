@@ -30,8 +30,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/page.tsx",
-    "components/UI/ArrowButton.ssx",
-    "components/Main/SliderContainer.jsx"
+    "src/components/UI/ArrowButton.ssx",
+    "src/components/Main/SliderContainer.jsx"
   ],
   "exclude": ["node_modules"]
 }

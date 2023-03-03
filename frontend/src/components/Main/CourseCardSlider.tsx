@@ -5,12 +5,11 @@ import React, { useEffect, useState } from "react";
 import { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import CourseCard from "@/components/Main/CourseCard";
+import CourseCard from "@/src/components/Main/CourseCard";
 
 import "swiper/css";
 import "swiper/css/navigation";
-import "../../styles/slider.css";
-import { Course } from "@/interfaces/Course";
+import { Course } from "@/src/interfaces/Course";
 
 const CourseCardSlider = () => {
   const [courseData, setCoueseData] = useState<Course[]>([]);
