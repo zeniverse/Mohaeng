@@ -18,12 +18,6 @@ export default function Course() {
             </button>
           </div>
           <CourseFilter />
-          {/* <div className={styles["course-body-head"]}>
-            <button className={styles["write-btn"]}>
-              <BiPencil />
-              작성하기
-            </button>
-          </div> */}
           <CourseList />
         </div>
       </div>
