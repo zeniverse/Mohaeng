@@ -16,10 +16,9 @@ const CourseCardSlider = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch("/api");
-      const newData = await res.json();
-      const getCourseData = newData.courseData;
-      setCoueseData(getCourseData);
+      const res = await fetch("/api/course");
+      const data = await res.json();
+      setCoueseData(data);
     }
     fetchData();
   }, []);

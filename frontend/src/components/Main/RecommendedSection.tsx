@@ -18,8 +18,8 @@ const RecommendedSection = ({
   bgColor,
   linkUrl,
 }: SectionStyle) => {
-  const getColor = bgColor ? palette[bgColor] : "#99D9D9";
-  const style = { backgroundColor: getColor };
+  const settingBgColor = bgColor ? palette[bgColor] : "#99D9D9";
+  const style = { backgroundColor: settingBgColor };
   return (
     <section className={styles["recommended-container"]} style={style}>
       <div className={styles["recommended-container-title"]}>
