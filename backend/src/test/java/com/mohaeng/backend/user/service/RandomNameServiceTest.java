@@ -39,4 +39,13 @@ class RandomNameServiceTest {
 
         Assertions.assertThat(nickName).isNotEqualTo(generatedNickName);
     }
+
+    @Test
+    public void 닉네임_변경_검사() {
+        User user = userRepository.save(new User("Kim", "kim@gmail.com", Role.NORMAL, "testNick"));
+        String nickName = randomNameService.generateNickName();
+        user.changeNickName(nickName);
+
+        Assertions.assertThat(nickName).isEqualTo(user.getNickName());
+    }
 }
