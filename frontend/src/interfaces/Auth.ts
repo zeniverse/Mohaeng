@@ -8,5 +8,5 @@ export interface userData {
 export interface User {
   result: string;
   status: number;
-  data: userData[];
+  data: userData;
 }

@@ -55,6 +55,7 @@ function Header({}: Props) {
             <Link href="#">여행지</Link>
             <Link href="#">코스</Link>
             <Link href="#">동행 게시판</Link>
+            <Link href="/mypage">마이페이지</Link>
           </div>
         </div>
       </nav>

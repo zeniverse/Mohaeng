@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ButtonBox } from "./Buttonstyle";
+import { ButtonBox } from "./ButtonStyle";
 
 type ButtonPropsType = {
   text: string;
