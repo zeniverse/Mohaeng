@@ -11,3 +11,11 @@ export interface items {
   content: string;
   imgUrl: string;
 }
+
+export type CourseProps = {
+  id: number;
+  courseTitle: string;
+  courseDesc: string;
+  courseLike: number;
+  courseList: items[];
+};
