@@ -8,6 +8,7 @@ import com.mohaeng.backend.place.entity.Category;
 import com.mohaeng.backend.place.repository.AddPlaceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,5 +71,7 @@ public class AddPlaceService {
         AddPlace addPlace = addPlaceRepository.findById(id).orElseThrow(null);
         addPlaceRepository.delete(addPlace);
     }
+
+
 
 }
