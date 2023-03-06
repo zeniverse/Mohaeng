@@ -44,4 +44,8 @@ public class User {
         this.name = name;
         return this;
     }
+
+    public void changeNickName(String nickName) {
+        this.nickName = nickName;
+    }
 }
