@@ -4,6 +4,7 @@ import com.mohaeng.backend.user.dto.SessionUser;
 import com.mohaeng.backend.user.domain.Role;
 import com.mohaeng.backend.user.domain.User;
 import com.mohaeng.backend.user.repository.UserRepository;
+import com.mohaeng.backend.user.service.RandomNameService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +24,8 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 
     private final UserRepository userRepository;
     private final HttpSession httpSession;
+
+    private final RandomNameService randomNameService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -50,7 +53,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
     private User save(OAuthAttributes attributes) {
         User findUser = userRepository.findByEmail(attributes.getEmail())
                 .map(user -> user.update(attributes.getName()))
-                .orElse(new User(attributes.getName(), attributes.getEmail(), Role.NORMAL, "testNick"));
+                .orElse(new User(attributes.getName(), attributes.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
 
         return userRepository.save(findUser);
     }
