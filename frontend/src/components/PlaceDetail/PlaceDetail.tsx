@@ -5,6 +5,7 @@ import { IoMdHeart } from "react-icons/io";
 import Image from "next/image";
 import Review from "../Review/Review";
 import KakaoMap from "../KakaoMap/KakaoMap";
+import Link from "next/link";
 
 export default function PlaceDetail() {
   const [btn, setBtn] = useState();
@@ -14,7 +15,7 @@ export default function PlaceDetail() {
         <div className={styles.detailHeader}>
           <div className={styles.headerTitle}>
             <h2 className={styles.h1}>여행지 이름</h2>
-            <a href="#review">
+            <a href="#">
               <p className={styles.rating}>별점 </p>
               <p className={styles.review}>12건의 리뷰</p>
             </a>

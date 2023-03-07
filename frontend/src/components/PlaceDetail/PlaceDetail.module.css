@@ -1,5 +1,6 @@
 .placeDetail {
   margin: 4rem 8rem 0;
+  position: relative;
   padding: 2rem 3rem;
   background-color: var(--color-bg);
   border-radius: 12px;
@@ -82,6 +83,7 @@
 .detailMap {
   width: 100rem;
 }
+
 .descInfo {
   margin-bottom: 8px;
 }
