@@ -20,7 +20,7 @@ export default function LoginModal() {
 
   return (
     <Content className={styles.loginContent}>
-      <h1 className={styles.loginTitle}>로그인 / 회원가입</h1>
+      <h2 className={styles.loginTitle}>로그인 / 회원가입</h2>
       <p className={styles.loginInfo}>
         간편하게 로그인하고 모두의 여행을 경험해보세요
       </p>
