@@ -1,31 +1,29 @@
 "use client";
 
 import Button from "@/src/components/Button/Button";
-import Sidebar from "@/src/components/Sidebar/Sidebar";
+import Sidebar from "@/src/components/Mypage/Sidebar";
 import { User, userData } from "@/src/interfaces/Auth";
 import React, { useEffect, useState } from "react";
-
-
 import styles from "./index.module.css";
 
 const MyPage: React.FC = () => {
-  const [currentUser, setUser] = useState<User>();
+  const [currentUser, setCurrentUser] = useState<User>();
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch("/api");
-      const newData = await res.json();
-      const getUserData = newData.userData;
-      setUser(getUserData);
+      const res = await fetch("/api/user");
+      const data = await res.json();
+      setCurrentUser(data);
     }
     fetchData();
   }, []);
 
+  const Img = currentUser?.data.profileUrl;
   return (
     <div className={styles["Container"]}>
       <h1 className={styles["Title"]}>마이페이지</h1>
       <Sidebar />
       <div className={styles["ProfileWrapper"]}>
-        <div className={styles["Avatar"]} />
+        <img src={Img} className={styles["Avatar"]} />
         <div>
           <div className={styles["Name"]}>{currentUser?.data.userId}</div>
           <div className={styles["Nickname"]}>
