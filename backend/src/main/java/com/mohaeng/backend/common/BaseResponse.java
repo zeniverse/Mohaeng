@@ -1,16 +1,14 @@
 package com.mohaeng.backend.common;
 
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor
 @Getter
 public class BaseResponse<T> {
     private String result;
     private T data;
-
-    public BaseResponse(String result, T data) {
-        this.result = result;
-        this.data = data;
-    }
 
     public BaseResponse(String result) {
         this.result = result;
@@ -23,5 +21,4 @@ public class BaseResponse<T> {
     public static <T> BaseResponse<T> success(String result){
         return new BaseResponse(result);
     }
-
 }

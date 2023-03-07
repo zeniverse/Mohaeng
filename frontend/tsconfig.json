@@ -24,6 +24,14 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "app/page.tsx",
+    "src/components/UI/ArrowButton.ssx",
+    "src/components/Main/SliderContainer.jsx"
+  ],
   "exclude": ["node_modules"]
 }

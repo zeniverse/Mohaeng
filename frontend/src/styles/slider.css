@@ -1,0 +1,27 @@
+.swiper-button-next,
+.swiper-button-prev {
+  color: black;
+  background-color: #fff;
+  width: 3.2rem;
+  height: 3.2rem;
+  font-size: 1.2rem;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  font-size: 1.2rem;
+}
+.swiper-slide {
+  display: flex;
+  padding: 1.3rem 1rem;
+  justify-content: center;
+}
+
+.swiper-button-next {
+  transform: translateX(18%);
+}
+.swiper-button-prev {
+  transform: translateX(-18%);
+}
