@@ -1,0 +1,30 @@
+.registerReview {
+  margin: 4rem 0;
+  text-align: center;
+  --color-bg: #f9f9f9;
+  --color-bg-white: #ffffff;
+  --color-border: #dddddd;
+  --color-icon: #a1a1a1;
+  --color-like: #f20000;
+  --color-text: #42444a;
+  --color-accent: #99d9d9;
+}
+
+.h2 {
+  font-size: 2rem;
+}
+
+.reviewEditForm {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem 8rem 0;
+  padding: 2rem 3rem;
+  background-color: var(--color-bg);
+  border-radius: 12px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}

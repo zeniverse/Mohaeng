@@ -1,0 +1,37 @@
+.reviewBox {
+  --color-bg: #f9f9f9;
+  --color-bg-white: #ffffff;
+  --color-border: #dddddd;
+  --color-icon: #a1a1a1;
+  --color-like: #f20000;
+  --color-text: #42444a;
+  --color-accent: #99d9d9;
+
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-white);
+}
+
+.reviewerInfo {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.reviewContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.reviewTxt {
+  margin-bottom: 1rem;
+}
+
+.likeBtn {
+  width: 60px;
+  height: 30px;
+  border: 1px solid var(--color-border);
+  border-radius: 50px;
+  background-color: var(--color-bg-white);
+}

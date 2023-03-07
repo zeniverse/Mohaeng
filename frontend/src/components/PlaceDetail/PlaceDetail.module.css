@@ -1,22 +1,26 @@
 .placeDetail {
+  margin: 4rem 8rem 0;
+  padding: 2rem 3rem;
+  background-color: var(--color-bg);
+  border-radius: 12px;
   --color-bg: #f9f9f9;
-  --color-icon: #a1a1a1;
+  --color-bg-white: #ffffff;
+  --color-border: #dddddd;
+  --color-icon: #cfcfcf;
   --color-like: #f20000;
   --color-text: #42444a;
   --color-accent: #99d9d9;
 }
 
-.detailTitle {
+.detailHeader {
   display: flex;
   justify-content: space-between;
-  margin: 4rem 8rem 1rem;
-  padding: 2rem 3rem;
-  background-color: var(--color-bg);
-  border-radius: 12px;
+  margin-bottom: 3rem;
 }
 
-.h1 {
+.h2 {
   font-size: 2rem;
+  margin-bottom: 1rem;
 }
 
 .rating,
@@ -26,6 +30,7 @@
 
 .likeBtn {
   display: flex;
+  justify-content: center;
   align-items: center;
   border: none;
   background-color: transparent;
@@ -33,28 +38,58 @@
 }
 
 .likeText {
-  color: var(--color-text);
-  padding: 12px 4px;
+  padding-right: 4px;
 }
 
 .likeIcon {
   color: var(--color-icon);
-  font-size: 36px;
+  font-size: 40px;
 }
 
 .likeIcon:hover {
   color: var(--color-like);
+  scale: 110%;
+  transition: 200ms;
+}
+
+.imgSlider {
+  height: 12rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  padding: 0 4rem;
+  background-color: var(--color-bg-white);
 }
 
 .detailContent {
   display: flex;
-  justify-content: space-between;
-  margin: 1rem 8rem;
-  padding: 2rem 3rem;
-  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+.detailDesc {
+  width: 200rem;
+  margin-right: 1rem;
+}
+
+.detailDesc,
+.detailMap {
+  height: 20rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-white);
   border-radius: 8px;
 }
 
-.detailDesc {
-  width: 500px;
+.detailMap {
+  width: 100rem;
+}
+.descInfo {
+  margin-bottom: 8px;
+}
+
+.descTitle {
+  font-weight: bold;
+}
+
+.placeMap {
+  padding: 1rem;
 }

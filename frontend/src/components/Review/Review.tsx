@@ -1,30 +1,47 @@
 import Link from "next/link";
-import React from "react";
 import styles from "./Review.module.css";
+import ReviewBox from "./ReviewBox";
 
 export default function Review() {
   return (
     <>
       <section className={styles.review}>
-        <article className={styles.reviewContainer}>
+        <div className={styles.reviewContainer}>
           <div className={styles.reviewTitle}>
             <div className={styles.titleBox}>
-              <h1 className={styles.h1}>리뷰</h1>
-              <p> 총 10건의 리뷰</p>
+              <h2 className={styles.h1}>리뷰</h2>
             </div>
             <Link className={styles.reviewBtn} href="/registerReview">
               리뷰 작성
             </Link>
           </div>
-          <div className={styles.reviewBox}>
-            <div className={styles.reviewContent}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil
-              culpa nam dicta, laborum modi delectus ratione similique inventore
-              quibusdam saepe facere eaque perferendis qui quas rem vel
-              corporis? Obcaecati, incidunt.
+
+          <aside className={styles.reviewNav}>
+            <div className={styles.reviewInfo}>
+              <p>총 리뷰 건수</p>
+              <span>평균 별점</span>
             </div>
-          </div>
-        </article>
+            <select className={styles.select} name="sort">
+              <option value="" selected>
+                정렬 ▼
+              </option>
+              <option value="newest">최신순</option>
+              <option value="popular">추천순</option>
+            </select>
+          </aside>
+
+          <ReviewBox />
+          <ReviewBox />
+          <ReviewBox />
+          <ReviewBox />
+          <ReviewBox />
+          <ReviewBox />
+          <ReviewBox />
+          <ReviewBox />
+          <ReviewBox />
+          <ReviewBox />
+          <ReviewBox />
+        </div>
       </section>
     </>
   );
