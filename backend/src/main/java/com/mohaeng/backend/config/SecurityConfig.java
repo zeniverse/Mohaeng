@@ -1,6 +1,6 @@
 package com.mohaeng.backend.config;
 
-import com.mohaeng.backend.user.oauth.OAuthService;
+import com.mohaeng.backend.member.oauth.OAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

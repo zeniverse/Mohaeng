@@ -1,10 +1,10 @@
-package com.mohaeng.backend.user.oauth;
+package com.mohaeng.backend.member.oauth;
 
-import com.mohaeng.backend.user.dto.SessionUser;
-import com.mohaeng.backend.user.domain.Role;
-import com.mohaeng.backend.user.domain.User;
-import com.mohaeng.backend.user.repository.UserRepository;
-import com.mohaeng.backend.user.service.RandomNameService;
+import com.mohaeng.backend.member.domain.Member;
+import com.mohaeng.backend.member.dto.SessionMember;
+import com.mohaeng.backend.member.domain.Role;
+import com.mohaeng.backend.member.repository.MemberRepository;
+import com.mohaeng.backend.member.service.RandomNameService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,7 +22,7 @@ import java.util.Collections;
 @Service
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final HttpSession httpSession;
 
     private final RandomNameService randomNameService;
@@ -41,8 +41,8 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         // OAuth2 로그인을 통해 가져온 OAuth2User의 attribute를 담아주는 of 메소드.
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        User user = save(attributes);
-        httpSession.setAttribute("user", new SessionUser(user));
+        Member member = save(attributes);
+        httpSession.setAttribute("user", new SessionMember(member));
 
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(Role.NORMAL.getKey()))
                 , attributes.getAttributes()
@@ -50,12 +50,12 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
     }
 
     // 혹시 이미 저장된 정보라면, update 처리
-    private User save(OAuthAttributes attributes) {
-        User findUser = userRepository.findByEmail(attributes.getEmail())
+    private Member save(OAuthAttributes attributes) {
+        Member findMember = memberRepository.findByEmail(attributes.getEmail())
                 .map(user -> user.update(attributes.getName()))
-                .orElse(new User(attributes.getName(), attributes.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
+                .orElse(new Member(attributes.getName(), attributes.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
 
-        return userRepository.save(findUser);
+        return memberRepository.save(findMember);
     }
 
 }

@@ -1,7 +1,6 @@
-package com.mohaeng.backend.user.service;
+package com.mohaeng.backend.member.service;
 
-import com.mohaeng.backend.user.domain.User;
-import com.mohaeng.backend.user.repository.UserRepository;
+import com.mohaeng.backend.member.repository.MemberRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 public class RandomNameService {
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     private String[] animalNames = {"고양이", "강아지", "거북이", "토끼", "뱀", "사자", "호랑이", "표범",
             "치타", "하이에나", "기린", "코끼리", "코뿔소", "하마", "악어", "펭귄", "부엉이", "올빼미",
@@ -40,7 +39,7 @@ public class RandomNameService {
             "케케묵은", "큰", "탐스러운", "턱없는", "푸른", "한결같은", "흐린", "희망찬", "흰", "힘겨운"};
 
     public String generateNickName() {
-        List<String> nickNameList = userRepository.findAll()
+        List<String> nickNameList = memberRepository.findAll()
                 .stream().map(user -> user.getNickName())
                 .toList();
 

@@ -1,4 +1,4 @@
-package com.mohaeng.backend.user.domain;
+package com.mohaeng.backend.member.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -32,7 +32,7 @@ public class User {
     private boolean isActive;
     private int stopCount;
 
-    public User(String name, String email, Role role, String nickName) {
+    public Member(String name, String email, Role role, String nickName) {
         this.name = name;
         this.email = email;
         this.role = role;
@@ -40,7 +40,7 @@ public class User {
     }
 
     // OAuth 서버에서 사용자의 정보가 변경될 수 있기때문
-    public User update(String name) {
+    public Member update(String name) {
         this.name = name;
         return this;
     }
