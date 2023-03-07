@@ -1,4 +1,4 @@
-package com.mohaeng.backend.user.oauth;
+package com.mohaeng.backend.member.oauth;
 
 import lombok.Getter;
 
@@ -29,12 +29,12 @@ public class OAuthAttributes {
         }
     }
 
-    private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
+    private static OAuthAttributes ofKakao(String memberNameAttributeName, Map<String, Object> attributes) {
         Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");  // 카카오로 받은 데이터에서 계정 정보가 담긴 kakao_account 값을 꺼낸다.
         Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");   // 마찬가지로 profile(nickname, image_url.. 등) 정보가 담긴 값을 꺼낸다.
         kakaoAccount.put("id", attributes.get("id"));
         return new OAuthAttributes(kakaoAccount,
-                userNameAttributeName,
+                memberNameAttributeName,
                 (String) profile.get("nickname"),
                 (String) kakaoAccount.get("email"));
     }

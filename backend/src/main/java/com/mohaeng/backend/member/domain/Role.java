@@ -1,4 +1,4 @@
-package com.mohaeng.backend.user.domain;
+package com.mohaeng.backend.member.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

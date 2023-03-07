@@ -1,12 +1,11 @@
-package com.mohaeng.backend.user.dto;
+package com.mohaeng.backend.member.dto;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UserLoginDto {
+public class MemberLoginDto {
     private Long id;
 
     private String nickName;

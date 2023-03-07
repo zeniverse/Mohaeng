@@ -1,9 +1,9 @@
-package com.mohaeng.backend.user.controller;
+package com.mohaeng.backend.member.controller;
 
-import com.mohaeng.backend.user.domain.User;
+import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.common.BaseResponse;
-import com.mohaeng.backend.user.dto.UserLoginDto;
-import com.mohaeng.backend.user.repository.UserRepository;
+import com.mohaeng.backend.member.dto.MemberLoginDto;
+import com.mohaeng.backend.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,22 +24,22 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     @GetMapping("/loginInfo")
     public ResponseEntity loginInfoController(@AuthenticationPrincipal OAuth2User oAuth2User) {
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        Optional<User> optionalUser = userRepository.findByEmail((String) attributes.get("email"));
+        Optional<Member> optionalUser = memberRepository.findByEmail((String) attributes.get("email"));
 
         if (optionalUser.isEmpty()) {
             throw new IllegalArgumentException("INVALID_USER");
         }
 
-        User findUser = optionalUser.get();
-        UserLoginDto userLoginDto = new UserLoginDto(findUser.getId(), findUser.getNickName(), findUser.getEmail());
+        Member findMember = optionalUser.get();
+        MemberLoginDto memberLoginDto = new MemberLoginDto(findMember.getId(), findMember.getNickName(), findMember.getEmail());
 
-        return ResponseEntity.ok().body(BaseResponse.success("ok", userLoginDto));
+        return ResponseEntity.ok().body(BaseResponse.success("ok", memberLoginDto));
     }
 
     @GetMapping("/user/logout")
