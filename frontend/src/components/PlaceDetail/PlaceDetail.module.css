@@ -42,12 +42,21 @@
   padding-right: 4px;
 }
 
-.likeIcon {
+.unbookmark {
   color: var(--color-icon);
   font-size: 40px;
 }
+.unbookmark:hover {
+  color: var(--color-like);
+  scale: 110%;
+  transition: 200ms;
+}
 
-.likeIcon:hover {
+.bookmark {
+  color: var(--color-like);
+  font-size: 40px;
+}
+.bookmark:hover {
   color: var(--color-like);
   scale: 110%;
   transition: 200ms;

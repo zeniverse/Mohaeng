@@ -5,5 +5,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  res.status(200).json({});
+  const imageData = await require("./JSON/image.json");
+  res.status(200).json(imageData);
 }

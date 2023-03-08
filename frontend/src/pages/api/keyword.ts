@@ -5,5 +5,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  res.status(200).json({});
+  const keywordData = await require("./JSON/keyword.json");
+  res.status(200).json(keywordData);
 }
