@@ -56,11 +56,6 @@
   color: var(--color-like);
   font-size: 40px;
 }
-.bookmark:hover {
-  color: var(--color-like);
-  scale: 110%;
-  transition: 200ms;
-}
 
 .imgSlider {
   height: 12rem;

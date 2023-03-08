@@ -1,6 +1,6 @@
-.registerReview {
+.registerReviewContainer {
   margin: 4rem 0;
-  text-align: center;
+
   --color-bg: #f9f9f9;
   --color-bg-white: #ffffff;
   --color-border: #dddddd;
@@ -12,9 +12,10 @@
 
 .h2 {
   font-size: 2rem;
+  text-align: center;
 }
 
-.reviewEditForm {
+.registerReview {
   display: flex;
   flex-direction: column;
   margin: 2rem 8rem 0;
@@ -23,8 +24,106 @@
   border-radius: 12px;
 }
 
+.reviewTitle {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+}
+
+.reviewTitleBox {
+  display: flex;
+  flex-direction: column;
+  margin-right: auto;
+  margin-bottom: 1rem;
+}
+
 .form {
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
+}
+
+.star:hover {
+  color: yellow;
+}
+.formTxtArea {
+  resize: none;
+  height: 20rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  font-size: 16px;
+}
+
+.ratingBox {
+  margin-bottom: 2rem;
+}
+
+.imageForm {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-white);
+  cursor: pointer;
+}
+
+.inputFileDesc {
+  margin-bottom: 1rem;
+  color: var(--color-icon);
+  font-size: 16px;
+}
+
+.imgContainer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2rem;
+}
+
+.imgBox {
+  position: relative;
+  display: flex;
+  margin: 1rem;
+}
+
+.removeImg {
+  font-size: 2rem;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+}
+.removeImg:hover {
+  color: red;
+}
+
+.btnGroup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.postBtn,
+.cancelBtn {
+  width: 120px;
+  height: 50px;
+  margin-right: 3rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 50px;
+  text-decoration: none;
+  text-align: center;
+  color: black;
+}
+
+.postBtn:hover,
+.cancelBtn:hover {
+  filter: brightness(90%);
+}
+
+.postBtn {
+  background-color: var(--color-accent);
+}
+
+.cancelBtn {
+  background-color: var(--color-icon);
 }

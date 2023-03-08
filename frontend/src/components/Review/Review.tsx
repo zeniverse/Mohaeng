@@ -33,14 +33,6 @@ export default function Review() {
           <ReviewBox />
           <ReviewBox />
           <ReviewBox />
-          <ReviewBox />
-          <ReviewBox />
-          <ReviewBox />
-          <ReviewBox />
-          <ReviewBox />
-          <ReviewBox />
-          <ReviewBox />
-          <ReviewBox />
         </div>
       </section>
     </>
