@@ -11,7 +11,6 @@ import com.mohaeng.backend.place.service.AddPlaceService;
 import com.mohaeng.backend.place.service.PlaceService;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
-import jakarta.xml.bind.JAXBException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,8 +20,8 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -66,7 +65,6 @@ public class PlaceController {
                 .build();
         addPlaceService.write(addPlaceCreate2);
     }
-
 
     @PostMapping("/addPlace")
     public AddPlaceCreate postPlace(@RequestBody @Valid AddPlaceCreate request) {
@@ -115,14 +113,12 @@ public class PlaceController {
         addPlaceService.delete(placeId);
     }
 
-
     @GetMapping("/place")
     public ResponseEntity<List<Place>> getPlaces() throws IOException, ParserConfigurationException, SAXException {
         List<Place> places = placeService.getPlaces();
         log.info("getPlaces.size:{}", places.size());
         return new ResponseEntity<>(places, HttpStatus.OK);
     }
-
 
     @GetMapping("/place/{addr1}")
     public ResponseEntity<List<Place>> getPlacesByAddr1(@PathVariable String addr1) {
@@ -131,6 +127,7 @@ public class PlaceController {
         log.info("search places.size:{} ", places.size());
         return new ResponseEntity<>(places, HttpStatus.OK);
     }
+
 }
 //    @GetMapping("/place/{addr1}")
 //    public ResponseEntity<List<Place>> searchPlace(@PathVariable String addr1) throws JAXBException, IOException, ParserConfigurationException, SAXException {

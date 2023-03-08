@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -37,8 +39,12 @@ public class PlaceService {
     @PostConstruct
     public void init() throws IOException, ParserConfigurationException, SAXException {
         List<Place> places = getPlaces();
+
         placeRepository.saveAll(places);
+        placeRepository.flush();
     }
+
+
 
 //    @Scheduled(cron = "0 0 5 * * ?") #TODO
     public List<Place> getPlaces() throws IOException, ParserConfigurationException, SAXException {
@@ -50,8 +56,7 @@ public class PlaceService {
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        org.w3c.dom.Document doc = db.parse(responseStream);
-
+        Document doc = db.parse(responseStream);
 
         List<Place> places = new ArrayList<>();
         NodeList nodeList = doc.getElementsByTagName("item");
@@ -78,14 +83,12 @@ public class PlaceService {
         if (places.isEmpty()) {
             throw new PlaceNotFoundException("No place found.");
         }
-        placeRepository.saveAll(places);
         return places;
     }
 
     public List<Place> getPlacesByAddr1(String addr1) {
         String searchValue = addr1.substring(0, 2); // get the first two letters of addr1
-        List<Place> places = placeRepository.findByAddr1ContainingIgnoreCase(searchValue);
-        return places;
+        return placeRepository.findByAddr1ContainingIgnoreCase(searchValue);
     }
 
 }
