@@ -4,6 +4,7 @@ import Link from "next/link";
 import React from "react";
 import styles from "./header.module.css";
 import { BsSearch } from "react-icons/bs";
+import { FaUserCircle } from "react-icons/fa";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../store/reducers/modalSlice";
@@ -55,6 +56,7 @@ function Header({}: Props) {
             <Link href="#">여행지</Link>
             <Link href="#">코스</Link>
             <Link href="#">동행 게시판</Link>
+            <Link href="/mypage">마이페이지</Link>
           </div>
         </div>
       </nav>
