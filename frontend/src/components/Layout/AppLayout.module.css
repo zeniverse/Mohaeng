@@ -1,6 +1,6 @@
 /* AppLayout.module.css */
-@import "../Footer/Footer.module.css";
-@import "../Header/Header.module.css";
+@import "./Footer.module.css";
+@import "./Header.module.css";
 
 /* AppLayout styles */
 /* :root {
