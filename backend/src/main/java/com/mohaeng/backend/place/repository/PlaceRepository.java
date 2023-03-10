@@ -8,14 +8,5 @@ import java.util.List;
 
 @Repository
 public interface PlaceRepository extends JpaRepository<Place, Long> {
-
-    List<Place> findAllByAddr1Containing(String keyword);
-    List<Place> findAllByTitleContaining(String keyword);
-
-    List<Place> findAllByAddr1StartingWithIgnoreCase(String substring);
-
-    List<Place> findByAddr1LikeIgnoreCase(String escapedValue);
-
     List<Place> findByAddr1ContainingIgnoreCase(String searchValue);
-
 }

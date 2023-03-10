@@ -9,6 +9,7 @@ import com.mohaeng.backend.place.repository.AddPlaceRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.service.AddPlaceService;
 import com.mohaeng.backend.place.service.PlaceService;
+import com.mohaeng.backend.place.service.PlaceService2;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +18,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.xml.sax.SAXException;
+import reactor.core.publisher.Mono;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class PlaceController {
     //    private final ApiService apiService;
     private final AddPlaceRepository addPlaceRepository;
     private final PlaceService placeService;
+    private final PlaceService2 placeService2;
     private final PlaceRepository placeRepository;
 
     @PostConstruct
@@ -119,6 +122,20 @@ public class PlaceController {
         log.info("getPlaces.size:{}", places.size());
         return new ResponseEntity<>(places, HttpStatus.OK);
     }
+
+//    @GetMapping("/place2")
+//    public ResponseEntity<List<Place>> getPlaces2() throws JAXBException {
+//        List<Place> places = placeService2.getPlaces();
+////        log.info("getPlaces.size:{}", places.());
+//        return new ResponseEntity<>( places, HttpStatus.OK);
+//    }
+
+
+    @GetMapping("/place2")
+    public Mono<List<Place>> getPlaces2() {
+        return placeService2.getPlaces();
+    }
+
 
     @GetMapping("/place/{addr1}")
     public ResponseEntity<List<Place>> getPlacesByAddr1(@PathVariable String addr1) {
