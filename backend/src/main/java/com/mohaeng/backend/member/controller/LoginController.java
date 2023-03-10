@@ -2,7 +2,7 @@ package com.mohaeng.backend.member.controller;
 
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.common.BaseResponse;
-import com.mohaeng.backend.member.dto.MemberLoginDto;
+import com.mohaeng.backend.member.dto.response.MemberLoginDto;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,4 +1,4 @@
-package com.mohaeng.backend.member.dto;
+package com.mohaeng.backend.member.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
