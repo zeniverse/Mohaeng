@@ -1,14 +1,18 @@
 package com.mohaeng.backend.member.domain;
 
+import com.mohaeng.backend.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -32,6 +36,11 @@ public class Member {
     private boolean isActive;
     private int stopCount;
 
+
+    @OneToMany(mappedBy = "member")
+
+    private List<CourseBookMark> courseBookMarkList = new ArrayList<>();
+
     public Member(String name, String email, Role role, String nickName) {
         this.name = name;
         this.email = email;
@@ -48,4 +57,5 @@ public class Member {
     public void changeNickName(String nickName) {
         this.nickName = nickName;
     }
+
 }
