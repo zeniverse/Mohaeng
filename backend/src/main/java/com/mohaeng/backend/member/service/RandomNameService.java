@@ -51,13 +51,13 @@ public class RandomNameService {
 
     public String checkDuplicateNickName(List<String> nickNameList, int firstRandomIndex, int secondRandomIndex) {
         while (true) {
-            String nickName = animalNames[firstRandomIndex] + adjectiveNames[secondRandomIndex];
+            String nickName = adjectiveNames[secondRandomIndex] + animalNames[firstRandomIndex];
             if (!nickNameList.contains(nickName)) {
                 return nickName;
             }
 
-            firstRandomIndex = (int) Math.random() * (animalNames.length + 1);
-            secondRandomIndex = (int) Math.random() * (adjectiveNames.length + 1);
+            firstRandomIndex = (int) (Math.random() * (animalNames.length + 1));
+            secondRandomIndex = (int) (Math.random() * (adjectiveNames.length + 1));
 
         }
     }
