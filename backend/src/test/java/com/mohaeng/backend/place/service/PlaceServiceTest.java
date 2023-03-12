@@ -1,8 +1,10 @@
 package com.mohaeng.backend.place.service;
 
 import com.mohaeng.backend.place.domain.Place;
+import com.mohaeng.backend.place.repository.JdbcTemplateRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +25,9 @@ class PlaceServiceTest {
 
     @Autowired
     private PlaceRepository placeRepository;
+
+    @Autowired
+    private JdbcTemplateRepository jdbcTemplateRepository;
 
     @BeforeEach
     void clean() {
@@ -64,5 +69,34 @@ class PlaceServiceTest {
 //        assertEquals(places.get(0).getName(),"가거도(소흑산도)");
         assertEquals(testData.get(0).getName(),"Place 1");
         // Verify
+    }
+
+
+    private static final int COUNT = 100;
+    @Test
+    @DisplayName("bulk insert")
+    void 벌크_insert() {
+        long startTime = System.currentTimeMillis();
+        List<Place> places = new ArrayList<>();
+        for (long i = 0; i < COUNT; i++) {
+            Long place_id = i;
+            String name = "name: " + i;
+            String addr1 = "addr1: " + i;
+            String areacode = "areacode: " + i;
+            String firstimage = "firstimage: " + i;
+            String firstimage2 = "firstimage2: " + i;
+            String mapx = "mapx: " + i;
+            String mapy = "mapy: " + i;
+            String sigungucode = "sigungucode: " + i;
+            String contentid = "contentid: " + i;
+            String overview = "overview: " + i;
+            Place place = new Place(place_id, name, addr1, areacode,firstimage,firstimage2, mapx, mapy, sigungucode,contentid, overview);
+            places.add(place);
+        }
+        jdbcTemplateRepository.batchInsert(places);
+        long endTime = System.currentTimeMillis();
+        System.out.println("---------------------------------");
+        System.out.printf("수행시간: %d\n", endTime - startTime);
+        System.out.println("---------------------------------");
     }
 }
