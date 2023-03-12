@@ -39,9 +39,6 @@ public class PlaceService {
     private static final String BASE_URL = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=" + API_KEY + "&pageNo=1&numOfRows=100&MobileApp=AppTest&_type=xml&MobileOS=ETC&arrange=A&contentTypeId=12";
     private static final String BASE_URL2 = "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=" + API_KEY + "&MobileOS=ETC&MobileApp=AppTest&_type=xml&contentId=&contentTypeId=12&&overviewYN=Y";
 
-
-//    https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=&MobileOS=ETC&MobileApp=AppTest&_type=json&contentId=126508&contentTypeId=12&&overviewYN=Y
-
     @PostConstruct
     public void init() throws IOException, ParserConfigurationException, SAXException {
         List<Place> places = getPlaces();
@@ -121,116 +118,6 @@ public List<Place> getPlaces() throws IOException, ParserConfigurationException,
 
         return doc;
     }
-
-
-
-
-
-    private static final int BUFFER_SIZE = 512;
-    private static final PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager();
-    private final Map<String, String> cache = new ConcurrentHashMap<>();
-
-//    public String getOverview(String contentId) throws IOException, ParserConfigurationException, SAXException {
-//        String url = BASE_URL2.replace("126508", contentId);
-//
-//        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(connManager).build();
-//        HttpGet httpGet = new HttpGet(url);
-//        CloseableHttpResponse response = httpClient.execute(httpGet);
-//
-//        try {
-//            HttpEntity entity = response.getEntity();
-//            InputStream responseStream = entity.getContent();
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream, StandardCharsets.UTF_8));
-//
-//            StringBuilder stringBuilder = new StringBuilder();
-//            char[] buffer = new char[BUFFER_SIZE];
-//            int bytesRead;
-//            while ((bytesRead = reader.read(buffer, 0, BUFFER_SIZE)) != -1) {
-//                stringBuilder.append(buffer, 0, bytesRead);
-//            }
-//
-//            String xml = stringBuilder.toString();
-//
-//            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-//            SAXParser saxParser = saxParserFactory.newSAXParser();
-//            OverviewHandler overviewHandler = new OverviewHandler();
-//            saxParser.parse(new InputSource(new StringReader(xml)), overviewHandler);
-//
-//            return overviewHandler.getOverview();
-//        } finally {
-//            response.close();
-//        }
-//    }
-//public String getOverview(String contentId) throws IOException, ParserConfigurationException, SAXException {
-//    if (cache.containsKey(contentId)) {
-//        return cache.get(contentId);
-//    }
-//
-//    String url = BASE_URL2.replace("126508", contentId);
-//
-//    CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(connManager).build();
-//    HttpGet httpGet = new HttpGet(url);
-//    CloseableHttpResponse response = httpClient.execute(httpGet);
-//
-//    try {
-//        HttpEntity entity = response.getEntity();
-//        InputStream responseStream = entity.getContent();
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream, StandardCharsets.UTF_8));
-//
-//        StringBuilder stringBuilder = new StringBuilder();
-//        char[] buffer = new char[BUFFER_SIZE];
-//        int bytesRead;
-//        while ((bytesRead = reader.read(buffer, 0, BUFFER_SIZE)) != -1) {
-//            stringBuilder.append(buffer, 0, bytesRead);
-//        }
-//
-//        String xml = stringBuilder.toString();
-//
-//        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-//        SAXParser saxParser = saxParserFactory.newSAXParser();
-//        OverviewHandler overviewHandler = new OverviewHandler();
-//        saxParser.parse(new InputSource(new StringReader(xml)), overviewHandler);
-//
-//        String overview = overviewHandler.getOverview();
-//        cache.put(contentId, overview);
-//        return overview;
-//    } finally {
-//        response.close();
-//    }
-//}
-//
-//
-//
-//    private static class OverviewHandler extends DefaultHandler {
-//        private final StringBuilder sb = new StringBuilder();
-//        private boolean isInOverviewTag = false;
-//
-//        @Override
-//        public void startElement(String uri, String localName, String qName, Attributes attributes) {
-//            if (qName.equalsIgnoreCase("overview")) {
-//                isInOverviewTag = true;
-//            }
-//        }
-//
-//        @Override
-//        public void endElement(String uri, String localName, String qName) {
-//            if (qName.equalsIgnoreCase("overview")) {
-//                isInOverviewTag = false;
-//            }
-//        }
-//
-//        @Override
-//        public void characters(char[] ch, int start, int length) {
-//            if (isInOverviewTag) {
-//                sb.append(ch, start, length);
-//            }
-//        }
-//
-//        public String getOverview() {
-//            return sb.substring(0, Math.min(sb.length(), 50));
-//        }
-//    }
-
 
    public List<Place> getPlacesByAddr1(String addr1) {
         String searchValue = addr1.substring(0, 2); // get the first two letters of addr1
