@@ -1,15 +1,18 @@
 export interface Course {
-  id: number;
-  title: string;
-  courseDesc: string;
-  like: number;
-  items: items[];
-}
-export interface items {
   courseId: number;
-  coursetitle: string;
+  title: string;
+  like: number;
+  courseDays: string;
+  createdDate: string;
+  isPublished: boolean;
   content: string;
+  places: Places[];
+}
+export interface Places {
+  placeId: number;
   imgUrl: string;
+  title: string;
+  address: string;
 }
 
 export type CourseProps = {
@@ -17,5 +20,12 @@ export type CourseProps = {
   courseTitle: string;
   courseDesc: string;
   courseLike: number;
-  courseList: items[];
+  courseDays: string;
+  courseList: Places[];
 };
+
+export interface RoughMapTitle {
+  RoughMapData: string[];
+  setIsRoughMapOpen?: any;
+  isRoughMapOpen?: any;
+}
