@@ -35,7 +35,7 @@ class PlaceServiceTest {
     }
 
     @Test
-    void testGetPlaces() throws IOException, ParserConfigurationException, SAXException {
+    void testGetPlaces() {
         // Setup
         int testDataSize = 10;
         List<Place> testData = new ArrayList<>();
