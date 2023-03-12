@@ -1,9 +1,6 @@
 package com.mohaeng.backend.place.dto.request;
 
-import com.mohaeng.backend.place.entity.Category;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
-import org.springframework.web.bind.annotation.PutMapping;
 
 public class AddPlaceUpdate {
 
