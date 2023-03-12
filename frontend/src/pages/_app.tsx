@@ -10,14 +10,18 @@ import Footer from "../components/Footer/Footer";
 
 import { Noto_Sans_KR } from "next/font/google";
 
-const NotoSansKR = Noto_Sans_KR({ weight: "400", subsets: ["latin"] });
+const NotoSansKR = Noto_Sans_KR({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <style jsx global>{`
-        html {
-          font-family: ${NotoSansKR.style.fontFamily};
+        :root {
+          --primary-font: ${NotoSansKR.style.fontFamily};
         }
       `}</style>
       <Head>

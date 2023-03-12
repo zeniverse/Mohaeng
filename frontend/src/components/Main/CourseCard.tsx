@@ -10,6 +10,7 @@ const CourseCard = ({
   courseLike,
   courseList,
 }: CourseProps) => {
+  console.log(courseList);
   const Img = courseList[0].imgUrl;
   return (
     <div className={styles["course-card-container"]}>

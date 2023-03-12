@@ -18,6 +18,7 @@ const CourseCardSlider = () => {
     async function fetchData() {
       const res = await fetch("/api/course");
       const data = await res.json();
+      console.log(data);
       setCoueseData(data);
     }
     fetchData();
@@ -34,12 +35,12 @@ const CourseCardSlider = () => {
       {courseData?.map((course, idx) => (
         <SwiperSlide key={idx}>
           <CourseCard
-            key={course.id}
-            id={course.id}
+            key={course.courseId}
+            id={course.courseId}
             courseTitle={course.title}
-            courseDesc={course.courseDesc}
+            courseDesc={course.content}
             courseLike={course.like}
-            courseList={course.items}
+            courseList={course.places}
           />
         </SwiperSlide>
       ))}

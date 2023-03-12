@@ -24,12 +24,12 @@ const options = [
   { value: "50", label: "제주특별자치도" },
 ];
 const ageOptions = [
-  { value: "1", label: "10대" },
-  { value: "2", label: "20대" },
-  { value: "3", label: "30대" },
-  { value: "4", label: "40대" },
-  { value: "5", label: "50대" },
-  { value: "6", label: "60대 이상" },
+  { value: "1", label: "당일치기" },
+  { value: "2", label: "1박 2일" },
+  { value: "3", label: "2박 3일" },
+  { value: "4", label: "3박 4일" },
+  { value: "5", label: "4박 5일" },
+  { value: "6", label: "5박 이상" },
 ];
 
 const CourseFilter = () => {

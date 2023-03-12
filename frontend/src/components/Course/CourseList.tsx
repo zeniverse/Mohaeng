@@ -18,18 +18,17 @@ const CourseList = () => {
 
   return (
     <div className={styles["course-list-container"]}>
-      <div className={styles["course-list-body"]}>
-        {courseData?.map((course) => (
-          <CourseItem
-            key={course.id}
-            id={course.id}
-            courseTitle={course.title}
-            courseDesc={course.courseDesc}
-            courseLike={course.like}
-            courseList={course.items}
-          />
-        ))}
-      </div>
+      {courseData?.map((course) => (
+        <CourseItem
+          key={course.courseId}
+          id={course.courseId}
+          courseTitle={course.title}
+          courseDesc={course.content}
+          courseLike={course.like}
+          courseDays={course.courseDays}
+          courseList={course.places}
+        />
+      ))}
     </div>
   );
 };
