@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.cfg.AvailableSettings;
+import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
 
 @Entity
@@ -14,7 +18,17 @@ import lombok.RequiredArgsConstructor;
 public class Place {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "test-sequence-generator")
+    @GenericGenerator(
+            name = "test-sequence-generator",
+            strategy = "sequence",
+            parameters = {
+                    @Parameter(name = SequenceStyleGenerator.SEQUENCE_PARAM, value = SequenceStyleGenerator.DEF_VALUE_COLUMN),
+                    @Parameter(name = SequenceStyleGenerator.INITIAL_PARAM, value = "1"),
+                    @Parameter(name = SequenceStyleGenerator.INCREMENT_PARAM, value = "100"),
+                    @Parameter(name = AvailableSettings.PREFERRED_POOLED_OPTIMIZER, value = "pooled-lo")
+            }
+    )
     @Column(name = "place_id")
     private Long id;
 
@@ -28,6 +42,7 @@ public class Place {
     private String mapy;
     private String sigungucode;
     private String contentid;
+    @Column(length = 500)
     private String overview;
 
     public Place(Long id, String name, String addr1, String addr2, String areacode, String firstimage, String firstimage2, String mapx, String mapy, String sigungucode, String contentid, String overview) {
@@ -72,5 +87,4 @@ public class Place {
 //        this.sigungucode = sigungucode;
 //        this.contentid = contentid;
 //    }
-
 }
