@@ -68,6 +68,8 @@ function Header({}: Props) {
         >
           로그인
         </button>
+        {/* {user && 로그아웃 버튼}
+        {!user && 로그인 버튼} */}
         <button
           id="signup-btn"
           className={styles["signup-btn"]}
