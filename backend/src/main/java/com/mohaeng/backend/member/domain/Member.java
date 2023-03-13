@@ -58,4 +58,8 @@ public class Member extends BaseTimeEntity {
         this.nickName = nickName;
     }
 
+    public void addCourseBookMark(CourseBookMark courseBookMark) {
+        this.courseBookMarkList.add(courseBookMark);
+        courseBookMark.setMember(this);
+    }
 }
