@@ -8,5 +8,4 @@ const nextConfig = {
     styledComponents: true,
   },
 };
-
 module.exports = nextConfig;
