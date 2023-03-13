@@ -1,6 +1,6 @@
+import styles from "./AppLayout.module.css";
 import Footer from "./Footer";
 import Header from "./Header";
-import styles from "./AppLayout.module.css";
 
 const AppLayout = (props: { children: React.ReactNode }) => {
   return (

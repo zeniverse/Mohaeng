@@ -24,12 +24,4 @@
   flex-direction: column;
   margin: 4rem 4rem 8rem;
   padding-bottom: 60px;
-  height: auto;
-  min-height: 100%;
-}
-
-.footer {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
 }
