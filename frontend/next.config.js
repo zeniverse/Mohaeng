@@ -4,5 +4,8 @@ const nextConfig = {
     domains: ["tong.visitkorea.or.kr"],
   },
   pageExtensions: ["jsx", "js", "ts", "tsx", "json"],
+  compiler: {
+    styledComponents: true,
+  },
 };
 module.exports = nextConfig;

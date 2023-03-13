@@ -1,16 +1,21 @@
 .placeDetail {
-  margin: 4rem 8rem 0;
-  position: relative;
+  width: 70rem;
+  margin: 2rem 8rem 2rem;
   padding: 2rem 3rem;
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-lightgray);
   border-radius: 12px;
-  --color-bg: #f9f9f9;
+  /* 
+  --color-primary: #99d9d9;
+  --color-bg-lightgray: #f9f9f9;
   --color-bg-white: #ffffff;
-  --color-border: #dddddd;
+  --color-red: #f20000;
+  --color-blue: #004aad;
+  --color-border-dark: #7d7d7d;
+  --color-border-semi: #b7b7b7;
+  --color-border-light: #dddddd;
+  --color-text-basic: #333333;
+  --color-text-semi: #b7b7b7; */
   --color-icon: #cfcfcf;
-  --color-like: #f20000;
-  --color-text: #42444a;
-  --color-accent: #99d9d9;
 }
 
 .detailHeader {
@@ -44,31 +49,31 @@
 
 .unbookmark {
   color: var(--color-icon);
-  font-size: 40px;
+  font-size: 50px;
 }
 .unbookmark:hover {
-  color: var(--color-like);
+  color: var(--color-red);
   scale: 110%;
   transition: 200ms;
 }
 
 .bookmark {
-  color: var(--color-like);
-  font-size: 40px;
+  color: var(--color-red);
+  font-size: 50px;
 }
 
 .imgSlider {
   height: 12rem;
   margin-bottom: 1rem;
   border-radius: 12px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-light);
   padding: 0 4rem;
   background-color: var(--color-bg-white);
 }
 
 .detailContent {
   display: flex;
-  color: var(--color-text);
+  color: var(--color-text-basic);
 }
 .detailDesc {
   width: 200rem;
@@ -79,7 +84,7 @@
 .detailMap {
   height: 20rem;
   padding: 1rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-light);
   background-color: var(--color-bg-white);
   border-radius: 8px;
 }

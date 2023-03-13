@@ -1,26 +1,20 @@
 .registerReviewContainer {
-  margin: 4rem 0;
+  width: 70rem;
 
-  --color-bg: #f9f9f9;
-  --color-bg-white: #ffffff;
-  --color-border: #dddddd;
-  --color-icon: #a1a1a1;
-  --color-like: #f20000;
-  --color-text: #42444a;
-  --color-accent: #99d9d9;
+  --color-icon: #cfcfcf;
 }
 
 .h2 {
   font-size: 2rem;
   text-align: center;
+  margin-bottom: 2rem;
 }
 
 .registerReview {
   display: flex;
   flex-direction: column;
-  margin: 2rem 8rem 0;
   padding: 2rem 3rem;
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-lightgray);
   border-radius: 12px;
 }
 
@@ -28,13 +22,16 @@
   margin-bottom: 2rem;
   padding: 1rem;
   background-color: var(--color-bg-white);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-light);
 }
 
 .reviewTitleBox {
   display: flex;
   flex-direction: column;
   margin-right: auto;
+  margin-bottom: 1rem;
+}
+.boldTitle {
   margin-bottom: 1rem;
 }
 
@@ -52,7 +49,7 @@
   height: 20rem;
   margin-bottom: 1rem;
   padding: 1rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-light);
   font-size: 16px;
 }
 
@@ -63,14 +60,14 @@
 .imageForm {
   margin-bottom: 1rem;
   padding: 1rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-light);
   background-color: var(--color-bg-white);
   cursor: pointer;
 }
 
 .inputFileDesc {
   margin-bottom: 1rem;
-  color: var(--color-icon);
+  color: var(--color-text-semi);
   font-size: 16px;
 }
 
@@ -93,7 +90,7 @@
   right: 0;
 }
 .removeImg:hover {
-  color: red;
+  color: var(--color-red);
 }
 
 .btnGroup {
@@ -112,6 +109,7 @@
   border-radius: 50px;
   text-decoration: none;
   text-align: center;
+  font-size: medium;
   color: black;
 }
 
@@ -121,9 +119,12 @@
 }
 
 .postBtn {
-  background-color: var(--color-accent);
+  background-color: var(--color-primary);
 }
 
 .cancelBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: var(--color-icon);
 }

@@ -6,6 +6,10 @@ import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 
+// 선택한 여행지 이름 가져오기
+// 별점 상태 저장, 내보내기
+// 데이터 생성 백으로 보내기
+
 export default function RegisterReview() {
   const [clicked, setClicked] = useState<boolean[]>([
     false,
@@ -77,7 +81,7 @@ export default function RegisterReview() {
           <h3 className={styles.reviewTitle}>선택한 여행지 이름 </h3>
 
           <div className={styles.ratingBox}>
-            <strong>별점</strong>
+            <strong className={styles.boldTitle}>별점</strong>
             <Stars>
               {[0, 1, 2, 3, 4].map((el, idx) => {
                 return (
@@ -92,7 +96,7 @@ export default function RegisterReview() {
             </Stars>
           </div>
 
-          <strong>리뷰내용</strong>
+          <strong className={styles.boldTitle}>리뷰내용</strong>
           <form className={styles.form} action="POST">
             <textarea
               className={styles.formTxtArea}
@@ -102,7 +106,7 @@ export default function RegisterReview() {
               required
             ></textarea>
 
-            <strong>사진 첨부</strong>
+            <strong className={styles.boldTitle}>사진 첨부</strong>
 
             {/* label사용해서 css 입히기(onChange 여기에, input은 display:none) */}
             <input

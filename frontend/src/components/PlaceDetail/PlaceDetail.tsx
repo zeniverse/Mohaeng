@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import styles from "./PlaceDetail.module.css";
 import { IoMdHeart } from "react-icons/io";
-import { IoMdHeartEmpty } from "react-icons/io";
 import Image from "next/image";
 import Review from "../Review/Review";
 import KakaoMap from "../KakaoMap/KakaoMap";
@@ -55,7 +54,7 @@ export default function PlaceDetail() {
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
             </p>
             <p className={styles.descInfo}>
-              <span className={styles.descTitle}>세부 설명</span>
+              <span className={styles.descTitle}>세부 설명 </span>
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
               Voluptatem, odio incidunt temporibus similique qui rem quod
               cupiditate obcaecati molestiae? Reiciendis distinctio rem odit,

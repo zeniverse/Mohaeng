@@ -35,6 +35,7 @@ const PlaceDetailCardSlider = () => {
 
   return (
     <Swiper
+      className={styles.swiper}
       modules={[Navigation]}
       spaceBetween={0}
       slidesPerView={4}

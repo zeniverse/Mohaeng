@@ -49,7 +49,16 @@ export default function SearchPlace(): JSX.Element {
         <ul className={styles.keywordList}>
           {keywordData?.map((keyword) => (
             <li className={styles.item} key={keyword.id}>
-              <Link className={styles.Link} href={`/place/${keyword.id}`}>
+              <Link
+                className={styles.Link}
+                href={{
+                  pathname: "/place/[id]",
+                  query: {
+                    id: keyword.id,
+                    title: keyword.title,
+                  },
+                }}
+              >
                 <Image
                   className={styles.img}
                   src={keyword.image}

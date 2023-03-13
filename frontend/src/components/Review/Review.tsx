@@ -2,6 +2,8 @@ import Link from "next/link";
 import styles from "./Review.module.css";
 import ReviewBox from "./ReviewBox";
 
+// 해당 여행지 총 리뷰 건수, 별점 데이터 가져오기
+// 정렬 필터
 export default function Review() {
   return (
     <>
@@ -30,8 +32,6 @@ export default function Review() {
             </select>
           </aside>
 
-          <ReviewBox />
-          <ReviewBox />
           <ReviewBox />
         </div>
       </section>

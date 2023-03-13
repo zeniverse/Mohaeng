@@ -1,20 +1,26 @@
 .review {
-  --color-bg: #f9f9f9;
+  width: 70rem;
+
+  /* 
+  --color-primary: #99d9d9;
+  --color-bg-lightgray: #f9f9f9;
   --color-bg-white: #ffffff;
-  --color-border: #dddddd;
-  --color-icon: #a1a1a1;
-  --color-like: #f20000;
-  --color-text: #42444a;
-  --color-accent: #99d9d9;
+  --color-red: #f20000;
+  --color-blue: #004aad;
+  --color-border-dark: #7d7d7d;
+  --color-border-semi: #b7b7b7;
+  --color-border-light: #dddddd;
+  --color-text-basic: #333333;
+  --color-text-semi: #b7b7b7; */
+  --color-icon: #cfcfcf;
 }
 
 .reviewContainer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin: 2rem 8rem 2rem;
   padding: 2rem 3rem;
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-lightgray);
   border-radius: 12px;
 }
 
@@ -29,14 +35,17 @@
 }
 
 .reviewBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 120px;
   height: 50px;
   padding: 1rem;
-  background-color: var(--color-accent);
+  background-color: var(--color-primary);
   border-radius: 50px;
   text-decoration: none;
   text-align: center;
-  color: black;
+  color: var(--color-text-basic);
 }
 
 .reviewBtn:hover {
@@ -62,9 +71,10 @@
   height: 40px;
   border-radius: 50px;
   text-align: center;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-light);
+  cursor: pointer;
 }
 
 .select:hover {
-  border: 2px solid var(--color-border);
+  border: 2px solid var(--color-border-light);
 }

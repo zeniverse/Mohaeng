@@ -1,7 +1,5 @@
 .section {
-  margin: 3rem 6rem;
-  --color-text: #272727;
-  --color-border: #9b9b9b;
+  margin: 1rem;
 }
 
 .keywordList {
@@ -40,11 +38,11 @@
 
 .Link {
   text-decoration: none;
-  color: var(--color-text);
+  color: var(--color-text-basic);
 }
 
 .Link:hover {
-  color: #99d9d9;
+  color: var(--color-primary);
 }
 
 .img {

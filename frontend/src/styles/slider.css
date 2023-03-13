@@ -14,6 +14,7 @@
   font-size: 1.2rem;
 }
 .swiper-slide {
+  width: 1200px;
   display: flex;
   padding: 1.3rem 1rem;
   justify-content: center;
