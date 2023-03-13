@@ -35,7 +35,7 @@ class PlaceServiceTest {
     }
 
     @Test
-    void testGetPlaces() throws IOException, ParserConfigurationException, SAXException {
+    void testGetPlaces() {
         // Setup
         int testDataSize = 10;
         List<Place> testData = new ArrayList<>();
@@ -48,8 +48,8 @@ class PlaceServiceTest {
             String areacode = "Area Code for Place " + i;
             String firstimage = "https://example.com/image" + i + ".jpg";
             String firstimage2 = "https://example.com/image2" + i + ".jpg";
-            String mapx = String.valueOf(i);
-            String mapy = String.valueOf(i);
+            String mapx = "map x " + i;
+            String mapy = "map y " + i;
             String sigungucode = "Sigungu Code for Place " + i;
             String contentid = "Content ID for Place " + i;
             String overview = "Overview for Place " + i;
