@@ -8,6 +8,10 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: var(--primary-font);
 }
 
 main {
@@ -20,4 +24,12 @@ fieldset {
 
 li {
   list-style: none;
+}
+
+.wrap {
+  min-height: 100%;
+  position: relative;
+}
+.body-content {
+  padding-bottom: 230px; /* footer의 높이 */
 }

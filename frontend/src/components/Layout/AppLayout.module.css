@@ -1,0 +1,33 @@
+/* AppLayout.module.css */
+@import "./Footer.module.css";
+@import "./Header.module.css";
+
+/* AppLayout styles */
+/* :root {
+  --content-horizontal-margin: 8rem;
+} */
+
+.Container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-height: 100%;
+  position: relative;
+}
+
+.contentWrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 4rem 4rem 8rem;
+  padding-bottom: 60px;
+}
+
+.footer {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}

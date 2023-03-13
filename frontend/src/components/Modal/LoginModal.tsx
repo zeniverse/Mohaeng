@@ -27,12 +27,12 @@ export default function LoginModal() {
       <div className={styles.btnList}>
         <Link className={styles.link} href={KAKAO_AUTH_URL}>
           <KakaoBtn className={styles.btn}>
-            <Image src={btnKakao} alt="카카오 로그인" width={320} height={48} />
+            <Image src={btnKakao} alt="카카오 로그인" width={352} height={54} />
           </KakaoBtn>
         </Link>
         <Link className={styles.link} href={GOOGLE_AUTH_URL}>
           <GoogleBtn className={styles.btn}>
-            <Image src={btnGoogle} alt="구글 로그인" width={46} height={46} />
+            <Image src={btnGoogle} alt="구글 로그인" width={54} height={54} />
             <p className={styles.loginGoogle}>Google 로그인</p>
           </GoogleBtn>
         </Link>
@@ -56,7 +56,7 @@ const KakaoBtn = styled.button`
 `;
 
 const GoogleBtn = styled.button`
-  width: 320px;
+  width: 352px;
   color: white;
   display: flex;
   align-items: center;
@@ -85,8 +85,8 @@ const Content = styled.section`
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 28rem;
-  height: 32rem;
+  width: 30rem;
+  height: 33rem;
   background: #fff;
   border-radius: 12px;
   padding: 4rem;
