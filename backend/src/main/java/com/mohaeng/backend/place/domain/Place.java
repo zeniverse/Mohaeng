@@ -18,7 +18,7 @@ import org.hibernate.id.enhanced.SequenceStyleGenerator;
 public class Place {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "test-sequence-generator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "test-sequence-generator")
     @GenericGenerator(
             name = "test-sequence-generator",
             strategy = "sequence",
@@ -42,7 +42,7 @@ public class Place {
     private String mapy;
     private String sigungucode;
     private String contentid;
-    @Column(length = 500)
+    @Column(length = 600)
     private String overview;
 
     public Place(Long id, String name, String addr1, String addr2, String areacode, String firstimage, String firstimage2, String mapx, String mapy, String sigungucode, String contentid, String overview) {
