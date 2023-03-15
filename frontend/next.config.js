@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
+  images: {
+    domains: ["tong.visitkorea.or.kr", "cdn.visitkorea.or.kr"],
   },
-}
+  pageExtensions: ["jsx", "js", "ts", "tsx", "json"],
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
