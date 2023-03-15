@@ -22,6 +22,7 @@ import java.util.Optional;
 @Controller
 @ResponseBody
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LoginController {
 
     private final MemberRepository memberRepository;

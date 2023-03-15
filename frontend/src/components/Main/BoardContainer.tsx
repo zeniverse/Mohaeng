@@ -2,10 +2,10 @@
 
 import { Board } from "@/src/interfaces/Board";
 import React, { useEffect, useState } from "react";
-import styles from "./AccompanyBoard.module.css";
+import styles from "./BoardContainer.module.css";
 import BoardCard from "./BoardCard";
 
-const AccompanyBoard = () => {
+const BoardContainer = () => {
   const [boardData, setBoardData] = useState<Board[]>([]);
 
   useEffect(() => {
@@ -36,4 +36,4 @@ const AccompanyBoard = () => {
   );
 };
 
-export default AccompanyBoard;
+export default BoardContainer;
