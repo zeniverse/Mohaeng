@@ -1,4 +1,5 @@
+import GoogleLogin from "@/src/components/Login/GoogleLogin";
 
 export default function google() {
-  return <div>구글 로그인</div>;
+  return <GoogleLogin />;
 }
