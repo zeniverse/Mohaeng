@@ -2,10 +2,12 @@ package com.mohaeng.backend.place.service;
 
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.exception.PlaceNotFoundException;
+import com.mohaeng.backend.place.repository.JdbcTemplateRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import org.w3c.dom.Document;
@@ -22,6 +24,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -30,11 +33,12 @@ import java.util.List;
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
-
-//    private static final String API_KEY = "dpTiMvKcFS8NVB1nRTahfmZTMala0uVdt7qu81eNIxznRol2OcYVskpBXHGIfAEIQf1eY2b%2FjMA4uu5ztw8heg%3D%3D";
+    private final JdbcTemplateRepository jdbcTemplateRepository;
+    private static final String API_KEY = "dpTiMvKcFS8NVB1nRTahfmZTMala0uVdt7qu81eNIxznRol2OcYVskpBXHGIfAEIQf1eY2b%2FjMA4uu5ztw8heg%3D%3D";
 //    private static final String API_KEY = "YDqng1hgvEKmXZVWZANhmv%2BKe1qPepQj%2BIxBkqBQTUyLG3XCiAXQtMzCMbNppL8OnNL8sPqvbxybFGIxrRpPnA%3D%3D"; // 승구님 키
-    private static final String API_KEY = "LEZGPi1UafewX40Vl5Yx8J4xwPliJNjaGSVMR8tOLVC7BTWBJMiQLb2gl12QNctUovP3VVtG6qPnrWteZGePOQ%3D%3D"; // 지혜님 키
-    private static final String BASE_URL = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=" + API_KEY + "&pageNo=1&numOfRows=300&MobileApp=AppTest&_type=xml&MobileOS=ETC&arrange=A&contentTypeId=12";
+//    private static final String API_KEY = "LEZGPi1UafewX40Vl5Yx8J4xwPliJNjaGSVMR8tOLVC7BTWBJMiQLb2gl12QNctUovP3VVtG6qPnrWteZGePOQ%3D%3D"; // 지혜님 키
+//    private static final String API_KEY = "DZSCfwbqP6kQHPDOAlDjWAhu63OBBX4BjGKHVNB2ocF6YW6Xpd6Do1IhFCg%2B1TfYiqZFngr57pUk3Tvs%2FYUukw%3D%3D"; // 지혜님 키
+    private static final String BASE_URL = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=" + API_KEY + "&pageNo=1&numOfRows=1000&MobileApp=AppTest&_type=xml&MobileOS=ETC&arrange=A&contentTypeId=12";
     private static final String BASE_URL2 = "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=" + API_KEY + "&MobileOS=ETC&MobileApp=AppTest&_type=xml&contentId=&contentTypeId=12&&overviewYN=Y";
 
     @PostConstruct
@@ -43,13 +47,13 @@ public class PlaceService {
         stopWatch.start();
 
         List<Place> places = getPlaces();
-        placeRepository.saveAll(places);
-
+//        placeRepository.saveAll(places);
+        jdbcTemplateRepository.batchInsert(places);
         stopWatch.stop();
         long totalTimeMillis = stopWatch.getTotalTimeMillis();
         System.out.println("total time : " + totalTimeMillis);
 
-        placeRepository.flush();
+//        placeRepository.flush();
     }
 
 //    @Scheduled(cron = "0 0 5 * * ?") #TODO
@@ -80,7 +84,7 @@ public List<Place> getPlaces() throws IOException, ParserConfigurationException,
                 addr1 = addr2;
             }
 
-            Place place = new Place((long) (i + 1), name, addr1, areacode, firstimage, firstimage2, mapx, mapy, sigungucode, contentid, overview);
+            Place place = new Place(i + 1, name, addr1, areacode, firstimage, firstimage2, mapx, mapy, sigungucode, contentid, overview);
             places.add(place);
         }
     }
@@ -90,25 +94,31 @@ public List<Place> getPlaces() throws IOException, ParserConfigurationException,
     return places;
 }
 
-    private String getOverview(String contentid) throws IOException, ParserConfigurationException, SAXException {
+    private String getOverview(String contentid) {
         String urlStr = BASE_URL2.replace("contentId=", "contentId=" + contentid);
-        Document doc = getXmlDocument(urlStr);
-
-        NodeList nodeList = doc.getElementsByTagName("item");
+        Document doc;
+        NodeList nodeList;
+        String overviewText = "";
         String overview = "";
-
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) node;
-                String overviewText = element.getElementsByTagName("overview").item(0).getTextContent();
-                overview = overviewText.substring(0, Math.min(overviewText.length(), 450));
+        try {
+            doc = getXmlDocument(urlStr);
+            nodeList = doc.getElementsByTagName("item");
+            if (nodeList.getLength() > 0) {
+                Node node = nodeList.item(0);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    overviewText = element.getElementsByTagName("overview").item(0).getTextContent();
+                }
             }
+            overview = overviewText.substring(0, Math.min(overviewText.length(), 450));
+        } catch (Exception e) {
+            log.info("Exception:", e);
+                // retry
         }
 
         return overview;
     }
+
 
     private Document getXmlDocument(String urlStr) throws IOException, ParserConfigurationException, SAXException {
         URL url = new URL(urlStr);
@@ -119,9 +129,8 @@ public List<Place> getPlaces() throws IOException, ParserConfigurationException,
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(responseStream);
 
-        return doc;
+        return db.parse(responseStream);
     }
 
    public List<Place> getPlacesByAddr1(String addr1) {
