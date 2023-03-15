@@ -1,12 +1,41 @@
 "use client";
 
-import React from "react";
+import Button from "@/src/components/Button/Button";
+import Sidebar from "@/src/components/Mypage/Sidebar";
+import { User, userData } from "@/src/interfaces/Auth";
+import React, { useEffect, useState } from "react";
+import styles from "./index.module.css";
 
 const MyPage: React.FC = () => {
+  const [currentUser, setCurrentUser] = useState<User>();
+  useEffect(() => {
+    async function fetchData() {
+      const res = await fetch("/api/user");
+      const data = await res.json();
+      setCurrentUser(data);
+    }
+    fetchData();
+  }, []);
+
+  const Img = currentUser?.data.profileUrl;
   return (
-    <div>
-      <h1>마이페이지</h1>
-      <p>여행 커뮤니티의 마이페이지입니다.</p>
+    <div className={styles["Container"]}>
+      <h1 className={styles["Title"]}>마이페이지</h1>
+      <Sidebar />
+      <div className={styles["ProfileWrapper"]}>
+        <img src={Img} className={styles["Avatar"]} />
+        <div>
+          <div className={styles["Name"]}>{currentUser?.data.userId}</div>
+          <div className={styles["Nickname"]}>
+            {currentUser?.data.userNickname}
+          </div>
+          <div className={styles["Email"]}>{currentUser?.data.userEmail}</div>
+        </div>
+      </div>
+      <div className={styles["ButtonWrapper"]}>
+        <Button text="정보수정" />
+        <Button text="회원탈퇴" />
+      </div>
     </div>
   );
 };
