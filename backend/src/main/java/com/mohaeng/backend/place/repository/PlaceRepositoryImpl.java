@@ -35,7 +35,7 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
                         place.id,
                         placeImage.imgUrl,
                         place.name,
-                        place.address,
+                        place.addr1,
                         place.rating
                 ))
                 .from(place)

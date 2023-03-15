@@ -30,12 +30,9 @@
 }
 
 .place-card-title h3 {
-  /* TODO: resetting default value */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin: 0;
-  padding: 0;
 }
 
 .place-card-title {

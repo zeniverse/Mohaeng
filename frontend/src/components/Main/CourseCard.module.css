@@ -25,46 +25,19 @@
   height: 180px;
 }
 
-.course-like-container {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 100%;
-  top: 0.5rem;
-  right: 0.5rem;
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  border: 1px solid gray;
-  color: red;
-}
-.course-like-container span {
-  position: absolute;
-  bottom: 2px;
-  font-size: 0.4rem;
-}
-
-.course-coursecard-content {
+.course-card-content {
   margin: 0.8rem;
   margin-top: 0.3rem;
 }
 
-.course-coursecard-title h3 {
-  /* TODO: resetting default value */
-  margin: 0;
-  padding: 0;
-}
-
-.course-coursecard-title {
+.course-card-title {
   margin: 0.2rem 0 0.5rem;
 }
 
-.course-coursecard-desc p {
+.course-card-desc p {
   display: -webkit-box;
-  height: 4rem;
+  height: 3.7rem;
   line-height: 1.2;
-  height: 3.6em;
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;

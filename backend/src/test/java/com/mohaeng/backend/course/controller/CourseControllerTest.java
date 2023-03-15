@@ -1,6 +1,8 @@
 package com.mohaeng.backend.course.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
+import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.domain.PlaceImage;
 
@@ -15,14 +17,24 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,33 +49,29 @@ class CourseControllerTest {
         Place place1 = Place.builder()
                 .id(1L)
                 .name("경복궁")
-                .address("서울시 종로구")
+                .addr1("서울시 종로구")
                 .rating(4.5)
-                .category(Category.place)
                 .build();
 
         Place place2 = Place.builder()
                 .id(2L)
                 .name("부산 경복궁")
-                .address("부산시 해운대구")
-                .category(Category.RESTAURANT)
+                .addr1("부산시 해운대구")
                 .rating(4.5)
                 .build();
 
         Place place3 = Place.builder()
                 .id(3L)
                 .name("경복")
-                .address("서울시 강남구")
+                .addr1("서울시 강남구")
                 .rating(5.0)
-                .category(Category.place)
                 .build();
 
         Place place4 = Place.builder()
                 .id(4L)
                 .name("경복궁 요리")
-                .address("서울시 강동구")
+                .addr1("서울시 강동구")
                 .rating(5.0)
-                .category(Category.RESTAURANT)
                 .build();
 
         placeRepository.saveAll(Lists.list(place1, place2, place3, place4));
@@ -151,6 +159,5 @@ class CourseControllerTest {
                 .andDo(print());
 
     }
-
 
 }

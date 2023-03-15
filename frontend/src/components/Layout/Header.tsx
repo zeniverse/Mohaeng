@@ -54,7 +54,7 @@ function Header({}: Props) {
           </div>
           <div className={styles.menu}>
             <Link href="#">여행지</Link>
-            <Link href="#">코스</Link>
+            <Link href="course">코스</Link>
             <Link href="#">동행 게시판</Link>
             <Link href="/mypage">마이페이지</Link>
           </div>
@@ -68,6 +68,8 @@ function Header({}: Props) {
         >
           로그인
         </button>
+        {/* {user && 로그아웃 버튼}
+        {!user && 로그인 버튼} */}
         <button
           id="signup-btn"
           className={styles["signup-btn"]}
