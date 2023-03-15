@@ -8,14 +8,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class PlaceServiceTest {
@@ -72,7 +69,7 @@ class PlaceServiceTest {
     }
 
 
-    private static final int COUNT = 100;
+    private static final int COUNT = 5000;
     @Test
     @DisplayName("bulk insert")
     void 벌크_insert() {
