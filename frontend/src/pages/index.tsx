@@ -3,8 +3,8 @@ import RecommendedSection from "../components/Main/RecommendedSection";
 import PlaceCardSlider from "../components/Main/PlaceCardSlider";
 import CourseCardSlider from "../components/Main/CourseCardSlider";
 import BannerSearch from "../components/Main/BannerSearch";
-import AccompanyBoard from "../components/Main/AccompanyBoard";
 import BoardFilters from "../components/Main/BoardFilters";
+import BoardContainer from "../components/Main/BoardContainer";
 
 export default function Home() {
   return (
@@ -33,7 +33,7 @@ export default function Home() {
               linkUrl="accompany"
             >
               <BoardFilters />
-              <AccompanyBoard />
+              <BoardContainer />
             </RecommendedSection>
           </div>
         </div>
