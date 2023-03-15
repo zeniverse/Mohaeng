@@ -8,7 +8,6 @@ const AppLayout = (props: { children: React.ReactNode }) => {
       <div className={styles.Container}>
         <Header />
         <div className={styles.contentWrapper}>{props.children}</div>
-
         <footer className={styles.footer}>
           <Footer />
         </footer>

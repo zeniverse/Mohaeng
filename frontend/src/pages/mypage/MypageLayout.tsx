@@ -1,4 +1,4 @@
-import styles from "./AppLayout.module.css";
+import styles from "./MypageLayout.module.css";
 import Sidebar from "@/src/components/Mypage/Sidebar";
 
 const MyPageLayout = (props: { children: React.ReactNode }) => {
