@@ -1,6 +1,5 @@
 import styles from "./index.module.css";
 import { BiPencil } from "react-icons/bi";
-import CourseFilter from "@/src/components/Course/CourseFilter";
 import CourseList from "@/src/components/Course/CourseList";
 
 export default function Course() {

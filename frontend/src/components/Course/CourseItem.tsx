@@ -6,6 +6,7 @@ import Image from "next/image";
 import { BiMapAlt, BiShareAlt, BiBookmarkPlus } from "react-icons/bi";
 import RoughMap from "./RoughMap";
 import IsLikeState from "../UI/IsLikeState";
+import Link from "next/link";
 
 const CourseItem = ({
   id,
@@ -26,26 +27,28 @@ const CourseItem = ({
   const Img = courseList[0].imgUrl;
   return (
     <div className={styles["course-item-container"]}>
-      <div className={styles["item-info-container"]}>
-        <div className={styles["item-image"]}>
-          <div className={styles["item-image-box"]}></div>
-          <Image
-            src={Img}
-            alt={courseTitle}
-            width={700}
-            height={700}
-            priority
-          />
-          <IsLikeState courseLike={courseLike} />
-        </div>
-        <div className={styles["item-info-text"]}>
-          <h3>{courseTitle}</h3>
-          <p>{courseDesc}</p>
-          <div className={styles["courseDays-container"]}>
-            <span className={styles.courseDays}>{courseDays}</span>
+      <Link href={`/course/${id}`}>
+        <div className={styles["item-info-container"]}>
+          <div className={styles["item-image"]}>
+            <div className={styles["item-image-box"]}></div>
+            <Image
+              src={Img}
+              alt={courseTitle}
+              width={700}
+              height={700}
+              priority
+            />
+            <IsLikeState courseLike={courseLike} />
+          </div>
+          <div className={styles["item-info-text"]}>
+            <h3>{courseTitle}</h3>
+            <p>{courseDesc}</p>
+            <div className={styles["courseDays-container"]}>
+              <span className={styles.courseDays}>{courseDays}</span>
+            </div>
           </div>
         </div>
-      </div>
+      </Link>
       <div className={styles["item-nav-container"]}>
         <div className={styles["item-nav"]}>
           <BiBookmarkPlus />
