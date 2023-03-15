@@ -1,28 +1,27 @@
-/* .swiper-button-next,
+.swiper-button-next,
 .swiper-button-prev {
-  color: black;
-  background-color: #fff;
-  width: 3.2rem;
-  height: 3.2rem;
-  font-size: 1.2rem;
-  border-radius: 50%;
-  border: 1px solid black;
-} */
+  color: black !important;
+  background-color: #fff !important;
+  width: 3.2rem !important;
+  height: 3.2rem !important;
+  font-size: 1.2rem !important;
+  border-radius: 50% !important;
+  border: 1px solid black !important;
+}
 
 .swiper-button-next:after,
 .swiper-button-prev:after {
-  font-size: 1.2rem;
+  font-size: 1.2rem !important;
 }
 .swiper-slide {
-  width: 1200px;
-  display: flex;
-  padding: 1.3rem 1rem;
-  justify-content: center;
+  display: flex !important;
+  padding: 1.3rem 1rem !important;
+  justify-content: center !important;
 }
 
 .swiper-button-next {
-  transform: translateX(18%);
+  transform: translateX(18%) !important;
 }
 .swiper-button-prev {
-  transform: translateX(-18%);
+  transform: translateX(-18%) !important;
 }

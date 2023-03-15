@@ -14,10 +14,14 @@ const BannerSearch = () => {
           alt=""
         />
         <div className={styles["banner-input-container"]}>
-          <input type="text" placeholder="어디로 가시나요?" />
-          <div className={styles["banner-input-icon"]}>
-            <AiOutlineSearch />
-          </div>
+          <form className={styles["banner-input-form"]}>
+            <AiOutlineSearch className={styles["banner-input-icon"]} />
+            <input
+              className={styles["banner-input"]}
+              type="text"
+              placeholder="어디로 가시나요?"
+            />
+          </form>
         </div>
       </div>
     </div>
