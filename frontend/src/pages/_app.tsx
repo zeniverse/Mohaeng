@@ -28,15 +28,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <Provider store={store}>
         <GlobalModal />
-        {/* <div className="wrap">
-          <Header />
-          <div className="body-content"> */}
         <AppLayout>
           <Component {...pageProps} />
         </AppLayout>
-        {/* </div>
-          <Footer />
-        </div> */}
       </Provider>
     </>
   );
