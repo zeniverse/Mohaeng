@@ -9,14 +9,6 @@ import AppLayout from "../components/Layout/AppLayout";
 import { Noto_Sans_KR } from "next/font/google";
 
 const NotoSansKR = Noto_Sans_KR({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-  display: "swap",
-});
-
-import { Noto_Sans_KR } from "next/font/google";
-
-const NotoSansKR = Noto_Sans_KR({
   weight: "400",
   subsets: ["latin"],
   display: "swap",
