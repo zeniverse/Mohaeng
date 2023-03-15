@@ -1,11 +1,11 @@
 import { CourseProps } from "@/src/interfaces/Course";
 import styles from "./CourseItem.module.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 
-import { BsFillHeartFill } from "react-icons/bs";
 import { BiMapAlt, BiShareAlt, BiBookmarkPlus } from "react-icons/bi";
 import RoughMap from "./RoughMap";
+import IsLikeState from "../UI/IsLikeState";
 
 const CourseItem = ({
   id,
@@ -36,11 +36,7 @@ const CourseItem = ({
             height={700}
             priority
           />
-          {/* TODO: 메인의 UI와 동일 */}
-          <div className={styles["course-like-container"]}>
-            <BsFillHeartFill color="#ff5252" size={20} />
-            <span className={styles.courseLike}>{courseLike}</span>
-          </div>
+          <IsLikeState courseLike={courseLike} />
         </div>
         <div className={styles["item-info-text"]}>
           <h3>{courseTitle}</h3>

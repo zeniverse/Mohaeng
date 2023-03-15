@@ -25,35 +25,9 @@
   height: 180px;
 }
 
-.course-like-container {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 100%;
-  top: 0.5rem;
-  right: 0.5rem;
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  border: 1px solid gray;
-  color: red;
-}
-.course-like-container span {
-  position: absolute;
-  bottom: 2px;
-  font-size: 0.4rem;
-}
-
 .course-card-content {
   margin: 0.8rem;
   margin-top: 0.3rem;
-}
-
-.course-card-title h3 {
-  /* TODO: resetting default value */
-  margin: 0;
-  padding: 0;
 }
 
 .course-card-title {

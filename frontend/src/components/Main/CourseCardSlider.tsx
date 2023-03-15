@@ -18,7 +18,6 @@ const CourseCardSlider = () => {
     async function fetchData() {
       const res = await fetch("/api/course");
       const data = await res.json();
-      console.log(data);
       setCoueseData(data);
     }
     fetchData();
@@ -37,6 +36,7 @@ const CourseCardSlider = () => {
           <CourseCard
             key={course.courseId}
             id={course.courseId}
+            courseDays={course.courseDays}
             courseTitle={course.title}
             courseDesc={course.content}
             courseLike={course.like}

@@ -7,11 +7,14 @@ const RoughMap = ({
   setIsRoughMapOpen,
   isRoughMapOpen,
 }: RoughMapTitle) => {
-  const ref: any = useRef<HTMLDivElement>(null);
+  const RoughMapBox = useRef<HTMLOListElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
+      if (
+        RoughMapBox.current &&
+        !RoughMapBox.current.contains(event.target as Node)
+      ) {
         setIsRoughMapOpen(false);
       }
     }
@@ -25,9 +28,9 @@ const RoughMap = ({
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [isRoughMapOpen, ref]);
+  }, [isRoughMapOpen, RoughMapBox]);
   return (
-    <ol ref={ref} className={styles["roughmap-container"]}>
+    <ol ref={RoughMapBox} className={styles["roughmap-container"]}>
       {RoughMapData.map((title, idx) => (
         <li className={styles.listitem} key={idx}>
           <div className={styles.circle}></div>
