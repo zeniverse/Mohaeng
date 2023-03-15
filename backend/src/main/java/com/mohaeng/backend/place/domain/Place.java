@@ -2,40 +2,42 @@ package com.mohaeng.backend.place.domain;
 
 import com.mohaeng.backend.place.entity.Category;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.Table;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(appliesTo = "place")
-@Getter
-@RequiredArgsConstructor
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Place {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "place_id")
     private Long id;
 
-    @Column(name = "name")
     private String name;
+    private String addr1;
+    //    private String content;
+    private String areacode;
+    private String firstimage;
+    private String firstimage2;
+    private String mapx;
+    private String mapy;
+    private String sigungucode;
+    private String contentid;
+    private double rating;
 
-    @Column(name = "content")
-    private String content;
+    @Builder.Default
+    @OneToMany(mappedBy = "place")
+    @ToString.Exclude
+    private List<PlaceImage> placeImages = new ArrayList<>();
 
-    @Column(name = "address")
-    private String address;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "category")
-    private Category category;
-
-    @Column(name = "available_time")
-    private String availableTime;
-
-    @Column(name = "menu")
-    private String menu;
-
-    @Column(name = "email")
-    private String email;
 }
