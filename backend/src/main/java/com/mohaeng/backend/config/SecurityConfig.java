@@ -35,6 +35,7 @@ public class SecurityConfig {
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")
                 .and()
+                .formLogin().disable()
                     .oauth2Login()
                     .defaultSuccessUrl("/loginInfo")
                     .userInfoEndpoint()
