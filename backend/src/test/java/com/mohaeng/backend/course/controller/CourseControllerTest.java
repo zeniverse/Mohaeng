@@ -2,11 +2,15 @@ package com.mohaeng.backend.course.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mohaeng.backend.config.SecurityConfig;
+import com.mohaeng.backend.course.domain.Course;
+import com.mohaeng.backend.course.dto.CourseInPlaceDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
+import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.service.CourseService;
+import com.mohaeng.backend.member.domain.Member;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -170,4 +174,45 @@ class CourseControllerTest {
         verify(courseService, times(0)).createCourse(refEq(courseReq), eq("test@test.com"));
     }
 
+    @Test
+    @DisplayName("[GET] 코스 단건 조회 - 정상 처리")
+    @WithMockUser()
+    public void getCourse() throws Exception {
+        //Given
+        Long courseId = 1L;
+        given(courseService.getCourse(anyLong()))
+                .willReturn(CourseRes.from(createTestCourse(), List.of(createCourseInPlaceDTO())));
+
+        //When & Then
+        mockMvc.perform(get("/api/course/" + courseId))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        verify(courseService).getCourse(eq(courseId));
+    }
+
+    private CourseInPlaceDto createCourseInPlaceDTO() {
+        return CourseInPlaceDto.builder()
+                .name("test name")
+                .imgUrl("image/01.jpg")
+                .address("서울시,,")
+                .placeId(1L)
+                .mapX("좌표x")
+                .mapY("좌표y")
+                .build();
+    }
+
+    private Course createTestCourse() {
+        return Course.builder()
+                .title("Course Test Title")
+                .courseDays("1박2일")
+                .isPublished(true)
+                .startDate(LocalDateTime.now())
+                .endDate(LocalDateTime.now().plusDays(1))
+                .region("서울")
+                .member(Member.builder().nickName("nickName").build())
+                .content("내용입니다")
+                .likeCount(0)
+                .build();
+    }
 }

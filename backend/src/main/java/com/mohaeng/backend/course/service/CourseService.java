@@ -2,16 +2,20 @@ package com.mohaeng.backend.course.service;
 
 import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.domain.CoursePlace;
+import com.mohaeng.backend.course.dto.CourseInPlaceDto;
 import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
+import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.repository.CoursePlaceRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
+import com.mohaeng.backend.place.domain.PlaceImage;
+import com.mohaeng.backend.place.repository.PlaceImageRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +36,7 @@ public class CourseService {
     private final MemberRepository memberRepository;
     private final CourseRepository courseRepository;
     private final CoursePlaceRepository coursePlaceRepository;
+    private final PlaceImageRepository placeImageRepository;
 
     public CoursePlaceSearchRes placeSearch(CoursePlaceSearchReq req, Pageable pageable) {
         // keyword에 null이 담겨있을 때
@@ -87,5 +92,35 @@ public class CourseService {
         createdCourse.addCoursePlaces(coursePlaces);
 
         return CourseIdRes.from(createdCourse.getId());
+    }
+
+    public CourseRes getCourse(Long courseId) {
+        // 1. courseId로 course 조회
+        Course findCourse = courseRepository.findById(courseId).orElseThrow(
+                // TODO: Exception 처리
+                () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
+        );
+
+        // 2. courseId로 CoursePlace 조회
+        List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
+        List<CourseInPlaceDto> courseInPlaceDtoList = new ArrayList<>();
+
+        // 3. CoursePlaces에 담긴 Place 정보와 PlaceImage를 사용해 CourseInPlaceDTO에 담아준다.
+        for (CoursePlace coursePlace : coursePlaces) {
+            Place place = coursePlace.getPlace();
+            PlaceImage findPlaceImage = placeImageRepository.findFirstByPlace(place);
+            courseInPlaceDtoList.add(
+                    CourseInPlaceDto.builder()
+                            .placeId(place.getId())
+                            .name(place.getName())
+                            .imgUrl(findPlaceImage.getImgUrl())
+                            .address(place.getAddr1())
+                            .mapX(place.getMapx())
+                            .mapY(place.getMapy())
+                            .build()
+            );
+        }
+
+        return CourseRes.from(findCourse, courseInPlaceDtoList);
     }
 }

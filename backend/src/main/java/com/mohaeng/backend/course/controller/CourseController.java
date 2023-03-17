@@ -5,6 +5,7 @@ import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
+import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.service.CourseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,5 +45,11 @@ public class CourseController {
         CourseIdRes courseIdRes = courseService.createCourse(courseReq, memberEmail);
 
         return ResponseEntity.ok().body(BaseResponse.success("OK", courseIdRes));
+    }
+
+    @GetMapping("/{courseId}")
+    public ResponseEntity getCourse(@PathVariable Long courseId){
+        CourseRes courseRes = courseService.getCourse(courseId);
+        return  ResponseEntity.ok().body(BaseResponse.success("OK", courseRes));
     }
 }

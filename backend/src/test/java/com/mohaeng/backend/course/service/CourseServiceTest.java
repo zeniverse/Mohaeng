@@ -6,6 +6,7 @@ import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
+import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.repository.CourseRepository;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.domain.Role;
@@ -202,6 +203,42 @@ class CourseServiceTest {
 
         //Then
         assertEquals(exception.getMessage(), "존재하지 않는 member 입니다.");
+    }
+
+    @Test
+    @DisplayName("코스 단건 조회 - 정상 처리")
+    public void getCourse() throws Exception{
+        //Given
+        List<Place> placeList = placeRepository.findAll();
+        CourseReq courseReq = createCourseReq("코스 제목", List.of(placeList.get(0).getId(), placeList.get(1).getId()));
+        Member savedMember = createMember();
+        CourseIdRes courseIdRes = courseService.createCourse(courseReq, savedMember.getEmail());
+
+
+        //When
+        CourseRes courseRes = courseService.getCourse(courseIdRes.getCourseId());
+        System.out.println("courseRes = " + courseRes);
+
+        //Then
+        assertNotNull(courseRes);
+        assertNotNull(courseRes.getPlaces());
+        assertEquals(2, courseRes.getPlaces().size());
+        assertEquals(placeList.get(0).getName(), courseRes.getPlaces().get(0).getName());
+    }
+
+    @Test
+    @DisplayName("코스 단건 조회 - CourseId가 없는 경우 예외 처리")
+    public void getCourse_courseId_isNull() throws Exception{
+        //Given
+        Long courseId = 1000L;
+
+        //When
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            courseService.getCourse(courseId);
+        });
+
+        //Then
+        assertEquals(exception.getMessage(), "존재하지 않는 코스 입니다.");
     }
 
 
