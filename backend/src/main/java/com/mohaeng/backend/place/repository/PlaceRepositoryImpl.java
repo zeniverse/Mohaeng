@@ -1,6 +1,7 @@
 package com.mohaeng.backend.place.repository;
 
 import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
+import com.mohaeng.backend.place.domain.QPlaceImage;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -30,29 +31,30 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 
     @Override
     public Slice<CoursePlaceSearchDto> findPlaceInCourse(String keyword, Long lastPlaceId, Double lastRating, Pageable pageable) {
+        QPlaceImage sub = new QPlaceImage("sub");
+        QPlaceImage origin = new QPlaceImage("origin");
+
         List<CoursePlaceSearchDto> res = queryFactory
                 .select(Projections.constructor(CoursePlaceSearchDto.class,
                         place.id,
-                        placeImage.imgUrl,
+                        origin.imgUrl,
                         place.name,
                         place.addr1,
                         place.rating
                 ))
                 .from(place)
-                .leftJoin(place.placeImages, placeImage)
-                .groupBy(place.id)
+                .innerJoin(place.placeImages, origin)
                 .where(
                         titleContain(keyword),
                         placeIdAndRatingLt(lastPlaceId, lastRating),
-                        placeImage.imgUrl.eq(
-                                JPAExpressions.select(placeImage.imgUrl)
-                                        .from(placeImage)
-                                        .where(place.id.eq(placeImage.place.id))
-                                        .orderBy(placeImage.id.asc())
-                                        .groupBy(place.id)
-                                        .limit(1L)
+                        origin.id.eq(
+                                JPAExpressions.select(sub.id.min().as("place_image_id"))
+                                        .from(sub)
+                                        .where(place.id.eq(sub.place.id))
+                                        .groupBy(sub.place.id)
                         )
                 )
+                .groupBy(place.id, origin.imgUrl)
                 .orderBy(place.rating.desc(), place.id.desc())
                 .limit(pageable.getPageSize()+1)
                 .fetch();
