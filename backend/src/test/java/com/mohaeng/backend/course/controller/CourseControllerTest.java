@@ -6,6 +6,7 @@ import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.dto.CourseInPlaceDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
+import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
@@ -35,8 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -190,6 +190,49 @@ class CourseControllerTest {
 
         verify(courseService).getCourse(eq(courseId));
     }
+
+    @Test
+    @DisplayName("[PUT] 코스 수정 - 정상 처리")
+    public void updateCourse() throws Exception {
+        //Given
+        CourseUpdateReq updateReq = CourseUpdateReq.builder()
+                .title("수정된 코스 제목")
+                .courseDays("1박2일")
+                .isPublished(false)
+                .region("서울")
+                .thumbnailUrl("images/01.jpg")
+                .startDate(LocalDateTime.now())
+                .endDate(LocalDateTime.now().plusDays(1))
+                .content("나의 첫번재 일정 입니다.")
+                .placeIds(Lists.list(1L, 2L))
+                .build();
+
+        Long courseId = 1L;
+
+        given(courseService.updateCourse(anyString(), anyLong(), any(CourseUpdateReq.class)))
+                .willReturn(CourseIdRes.from(1L));
+
+        //When & Then
+        mockMvc.perform(put("/api/course/{courseId}", courseId)
+                        .with(oauth2Login()
+                                // 1
+                                .authorities(new SimpleGrantedAuthority("ROLE_NORMAL"))
+                                // 2
+                                .attributes(attributes -> {
+                                    attributes.put("name", "kimMohaeng");
+                                    attributes.put("email", "test@test.com");
+                                })
+                        )
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(updateReq))
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        verify(courseService).updateCourse(eq("test@test.com"), eq(courseId), refEq(updateReq));
+    }
+
+
 
     private CourseInPlaceDto createCourseInPlaceDTO() {
         return CourseInPlaceDto.builder()

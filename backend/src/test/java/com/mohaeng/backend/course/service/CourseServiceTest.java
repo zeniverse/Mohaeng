@@ -4,6 +4,7 @@ import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
+import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
@@ -210,7 +211,7 @@ class CourseServiceTest {
     public void getCourse() throws Exception{
         //Given
         List<Place> placeList = placeRepository.findAll();
-        CourseReq courseReq = createCourseReq("코스 제목", List.of(placeList.get(0).getId(), placeList.get(1).getId()));
+        CourseReq courseReq = createCourseReq("코스 제목", List.of(placeList.get(3).getId(), placeList.get(1).getId()));
         Member savedMember = createMember();
         CourseIdRes courseIdRes = courseService.createCourse(courseReq, savedMember.getEmail());
 
@@ -223,7 +224,7 @@ class CourseServiceTest {
         assertNotNull(courseRes);
         assertNotNull(courseRes.getPlaces());
         assertEquals(2, courseRes.getPlaces().size());
-        assertEquals(placeList.get(0).getName(), courseRes.getPlaces().get(0).getName());
+        assertEquals(placeList.get(3).getName(), courseRes.getPlaces().get(0).getName());
     }
 
     @Test
@@ -239,6 +240,104 @@ class CourseServiceTest {
 
         //Then
         assertEquals(exception.getMessage(), "존재하지 않는 코스 입니다.");
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("코스 수정 - 정상 처리")
+    public void updateCourse() throws Exception{
+        //Given
+        List<Place> placeList = placeRepository.findAll();
+        CourseReq originReq = createCourseReq("코스 제목", List.of(placeList.get(0).getId(), placeList.get(1).getId()));
+        Member savedMember = createMember();
+        CourseIdRes courseIdRes = courseService.createCourse(originReq, savedMember.getEmail());
+
+        Long courseId = courseIdRes.getCourseId();
+        CourseUpdateReq updateReq = createUpdateCourseReq(List.of(placeList.get(2).getId(), placeList.get(3).getId()));
+
+        //When
+        CourseIdRes updateIdRes = courseService.updateCourse(savedMember.getEmail(), courseId, updateReq);
+        Course course = courseRepository.findById(updateIdRes.getCourseId()).orElseThrow(null);
+        System.out.println("course = " + course.getCoursePlaces());
+
+        //Then
+        assertNotNull(course);
+        assertEquals(2, course.getCoursePlaces().size());
+        assertEquals(updateReq.getTitle(), course.getTitle());
+        assertEquals(placeList.get(2).getName(), course.getCoursePlaces().get(0).getPlace().getName());
+        memberRepository.deleteAll();
+        courseRepository.deleteById(courseId);
+
+    }
+
+    @Test
+    @DisplayName("코스 수정 - CourseId가 없는 경우 예외 처리")
+    public void updateCourse_courseId_isNull() throws Exception{
+        //Given
+        Long courseId = 1000L;
+        Member savedMember = createMember();
+        CourseUpdateReq updateReq = createUpdateCourseReq(List.of(1L, 2L));
+
+
+        //When
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            courseService.updateCourse(savedMember.getEmail(), courseId, updateReq);
+        });
+
+        //Then
+        assertEquals(exception.getMessage(), "존재하지 않는 course 입니다.");
+    }
+
+    @Test
+    @DisplayName("코스 수정 - Member가 없는 경우 예외 처리")
+    public void updateCourse_member_isNull() throws Exception{
+        //Given
+        List<Place> placeList = placeRepository.findAll();
+        CourseReq originReq = createCourseReq("코스 제목", List.of(placeList.get(0).getId(), placeList.get(1).getId()));
+        Member savedMember = createMember();
+
+        CourseIdRes courseIdRes = courseService.createCourse(originReq, savedMember.getEmail());
+
+        Long courseId = courseIdRes.getCourseId();
+        CourseUpdateReq updateReq = createUpdateCourseReq(List.of(placeList.get(2).getId(), placeList.get(3).getId()));
+
+        //When
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            courseService.updateCourse("test@null.com", courseId, updateReq);
+        });
+
+        //Then
+        assertEquals(exception.getMessage(), "존재하지 않는 member 입니다.");
+    }
+
+    @Test
+    @DisplayName("코스 수정 - 작성자와 요청자가 다른 경우 예외 처리")
+    public void updateCourse_different_member() throws Exception{
+        //Given
+        List<Place> placeList = placeRepository.findAll();
+        CourseReq originReq = createCourseReq("코스 제목", List.of(placeList.get(0).getId(), placeList.get(1).getId()));
+        Member savedMember = createMember();
+
+        CourseIdRes courseIdRes = courseService.createCourse(originReq, savedMember.getEmail());
+
+        Long courseId = courseIdRes.getCourseId();
+        CourseUpdateReq updateReq = createUpdateCourseReq(List.of(placeList.get(2).getId(), placeList.get(3).getId()));
+
+        Member newMember = Member.builder()
+                .nickName("nick")
+                .name("뉴모행")
+                .email("new@new")
+                .role(Role.NORMAL)
+                .build();
+        Member newMem = memberRepository.save(newMember);
+
+        //When
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            courseService.updateCourse(newMem.getEmail(), courseId, updateReq);
+        });
+
+        //Then
+        assertEquals(exception.getMessage(), "요청자와 작성자가 일치하지 않습니다.");
     }
 
 
@@ -266,6 +365,21 @@ class CourseServiceTest {
                 .build();
         Member savedMember = memberRepository.save(member);
         return savedMember;
+    }
+
+    private CourseUpdateReq createUpdateCourseReq(List<Long> placeIds) {
+        CourseUpdateReq updateReq = CourseUpdateReq.builder()
+                .title("수정된 제목 입니다")
+                .courseDays("2박3일")
+                .isPublished(false)
+                .region("서울")
+                .thumbnailUrl("images/01.jpg")
+                .startDate(LocalDateTime.now())
+                .endDate(LocalDateTime.now().plusDays(1))
+                .content("나의 첫번재 일정 입니다.")
+                .placeIds(placeIds)
+                .build();
+        return updateReq;
     }
 
 }
