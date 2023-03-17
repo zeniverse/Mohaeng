@@ -1,13 +1,9 @@
 package com.mohaeng.backend.course.domain;
 
 import com.mohaeng.backend.common.BaseTimeEntity;
-import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,14 +14,17 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Course extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
     private Long id;
 
     @OneToMany
     @JoinColumn(name = "course_id")
+    @ToString.Exclude
     private List<CoursePlace> coursePlaces = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY)
@@ -36,6 +35,8 @@ public class Course extends BaseTimeEntity {
     private String title;
 
     private String nickname;
+    private String region;
+    private String courseDays;
 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -44,26 +45,28 @@ public class Course extends BaseTimeEntity {
     private String content;
     private Integer likeCount;
     private Boolean isPublished;
+    private String thumbnailUrl;
 
-    private String imageName;
-    private String originName;
-    private String imageUrl;
+    @Builder
+    public Course(List<CoursePlace> coursePlaces, Member member, String title, String nickname, String region, String courseDays, LocalDateTime startDate, LocalDateTime endDate,
+                  LocalDateTime deletedDate, String content, Integer likeCount, Boolean isPublished, String thumbnailUrl) {
+        this.coursePlaces = coursePlaces;
+        this.member = member;
+        this.title = title;
+        this.nickname = nickname;
+        this.region = region;
+        this.courseDays = courseDays;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.deletedDate = deletedDate;
+        this.content = content;
+        this.likeCount = likeCount;
+        this.isPublished = isPublished;
+        this.thumbnailUrl = thumbnailUrl;
+    }
 
-//    @Builder
-//    public Course(List<CoursePlace> coursePlaces, Member member, String title, String nickname, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime deletedDate,
-//                  String content, Integer likeCount, Boolean isPublished, String imageName, String originName, String imageUrl) {
-//        this.coursePlaces = coursePlaces;
-//        this.member = member;
-//        this.title = title;
-//        this.nickname = nickname;
-//        this.startDate = startDate;
-//        this.endDate = endDate;
-//        this.deletedDate = deletedDate;
-//        this.content = content;
-//        this.likeCount = likeCount;
-//        this.isPublished = isPublished;
-//        this.imageName = imageName;
-//        this.originName = originName;
-//        this.imageUrl = imageUrl;
-//    }
+    public void addCoursePlaces(List<CoursePlace> data) {
+        this.coursePlaces = data;
+    }
+
 }
