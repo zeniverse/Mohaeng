@@ -1,9 +1,14 @@
 package com.mohaeng.backend.course.service;
 
+import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
+import com.mohaeng.backend.course.dto.request.CourseReq;
+import com.mohaeng.backend.course.dto.response.CourseIdRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.repository.CourseRepository;
+import com.mohaeng.backend.member.domain.Member;
+import com.mohaeng.backend.member.domain.Role;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.domain.PlaceImage;
@@ -14,7 +19,9 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -137,6 +144,91 @@ class CourseServiceTest {
 
         //Then
         assertEquals(exception.getMessage(), "keyword 값이 비어있습니다.");
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("코스 생성 - 정상 처리")
+    public void createMyCourse(){
+        //Given
+        List<Place> placeList = placeRepository.findAll();
+        CourseReq courseReq = createCourseReq("코스 제목", List.of(placeList.get(0).getId(), placeList.get(1).getId()));
+        Member savedMember = createMember();
+
+        //When
+        CourseIdRes courseIdRes = courseService.createCourse(courseReq, savedMember.getEmail());
+
+        //Then
+        Course course = courseRepository.findById(courseIdRes.getCourseId()).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 일정 입니다")
+        );
+
+        System.out.println("course22222 = " + course.getMember());
+        System.out.println("course22222 = " + course.getCoursePlaces().get(0));
+
+        assertNotNull(course.getCoursePlaces());
+        assertEquals(2, course.getCoursePlaces().size());
+        assertEquals(placeList.get(0).getName(), course.getCoursePlaces().get(0).getPlace().getName());
+        memberRepository.deleteAll();
+        courseRepository.deleteById(courseIdRes.getCourseId());
+    }
+
+    @Test
+    @DisplayName("코스 생성 - 장소가 존재하지 않는 경우 예외 처리")
+    public void createMyCourse_no_place() throws Exception{
+        //Given
+        CourseReq courseReq = createCourseReq("코스 제목", List.of(1L, 10000L));
+        Member savedMember = createMember();
+
+        //When
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            courseService.createCourse(courseReq, savedMember.getEmail());
+        });
+
+        //Then
+        assertEquals(exception.getMessage(), "존재하지 않는 장소 입니다.");
+    }
+
+    @Test
+    @DisplayName("코스 생성 - 회원이 존재하지 않는 경우 예외 처리")
+    public void createMyCourse_no_member() throws Exception{
+        //Given
+        CourseReq courseReq = createCourseReq("코스 제목", List.of(1L, 2L));
+
+        //When
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            courseService.createCourse(courseReq, "test@test.com");
+        });
+
+        //Then
+        assertEquals(exception.getMessage(), "존재하지 않는 member 입니다.");
+    }
+
+
+    private CourseReq createCourseReq(String title, List<Long> placeIds) {
+        CourseReq myCourseReq = CourseReq.builder()
+                .title(title)
+                .courseDays("1박2일")
+                .isPublished(false)
+                .region("서울")
+                .thumbnailUrl("images/01.jpg")
+                .startDate(LocalDateTime.now())
+                .endDate(LocalDateTime.now().plusDays(1))
+                .content("나의 첫번재 일정 입니다.")
+                .placeIds(placeIds)
+                .build();
+        return myCourseReq;
+    }
+
+    private Member createMember() {
+        Member member = Member.builder()
+                .nickName("nick")
+                .name("김모행")
+                .email("test@test")
+                .role(Role.NORMAL)
+                .build();
+        Member savedMember = memberRepository.save(member);
+        return savedMember;
     }
 
 }

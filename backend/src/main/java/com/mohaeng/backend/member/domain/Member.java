@@ -3,6 +3,7 @@ package com.mohaeng.backend.member.domain;
 import com.mohaeng.backend.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,6 +42,7 @@ public class Member extends BaseTimeEntity {
 
     private List<CourseBookMark> courseBookMarkList = new ArrayList<>();
 
+    @Builder
     public Member(String name, String email, Role role, String nickName) {
         this.name = name;
         this.email = email;
