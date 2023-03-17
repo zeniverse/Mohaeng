@@ -232,6 +232,41 @@ class CourseControllerTest {
         verify(courseService).updateCourse(eq("test@test.com"), eq(courseId), refEq(updateReq));
     }
 
+    @Test
+    @DisplayName("[DELETE] 코스 삭제 - 정상 처리")
+    public void deleteCourse() throws Exception {
+        //Given
+        Long courseId = 1L;
+
+        //When & Then
+        mockMvc.perform(delete("/api/course/{courseId}", courseId)
+                        .with(oauth2Login()
+                                // 1
+                                .authorities(new SimpleGrantedAuthority("ROLE_NORMAL"))
+                                // 2
+                                .attributes(attributes -> {
+                                    attributes.put("name", "kimMohaeng");
+                                    attributes.put("email", "test@test.com");
+                                })
+                        )
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        verify(courseService).deleteCourse(eq("test@test.com"), eq(courseId));
+    }
+
+    //TODO: exceptionHandler 구현 후, 처리할 case
+
+    // 코스 단건 조회 - 코스가 존재하지 않는 경우
+
+    // 코스 수정 - 요청자와 작성자가 다른 경우
+    // 코스 수정 - course가 존재하지 않는 경우
+
+    // 코스 삭제 - 요청자와 작성자가 다른 경우
+    // 코스 삭제 - course가 존재하지 않는 경우
+
 
 
     private CourseInPlaceDto createCourseInPlaceDTO() {

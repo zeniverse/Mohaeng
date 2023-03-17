@@ -340,6 +340,71 @@ class CourseServiceTest {
         assertEquals(exception.getMessage(), "요청자와 작성자가 일치하지 않습니다.");
     }
 
+    @Test
+    @DisplayName("코스 삭제 - 정상 처리")
+    public void deleteCourse() throws Exception{
+        //Given
+        CourseReq originReq = createCourseReq("코스 제목", List.of(1L, 2L));
+        Member savedMember = createMember();
+        CourseIdRes courseIdRes = courseService.createCourse(originReq, savedMember.getEmail());
+
+        Long courseId = courseIdRes.getCourseId();
+
+        //When
+        courseService.deleteCourse(savedMember.getEmail(), courseId);
+        List<Course> courseList = courseRepository.findAll();
+
+        //Then
+        assertEquals(0, courseList.size());
+        assertThrows(IllegalArgumentException.class,
+                () -> courseRepository.findById(courseId).orElseThrow(() -> new IllegalArgumentException()));
+    }
+
+    @Test
+    @DisplayName("코스 삭제 - 작성자와 요청자가 다른 경우 예외 처리")
+    public void deleteCourse_different_member() throws Exception{
+        //Given
+        List<Place> placeList = placeRepository.findAll();
+        CourseReq originReq = createCourseReq("코스 제목", List.of(placeList.get(0).getId(), placeList.get(1).getId()));
+        Member savedMember = createMember();
+
+        CourseIdRes courseIdRes = courseService.createCourse(originReq, savedMember.getEmail());
+
+        Long courseId = courseIdRes.getCourseId();
+
+        Member newMember = Member.builder()
+                .nickName("nick")
+                .name("뉴모행")
+                .email("new@new")
+                .role(Role.NORMAL)
+                .build();
+        Member newMem = memberRepository.save(newMember);
+
+        //When
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            courseService.deleteCourse(newMember.getEmail(), courseId);
+        });
+
+        //Then
+        assertEquals(exception.getMessage(), "요청자와 작성자가 일치하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("코스 삭제 - CourseId가 없는 경우 예외 처리")
+    public void deleteCourse_courseId_isNull() throws Exception{
+        //Given
+        Long courseId = 1000L;
+        Member savedMember = createMember();
+
+        //When
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            courseService.deleteCourse(savedMember.getEmail(), courseId);
+        });
+
+        //Then
+        assertEquals(exception.getMessage(), "존재하지 않는 course 입니다.");
+    }
+
 
     private CourseReq createCourseReq(String title, List<Long> placeIds) {
         CourseReq myCourseReq = CourseReq.builder()
