@@ -158,6 +158,17 @@ public class CourseService {
         return CourseIdRes.from(course.getId());
     }
 
+    @Transactional
+    public void deleteCourse(String memberEmail, Long courseId) {
+        Course course = courseRepository.findById(courseId).orElseThrow(
+                // TODO: Exception 처리
+                () -> new IllegalArgumentException("존재하지 않는 course 입니다.")
+        );
+
+        isWriter(memberEmail, course.getMember());
+        courseRepository.deleteById(course.getId());
+    }
+
     private Member isWriter(String memberEmail, Member writer){
         Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
                 // TODO: Exception 처리

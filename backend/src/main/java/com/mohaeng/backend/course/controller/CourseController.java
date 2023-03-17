@@ -67,4 +67,15 @@ public class CourseController {
         CourseIdRes courseIdRes = courseService.updateCourse(memberEmail, courseId, courseUpdateReq);
         return ResponseEntity.ok().body(BaseResponse.success("OK", courseIdRes));
     }
+
+    @DeleteMapping("/{courseId}")
+    public ResponseEntity deleteCourse(@AuthenticationPrincipal OAuth2User oAuth2User,
+                                       @PathVariable Long courseId) {
+
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        String memberEmail = (String) attributes.get("email");
+
+        courseService.deleteCourse(memberEmail, courseId);
+        return ResponseEntity.ok().body(BaseResponse.success("OK"));
+    }
 }
