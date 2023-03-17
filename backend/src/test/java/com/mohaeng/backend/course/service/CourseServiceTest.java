@@ -1,66 +1,54 @@
 package com.mohaeng.backend.course.service;
 
-import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
-import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.repository.CourseRepository;
-import com.mohaeng.backend.member.domain.Member;
-import com.mohaeng.backend.member.domain.Role;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.domain.PlaceImage;
-import com.mohaeng.backend.place.entity.Category;
 import com.mohaeng.backend.place.repository.PlaceImageRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
-import jakarta.transaction.Transactional;
 import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CourseServiceTest {
     @Autowired CourseService courseService;
     @Autowired PlaceRepository placeRepository;
     @Autowired PlaceImageRepository placeImageRepository;
+    @Autowired CourseRepository courseRepository;
+    @Autowired MemberRepository memberRepository;
 
-    @BeforeEach
+    @BeforeAll
     public void before(){
         Place place1 = Place.builder()
-                .id(1L)
                 .name("경복궁")
                 .addr1("서울시 종로구")
                 .rating(4.5)
                 .build();
 
         Place place2 = Place.builder()
-                .id(2L)
                 .name("부산 경복궁")
                 .addr1("부산시 해운대구")
                 .rating(4.5)
                 .build();
 
         Place place3 = Place.builder()
-                .id(3L)
                 .name("경복")
                 .addr1("서울시 강남구")
                 .rating(5.0)
                 .build();
 
         Place place4 = Place.builder()
-                .id(4L)
                 .name("경복궁 요리")
                 .addr1("서울시 강동구")
                 .rating(5.0)
@@ -109,22 +97,26 @@ class CourseServiceTest {
 
     @AfterEach
     void afterEach() {
-        placeRepository.deleteAll();
-        placeImageRepository.deleteAll();
+        memberRepository.deleteAll();
     }
 
     @Test
-    @DisplayName("장소 검색 - 필요한 정보를 모두 넣은 경우")
+    @DisplayName("장소 검색 - 정상 처리")
     public void placeSearchTest(){
         //Given
-        CoursePlaceSearchReq req = new CoursePlaceSearchReq("경복", 4L, "5.0");
+        List<Place> placeList = placeRepository.findAll();
+        CoursePlaceSearchReq req = new CoursePlaceSearchReq("경복", placeList.get(3).getId(), "5.0");
 
         //When
         CoursePlaceSearchRes res = courseService.placeSearch(req, PageRequest.ofSize(2));
 
         //Then
         List<CoursePlaceSearchDto> places = res.getPlaces();
-//        System.out.println("places = " + places);
+        System.out.println("places = " + places);
+        List<Place> all = placeRepository.findAll();
+        for (Place place : all) {
+            System.out.println("place = " + place);
+        }
 
         assertNotNull(res);
         assertEquals(true, res.isHasNext());
@@ -133,7 +125,7 @@ class CourseServiceTest {
     }
 
     @Test()
-    @DisplayName("장소 검색 - 키워드를 넣지 않은 경우 에러 반환")
+    @DisplayName("장소 검색 - 키워드를 넣지 않은 경우 예외 처리")
     public void placeSearchWithoutKeywordTest() throws Exception{
         //Given
         CoursePlaceSearchReq req = new CoursePlaceSearchReq(null, null, null);
@@ -146,4 +138,7 @@ class CourseServiceTest {
         //Then
         assertEquals(exception.getMessage(), "keyword 값이 비어있습니다.");
     }
+
 }
+
+
