@@ -3,6 +3,7 @@ package com.mohaeng.backend.course.controller;
 import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
+import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
@@ -51,5 +52,19 @@ public class CourseController {
     public ResponseEntity getCourse(@PathVariable Long courseId){
         CourseRes courseRes = courseService.getCourse(courseId);
         return  ResponseEntity.ok().body(BaseResponse.success("OK", courseRes));
+    }
+
+    @PutMapping("/{courseId}")
+    public ResponseEntity updateCourse(@AuthenticationPrincipal OAuth2User oAuth2User,
+                                       @PathVariable Long courseId,
+                                       @Valid @RequestBody CourseUpdateReq courseUpdateReq){
+
+        //TODO: @Valid 결과를 RestcontrollerAdvice를 통해 처리하도록 수정해야함
+
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        String memberEmail = (String) attributes.get("email");
+
+        CourseIdRes courseIdRes = courseService.updateCourse(memberEmail, courseId, courseUpdateReq);
+        return ResponseEntity.ok().body(BaseResponse.success("OK", courseIdRes));
     }
 }

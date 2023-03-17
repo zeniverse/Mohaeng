@@ -1,6 +1,7 @@
 package com.mohaeng.backend.course.domain;
 
 import com.mohaeng.backend.common.BaseTimeEntity;
+import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -67,6 +68,18 @@ public class Course extends BaseTimeEntity {
 
     public void addCoursePlaces(List<CoursePlace> data) {
         this.coursePlaces = data;
+    }
+
+    public void updateCourse(CourseUpdateReq courseUpdateReq, List<CoursePlace> coursePlaces) {
+        this.title = courseUpdateReq.getTitle();
+        this.startDate = courseUpdateReq.getStartDate();
+        this.endDate = courseUpdateReq.getEndDate();
+        this.isPublished = courseUpdateReq.getIsPublished();
+        this.courseDays = courseUpdateReq.getCourseDays();
+        this.region = courseUpdateReq.getRegion();
+        this.thumbnailUrl = courseUpdateReq.getThumbnailUrl();
+        this.content = courseUpdateReq.getContent();
+        this.coursePlaces = coursePlaces;
     }
 
 }

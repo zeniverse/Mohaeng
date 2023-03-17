@@ -6,6 +6,7 @@ import com.mohaeng.backend.course.dto.CourseInPlaceDto;
 import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
+import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
@@ -122,5 +123,51 @@ public class CourseService {
         }
 
         return CourseRes.from(findCourse, courseInPlaceDtoList);
+    }
+
+    @Transactional
+    public CourseIdRes updateCourse(String memberEmail, Long courseId, CourseUpdateReq req) {
+
+        Course course = courseRepository.findById(courseId).orElseThrow(
+                // TODO: Exception 처리
+                () -> new IllegalArgumentException("존재하지 않는 course 입니다.")
+        );
+
+        isWriter(memberEmail, course.getMember());
+
+        List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
+        coursePlaceRepository.deleteAllInBatch(coursePlaces);
+
+        coursePlaces.clear();
+        for (Long id : req.getPlaceIds()) {
+            Place place = placeRepository.findById(id).orElseThrow(
+                    // TODO: Exception 처리
+                    () -> new IllegalArgumentException("존재하지 않는 장소 입니다.")
+            );
+            coursePlaces.add(
+                    CoursePlace.builder()
+                            .course(course)
+                            .place(place)
+                            .build()
+            );
+        }
+
+        coursePlaceRepository.saveAll(coursePlaces);
+        course.updateCourse(req, coursePlaces);
+
+        return CourseIdRes.from(course.getId());
+    }
+
+    private Member isWriter(String memberEmail, Member writer){
+        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+                // TODO: Exception 처리
+                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
+        );
+
+        if(!member.getEmail().equals(writer.getEmail()))
+            // TODO: Exception 처리
+            throw new RuntimeException("요청자와 작성자가 일치하지 않습니다.");
+        return member;
+
     }
 }
