@@ -4,22 +4,51 @@ import com.mohaeng.backend.place.domain.Place;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
 public class JdbcTemplateRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    private SimpleJdbcInsert simpleJdbcInsert;
+
+    public void setDataSource(List<Place> temp) {
+        this.simpleJdbcInsert = new SimpleJdbcInsert((DataSource) temp).withTableName("place");
+    }
+
+    public void add(Place place) {
+        Map<String, Object> parameters = new HashMap<>(11);
+        parameters.put("id", place.getId());
+        parameters.put("name", place.getName());
+        parameters.put("addr", place.getAddr1());
+        parameters.put("areacode", place.getAreacode());
+        parameters.put("firstimage", place.getFirstimage());
+        parameters.put("firstimage2", place.getFirstimage2());
+        parameters.put("mapx", place.getMapx());
+        parameters.put("mapy", place.getMapy());
+        parameters.put("sigungucode", place.getSigungucode());
+        parameters.put("contentid", place.getContentid());
+        parameters.put("overview", place.getOverview());
+        simpleJdbcInsert.execute(parameters);
+    }
+
+
+
+
 
     public void batchInsert(List<Place> temp) {
 
-        jdbcTemplate.batchUpdate("INSERT INTO Place(" +
+        jdbcTemplate.batchUpdate("INSERT INTO place(" +
                         "`place_id`," + "`name`, " +
                         "`addr1`," + "`areacode`," +
                         "`firstimage`," + "`firstimage2`," +
