@@ -34,8 +34,8 @@ public class PlaceController {
     private final PlaceService placeService;
     private final PlaceRepository placeRepository;
 
-    @PostConstruct
-    public void init() throws Exception {
+//    @PostConstruct
+    public void init() {
         AddPlaceCreate addPlaceCreate1 = AddPlaceCreate.builder()
                 .username("hong")
                 .name("경복궁")
