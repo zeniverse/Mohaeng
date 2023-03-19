@@ -1,7 +1,11 @@
 package com.mohaeng.backend.config;
 
 import com.mohaeng.backend.member.domain.Role;
+import com.mohaeng.backend.member.jwt.JwtFilter;
+import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.oauth.OAuthService;
+import com.mohaeng.backend.member.oauth.OAuthSuccessHandler;
+import com.mohaeng.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,12 +13,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
     private final OAuthService oAuthService;
+    private final OAuthSuccessHandler oAuthSuccessHandler;
+    private final TokenGenerator tokenGenerator;
+    private final MemberRepository memberRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -28,7 +36,7 @@ public class SecurityConfig {
                     .requestMatchers("/loginInfo", "/user/logout").hasAnyRole(Role.NORMAL.name(), Role.ADMIN.name())
                     .requestMatchers("/api/**").hasAnyRole(Role.NORMAL.name(), Role.ADMIN.name())
                 .and()
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .logout()
                     .logoutSuccessUrl("/")
@@ -37,10 +45,11 @@ public class SecurityConfig {
                 .and()
                 .formLogin().disable()
                     .oauth2Login()
-                    .defaultSuccessUrl("/loginInfo")
+                    .successHandler(oAuthSuccessHandler)
                     .userInfoEndpoint()
                     .userService(oAuthService);
 
+        http.addFilterBefore(new JwtFilter(tokenGenerator, memberRepository), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
