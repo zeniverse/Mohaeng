@@ -10,3 +10,10 @@ export interface User {
   status: number;
   data: userData;
 }
+
+export interface Session {
+  user: {
+    id: string;
+    email: string;
+  };
+}
