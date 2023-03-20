@@ -12,17 +12,23 @@ const KakaoLogin = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const KAKAO_CODE = new URL(window.location.href).searchParams.get("code");
-    const postCode = async () => {
+    let code = new URL(window.location.href).searchParams.get("code");
+    const kakao = async () => {
       await axios
-        .get(`http://localhost:8080/login/oauth2/code/kakao/${code}`)
+        .get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/login/oauth2/code/kakao/${code}`
+        )
         .then((res) => {
           localStorage.setItem("token", res.headers.authorization);
           router.replace("/");
         })
-        .catch();
+        //.then(res => res.json())
+        //.then(data => {
+        // localStorage.setItem('token', data.token) })
+
+        .catch((error) => console.log(error));
     };
-    postCode();
+    kakao();
   }, []);
   // 성공하면 LoginInfo 컴포넌트로 가고, 실패하면 Loading에 머무른다.
   // {valid ? <LoginInfo /> : <Loading />}
