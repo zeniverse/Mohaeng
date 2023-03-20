@@ -2,8 +2,11 @@ package com.mohaeng.backend.course.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 
-@Data
+@Getter
+@ToString
 @AllArgsConstructor
 public class CoursePlaceSearchReq {
     private String keyword;

@@ -30,15 +30,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <SessionProvider session={pageProps.session}>
           <GlobalModal />
-          {/* <div className="wrap">
-          <Header />
-          <div className="body-content"> */}
           <AppLayout>
             <Component {...pageProps} />
           </AppLayout>
-          {/* </div>
-          <Footer />
-        </div> */}
         </SessionProvider>
       </Provider>
     </>
