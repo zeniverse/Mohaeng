@@ -1,17 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface LoginState {
+  id: number;
   token: string;
   nickname: string;
   email: string;
-  idx: number;
 }
 
 const initialState: LoginState = {
   token: "",
   nickname: "",
   email: "",
-  idx: 0,
+  id: 0,
 };
 
 export const logintokenSlice = createSlice({
@@ -28,7 +28,7 @@ export const logintokenSlice = createSlice({
       state.email = action.payload;
     },
     setIdx: (state, action) => {
-      state.idx = action.payload;
+      state.id = action.payload;
     },
   },
 });

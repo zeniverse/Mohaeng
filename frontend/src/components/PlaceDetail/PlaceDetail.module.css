@@ -49,7 +49,7 @@
 
 .unbookmark {
   color: var(--color-icon);
-  font-size: 50px;
+  font-size: 40px;
 }
 .unbookmark:hover {
   color: var(--color-red);
@@ -59,7 +59,7 @@
 
 .bookmark {
   color: var(--color-red);
-  font-size: 50px;
+  font-size: 40px;
 }
 
 .imgSlider {
