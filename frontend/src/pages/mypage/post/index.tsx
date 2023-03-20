@@ -51,7 +51,7 @@ const bookmarksCourse: BookmarkItem[] = [
   },
 ];
 
-const MyBookmark = () => {
+const MyPost = () => {
   // const [bookmarks, setBookmarks] = useState<bookmarkItem[]>([]);
 
   // useEffect(() => {
@@ -126,4 +126,4 @@ const MyBookmark = () => {
   );
 };
 
-export default MyBookmark;
+export default MyPost;
