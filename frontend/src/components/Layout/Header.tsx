@@ -8,6 +8,8 @@ import { FaUserCircle } from "react-icons/fa";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../store/reducers/modalSlice";
+import { signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 
 const StyledIcon = styled(BsSearch)`
   color: #004aad;
@@ -16,6 +18,9 @@ const StyledIcon = styled(BsSearch)`
 type Props = {};
 
 function Header({}: Props) {
+  const { data: session } = useSession();
+  console.log(session);
+
   const dispatch = useDispatch();
 
   const handleOpenLoginModal = () => {
@@ -55,21 +60,43 @@ function Header({}: Props) {
           <div className={styles.menu}>
             <Link href="#">여행지</Link>
             <Link href="course">코스</Link>
-            <Link href="#">동행 게시판</Link>
+            {/* <Link href="#">동행 게시판</Link> */}
             <Link href="/mypage">마이페이지</Link>
           </div>
         </div>
       </nav>
       <div className={styles.btn}>
-        <button
-          id="login-btn"
-          className={styles["login-btn"]}
-          onClick={handleOpenLoginModal}
-        >
-          로그인
-        </button>
-        {/* {user && 로그아웃 버튼}
-        {!user && 로그인 버튼} */}
+        {!session ? (
+          <>
+            <button
+              id="login-btn"
+              className={styles["login-btn"]}
+              // onClick={handleOpenLoginModal}
+              onClick={() => signIn("kakao")}
+            >
+              로그인
+            </button>
+          </>
+        ) : (
+          <>
+            <Image
+              className={styles["kakao-profile-img"]}
+              src={session.user?.image}
+              alt="카카오프로필"
+              width={40}
+              height={40}
+            />
+            {session.user?.name}님
+            <button
+              id="login-btn"
+              className={styles["login-btn"]}
+              // onClick={handleOpenLoginModal}
+              onClick={() => signOut()}
+            >
+              로그아웃
+            </button>
+          </>
+        )}
         <button
           id="signup-btn"
           className={styles["signup-btn"]}
