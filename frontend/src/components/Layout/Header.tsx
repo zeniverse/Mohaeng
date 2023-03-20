@@ -71,8 +71,8 @@ function Header({}: Props) {
             <button
               id="login-btn"
               className={styles["login-btn"]}
-              // onClick={handleOpenLoginModal}
-              onClick={() => signIn("kakao")}
+              onClick={handleOpenLoginModal}
+              // onClick={() => signIn("kakao")}
             >
               로그인
             </button>
