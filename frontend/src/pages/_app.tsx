@@ -15,7 +15,10 @@ const NotoSansKR = Noto_Sans_KR({
   display: "swap",
 });
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   return (
     <>
       <style jsx global>{`
@@ -28,7 +31,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta content="width=device-width, initial-scale=1" name="viewport" />
       </Head>
       <Provider store={store}>
-        <SessionProvider session={pageProps.session}>
+        <SessionProvider session={session}>
           <GlobalModal />
           <AppLayout>
             <Component {...pageProps} />
