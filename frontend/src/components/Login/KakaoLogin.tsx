@@ -12,21 +12,15 @@ const KakaoLogin = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const KAKAO_CODE = new URL(window.location.href).searchParams.get("code");
     const postCode = async () => {
       try {
-        // 인가코드 서버로 보내기
-        const KAKAO_CODE = new URL(window.location.href).searchParams.get(
-          "code"
-        );
         const response = await axios
-          .post(
-            `http://localhost:3000/login/oauth2/code/kakao/${KAKAO_CODE}}`,
-            null,
-            {
-              params: { authorizationCode: KAKAO_CODE },
-            }
-          )
-          .then((data) => console.log(data));
+          .post(`/oauth2/authorization/kakao`, null, {
+            params: { authorizationCode: KAKAO_CODE },
+            withCredentials: true,
+          })
+          .then((res) => console.log(res));
 
         // 서버에서 인가코드를 가지고 카카오에서 개인정보를 받아온 뒤, 응답값으로 회원가입 유무를 판단할 email을 보내준다.
         const userEmail = response.data.success.kakao_account.email;
