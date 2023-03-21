@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import styles from "./SearchResult.module.css";
 import Link from "next/link";
@@ -18,9 +16,9 @@ type Keyword = {
   review: number;
 };
 
-export default function SearchPlace(): JSX.Element {
-  const router = useRouter();
+export default function indec(): JSX.Element {
   const [keywordData, setKeywordData] = useState<Keyword[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchData() {
@@ -80,4 +78,36 @@ export default function SearchPlace(): JSX.Element {
       </section>
     </>
   );
+}
+
+{
+  /* <Link
+className={styles.Link}
+href={{
+  pathname: "/place/[id]",
+  query: {
+    id: keyword.id,
+    addr: keyword.addr,
+    image: keyword.image,
+    mapx: keyword.mapx,
+    mapy: keyword.mapy,
+    tel: keyword.tel,
+    title: keyword.title,
+    review: keyword.review,
+  },
+}}
+as={`/place/${keyword.id}`}
+>
+<Image
+  className={styles.img}
+  src={keyword.image}
+  alt={keyword.title}
+  width={257}
+  height={233}
+/>
+<span className={styles.keywordInfo}>
+  <p className={styles.title}>{keyword.title}</p>
+  <p className={styles.review}>{keyword.review}건의 리뷰</p>
+</span>
+</Link> */
 }
