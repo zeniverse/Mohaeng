@@ -1,19 +1,7 @@
-import { BsFillHeartFill } from "react-icons/bs";
+import { CourseProps } from "@/src/interfaces/Course";
+import Image from "next/image";
+import IsLikeState from "../UI/IsLikeState";
 import styles from "./CourseCard.module.css";
-
-interface items {
-  courseId: number;
-  coursetitle: string;
-  content: string;
-  imgUrl: string;
-}
-type CourseProps = {
-  id: number;
-  courseTitle: string;
-  courseDesc: string;
-  courseLike: number;
-  courseList: items[];
-};
 
 const CourseCard = ({
   id,
@@ -21,16 +9,15 @@ const CourseCard = ({
   courseDesc,
   courseLike,
   courseList,
+  courseDays,
 }: CourseProps) => {
+  console.log(courseList);
   const Img = courseList[0].imgUrl;
   return (
     <div className={styles["course-card-container"]}>
       <div className={styles["course-image-container"]}>
-        <img src={Img} />
-        <div className={styles["course-like-container"]}>
-          <BsFillHeartFill color="red" size={20} />
-          <span>{courseLike}</span>
-        </div>
+        <Image src={Img} alt={courseTitle} width={700} height={700} priority />
+        <IsLikeState courseLike={courseLike} />
       </div>
       <div className={styles["course-card-content"]}>
         <div className={styles["course-card-title"]}>

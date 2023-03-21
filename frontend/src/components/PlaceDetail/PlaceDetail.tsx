@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+// "use client";
+import { useState } from "react";
 import styles from "./PlaceDetail.module.css";
 import { IoMdHeart } from "react-icons/io";
 import Image from "next/image";
@@ -15,7 +15,7 @@ export default function PlaceDetail() {
       <section className={styles.placeDetail}>
         <div className={styles.detailHeader}>
           <div className={styles.headerTitle}>
-            <h2 className={styles.h1}>여행지 이름</h2>
+            <h2 className={styles.h1}></h2>
             <a href="#review">
               <p className={styles.rating}>별점 </p>
               <p className={styles.review}>12건의 리뷰</p>
@@ -55,10 +55,6 @@ export default function PlaceDetail() {
             </p>
             <p className={styles.descInfo}>
               <span className={styles.descTitle}>세부 설명 </span>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Voluptatem, odio incidunt temporibus similique qui rem quod
-              cupiditate obcaecati molestiae? Reiciendis distinctio rem odit,
-              aliquam dolore minus iusto enim. Voluptatum, labore.
             </p>
           </div>
           <div className={styles.detailMap} id="map">

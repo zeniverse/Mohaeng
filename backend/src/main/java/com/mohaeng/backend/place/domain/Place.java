@@ -12,44 +12,32 @@ import java.util.List;
 
 @Entity
 @Table(appliesTo = "place")
-@Getter
-@RequiredArgsConstructor
 @Builder
+@Getter
+@NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Place {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "place_id")
     private Long id;
 
-    @NotBlank
     private String name;
-
-    @NotBlank
-    private String address;
-
-//    @NotBlank
-//    private String content;
-
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private Category category;
-
-    private String availableTime;
-
-    private String menu;
-
-    private String latitude;
-
-    private String longitude;
-
-//    @Builder.Default
-//    @OneToMany(mappedBy = "review")
-//    private List<Review> reviews = new ArrayList<>();
+    private String addr1;
+    //    private String content;
+    private String areacode;
+    private String firstimage;
+    private String firstimage2;
+    private String mapx;
+    private String mapy;
+    private String sigungucode;
+    private String contentid;
+    private double rating;
 
     @Builder.Default
     @OneToMany(mappedBy = "place")
+    @ToString.Exclude
     private List<PlaceImage> placeImages = new ArrayList<>();
 
-    private double rating;
 }

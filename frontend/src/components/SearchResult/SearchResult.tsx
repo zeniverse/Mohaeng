@@ -4,32 +4,22 @@ import Image from "next/image";
 import styles from "./SearchResult.module.css";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 type Keyword = {
   addr: string;
-  id: string;
+  id: number;
   image: string;
   mapx: string;
   mapy: string;
   tel: string;
   title: string;
+  overview: string;
   review: number;
 };
 
-// useEffect(() => {
-//   const handler = async () => {
-//     const response = await fetch("/api/keyword", {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     });
-//     const data = await response.json();
-//     console.log(data);
-//   };
-//   handler();
-// }, []);
 export default function SearchPlace(): JSX.Element {
+  const router = useRouter();
   const [keywordData, setKeywordData] = useState<Keyword[]>([]);
 
   useEffect(() => {
@@ -49,15 +39,28 @@ export default function SearchPlace(): JSX.Element {
         <ul className={styles.keywordList}>
           {keywordData?.map((keyword) => (
             <li className={styles.item} key={keyword.id}>
-              <Link
+              <button
                 className={styles.Link}
-                href={{
-                  pathname: "/place/[id]",
-                  query: {
-                    id: keyword.id,
-                    title: keyword.title,
-                  },
-                }}
+                onClick={() =>
+                  router.push(
+                    {
+                      pathname: "/place/[id]",
+                      query: {
+                        id: keyword.id,
+                        addr: keyword.addr,
+                        image: keyword.image,
+                        mapx: keyword.mapx,
+                        mapy: keyword.mapy,
+                        tel: keyword.tel,
+                        title: keyword.title,
+                        overview: keyword.overview,
+                        review: keyword.review,
+                      },
+                    },
+                    `place/${keyword.id}`,
+                    { scroll: true }
+                  )
+                }
               >
                 <Image
                   className={styles.img}
@@ -70,7 +73,7 @@ export default function SearchPlace(): JSX.Element {
                   <p className={styles.title}>{keyword.title}</p>
                   <p className={styles.review}>{keyword.review}건의 리뷰</p>
                 </span>
-              </Link>
+              </button>
             </li>
           ))}
         </ul>

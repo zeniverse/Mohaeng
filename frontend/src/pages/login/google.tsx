@@ -1,3 +1,5 @@
-export default function kakao() {
-  return <div>구글 로그인</div>;
+import GoogleLogin from "@/src/components/Login/GoogleLogin";
+
+export default function google() {
+  return <GoogleLogin />;
 }

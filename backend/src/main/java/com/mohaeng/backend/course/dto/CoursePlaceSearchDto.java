@@ -15,6 +15,6 @@ public class CoursePlaceSearchDto {
     private String imgUrl;
     private String name;
     private String address;
-    private Double rating;
+    private double rating;
 
 }

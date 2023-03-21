@@ -9,7 +9,6 @@
   --color-border-light: #dddddd;
   --color-text-basic: #333333;
   --color-text-semi: #b7b7b7;
-  --color-icon: #cfcfcf;
 }
 
 * {
@@ -31,7 +30,7 @@ body {
 
 main {
   display: block;
-  width: 100vw;
+  /* width: 100vw; */
 }
 
 fieldset {
@@ -46,6 +45,17 @@ li {
   min-height: 100%;
   position: relative;
 }
+
 .body-content {
   padding-bottom: 230px; /* footer의 높이 */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
 }
