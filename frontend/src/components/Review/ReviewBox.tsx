@@ -12,7 +12,13 @@ export default function () {
   return (
     <article className={styles.reviewBox}>
       <div className={styles.reviewer}>
-        <Image className={styles.userImg} src={user} width={50} height={50} />
+        <Image
+          className={styles.userImg}
+          src={user}
+          width={50}
+          height={50}
+          alt="userImg"
+        />
         <div className={styles.reviewerInfo}>
           <div className={styles.rating}> 별점 </div>
           <p className={styles.review}>아이디 | 작성일</p>
