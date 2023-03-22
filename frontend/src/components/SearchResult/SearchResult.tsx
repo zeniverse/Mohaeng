@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "./SearchResult.module.css";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 
 type Keyword = {
   addr: string;
