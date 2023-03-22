@@ -25,10 +25,9 @@ public class TokenGenerator {
     private String secretKey = "SECRETKEYFORMOHAENGPROJECTWECANDOSECRETKEYTHISISKEY";
     private Key key;
     // 임시값
-    private final long ACCESS_PERIOD = 100000L;
+    private final long ACCESS_PERIOD = 100000000L;
     private final long REFRESH_PERIOD = 100000L;
 
-    private final MemberService memberService;
 
     @PostConstruct
     private void setUPEncodeKey() {
@@ -40,7 +39,6 @@ public class TokenGenerator {
         claims.put("role", role);
 
         Date nowDate = new Date();
-
 
         Token token = new Token(
                 Jwts.builder()
