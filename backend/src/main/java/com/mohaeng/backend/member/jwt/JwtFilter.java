@@ -8,18 +8,18 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 import java.util.Arrays;
 
 @RequiredArgsConstructor
+@Component
 public class JwtFilter extends GenericFilterBean {
     private final TokenGenerator tokenGenerator;
     private final MemberRepository memberRepository;
@@ -33,8 +33,10 @@ public class JwtFilter extends GenericFilterBean {
             String email = tokenGenerator.parseEmailFromToken(accessToken);
             Member member = memberRepository.findByEmail(email).get();
 
-            Authentication authentication = getAuthentication(member);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            request.setAttribute("userEmail", email);
+
+//            Authentication authentication = getAuthentication(member);
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         chain.doFilter(request, response);
