@@ -1,25 +1,16 @@
 package com.mohaeng.backend.place.controller;
 
-import com.mohaeng.backend.place.domain.AddPlace;
 import com.mohaeng.backend.place.domain.Place;
-import com.mohaeng.backend.place.dto.request.AddPlaceCreate;
-import com.mohaeng.backend.place.dto.response.AddPlaceResponse;
-import com.mohaeng.backend.place.entity.Category;
-import com.mohaeng.backend.place.repository.AddPlaceRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
-import com.mohaeng.backend.place.service.AddPlaceService;
 import com.mohaeng.backend.place.service.PlaceService;
-import jakarta.annotation.PostConstruct;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.xml.sax.SAXException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.util.List;
 
 
