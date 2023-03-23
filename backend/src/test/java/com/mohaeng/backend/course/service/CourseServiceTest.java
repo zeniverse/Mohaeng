@@ -2,10 +2,12 @@ package com.mohaeng.backend.course.service;
 
 import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
+import com.mohaeng.backend.course.dto.CourseSearchDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
+import com.mohaeng.backend.course.dto.response.CourseListRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.repository.CourseRepository;
@@ -403,6 +405,31 @@ class CourseServiceTest {
 
         //Then
         assertEquals(exception.getMessage(), "존재하지 않는 course 입니다.");
+    }
+
+    @Test
+    @DisplayName("코스 검색 - 정상 처리")
+    public void searchCourse() throws Exception{
+        //Given
+        CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
+        CourseReq originReq2 = createCourseReq("코스 소개합니다", List.of(3L, 4L));
+        Member savedMember = createMember();
+        CourseIdRes courseIdRes1 = courseService.createCourse(originReq1, savedMember.getEmail());
+        CourseIdRes courseIdRes2 = courseService.createCourse(originReq2, savedMember.getEmail());
+
+        CourseSearchDto courseSearchDto = CourseSearchDto.builder()
+                .keyword("바다")
+                .build();
+
+        PageRequest pageRequest = PageRequest.of(0, 2);
+
+        //When
+        CourseListRes courseList = courseService.getCourseList(courseSearchDto, pageRequest);
+
+        //Then
+        assertEquals(1, courseList.getCourseList().size());
+        assertEquals(originReq1.getTitle(), courseList.getCourseList().get(0).getTitle());
+        assertEquals(1, courseList.getTotalPages());
     }
 
 
