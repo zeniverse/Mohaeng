@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
+import { useEffect } from "react";
 import styles from "./Header.module.css";
 import { BsSearch } from "react-icons/bs";
-import { FaUserCircle } from "react-icons/fa";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../store/reducers/modalSlice";
@@ -17,6 +16,7 @@ import {
   setToken,
 } from "@/src/store/reducers/loginTokenSlice";
 import { RootState } from "@/src/store/store";
+import axios from "axios";
 
 const StyledIcon = styled(BsSearch)`
   color: #004aad;
@@ -25,23 +25,32 @@ const StyledIcon = styled(BsSearch)`
 type Props = {};
 
 function Header({}: Props) {
-  const router = useRouter();
   const dispatch = useDispatch();
+  const router = useRouter();
   const loginToken = useSelector((state: RootState) => state.token.token);
-  const nickname = useSelector((state: RootState) => state.nickname.nickname);
+  const nickName = useSelector((state: RootState) => state.nickName.nickName);
+
+  // useEffect(() => {
+  //   const getResponse = async () => {
+  //     if (loginToken) {
+  //       // axios.defaults.headers.common["Access-Token"] =
+  //       //   localStorage.getItem("accessToken");
+  //       const getUser = await axios.get(`http://219.255.1.253:8080/loginInfo`, {
+  //         headers: {
+  //           "Access-Token": `${loginToken}`,
+  //         },
+  //       });
+  //       console.log();
+  //       dispatch(setNickname(getUser.data.nickName));
+  //     }
+  //   };
+  //   getResponse();
+  // }, [loginToken]);
 
   const handleOpenLoginModal = () => {
     dispatch(
       openModal({
         modalType: "LoginModal",
-        isOpen: true,
-      })
-    );
-  };
-  const handleOpenBasicModal = () => {
-    dispatch(
-      openModal({
-        modalType: "BasicModal",
         isOpen: true,
       })
     );
@@ -94,7 +103,7 @@ function Header({}: Props) {
           </>
         ) : (
           <>
-            {nickname}님
+            {nickName}
             <button
               id="login-btn"
               className={styles["login-btn"]}

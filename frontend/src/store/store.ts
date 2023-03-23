@@ -10,7 +10,7 @@ const store = configureStore({
   reducer: {
     modal: modalReducer,
     token: tokenReducer,
-    nickname: nicknameReducer,
+    nickName: nicknameReducer,
     email: emailReducer,
     socialEmail: socialEmailReducer,
     id: idReducer,

@@ -8,6 +8,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { idText } from "typescript";
 import Loading from "./Loading";
 
 const KakaoLogin = () => {
@@ -23,29 +24,34 @@ const KakaoLogin = () => {
         const response = await axios.get(
           `http://219.255.1.253:8080/oauth/token?code=${code}`
         );
-        const { accessToken } = response.data;
-        localStorage.setItem("token", response.headers.authorization);
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${accessToken}`;
+        const accessToken = response.data.accessToken;
+        const refreshToken = response.data.refreshToken;
+        localStorage.setItem("accessToken", response.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.refreshToken);
+        // axios.defaults.headers.common[
+        //   "Access-Token"
+        // ] = `${accessToken}`;
         dispatch(setToken(accessToken));
-        console.log(accessToken);
-        router.replace("/");
-        console.log("로그인 성공!");
+
         if (accessToken) {
           try {
             // loginInfo에서 정보 받아오기, 토큰 헤더에 담아서 전송
-            axios.defaults.headers.common[
-              "Authorization"
-            ] = `Bearer ${accessToken}`;
-            const userResponse = await axios.post(
-              `http://219.255.1.253:8080/loginInfo`
+            const userResponse = await axios.get(
+              `http://219.255.1.253:8080/loginInfo`,
+              {
+                headers: {
+                  "Access-Token": `${accessToken}`,
+                },
+              }
             );
+
             // 여기에서 받아온 유저 정보를 리덕스에 저장한다
-            const { id, email, nickname } = userResponse.data;
-            dispatch(setId(id));
-            dispatch(setEmail(email));
-            dispatch(setNickname(nickname));
+            console.log(userResponse.data);
+            //     // dispatch(setId(id));
+            //     // dispatch(setEmail(email));
+            //     // dispatch(setNickname(nickName));
+            router.replace("/");
+            console.log(`로그인 성공!`);
           } catch (e) {
             console.log(e);
           }
@@ -55,8 +61,7 @@ const KakaoLogin = () => {
         setValid(true);
       } catch (e) {
         console.log(e);
-        // router.push("/");
-        // alert("로그인되지 않았습니다.");
+        router.push("/");
       }
     };
     kakaoCode();
