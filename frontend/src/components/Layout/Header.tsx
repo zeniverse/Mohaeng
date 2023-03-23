@@ -1,14 +1,11 @@
 "use client";
-
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Header.module.css";
 import { BsSearch } from "react-icons/bs";
-import { FaUserCircle } from "react-icons/fa";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../store/reducers/modalSlice";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import {
   setEmail,
@@ -25,6 +22,13 @@ const StyledIcon = styled(BsSearch)`
 type Props = {};
 
 function Header({}: Props) {
+  const [text, setText] = useState("");
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    router.push(`/searchResult?=${text}`);
+    setText("");
+  };
+
   const router = useRouter();
   const dispatch = useDispatch();
   const loginToken = useSelector((state: RootState) => state.token.token);
@@ -34,14 +38,6 @@ function Header({}: Props) {
     dispatch(
       openModal({
         modalType: "LoginModal",
-        isOpen: true,
-      })
-    );
-  };
-  const handleOpenBasicModal = () => {
-    dispatch(
-      openModal({
-        modalType: "BasicModal",
         isOpen: true,
       })
     );
@@ -64,23 +60,23 @@ function Header({}: Props) {
           <Link href="/">
             <img src="/assets/logo.png" alt="logo" className={styles.logo} />
           </Link>
-          <div className={styles["search-bar"]}>
+
+          <form className={styles["search-bar"]} onSubmit={handleSubmit}>
             <input
               className={styles["search-input"]}
               type="text"
               placeholder="어디 가고 싶으세요?"
+              onChange={(e) => setText(e.target.value)}
+              value={text}
             />
             <button className={styles["search-icon"]}>
-              <StyledIcon size={20} />
+              <BsSearch />
             </button>
-          </div>
+          </form>
+
           <div className={styles.menu}>
             <Link href="/place">여행지</Link>
             <Link href="/course">코스</Link>
-<<<<<<< HEAD
-            {/* <Link href="#">동행 게시판</Link> */}
-=======
->>>>>>> e5e9a49ee5504dcdae5070bea8e40a7c2e0f91b8
             <Link href="/mypage">마이페이지</Link>
           </div>
         </div>
