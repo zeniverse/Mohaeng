@@ -1,10 +1,13 @@
 package com.mohaeng.backend.course.controller;
 
 import com.mohaeng.backend.common.BaseResponse;
+import com.mohaeng.backend.course.dto.CourseSearchDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
+import com.mohaeng.backend.course.dto.CourseListDto;
+import com.mohaeng.backend.course.dto.response.CourseListRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.service.CourseService;
@@ -17,6 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -77,5 +81,11 @@ public class CourseController {
 
         courseService.deleteCourse(memberEmail, courseId);
         return ResponseEntity.ok().body(BaseResponse.success("OK"));
+    }
+
+    @GetMapping
+    public ResponseEntity getCourseList(CourseSearchDto courseSearchDto,Pageable pageable){
+        CourseListRes result = courseService.getCourseList(courseSearchDto, pageable);
+        return ResponseEntity.ok().body(BaseResponse.success("OK", result));
     }
 }
