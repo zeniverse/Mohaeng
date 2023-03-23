@@ -112,21 +112,14 @@ public class PlaceController {
     public void delete(@PathVariable Long placeId) {
         addPlaceService.delete(placeId);
     }
+    
 
     @GetMapping("/place")
-    public ResponseEntity<List<Place>> getPlaces() throws IOException, ParserConfigurationException, SAXException {
-        List<Place> places = placeService.getPlaces();
+    public ResponseEntity<List<Place>> getPlaces() {
+        List<Place> places = placeService.getPlacesAll();
         log.info("getPlaces.size:{}", places.size());
         return new ResponseEntity<>(places, HttpStatus.OK);
     }
-
-//    @GetMapping("/place2")
-//    public ResponseEntity<List<Place>> getPlaces2() throws JAXBException {
-//        List<Place> places = placeService2.getPlaces();
-////        log.info("getPlaces.size:{}", places.());
-//        return new ResponseEntity<>( places, HttpStatus.OK);
-//    }
-
 
 
     @GetMapping("/place/{addr1}")
