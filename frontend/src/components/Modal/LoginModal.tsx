@@ -11,7 +11,6 @@ import Image from "next/image";
 import btnKakao from "/public/assets/btnKakao.png";
 import btnGoogle from "/public/assets/btnGoogle.png";
 import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL } from "../../pages/api/auth/OAuth";
-import { signIn } from "next-auth/react";
 
 export default function LoginModal() {
   const dispatch = useDispatch();
@@ -26,11 +25,11 @@ export default function LoginModal() {
         간편하게 로그인하고 모두의 여행을 경험해보세요
       </p>
       <div className={styles.btnList}>
-        {/* <Link className={styles.link} href={KAKAO_AUTH_URL}> */}
-        <KakaoBtn onClick={() => signIn("kakao")} className={styles.btn}>
-          <Image src={btnKakao} alt="카카오 로그인" width={352} height={54} />
-        </KakaoBtn>
-        {/* </Link> */}
+        <Link className={styles.link} href={KAKAO_AUTH_URL}>
+          <KakaoBtn className={styles.btn}>
+            <Image src={btnKakao} alt="카카오 로그인" width={352} height={54} />
+          </KakaoBtn>
+        </Link>
         <Link className={styles.link} href={GOOGLE_AUTH_URL}>
           <GoogleBtn className={styles.btn}>
             <Image src={btnGoogle} alt="구글 로그인" width={54} height={54} />
@@ -93,3 +92,5 @@ const Content = styled.section`
   padding: 4rem;
   z-index: 1;
 `;
+
+// onClick={() => signIn("kakao")}

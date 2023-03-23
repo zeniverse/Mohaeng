@@ -27,12 +27,12 @@ export const logintokenSlice = createSlice({
     setEmail: (state, action) => {
       state.email = action.payload;
     },
-    setIdx: (state, action) => {
+    setId: (state, action) => {
       state.id = action.payload;
     },
   },
 });
 
-export const { setToken, setNickname, setEmail, setIdx } =
+export const { setToken, setNickname, setEmail, setId } =
   logintokenSlice.actions;
 export default logintokenSlice.reducer;
