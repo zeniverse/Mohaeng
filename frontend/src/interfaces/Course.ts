@@ -29,3 +29,36 @@ export interface RoughMapTitle {
   setIsRoughMapOpen?: any;
   isRoughMapOpen?: any;
 }
+
+export interface CourseDetailType {
+  title: string;
+  nickname: string;
+  likeCount: number | string;
+  courseDays: string;
+  region: string;
+  content: string;
+  createdDate: string;
+  places: CourseDetailPlaces[];
+}
+
+export interface CourseDetailPlaces {
+  placeId: number;
+  imgUrl: string;
+  name: string;
+  address: string;
+  mapX: string;
+  mapY: string;
+}
+
+export interface kakaoPlaces {
+  placeId: number;
+  name: string;
+  mapX: string;
+  mapY: string;
+}
+
+export interface PositionsProps {
+  positions: kakaoPlaces[];
+}
+
+export interface formatPositions {}
