@@ -108,6 +108,10 @@
   background-color: #0066cc;
 }
 
+.kakao-profile-img {
+  border-radius: 50%;
+}
+
 @media screen and (max-width: 768px) {
   .btn {
     flex-direction: column;
