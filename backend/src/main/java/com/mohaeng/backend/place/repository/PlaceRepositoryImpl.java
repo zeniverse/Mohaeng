@@ -13,12 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
-import static org.springframework.util.ObjectUtils.isEmpty;
-
 import java.util.List;
 
 import static com.mohaeng.backend.place.domain.QPlace.place;
-import static com.mohaeng.backend.place.domain.QPlaceImage.placeImage;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 
