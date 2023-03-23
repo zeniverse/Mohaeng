@@ -8,7 +8,6 @@ import { FaUserCircle } from "react-icons/fa";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../store/reducers/modalSlice";
-import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 
 const StyledIcon = styled(BsSearch)`
@@ -18,9 +17,6 @@ const StyledIcon = styled(BsSearch)`
 type Props = {};
 
 function Header({}: Props) {
-  const { data: session } = useSession();
-  console.log(session);
-
   const dispatch = useDispatch();
 
   const handleOpenLoginModal = () => {
@@ -66,16 +62,17 @@ function Header({}: Props) {
         </div>
       </nav>
       <div className={styles.btn}>
-        {!session ? (
+        <button
+          id="login-btn"
+          className={styles["login-btn"]}
+          onClick={handleOpenLoginModal}
+          // onClick={() => signIn("kakao")}
+        >
+          로그인
+        </button>
+        {/* {!session ? (
           <>
-            <button
-              id="login-btn"
-              className={styles["login-btn"]}
-              onClick={handleOpenLoginModal}
-              // onClick={() => signIn("kakao")}
-            >
-              로그인
-            </button>
+            
           </>
         ) : (
           <>
@@ -96,7 +93,7 @@ function Header({}: Props) {
               로그아웃
             </button>
           </>
-        )}
+        )} */}
         <button
           id="signup-btn"
           className={styles["signup-btn"]}

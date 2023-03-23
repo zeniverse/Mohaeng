@@ -11,16 +11,16 @@ const KakaoLogin = () => {
   const [valid, setValid] = useState(false);
   const dispatch = useDispatch();
 
+  // ${process.env.PUBLIC_NEXT_BASE_URL}
   useEffect(() => {
     let code = new URL(window.location.href).searchParams.get("code");
     const kakao = async () => {
       await axios
-        .get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/login/oauth2/code/kakao/${code}`
-        )
+        .get(`http://219.255.1.253:8080/oauth/token?code=${code}`)
         .then((res) => {
-          localStorage.setItem("token", res.headers.authorization);
+          sessionStorage.setItem("token", res.headers.authorization);
           router.replace("/");
+          window.alert("로그인 성공!");
         })
         //.then(res => res.json())
         //.then(data => {
