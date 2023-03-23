@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -38,6 +39,15 @@ public class PlaceController {
         List<Place> places = placeService.getPlacesByAddr1(addr1);
         log.info("search places.size:{} ", places.size());
         return new ResponseEntity<>(places, HttpStatus.OK);
+    }
+
+    @GetMapping("/place/search")
+    public List<Place> search(@RequestParam String name, @RequestParam(required = false) String addr1) {
+        if (addr1 == null || addr1.isEmpty()) {
+            return placeRepository.findByNameContaining(name);
+        } else {
+            return placeRepository.findByNameContainingOrAddr1Containing(name, addr1);
+        }
     }
 
 }
