@@ -25,7 +25,7 @@ public class MemberService {
     private final TokenGenerator tokenGenerator;
 
     private final String CLIENT_ID = "d7c41513380cc7e5cbbfce173bf86002";
-    private final String REDIRECT_URL = "http://localhost:8080/login/oauth2/code/kakao";
+    private final String REDIRECT_URL = "http://localhost:3000/login/kakao";
 
     private final String GET_ACCESS_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
     private final String GET_PROFILE_URL = "https://kapi.kakao.com/v2/user/me";
@@ -85,11 +85,13 @@ public class MemberService {
         );
 
         String body = kakaoProfileResponse.getBody();
+
         JSONObject jsonObject = new JSONObject(body);
         String parsedEmail = jsonObject.getJSONObject("kakao_account").getString("email");
         String parsedName = jsonObject.getJSONObject("properties").getString("nickname");
+        String profileImage = jsonObject.getJSONObject("properties").getString("profile_image");
 
-        return new KakaoUserDto(parsedEmail, parsedName);
+        return new KakaoUserDto(parsedEmail, parsedName, profileImage);
     }
 
     public Member saveMember(String token) {
@@ -97,8 +99,8 @@ public class MemberService {
         Member member = memberRepository.findByEmail(kakaoUser.getEmail())
                 .orElse(new Member(kakaoUser.getName(),
                         kakaoUser.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
+        member.changeImageURL(kakaoUser.getProfileImage());
         memberRepository.save(member);
-
         return member;
     }
 
