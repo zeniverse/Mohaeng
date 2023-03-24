@@ -16,6 +16,8 @@ import {
 } from "@/src/store/reducers/loginTokenSlice";
 import { RootState } from "@/src/store/store";
 import axios from "axios";
+import cookie from "react-cookies";
+import Image from "next/image";
 
 const StyledIcon = styled(BsSearch)`
   color: #004aad;
@@ -28,6 +30,9 @@ function Header({}: Props) {
   const router = useRouter();
   const loginToken = useSelector((state: RootState) => state.token.token);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
+  const profileUrl = useSelector(
+    (state: RootState) => state.profileUrl.profileUrl
+  );
   // await axios.defaults.headers.common["Access-Token"] = `${loginToken}`;
 
   useEffect(() => {
@@ -38,8 +43,8 @@ function Header({}: Props) {
           {
             headers: {
               "Access-Token": loginToken,
-              //localStorage.getItem("accessToken")
             },
+            withCredentials: true,
           }
         );
         console.log(userData);
@@ -61,7 +66,7 @@ function Header({}: Props) {
   };
 
   const handleLogout = () => {
-    localStorage.clear(); // 토큰 삭제, removeItem('accessToken')
+    cookie.remove("accessToken", { path: "/" });
     dispatch(setToken(""));
     dispatch(setNickname(""));
     dispatch(setEmail(""));
@@ -69,6 +74,9 @@ function Header({}: Props) {
     router.replace("/");
     window.alert("로그아웃되었습니다!");
   };
+
+  // res.setHeader('Set-Cookie', `token=; path=/; expires=-1`) 쿠키 삭제
+  //cookie.remove('accessToken', `token=; path=/; expires=-1`)
 
   return (
     <header className={styles.header}>
@@ -107,6 +115,13 @@ function Header({}: Props) {
           </>
         ) : (
           <>
+            <Image
+              className={styles["kakao-profile-img"]}
+              src={profileUrl}
+              alt="카카오프로필"
+              width={40}
+              height={40}
+            />
             {nickName}님
             <button
               id="login-btn"
@@ -120,15 +135,6 @@ function Header({}: Props) {
       </div>
     </header>
   );
-}
-
-{
-  /* <Image
-              className={styles["kakao-profile-img"]}
-              src={session.user?.image}
-              alt="카카오프로필"
-              width={40}
-              height={40} /> */
 }
 
 export default Header;
