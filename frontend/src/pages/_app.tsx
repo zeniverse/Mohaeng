@@ -16,7 +16,7 @@ const NotoSansKR = Noto_Sans_KR({
 
 export default function MyApp({
   Component,
-  pageProps: { session, ...pageProps },
+  pageProps: { ...pageProps },
 }: AppProps) {
   return (
     <>

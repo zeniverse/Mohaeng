@@ -7,7 +7,6 @@ import { BsSearch } from "react-icons/bs";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../store/reducers/modalSlice";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import {
   setEmail,
@@ -29,23 +28,28 @@ function Header({}: Props) {
   const router = useRouter();
   const loginToken = useSelector((state: RootState) => state.token.token);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
+  // await axios.defaults.headers.common["Access-Token"] = `${loginToken}`;
 
-  // useEffect(() => {
-  //   const getResponse = async () => {
-  //     if (loginToken) {
-  //       // axios.defaults.headers.common["Access-Token"] =
-  //       //   localStorage.getItem("accessToken");
-  //       const getUser = await axios.get(`http://219.255.1.253:8080/loginInfo`, {
-  //         headers: {
-  //           "Access-Token": `${loginToken}`,
-  //         },
-  //       });
-  //       console.log();
-  //       dispatch(setNickname(getUser.data.nickName));
-  //     }
-  //   };
-  //   getResponse();
-  // }, [loginToken]);
+  useEffect(() => {
+    const response = async () => {
+      if (loginToken) {
+        const userData = await axios.get(
+          `http://219.255.1.253:8080/loginInfo`,
+          {
+            headers: {
+              "Access-Token": loginToken,
+              //localStorage.getItem("accessToken")
+            },
+          }
+        );
+        console.log(userData);
+        const nickName = userData.data.data.nickName;
+        dispatch(setNickname(nickName));
+        console.log(nickName);
+      }
+    };
+    response();
+  }, [loginToken]);
 
   const handleOpenLoginModal = () => {
     dispatch(
@@ -57,7 +61,7 @@ function Header({}: Props) {
   };
 
   const handleLogout = () => {
-    localStorage.clear(); // 토큰 삭제, removeItem
+    localStorage.clear(); // 토큰 삭제, removeItem('accessToken')
     dispatch(setToken(""));
     dispatch(setNickname(""));
     dispatch(setEmail(""));
@@ -103,7 +107,7 @@ function Header({}: Props) {
           </>
         ) : (
           <>
-            {nickName}
+            {nickName}님
             <button
               id="login-btn"
               className={styles["login-btn"]}

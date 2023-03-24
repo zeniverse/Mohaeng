@@ -8,7 +8,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { idText } from "typescript";
+import Header from "../Layout/Header";
 import Loading from "./Loading";
 
 const KakaoLogin = () => {
@@ -26,32 +26,33 @@ const KakaoLogin = () => {
         );
         const accessToken = response.data.accessToken;
         const refreshToken = response.data.refreshToken;
-        localStorage.setItem("accessToken", response.data.accessToken);
-        localStorage.setItem("refreshToken", response.data.refreshToken);
-        // axios.defaults.headers.common[
-        //   "Access-Token"
-        // ] = `${accessToken}`;
+        window.localStorage.setItem("accessToken", accessToken);
+        window.localStorage.setItem("refreshToken", refreshToken);
         dispatch(setToken(accessToken));
 
         if (accessToken) {
           try {
             // loginInfo에서 정보 받아오기, 토큰 헤더에 담아서 전송
-            const userResponse = await axios.get(
+            // axios.defaults.headers.common[
+            //   "Access-Token"
+            // ] = `${accessToken}`;
+            const userRes = await axios.get(
               `http://219.255.1.253:8080/loginInfo`,
               {
                 headers: {
                   "Access-Token": `${accessToken}`,
                 },
+                withCredentials: true,
               }
             );
-
             // 여기에서 받아온 유저 정보를 리덕스에 저장한다
-            console.log(userResponse.data);
-            //     // dispatch(setId(id));
-            //     // dispatch(setEmail(email));
-            //     // dispatch(setNickname(nickName));
+            console.log(userRes.data);
+            const { id, nickName, email } = userRes.data.data;
+            dispatch(setId(id));
+            dispatch(setEmail(email));
+            dispatch(setNickname(nickName));
             router.replace("/");
-            console.log(`로그인 성공!`);
+            // alert(`${nickName}님 반갑습니다.`);
           } catch (e) {
             console.log(e);
           }
@@ -66,11 +67,11 @@ const KakaoLogin = () => {
     };
     kakaoCode();
   }, [dispatch]);
-  return (
-    <>
-      <Loading />
-    </>
-  );
+
+  if (!valid) {
+    return <Loading />;
+  }
+  return <></>;
 };
 
 export default KakaoLogin;
@@ -81,7 +82,7 @@ export default KakaoLogin;
 //     await axios
 //       .get(`http://219.255.1.253:8080/oauth/token?code=${code}`)
 //       .then((res) => {
-//         localStorage.setItem("token", res.headers.authorization);
+//         localStorage.setItem("token", res.headers.Access-Token);
 //         router.replace("/");
 //       })
 //       //.then(res => res.json())
