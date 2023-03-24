@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +28,8 @@ public class JwtFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String accessToken = httpServletRequest.getHeader("Access-Token");
+        Cookie[] cookies = httpServletRequest.getCookies();
+        String accessToken = cookies[0].getAttribute("Access-Token");
 
         if (accessToken != null && tokenGenerator.checkToken(accessToken)) {
             String email = tokenGenerator.parseEmailFromToken(accessToken);
