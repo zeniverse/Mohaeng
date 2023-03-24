@@ -36,9 +36,10 @@ public class Member extends BaseTimeEntity {
     private boolean isActive;
     private int stopCount;
 
+    private String oauthAccessToken;
+
 
     @OneToMany(mappedBy = "member")
-
     private List<CourseBookMark> courseBookMarkList = new ArrayList<>();
 
     public Member(String name, String email, Role role, String nickName) {
@@ -61,5 +62,13 @@ public class Member extends BaseTimeEntity {
     public void addCourseBookMark(CourseBookMark courseBookMark) {
         this.courseBookMarkList.add(courseBookMark);
         courseBookMark.setMember(this);
+    }
+
+    public void setOauthAccessToken(String oauthAccessToken) {
+        this.oauthAccessToken = oauthAccessToken;
+    }
+
+    public void changeImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }
