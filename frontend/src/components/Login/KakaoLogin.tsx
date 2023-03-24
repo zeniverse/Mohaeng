@@ -56,7 +56,6 @@ const KakaoLogin = () => {
             dispatch(setNickname(nickName));
             dispatch(setProfileUrl(profileUrl));
             router.replace("/");
-            // alert(`${nickName}님 반갑습니다.`);
           } catch (e) {
             console.log(e);
           }

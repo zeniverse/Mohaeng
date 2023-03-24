@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import "../styles/slider.css";
-import type { AppProps } from "next/app";
+import App, { AppContext, AppProps } from "next/app";
 import Head from "next/head";
 import { Provider } from "react-redux";
 import store from "../store/store";
@@ -16,24 +16,7 @@ const NotoSansKR = Noto_Sans_KR({
   display: "swap",
 });
 
-// MyApp.getInitialProps = async (appContext: AppContext) => {
-//   const appProps = await MyApp.getInitialProps(appContext);
-//   // 서버 사이드 쿠키 얻어오기
-//   const { ctx } = appContext;
-//   const allCookies = cookies(ctx);
-//   const accessTokenByCookie = allCookies["accessToken"];
-//   if (accessTokenByCookie !== undefined) {
-//     const refreshTokenByCookie = allCookies["refreshToken"] || "";
-//     setToken(accessTokenByCookie, refreshTokenByCookie);
-//   }
-
-//   return { ...appProps };
-// };
-
-export default function MyApp({
-  Component,
-  pageProps: { ...pageProps },
-}: AppProps) {
+function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
   // const dispatch = useDispatch();
   // const accessToken = localStorage.getItem("accessToken");
   // dispatch(setToken(accessToken));
@@ -59,3 +42,20 @@ export default function MyApp({
     </>
   );
 }
+
+// _app.tsx에서 전역으로 getInitialProps를 적용하게 되면, 모든 페이지가 서버 사이드 렌더링이 됨
+MyApp.getInitialProps = async (appContext: AppContext) => {
+  const appProps = await App.getInitialProps(appContext);
+  // 서버 사이드 쿠키 얻어오기
+  const { ctx } = appContext;
+  const allCookies = cookies(ctx);
+  const accessTokenByCookie = allCookies["accessToken"];
+  if (accessTokenByCookie !== undefined) {
+    const refreshTokenByCookie = allCookies["refreshToken"] || "";
+    setToken({ accessTokenByCookie, refreshTokenByCookie });
+  }
+
+  return { ...appProps };
+};
+
+export default MyApp;

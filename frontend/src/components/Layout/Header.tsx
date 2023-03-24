@@ -1,7 +1,6 @@
 "use client";
-
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
 import { BsSearch } from "react-icons/bs";
 import styled from "styled-components";
@@ -12,6 +11,7 @@ import {
   setEmail,
   setId,
   setNickname,
+  setProfileUrl,
   setToken,
 } from "@/src/store/reducers/loginTokenSlice";
 import { RootState } from "@/src/store/store";
@@ -26,6 +26,7 @@ const StyledIcon = styled(BsSearch)`
 type Props = {};
 
 function Header({}: Props) {
+  const [user, setUser] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
   const loginToken = useSelector((state: RootState) => state.token.token);
@@ -33,7 +34,6 @@ function Header({}: Props) {
   const profileUrl = useSelector(
     (state: RootState) => state.profileUrl.profileUrl
   );
-  // await axios.defaults.headers.common["Access-Token"] = `${loginToken}`;
 
   useEffect(() => {
     const response = async () => {
@@ -49,8 +49,11 @@ function Header({}: Props) {
         );
         console.log(userData);
         const nickName = userData.data.data.nickName;
+        const profileUrl = userData.data.data.profileUrl;
         dispatch(setNickname(nickName));
+        dispatch(setProfileUrl(profileUrl));
         console.log(nickName);
+        setUser(userData.data.data);
       }
     };
     response();
@@ -74,9 +77,6 @@ function Header({}: Props) {
     router.replace("/");
     window.alert("로그아웃되었습니다!");
   };
-
-  // res.setHeader('Set-Cookie', `token=; path=/; expires=-1`) 쿠키 삭제
-  //cookie.remove('accessToken', `token=; path=/; expires=-1`)
 
   return (
     <header className={styles.header}>

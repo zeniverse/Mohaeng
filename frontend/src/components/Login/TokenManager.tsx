@@ -1,6 +1,11 @@
 import axios from "axios";
 import cookie from "react-cookies";
 
+type setToken = {
+  accessToken: string;
+  refreshToken: string;
+};
+
 function setToken(accessToken: string, refreshToken: string) {
   axios.defaults.headers.common["Access-Token"] = accessToken;
   axios.defaults.headers.common["Refresh-Token"] = refreshToken;
@@ -11,7 +16,7 @@ function setToken(accessToken: string, refreshToken: string) {
   cookie.save("accessToken", accessToken, {
     path: "/",
     expires,
-    httpOnly: false, // dev/prod 에 따라 true / false 로 받게 했다.
+    httpOnly: false,
   });
   cookie.save("refreshToken", refreshToken, {
     path: "/",
