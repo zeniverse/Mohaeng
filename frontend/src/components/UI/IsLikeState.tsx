@@ -4,7 +4,6 @@ import { BsFillHeartFill } from "react-icons/bs";
 const IsLikeState = ({ courseLike }: { courseLike: number | string }) => {
   const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.preventDefault();
-    console.log("adsfdsf");
   };
   return (
     <>
