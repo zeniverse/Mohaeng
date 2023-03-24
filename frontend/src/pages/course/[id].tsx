@@ -1,11 +1,10 @@
 import { CourseDetailType, kakaoPlaces } from "@/src/interfaces/Course";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./courseDetail.module.css";
-import { BiMapAlt, BiShareAlt, BiBookmarkPlus } from "react-icons/bi";
-import { BsFillHeartFill } from "react-icons/bs";
-import KakaoMap from "@/src/components/KakaoMap/KakaoMap";
-import Image from "next/image";
+
+import CourseDetailNav from "@/src/components/CourseDetail/CourseDetailNav";
+import CourseDetailContent from "@/src/components/CourseDetail/CourseDetailContent";
 
 const initialData = {
   title: "",
@@ -48,8 +47,8 @@ export default function CourseDetail() {
     useState<CourseDetailType>(initialData);
   const {
     title,
-    nickname,
     likeCount,
+    nickname,
     courseDays,
     region,
     content,
@@ -80,7 +79,8 @@ export default function CourseDetail() {
       fetchCourseData(id);
     }
   }, [id]);
-  function getFomattedDate(date: Date) {
+
+  const getFomattedDate = useCallback((date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
@@ -88,28 +88,23 @@ export default function CourseDetail() {
     return `${year}-${month < 10 ? "0" + month : month}-${
       day < 10 ? "0" + day : day
     }`;
-  }
-
-  // useEffect(() => {
-  //   const agoDate = timeAgoFn(new Date(createdDate));
-  //   setTimeAgoDate(agoDate);
-  // }, [createdDate]);
+  }, []);
 
   useEffect(() => {
     const FormattedDate = getFomattedDate(new Date(createdDate));
     setFormattedDate(FormattedDate);
   }, [createdDate]);
+  // useEffect(() => {
+  //   const agoDate = timeAgoFn(new Date(createdDate));
+  //   setTimeAgoDate(agoDate);
+  // }, [createdDate]);
 
-  let positions: kakaoPlaces[] = places?.map((place) => ({
+  let mapData: kakaoPlaces[] = places?.map((place) => ({
     placeId: place.placeId,
     name: place.name,
     mapX: place.mapX,
     mapY: place.mapY,
   }));
-
-  const handleClick = () => {
-    router.push("/");
-  };
 
   return (
     <>
@@ -126,72 +121,13 @@ export default function CourseDetail() {
             <span className={styles.dateinfo}>{formattedDate}</span>
           </div>
         </div>
-        <div className={styles["title-nav"]}>
-          {/* 왼쪽 좋아요 오른쪽  북마크, 약도, 공유 */}
-          <div className={styles["title-nav-left"]}>
-            <span className={styles.like}>
-              <BsFillHeartFill />
-              {likeCount}
-            </span>
-          </div>
-          <div className={styles["title-nav-right"]}>
-            <div className={`${styles["item-nav"]}`}>
-              <BiMapAlt
-                className={styles.roughmapIcon}
-                // onMouseEnter={handleMouseEnter}
-                // onMouseLeave={handleMouseLeave}
-              />
-              {/* {isRoughMapOpen && (
-              <RoughMap
-                RoughMapData={RoughMapData}
-                setIsRoughMapOpen={setIsRoughMapOpen}
-                isRoughMapOpen={isRoughMapOpen}
-              />
-            )} */}
-            </div>
-            <div className={styles["item-nav"]}>
-              <BiBookmarkPlus />
-            </div>
-            <div className={`${styles["item-nav"]}`}>
-              <BiShareAlt />
-            </div>
-          </div>
-        </div>
-        <div className={styles["content-container"]}>
-          <p className={styles.content}>{content}</p>
-          <div className={styles.map}>
-            {positions && positions.length > 0 && (
-              <KakaoMap positions={positions} />
-            )}
-            <div className={styles.info}>
-              <ol className={styles["course-List"]}>
-                {places.map((place, idx) => (
-                  <li className={styles["course-item"]} key={place.placeId}>
-                    <span className={styles.number}>{idx + 1}</span>
-                    <Image
-                      src={place.imgUrl}
-                      alt={place.name}
-                      width={126}
-                      height={110}
-                      priority
-                    />
-                    <div className={styles["item-content"]}>
-                      <div className={styles["item-content-text"]}>
-                        <span className={styles.name}>{place.name}</span>
-                        <span className={styles.address}>
-                          주소: {place.address}
-                        </span>
-                      </div>
-                      <button className={styles.button} onClick={handleClick}>
-                        자세히 보기
-                      </button>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </div>
-        </div>
+        <CourseDetailNav likeCount={likeCount} />
+        <CourseDetailContent
+          positions={mapData}
+          places={places}
+          content={content}
+          router={router}
+        />
       </div>
     </>
   );

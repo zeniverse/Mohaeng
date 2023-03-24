@@ -14,17 +14,17 @@ const CourseItem = ({
   courseDesc,
   courseLike,
   courseDays,
+  thumbnailUrl,
   courseList,
 }: CourseProps) => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
-  const RoughMapData: string[] = courseList?.map((course) => course.title);
+  const RoughMapData: any[] = courseList?.map((course) => course.name)!;
 
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
     setIsRoughMapOpen((prev) => !prev);
   };
 
-  const Img = courseList[0].imgUrl;
   return (
     <div className={styles["course-item-container"]}>
       <Link href={`/course/${id}`}>
@@ -32,7 +32,7 @@ const CourseItem = ({
           <div className={styles["item-image"]}>
             <div className={styles["item-image-box"]}></div>
             <Image
-              src={Img}
+              src={thumbnailUrl}
               alt={courseTitle}
               width={700}
               height={700}
