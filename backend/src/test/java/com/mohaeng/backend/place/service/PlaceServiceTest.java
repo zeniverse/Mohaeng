@@ -41,7 +41,6 @@ class PlaceServiceTest {
         for (int i = 1; i < testDataSize+1; i++) {
             String name = "Place " + i;
             String addr1 = "Address 1 for Place " + i;
-            String addr2 = "Address 2 for Place " + i;
             String areacode = "Area Code for Place " + i;
             String firstimage = "https://example.com/image" + i + ".jpg";
             String firstimage2 = "https://example.com/image2" + i + ".jpg";
@@ -49,11 +48,18 @@ class PlaceServiceTest {
             String mapy = "map y " + i;
             String sigungucode = "Sigungu Code for Place " + i;
             String contentid = "Content ID for Place " + i;
-            String overview = "Overview for Place " + i;
 
-            Place place = new Place((long) (i + 1), name, addr1, addr2, areacode, firstimage, firstimage2, mapx, mapy, sigungucode, contentid, overview);
+            Place place = new Place((long) i, name, addr1, areacode, firstimage, firstimage2, mapx, mapy, sigungucode, contentid);
             testData.add(place);
             placeRepository.saveAll(testData);
+            placeRepository.flush();
+
+            String findName = placeRepository.findAll().get(0).getName();
+            String findAreacode = placeRepository.findAll().get(0).getAreaCode();
+            String findContentid = placeRepository.findAll().get(0).getContentId();
+            assertEquals("Place 1",findName);
+            assertEquals("Area Code for Place 1",findAreacode);
+            assertEquals("Content ID for Place 1",findContentid);
         }
 
 //        // Test
@@ -69,31 +75,5 @@ class PlaceServiceTest {
     }
 
 
-    private static final int COUNT = 5000;
-    @Test
-    @DisplayName("bulk insert")
-    void 벌크_insert() {
-        long startTime = System.currentTimeMillis();
-        List<Place> places = new ArrayList<>();
-        for (long i = 0; i < COUNT; i++) {
-            Long place_id = i;
-            String name = "name: " + i;
-            String addr1 = "addr1: " + i;
-            String areacode = "areacode: " + i;
-            String firstimage = "firstimage: " + i;
-            String firstimage2 = "firstimage2: " + i;
-            String mapx = "mapx: " + i;
-            String mapy = "mapy: " + i;
-            String sigungucode = "sigungucode: " + i;
-            String contentid = "contentid: " + i;
-            String overview = "overview: " + i;
-            Place place = new Place(place_id, name, addr1, areacode,firstimage,firstimage2, mapx, mapy, sigungucode,contentid, overview);
-            places.add(place);
-        }
-        jdbcTemplateRepository.batchInsert(places);
-        long endTime = System.currentTimeMillis();
-        System.out.println("---------------------------------");
-        System.out.printf("수행시간: %d\n", endTime - startTime);
-        System.out.println("---------------------------------");
-    }
+
 }
