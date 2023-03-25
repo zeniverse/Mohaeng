@@ -121,8 +121,8 @@ public class CourseService {
                             .name(place.getName())
                             .imgUrl(findPlaceImage.getImgUrl())
                             .address(place.getAddr1())
-                            .mapX(place.getMapx())
-                            .mapY(place.getMapy())
+                            .mapX(place.getMapX())
+                            .mapY(place.getMapY())
                             .build()
             );
         }
