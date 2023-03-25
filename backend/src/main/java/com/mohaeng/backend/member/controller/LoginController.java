@@ -10,9 +10,15 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 @Controller
@@ -25,17 +31,20 @@ public class LoginController {
 
 
     @GetMapping("/oauth/token")
-    public ResponseEntity getToken(@RequestParam("code") String code, HttpServletResponse response) {
+    public ResponseEntity getToken(@RequestParam("code") String code, HttpServletResponse response) throws IOException {
         String accessToken = memberService.getAccessToken(code);
-
         Member member = memberService.saveMember(accessToken);
-        member.setOauthAccessToken(accessToken);
         Token token = memberService.createToken(member);
 
-        Cookie cookie = new Cookie("Access-Token", token.getAccessToken());
-        cookie.setAttribute("Response-Token", token.getRefreshToken());
-        cookie.setMaxAge(60*60*24);
-        response.addCookie(cookie);
+        Cookie accessCookie = new Cookie("Access-Token", token.getAccessToken());
+        accessCookie.setAttribute("Response-Token", token.getRefreshToken());
+        accessCookie.setMaxAge(60*60*24);
+        response.addCookie(accessCookie);
+
+        Cookie refreshCookie = new Cookie("Refresh-Token", token.getAccessToken());
+        refreshCookie.setAttribute("Response-Token", token.getRefreshToken());
+        refreshCookie.setMaxAge(60*60*24);
+        response.addCookie(refreshCookie);
 
         return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
     }
@@ -63,11 +72,17 @@ public class LoginController {
     }
 
     @GetMapping("/loginInfo")
-    public ResponseEntity loginInfoController(HttpServletRequest request) {
+    public ResponseEntity loginInfoController(HttpServletRequest request) throws IOException {
         String userEmail = (String) request.getAttribute("userEmail");
+        System.out.println("userEmail = " + userEmail);
 
         Member findMember = memberService.findByEmail(userEmail);
-        MemberLoginDto memberLoginDto = new MemberLoginDto(findMember.getId(), findMember.getNickName(), findMember.getEmail(), findMember.getImageURL());
+        InputStream inputStream = new FileInputStream(findMember.getImageURL() + "/" + findMember.getImageName());
+        byte[] imageByteArray = inputStream.readAllBytes();
+        inputStream.close();
+
+        MemberLoginDto memberLoginDto = new MemberLoginDto(findMember.getId(), findMember.getNickName(),
+                findMember.getEmail(), imageByteArray);
 
         return ResponseEntity.ok().body(BaseResponse.success("ok", memberLoginDto));
     }
