@@ -1,14 +1,19 @@
 package com.mohaeng.backend.member.domain;
 
+import com.mohaeng.backend.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -47,5 +52,10 @@ public class Member {
 
     public void changeNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public void addCourseBookMark(CourseBookMark courseBookMark) {
+        this.courseBookMarkList.add(courseBookMark);
+        courseBookMark.setMember(this);
     }
 }

@@ -2,7 +2,7 @@ package com.mohaeng.backend.course.domain;
 
 import com.mohaeng.backend.place.domain.Place;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -21,4 +21,10 @@ public class CoursePlace {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "place_id")
     private Place place;
+
+    @Builder
+    public CoursePlace(Course course, Place place) {
+        this.course = course;
+        this.place = place;
+    }
 }
