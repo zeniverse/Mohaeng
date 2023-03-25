@@ -24,6 +24,7 @@ public class SecurityConfig {
                 .and()
                 .httpBasic().disable()
                     .authorizeHttpRequests()
+                    .requestMatchers("/api/course/**").permitAll()
                     .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/profile").permitAll()
                     .requestMatchers("/loginInfo", "/user/logout").hasAnyRole(Role.NORMAL.name(), Role.ADMIN.name())
                     .requestMatchers("/api/**").hasAnyRole(Role.NORMAL.name(), Role.ADMIN.name())
