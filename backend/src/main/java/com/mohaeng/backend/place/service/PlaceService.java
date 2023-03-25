@@ -182,7 +182,7 @@ public class PlaceService {
                 .addr1(place.getAddr1())
                 .areaCode(place.getAreaCode())
                 .sigunguCode(place.getSigunguCode())
-                .firstIimage(place.getFirstImage())
+                .firstImage(place.getFirstImage())
                 .firstImage2(place.getFirstImage2())
                 .mapX(place.getMapX())
                 .mapY(place.getMapY())
