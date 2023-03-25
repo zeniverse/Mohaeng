@@ -5,16 +5,20 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Table;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Builder
 @Getter
-@Table(name = "place")
+@Table(appliesTo = "place")
 @RequiredArgsConstructor
 public class Place {
 
@@ -42,6 +46,13 @@ public class Place {
     private String mapX;
     private String mapY;
     private String contentId;
+    private double rating;
+
+
+    @Builder.Default
+    @OneToMany(mappedBy = "place")
+    @ToString.Exclude
+    private List<PlaceImage> placeImages = new ArrayList<>();
 
     public Place(String name, String address, String areaCode, String sigunguCode, String contentId, String firstImage, String firstImage2, String mapX, String mapY) {
         this.name = name;
@@ -55,7 +66,7 @@ public class Place {
         this.mapY = mapY;
     }
 
-    public Place(Long id, String name, String address, String areaCode, String firstImage, String firstImage2, String mapX, String mapY, String sigunguCode, String contentId) {
+    public Place(Long id, String name, String address, String areaCode, String firstImage, String firstImage2, String mapX, String mapY, String sigunguCode, String contentId, double rating) {
         this.id = id;
         this.name = name;
         this.addr1 = address;
@@ -66,5 +77,21 @@ public class Place {
         this.mapY = mapY;
         this.sigunguCode = sigunguCode;
         this.contentId = contentId;
+        this.rating = rating;
+    }
+
+    public Place(Long id, String name, String addr1, String areaCode, String sigunguCode, String firstImage, String firstImage2, String mapX, String mapY, String contentId, double rating, List<PlaceImage> placeImages) {
+        this.id = id;
+        this.name = name;
+        this.addr1 = addr1;
+        this.areaCode = areaCode;
+        this.sigunguCode = sigunguCode;
+        this.firstImage = firstImage;
+        this.firstImage2 = firstImage2;
+        this.mapX = mapX;
+        this.mapY = mapY;
+        this.contentId = contentId;
+        this.rating = rating;
+        this.placeImages = placeImages;
     }
 }
