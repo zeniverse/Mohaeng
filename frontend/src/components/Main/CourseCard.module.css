@@ -1,0 +1,44 @@
+.course-card-container {
+  width: 240px;
+  overflow: hidden;
+  box-shadow: 0px 0px 15px -5px;
+  transition: 0.3s;
+  background-color: #ffffff;
+  animation: ease-in;
+  cursor: pointer;
+}
+
+.course-card-container:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 0px 15px 0px;
+}
+.course-image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid gray;
+}
+
+.course-image-container img {
+  overflow: hidden;
+  height: 180px;
+}
+
+.course-card-content {
+  margin: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+.course-card-title {
+  margin: 0.2rem 0 0.5rem;
+}
+
+.course-card-desc p {
+  display: -webkit-box;
+  height: 3.7rem;
+  line-height: 1.2;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Table;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
