@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./index.module.css";
 import { BookmarkItem } from "@/src/interfaces/Bookmark";
-import MypageLayout from "../MypageLayout";
+import MypageLayout from "../layout";
 
 const bookmarksPlace: BookmarkItem[] = [
   {

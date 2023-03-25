@@ -9,22 +9,23 @@ const CourseList = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch("/api/course");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/course`);
       const data = await res.json();
-      setCoueseData(data);
+      const aa = await data.data.courseList;
+      setCoueseData(aa);
     }
     fetchData();
   }, []);
-
   return (
     <div className={styles["course-list-container"]}>
       {courseData?.map((course) => (
         <CourseItem
-          key={course.courseId}
-          id={course.courseId}
+          key={course.id}
+          id={course.id}
           courseTitle={course.title}
           courseDesc={course.content}
-          courseLike={course.like}
+          courseLike={course.likeCount}
+          thumbnailUrl={course.thumbnailUrl}
           courseDays={course.courseDays}
           courseList={course.places}
         />

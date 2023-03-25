@@ -40,7 +40,7 @@ const Sidebar = () => {
   const Img = currentUser?.data.profileUrl;
 
   return (
-    <div className={styles.sidebar}>
+    <nav className={styles.sidebar}>
       <ul>
         <div className={styles["ProfileWrapper"]}>
           <img src={Img} className={styles["Avatar"]} />
@@ -54,7 +54,7 @@ const Sidebar = () => {
           <SidebarLink key={link.href} href={link.href} label={link.label} />
         ))}
       </ul>
-    </div>
+    </nav>
   );
 };
 

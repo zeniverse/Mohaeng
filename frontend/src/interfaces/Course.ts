@@ -1,27 +1,29 @@
 export interface Course {
-  courseId: number;
+  id?: number;
   title: string;
-  like: number;
-  courseDays: string;
-  createdDate: string;
-  isPublished: boolean;
-  content: string;
-  places: Places[];
+  likeCount: number;
+  courseDays?: string;
+  createdDate?: string;
+  thumbnailUrl: string;
+  isPublished?: boolean;
+  content?: string;
+  places?: Places[];
 }
 export interface Places {
-  placeId: number;
-  imgUrl: string;
-  title: string;
-  address: string;
+  placeId?: number;
+  imgUrl?: string;
+  name?: string;
+  address?: string;
 }
 
 export type CourseProps = {
-  id: number;
+  id?: number;
   courseTitle: string;
-  courseDesc: string;
+  courseDesc?: string;
   courseLike: number;
-  courseDays: string;
-  courseList: Places[];
+  courseDays?: string;
+  thumbnailUrl: string;
+  courseList?: Places[];
 };
 
 export interface RoughMapTitle {

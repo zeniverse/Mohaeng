@@ -1,3 +1,5 @@
+"use client";
+
 import { BookmarkItem } from "@/src/interfaces/Bookmark";
 import styles from "./index.module.css";
 

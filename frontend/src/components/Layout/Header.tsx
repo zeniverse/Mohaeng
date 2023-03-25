@@ -79,22 +79,24 @@ function Header({}: Props) {
           </>
         ) : (
           <>
-            <Image
-              className={styles["kakao-profile-img"]}
-              src={session.user?.image}
-              alt="카카오프로필"
-              width={40}
-              height={40}
-            />
-            {session.user?.name}님
-            <button
-              id="login-btn"
-              className={styles["login-btn"]}
-              // onClick={handleOpenLoginModal}
-              onClick={() => signOut()}
-            >
-              로그아웃
-            </button>
+            <Link href="/mypage">
+              <Image
+                className={styles["kakao-profile-img"]}
+                src={session.user?.image}
+                alt="카카오프로필"
+                width={40}
+                height={40}
+              />
+              {session.user?.name}님
+              <button
+                id="login-btn"
+                className={styles["login-btn"]}
+                // onClick={handleOpenLoginModal}
+                onClick={() => signOut()}
+              >
+                로그아웃
+              </button>
+            </Link>
           </>
         )}
         <button

@@ -1,15 +1,17 @@
 import styles from "./MypageLayout.module.css";
 import Sidebar from "@/src/components/Mypage/Sidebar";
 
-const MyPageLayout = (props: { children: React.ReactNode }) => {
+export default function MyPageLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
       <div className={styles.Container}>
         <Sidebar />
-        <div className={styles.contentWrapper}>{props.children}</div>
+        <section className={styles.contentWrapper}>{children}</section>
       </div>
     </>
   );
-};
-
-export default MyPageLayout;
+}

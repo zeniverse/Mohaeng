@@ -4,7 +4,6 @@ import Button from "@/src/components/Button/Button";
 import { User, userData } from "@/src/interfaces/Auth";
 import React, { useEffect, useState } from "react";
 import styles from "./index.module.css";
-import MypageLayout from "./layout";
 
 const MyPage: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User>();
@@ -19,7 +18,7 @@ const MyPage: React.FC = () => {
 
   const Img = currentUser?.data.profileUrl;
   return (
-    <MypageLayout>
+    <>
       <h1 className={styles["Title"]}>마이페이지</h1>
       <div className={styles["Container"]}>
         <div className={styles["ProfileWrapper"]}>
@@ -37,7 +36,7 @@ const MyPage: React.FC = () => {
           <Button text="회원탈퇴" />
         </div>
       </div>
-    </MypageLayout>
+    </>
   );
 };
 
