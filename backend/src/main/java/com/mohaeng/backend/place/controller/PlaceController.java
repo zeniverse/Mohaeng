@@ -1,17 +1,25 @@
 package com.mohaeng.backend.place.controller;
 
 import com.mohaeng.backend.place.domain.Place;
+import com.mohaeng.backend.place.dto.request.PlaceDTO;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -25,7 +33,7 @@ public class PlaceController {
 
 
 
-    @GetMapping("/place")
+    @GetMapping("/api/place/all")
     public ResponseEntity<List<Place>> getPlaces() {
         List<Place> places = placeService.getPlacesAll();
         log.info("getPlaces.size:{}", places.size());
@@ -35,19 +43,52 @@ public class PlaceController {
 
     @GetMapping("/place/{addr1}")
     public ResponseEntity<List<Place>> getPlacesByAddr1(@PathVariable String addr1) {
-        // 데이터베이스에서 모든 데이터를 가져옵니다.
         List<Place> places = placeService.getPlacesByAddr1(addr1);
         log.info("search places.size:{} ", places.size());
         return new ResponseEntity<>(places, HttpStatus.OK);
     }
 
-    @GetMapping("/place/search")
-    public List<Place> search(@RequestParam String name, @RequestParam(required = false) String addr1) {
-        if (addr1 == null || addr1.isEmpty()) {
-            return placeRepository.findByNameContaining(name);
+    @GetMapping("/api/place")
+    public List<Place> search(@RequestParam String keyword, @RequestParam(required = false) String address) {
+        if (address == null || address.isEmpty()) {
+            return placeRepository.findByNameContaining(keyword);
         } else {
-            return placeRepository.findByNameContainingOrAddr1Containing(name, addr1);
+            return placeRepository.findByNameContainingOrAddr1Containing(keyword,address);
         }
+    }
+
+    @GetMapping("/api/place/{contentId}")
+    public ResponseEntity<PlaceDTO> getPlace(@PathVariable String contentId) throws IOException, ParserConfigurationException, SAXException {
+        Place place = placeService.getPlace(contentId);
+        if (place == null) {
+            return ResponseEntity.notFound().build();
+        }
+        PlaceDTO dto = placeService.toPlaceDTO(place);
+        return ResponseEntity.ok(dto);
+    }
+
+
+    @GetMapping("/place/overview/{placeName}")
+    public ResponseEntity<List<String>> getPlaceOverview(@PathVariable String placeName) throws IOException, ParserConfigurationException, SAXException {
+        List<String> overview = placeService.getPlaceOverview(placeName);
+        log.info("overview:{}", overview);
+        return ResponseEntity.ok(overview);
+    }
+
+    @GetMapping("/api/places")
+    public Page<Place> getPlaces(@RequestParam(defaultValue = "0") int page) {
+        Pageable pageable = PageRequest.of(page, 4, Sort.by("id").ascending());
+        return placeRepository.findAll(pageable);
+    }
+
+    @GetMapping("/places")
+    public List<Place> getPlaces(@RequestParam String areaCode,
+                                 @RequestParam(defaultValue = "0") int page) throws IOException, ParserConfigurationException, SAXException {
+        List<Place> places = placeService.getPlaces();
+        List<Place> filteredPlaces = placeService.filterPlaces(places, areaCode);
+        int start = page * 4;
+        int end = Math.min(start + 4, filteredPlaces.size());
+        return filteredPlaces.subList(start, end);
     }
 
 }
