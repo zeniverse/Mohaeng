@@ -13,15 +13,13 @@ services:
       - "3306:3306"
     restart: always
 
-
-
   backend:
     build:
       context: backend/
       dockerfile: Dockerfile
     restart: always
     ports:
-      - "7070:7070"
+      - "8080:8080"
     depends_on:
       - db
     container_name: "backend"

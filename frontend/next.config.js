@@ -15,7 +15,7 @@ const nextConfig = {
   //   return [
   //     {
   //       source: "/:path*",
-  //       destination: "http://localhost:8080/:path*",
+  //       destination: "http://219.255.1.253:8080/:path*",
   //     },
   //   ];
   // },

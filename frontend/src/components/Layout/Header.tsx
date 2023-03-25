@@ -1,14 +1,22 @@
 "use client";
-
 import Link from "next/link";
-import React from "react";
+import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
 import { BsSearch } from "react-icons/bs";
-import { FaUserCircle } from "react-icons/fa";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../store/reducers/modalSlice";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import {
+  setEmail,
+  setId,
+  setNickname,
+  setProfileUrl,
+  setToken,
+} from "@/src/store/reducers/loginTokenSlice";
+import { RootState } from "@/src/store/store";
+import axios from "axios";
+import cookie from "react-cookies";
 import Image from "next/image";
 
 const StyledIcon = styled(BsSearch)`
@@ -18,10 +26,38 @@ const StyledIcon = styled(BsSearch)`
 type Props = {};
 
 function Header({}: Props) {
-  const { data: session } = useSession();
-  console.log(session);
-
+  const [user, setUser] = useState("");
   const dispatch = useDispatch();
+  const router = useRouter();
+  const loginToken = useSelector((state: RootState) => state.token.token);
+  const nickName = useSelector((state: RootState) => state.nickName.nickName);
+  const profileUrl = useSelector(
+    (state: RootState) => state.profileUrl.profileUrl
+  );
+
+  useEffect(() => {
+    const response = async () => {
+      if (loginToken) {
+        const userData = await axios.get(
+          `http://219.255.1.253:8080/loginInfo`,
+          {
+            headers: {
+              "Access-Token": loginToken,
+            },
+            withCredentials: true,
+          }
+        );
+        console.log(userData);
+        const nickName = userData.data.data.nickName;
+        const profileUrl = userData.data.data.profileUrl;
+        dispatch(setNickname(nickName));
+        dispatch(setProfileUrl(profileUrl));
+        console.log(nickName);
+        setUser(userData.data.data);
+      }
+    };
+    response();
+  }, [loginToken]);
 
   const handleOpenLoginModal = () => {
     dispatch(
@@ -31,13 +67,15 @@ function Header({}: Props) {
       })
     );
   };
-  const handleOpenBasicModal = () => {
-    dispatch(
-      openModal({
-        modalType: "BasicModal",
-        isOpen: true,
-      })
-    );
+
+  const handleLogout = () => {
+    cookie.remove("accessToken", { path: "/" });
+    dispatch(setToken(""));
+    dispatch(setNickname(""));
+    dispatch(setEmail(""));
+    dispatch(setId(0));
+    router.replace("/");
+    window.alert("로그아웃되었습니다!");
   };
 
   return (
@@ -58,21 +96,19 @@ function Header({}: Props) {
             </button>
           </div>
           <div className={styles.menu}>
-            <Link href="#">여행지</Link>
-            <Link href="course">코스</Link>
-            {/* <Link href="#">동행 게시판</Link> */}
+            <Link href="/place">여행지</Link>
+            <Link href="/course">코스</Link>
             <Link href="/mypage">마이페이지</Link>
           </div>
         </div>
       </nav>
       <div className={styles.btn}>
-        {!session ? (
+        {!loginToken ? (
           <>
             <button
               id="login-btn"
               className={styles["login-btn"]}
               onClick={handleOpenLoginModal}
-              // onClick={() => signIn("kakao")}
             >
               로그인
             </button>
@@ -81,29 +117,21 @@ function Header({}: Props) {
           <>
             <Image
               className={styles["kakao-profile-img"]}
-              src={session.user?.image}
+              src={profileUrl}
               alt="카카오프로필"
               width={40}
               height={40}
             />
-            {session.user?.name}님
+            {nickName}님
             <button
               id="login-btn"
               className={styles["login-btn"]}
-              // onClick={handleOpenLoginModal}
-              onClick={() => signOut()}
+              onClick={handleLogout}
             >
               로그아웃
             </button>
           </>
         )}
-        <button
-          id="signup-btn"
-          className={styles["signup-btn"]}
-          onClick={handleOpenBasicModal}
-        >
-          기본 모달
-        </button>
       </div>
     </header>
   );

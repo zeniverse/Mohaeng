@@ -34,12 +34,13 @@ const CourseCardSlider = () => {
       {courseData?.map((course, idx) => (
         <SwiperSlide key={idx}>
           <CourseCard
-            key={course.courseId}
-            id={course.courseId}
+            key={course.id}
+            id={course.id}
             courseDays={course.courseDays}
             courseTitle={course.title}
             courseDesc={course.content}
-            courseLike={course.like}
+            thumbnailUrl={course.thumbnailUrl}
+            courseLike={course.likeCount}
             courseList={course.places}
           />
         </SwiperSlide>
