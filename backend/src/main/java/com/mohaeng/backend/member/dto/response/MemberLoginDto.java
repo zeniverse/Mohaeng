@@ -9,5 +9,5 @@ public class MemberLoginDto {
     private Long id;
     private String nickName;
     private String email;
-    private String profileUrl;
+    private byte[] imageByteArray;
 }
