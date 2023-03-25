@@ -8,6 +8,8 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class CoursePlace {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
