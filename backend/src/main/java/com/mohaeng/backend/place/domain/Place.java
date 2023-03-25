@@ -1,5 +1,6 @@
 package com.mohaeng.backend.place.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,9 +9,6 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
-
-import java.sql.Clob;
-
 
 @Entity
 @Builder
@@ -32,49 +30,40 @@ public class Place {
             }
     )
     @Column(name = "place_id")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long id;
-
     private String name;
     private String addr1;
-    private String addr2;
-    private String areacode;
-    private String firstimage;
-    private String firstimage2;
-    private String mapx;
-    private String mapy;
-    private String sigungucode;
-    private String contentid;
-    @Column(length = 30000)
-    private String overview;
+    private String areaCode;
+    private String sigunguCode;
+    private String firstImage;
+    private String firstImage2;
+    private String mapX;
+    private String mapY;
+    private String contentId;
 
-    public Place(Long id, String name, String addr1, String addr2, String areacode, String firstimage, String firstimage2, String mapx, String mapy, String sigungucode, String contentid, String overview) {
-        this.id = id;
+    public Place(String name, String address, String areaCode, String sigunguCode, String contentId, String firstImage, String firstImage2, String mapX, String mapY) {
         this.name = name;
-        this.addr1 = addr1;
-        this.addr2 = addr2;
-        this.areacode = areacode;
-        this.firstimage = firstimage;
-        this.firstimage2 = firstimage2;
-        this.mapx = mapx;
-        this.mapy = mapy;
-        this.sigungucode = sigungucode;
-        this.contentid = contentid;
-        this.overview = overview;
+        this.addr1 = address;
+        this.areaCode = areaCode;
+        this.sigunguCode = sigunguCode;
+        this.contentId = contentId;
+        this.firstImage = firstImage;
+        this.firstImage2 = firstImage2;
+        this.mapX = mapX;
+        this.mapY = mapY;
     }
 
-    public Place(long id, String name, String addr1, String areacode, String firstimage, String firstimage2, String mapx, String mapy, String sigungucode, String contentid, String overview) {
+    public Place(Long id, String name, String address, String areaCode, String firstImage, String firstImage2, String mapX, String mapY, String sigunguCode, String contentId) {
         this.id = id;
         this.name = name;
-        this.addr1 = addr1;
-        this.areacode = areacode;
-        this.firstimage = firstimage;
-        this.firstimage2 = firstimage2;
-        this.mapx = mapx;
-        this.mapy = mapy;
-        this.sigungucode = sigungucode;
-        this.contentid = contentid;
-        this.overview = overview;
-
+        this.addr1 = address;
+        this.areaCode = areaCode;
+        this.firstImage = firstImage;
+        this.firstImage2 = firstImage2;
+        this.mapX = mapX;
+        this.mapY = mapY;
+        this.sigunguCode = sigunguCode;
+        this.contentId = contentId;
     }
-
 }
