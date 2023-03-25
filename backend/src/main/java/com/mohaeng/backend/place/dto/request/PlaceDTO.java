@@ -10,7 +10,7 @@ public class PlaceDTO {
     private String addr1;
     private String areaCode;
     private String sigunguCode;
-    private String firstIimage;
+    private String firstImage;
     private String firstImage2;
     private String mapX;
     private String mapY;
