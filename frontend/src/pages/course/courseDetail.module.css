@@ -1,0 +1,29 @@
+.course-id-container {
+  padding: 1rem 6rem 0;
+}
+
+.title-container {
+  border-bottom: 3px solid var(--color-border-semi);
+  width: 100%;
+  text-align: center;
+  margin-bottom: 0.4rem;
+}
+.title-length {
+  display: inline-block;
+  padding: 0.2rem 0.8rem;
+  color: var(--color-bg-white);
+  background-color: var(--color-primary);
+  border-radius: 50px;
+  font-size: 1.4rem;
+  margin-right: 0.8rem;
+}
+
+.title {
+  padding: 0.4rem 4rem 1rem;
+}
+
+.title-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0.2rem;
+}
