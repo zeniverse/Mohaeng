@@ -29,7 +29,10 @@ public class JwtFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         Cookie[] cookies = httpServletRequest.getCookies();
-        String accessToken = cookies[0].getAttribute("Access-Token");
+        String accessToken = null;
+        if (cookies != null) {
+            accessToken = cookies[0].getValue();
+        }
 
         if (accessToken != null && tokenGenerator.checkToken(accessToken)) {
             String email = tokenGenerator.parseEmailFromToken(accessToken);
