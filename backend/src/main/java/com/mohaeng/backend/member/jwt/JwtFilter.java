@@ -9,7 +9,9 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +20,7 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 
 @RequiredArgsConstructor
 @Component
@@ -36,7 +39,7 @@ public class JwtFilter extends GenericFilterBean {
 
         if (accessToken != null && tokenGenerator.checkToken(accessToken)) {
             String email = tokenGenerator.parseEmailFromToken(accessToken);
-            Member member = memberRepository.findByEmail(email).get();
+            Member member = memberRepository.findByEmailAndDeletedDateIsNull(email).get();
 
             request.setAttribute("userEmail", email);
 
@@ -45,6 +48,22 @@ public class JwtFilter extends GenericFilterBean {
         }
 
         chain.doFilter(request, response);
+        addSameSite((HttpServletResponse) response, "None");
+
+    }
+
+    private void addSameSite(HttpServletResponse response, String sameSite) {
+
+        Collection<String> headers = response.getHeaders(HttpHeaders.SET_COOKIE);
+        boolean firstHeader = true;
+        for (String header : headers) { // there can be multiple Set-Cookie attributes
+            if (firstHeader) {
+                response.setHeader(HttpHeaders.SET_COOKIE, String.format("%s; Secure; %s", header, "SameSite=" + sameSite));
+                firstHeader = false;
+                continue;
+            }
+            response.addHeader(HttpHeaders.SET_COOKIE, String.format("%s; Secure; %s", header, "SameSite=" + sameSite));
+        }
     }
 
     public Authentication getAuthentication(Member member) {
