@@ -8,8 +8,8 @@ import java.util.List;
 
 @Repository
 public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceRepositoryCustom{
-    List<Place> findByAddr1ContainingIgnoreCase(String searchValue);
-    List<Place> findByNameContainingOrAddr1Containing(String name, String address);
+    List<Place> findByAddressContainingIgnoreCase(String searchValue);
+    List<Place> findByNameContainingOrAddressContaining(String name, String address);
     List<Place> findByNameContaining(String name);
 
 }
