@@ -80,4 +80,20 @@ public class Course extends BaseTimeEntity {
         this.thumbnailUrl = courseUpdateReq.getThumbnailUrl();
         this.content = courseUpdateReq.getContent();
     }
+
+    public void updateDeletedDate(List<CoursePlace> coursePlaces){
+        this.deletedDate = LocalDateTime.now();
+        for (CoursePlace coursePlace : coursePlaces) {
+            coursePlace.updateDeletedDate();
+        }
+    }
+
+    public void addLikeCount(){
+        this.likeCount += 1;
+    }
+
+    public void cancelLikeCount(){
+        this.likeCount -= 1;
+    }
+
 }
