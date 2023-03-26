@@ -1,12 +1,15 @@
 package com.mohaeng.backend.member.domain;
 
 import com.mohaeng.backend.common.BaseTimeEntity;
+import com.mohaeng.backend.course.domain.Course;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import java.util.List;
 public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "member_id")
     private Long id;
 
     @Column(nullable = false)
@@ -27,9 +31,9 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String email;
 
-    private String imageName;
     private String originName;
     private String imageURL;
+    private String imageName;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -37,9 +41,11 @@ public class Member extends BaseTimeEntity {
     private boolean isActive;
     private int stopCount;
 
+    private String oauthAccessToken;
+
+    private Long kakaoId;
 
     @OneToMany(mappedBy = "member")
-
     private List<CourseBookMark> courseBookMarkList = new ArrayList<>();
 
     @Builder
@@ -64,4 +70,21 @@ public class Member extends BaseTimeEntity {
         this.courseBookMarkList.add(courseBookMark);
         courseBookMark.setMember(this);
     }
+
+    public void setOauthAccessToken(String oauthAccessToken) {
+        this.oauthAccessToken = oauthAccessToken;
+    }
+
+    public void changeImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public void changeImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public void setKakaoId(Long kakaoId) {
+        this.kakaoId = kakaoId;
+    }
 }
+

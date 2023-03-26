@@ -10,7 +10,7 @@ services:
     volumes:
       - ./db:/var/lib/mysql:rw
     ports:
-      - "3306:3306"
+      - 3307:3307
     restart: always
 
   backend:
@@ -24,6 +24,6 @@ services:
       - db
     container_name: "backend"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://my_sql:3306/testdb
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3307/testdb?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: sa
