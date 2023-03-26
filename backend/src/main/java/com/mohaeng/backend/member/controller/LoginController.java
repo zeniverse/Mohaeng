@@ -3,55 +3,89 @@ package com.mohaeng.backend.member.controller;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.member.dto.response.MemberLoginDto;
-import com.mohaeng.backend.member.repository.MemberRepository;
+import com.mohaeng.backend.member.jwt.Token;
+import com.mohaeng.backend.member.jwt.TokenGenerator;
+import com.mohaeng.backend.member.service.MemberService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-import java.util.Optional;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 
 @Controller
 @ResponseBody
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LoginController {
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
+    private final TokenGenerator tokenGenerator;
 
-    @GetMapping("/loginInfo")
-    public ResponseEntity loginInfoController(@AuthenticationPrincipal OAuth2User oAuth2User) {
-        Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        Optional<Member> optionalUser = memberRepository.findByEmail((String) attributes.get("email"));
+    @GetMapping("/oauth/token")
+    public ResponseEntity getToken(@RequestParam("code") String code, HttpServletResponse response) throws IOException {
+        String accessToken = memberService.getAccessToken(code);
+        Member member = memberService.saveMember(accessToken);
+        Token token = memberService.createToken(member);
 
-        if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("INVALID_USER");
+        Cookie accessCookie = new Cookie("Access-Token", token.getAccessToken());
+        accessCookie.setAttribute("Response-Token", token.getRefreshToken());
+        accessCookie.setMaxAge(60*60*24);
+        response.addCookie(accessCookie);
+
+        Cookie refreshCookie = new Cookie("Refresh-Token", token.getAccessToken());
+        refreshCookie.setAttribute("Response-Token", token.getRefreshToken());
+        refreshCookie.setMaxAge(60*60*24);
+        response.addCookie(refreshCookie);
+
+        return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
+    }
+
+    /**
+     * 토큰 재발급
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @GetMapping("/oauth/token/refresh")
+    public Token refreshAuth(HttpServletRequest request, HttpServletResponse response) {
+        String token = request.getHeader("Refresh-token");
+
+        if (token != null && tokenGenerator.checkToken(token)) {
+            String email = tokenGenerator.parseEmailFromToken(token);
+            Member member = memberService.findByEmail(email);
+            Token reGeneratedToken = memberService.createToken(member);
+
+            return reGeneratedToken;
         }
 
-        Member findMember = optionalUser.get();
-        MemberLoginDto memberLoginDto = new MemberLoginDto(findMember.getId(), findMember.getNickName(), findMember.getEmail());
+        throw new IllegalArgumentException("NotExistRefreshToken");
+    }
+
+    @GetMapping("/loginInfo")
+    public ResponseEntity loginInfoController(HttpServletRequest request) throws IOException {
+        String userEmail = (String) request.getAttribute("userEmail");
+        System.out.println("userEmail = " + userEmail);
+
+        Member findMember = memberService.findByEmail(userEmail);
+        InputStream inputStream = new FileInputStream(findMember.getImageURL() + "/" + findMember.getImageName());
+        byte[] imageByteArray = inputStream.readAllBytes();
+        inputStream.close();
+
+        MemberLoginDto memberLoginDto = new MemberLoginDto(findMember.getId(), findMember.getNickName(),
+                findMember.getEmail(), imageByteArray);
 
         return ResponseEntity.ok().body(BaseResponse.success("ok", memberLoginDto));
     }
 
-    @GetMapping("/user/logout")
-    public ResponseEntity logoutController(HttpServletRequest request, HttpServletResponse response) {
-        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-        HttpSession session = request.getSession();
-        session.invalidate();
-
-        return ResponseEntity.ok().body(BaseResponse.success("ok"));
-    }
 
 }

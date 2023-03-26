@@ -31,15 +31,19 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String email;
 
-    private String imageName;
     private String originName;
     private String imageURL;
+    private String imageName;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
     private boolean isActive;
     private int stopCount;
+
+    private String oauthAccessToken;
+
+    private Long kakaoId;
 
     @OneToMany(mappedBy = "member")
     private List<CourseBookMark> courseBookMarkList = new ArrayList<>();
@@ -65,6 +69,22 @@ public class Member extends BaseTimeEntity {
     public void addCourseBookMark(CourseBookMark courseBookMark) {
         this.courseBookMarkList.add(courseBookMark);
         courseBookMark.setMember(this);
+    }
+
+    public void setOauthAccessToken(String oauthAccessToken) {
+        this.oauthAccessToken = oauthAccessToken;
+    }
+
+    public void changeImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public void changeImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public void setKakaoId(Long kakaoId) {
+        this.kakaoId = kakaoId;
     }
 }
 
