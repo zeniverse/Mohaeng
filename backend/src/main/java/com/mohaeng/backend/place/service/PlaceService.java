@@ -6,6 +6,7 @@ import com.mohaeng.backend.place.exception.PlaceNotFoundException;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import org.w3c.dom.Document;

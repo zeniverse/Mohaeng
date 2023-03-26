@@ -5,7 +5,6 @@ import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
@@ -17,14 +16,16 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
+@Where(clause = "deleted_date is NULL")
 public class Course extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
     private Long id;
 
-    @OneToMany
-    @JoinColumn(name = "course_id")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<CoursePlace> coursePlaces = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY)
@@ -69,7 +70,7 @@ public class Course extends BaseTimeEntity {
         this.coursePlaces = data;
     }
 
-    public void updateCourse(CourseUpdateReq courseUpdateReq, List<CoursePlace> coursePlaces) {
+    public void updateCourse(CourseUpdateReq courseUpdateReq) {
         this.title = courseUpdateReq.getTitle();
         this.startDate = courseUpdateReq.getStartDate();
         this.endDate = courseUpdateReq.getEndDate();
@@ -78,24 +79,21 @@ public class Course extends BaseTimeEntity {
         this.region = courseUpdateReq.getRegion();
         this.thumbnailUrl = courseUpdateReq.getThumbnailUrl();
         this.content = courseUpdateReq.getContent();
-        this.coursePlaces = coursePlaces;
     }
 
-//    @Builder
-//    public Course(List<CoursePlace> coursePlaces, Member member, String title, String nickname, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime deletedDate,
-//                  String content, Integer likeCount, Boolean isPublished, String imageName, String originName, String imageUrl) {
-//        this.coursePlaces = coursePlaces;
-//        this.member = member;
-//        this.title = title;
-//        this.nickname = nickname;
-//        this.startDate = startDate;
-//        this.endDate = endDate;
-//        this.deletedDate = deletedDate;
-//        this.content = content;
-//        this.likeCount = likeCount;
-//        this.isPublished = isPublished;
-//        this.imageName = imageName;
-//        this.originName = originName;
-//        this.imageUrl = imageUrl;
-//    }
+    public void updateDeletedDate(List<CoursePlace> coursePlaces){
+        this.deletedDate = LocalDateTime.now();
+        for (CoursePlace coursePlace : coursePlaces) {
+            coursePlace.updateDeletedDate();
+        }
+    }
+
+    public void addLikeCount(){
+        this.likeCount += 1;
+    }
+
+    public void cancelLikeCount(){
+        this.likeCount -= 1;
+    }
+
 }

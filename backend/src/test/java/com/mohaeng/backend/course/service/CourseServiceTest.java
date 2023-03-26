@@ -10,6 +10,7 @@ import com.mohaeng.backend.course.dto.response.CourseIdRes;
 import com.mohaeng.backend.course.dto.response.CourseListRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
+import com.mohaeng.backend.course.repository.CoursePlaceRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.domain.Role;
@@ -38,6 +39,7 @@ class CourseServiceTest {
     @Autowired PlaceImageRepository placeImageRepository;
     @Autowired CourseRepository courseRepository;
     @Autowired MemberRepository memberRepository;
+    @Autowired CoursePlaceRepository coursePlaceRepository;
 
     @BeforeAll
     public void before(){
@@ -108,7 +110,9 @@ class CourseServiceTest {
 
     @AfterEach
     void afterEach() {
-        memberRepository.deleteAll();
+//        coursePlaceRepository.deleteAll();
+//        courseRepository.deleteAll();
+//        memberRepository.deleteAll();
     }
 
     @Test
@@ -157,7 +161,7 @@ class CourseServiceTest {
         //Given
         List<Place> placeList = placeRepository.findAll();
         CourseReq courseReq = createCourseReq("코스 제목", List.of(placeList.get(0).getId(), placeList.get(1).getId()));
-        Member savedMember = createMember();
+        Member savedMember = createMember("create");
 
         //When
         CourseIdRes courseIdRes = courseService.createCourse(courseReq, savedMember.getEmail());
@@ -182,7 +186,7 @@ class CourseServiceTest {
     public void createMyCourse_no_place() throws Exception{
         //Given
         CourseReq courseReq = createCourseReq("코스 제목", List.of(1L, 10000L));
-        Member savedMember = createMember();
+        Member savedMember = createMember("createNoPlace");
 
         //When
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -214,7 +218,7 @@ class CourseServiceTest {
         //Given
         List<Place> placeList = placeRepository.findAll();
         CourseReq courseReq = createCourseReq("코스 제목", List.of(placeList.get(3).getId(), placeList.get(1).getId()));
-        Member savedMember = createMember();
+        Member savedMember = createMember("getCourse");
         CourseIdRes courseIdRes = courseService.createCourse(courseReq, savedMember.getEmail());
 
 
@@ -251,7 +255,7 @@ class CourseServiceTest {
         //Given
         List<Place> placeList = placeRepository.findAll();
         CourseReq originReq = createCourseReq("코스 제목", List.of(placeList.get(0).getId(), placeList.get(1).getId()));
-        Member savedMember = createMember();
+        Member savedMember = createMember("updateCourse");
         CourseIdRes courseIdRes = courseService.createCourse(originReq, savedMember.getEmail());
 
         Long courseId = courseIdRes.getCourseId();
@@ -268,8 +272,7 @@ class CourseServiceTest {
         assertEquals(updateReq.getTitle(), course.getTitle());
         assertEquals(placeList.get(2).getName(), course.getCoursePlaces().get(0).getPlace().getName());
         memberRepository.deleteAll();
-        courseRepository.deleteById(courseId);
-
+        courseRepository.deleteById(courseIdRes.getCourseId());
     }
 
     @Test
@@ -277,7 +280,7 @@ class CourseServiceTest {
     public void updateCourse_courseId_isNull() throws Exception{
         //Given
         Long courseId = 1000L;
-        Member savedMember = createMember();
+        Member savedMember = createMember("updateNoCourseId");
         CourseUpdateReq updateReq = createUpdateCourseReq(List.of(1L, 2L));
 
 
@@ -296,7 +299,7 @@ class CourseServiceTest {
         //Given
         List<Place> placeList = placeRepository.findAll();
         CourseReq originReq = createCourseReq("코스 제목", List.of(placeList.get(0).getId(), placeList.get(1).getId()));
-        Member savedMember = createMember();
+        Member savedMember = createMember("updateNoMember");
 
         CourseIdRes courseIdRes = courseService.createCourse(originReq, savedMember.getEmail());
 
@@ -318,24 +321,18 @@ class CourseServiceTest {
         //Given
         List<Place> placeList = placeRepository.findAll();
         CourseReq originReq = createCourseReq("코스 제목", List.of(placeList.get(0).getId(), placeList.get(1).getId()));
-        Member savedMember = createMember();
+        Member savedMember = createMember("updateCourseDiffMember");
 
         CourseIdRes courseIdRes = courseService.createCourse(originReq, savedMember.getEmail());
+        System.out.println("courseIdRes.getCourseId() ================== " + courseIdRes.getCourseId());
 
         Long courseId = courseIdRes.getCourseId();
         CourseUpdateReq updateReq = createUpdateCourseReq(List.of(placeList.get(2).getId(), placeList.get(3).getId()));
-
-        Member newMember = Member.builder()
-                .nickName("nick")
-                .name("뉴모행")
-                .email("new@new")
-                .role(Role.NORMAL)
-                .build();
-        Member newMem = memberRepository.save(newMember);
+        Member newMem = createMember("newMem");
 
         //When
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            courseService.updateCourse(newMem.getEmail(), courseId, updateReq);
+            courseService.updateCourse("new@new", courseId, updateReq);
         });
 
         //Then
@@ -347,7 +344,7 @@ class CourseServiceTest {
     public void deleteCourse() throws Exception{
         //Given
         CourseReq originReq = createCourseReq("코스 제목", List.of(1L, 2L));
-        Member savedMember = createMember();
+        Member savedMember = createMember("deleteCourse");
         CourseIdRes courseIdRes = courseService.createCourse(originReq, savedMember.getEmail());
 
         Long courseId = courseIdRes.getCourseId();
@@ -368,7 +365,7 @@ class CourseServiceTest {
         //Given
         List<Place> placeList = placeRepository.findAll();
         CourseReq originReq = createCourseReq("코스 제목", List.of(placeList.get(0).getId(), placeList.get(1).getId()));
-        Member savedMember = createMember();
+        Member savedMember = createMember("deleteCourseDiffMem");
 
         CourseIdRes courseIdRes = courseService.createCourse(originReq, savedMember.getEmail());
 
@@ -396,7 +393,7 @@ class CourseServiceTest {
     public void deleteCourse_courseId_isNull() throws Exception{
         //Given
         Long courseId = 1000L;
-        Member savedMember = createMember();
+        Member savedMember = createMember("deleteCourseIdNull");
 
         //When
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -413,7 +410,7 @@ class CourseServiceTest {
         //Given
         CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
         CourseReq originReq2 = createCourseReq("코스 소개합니다", List.of(3L, 4L));
-        Member savedMember = createMember();
+        Member savedMember = createMember("searchCourse");
         CourseIdRes courseIdRes1 = courseService.createCourse(originReq1, savedMember.getEmail());
         CourseIdRes courseIdRes2 = courseService.createCourse(originReq2, savedMember.getEmail());
 
@@ -424,7 +421,7 @@ class CourseServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 2);
 
         //When
-        CourseListRes courseList = courseService.getCourseList(courseSearchDto, pageRequest);
+        CourseListRes courseList = courseService.getCourseList(courseSearchDto, pageRequest, savedMember.getEmail());
 
         //Then
         assertEquals(1, courseList.getCourseList().size());
@@ -448,11 +445,11 @@ class CourseServiceTest {
         return myCourseReq;
     }
 
-    private Member createMember() {
+    private Member createMember(String email) {
         Member member = Member.builder()
                 .nickName("nick")
                 .name("김모행")
-                .email("test@test")
+                .email(email + "@test")
                 .role(Role.NORMAL)
                 .build();
         Member savedMember = memberRepository.save(member);
