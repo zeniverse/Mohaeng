@@ -4,7 +4,6 @@ import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.dto.request.PlaceDTO;
 import com.mohaeng.backend.place.exception.PlaceNotFoundException;
 import com.mohaeng.backend.place.repository.PlaceRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,28 +40,6 @@ public class PlaceService {
 
     private static final String BASE_URL = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=" + API_KEY + "&pageNo=1&numOfRows=12100&MobileApp=AppTest&_type=xml&MobileOS=ETC&arrange=A&contentTypeId=12";
     private static final String BASE_URL2 = "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=" + API_KEY + "&MobileOS=ETC&MobileApp=AppTest&_type=xml&contentId=&contentTypeId=12&&overviewYN=Y";
-
-
-    @PostConstruct
-    public void init() throws IOException, ParserConfigurationException, SAXException {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        List<Place> places = getPlaces(); // 최초생성
-//        List<Place> places = new ArrayList<>(); // overview update
-//        List<Place> updatePlaces = placeRepository.findAll();
-//        for (Place place : updatePlaces) {
-//            if (place.getOverview().isEmpty()) {
-//                updateOverview(place.getContentid());
-//                places.add(place);
-//            }
-//        }
-        stopWatch.stop();
-        long totalTimeMillis = stopWatch.getTotalTimeMillis();
-        System.out.println("total time : " + totalTimeMillis);
-        placeRepository.saveAll(places);
-        System.out.println("total time : " + totalTimeMillis);
-        placeRepository.flush();
-    }
 
     //    @Scheduled(cron = "0 0 5 * * ?") #TODO
     public List<Place> getPlaces() throws IOException, ParserConfigurationException, SAXException {
@@ -161,7 +138,7 @@ public class PlaceService {
         return placeRepository.findAll();
     }
 
-    public List<Place> getPlacesByAddr1(String address) {
+    public List<Place> getPlacesByAddress(String address) {
         String searchValue = address.substring(0, 2); // get the first two letters of address
         return placeRepository.findByAddr1ContainingIgnoreCase(searchValue);
     }
@@ -179,7 +156,7 @@ public class PlaceService {
     public PlaceDTO toPlaceDTO(Place place) {
         return PlaceDTO.builder()
                 .name(place.getName())
-                .addr1(place.getAddr1())
+                .address(place.getAddress())
                 .areaCode(place.getAreaCode())
                 .sigunguCode(place.getSigunguCode())
                 .firstImage(place.getFirstImage())
