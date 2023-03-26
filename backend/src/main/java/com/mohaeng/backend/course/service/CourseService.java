@@ -120,7 +120,7 @@ public class CourseService {
                             .placeId(place.getId())
                             .name(place.getName())
                             .imgUrl(findPlaceImage.getImgUrl())
-                            .address(place.getAddr1())
+                            .address(place.getAddress())
                             .mapX(place.getMapX())
                             .mapY(place.getMapY())
                             .build()
