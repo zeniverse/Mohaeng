@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class MemberLoginDto {
-    private Long id;
-    private String nickName;
+public class KakaoUserDto {
+    private Long kakaoId;
     private String email;
-    private byte[] imageByteArray;
+    private String name;
+    private String profileImage;
 }
