@@ -41,9 +41,9 @@ public class PlaceController {
     }
 
 
-    @GetMapping("/place/{addr1}")
-    public ResponseEntity<List<Place>> getPlacesByAddr1(@PathVariable String addr1) {
-        List<Place> places = placeService.getPlacesByAddr1(addr1);
+    @GetMapping("/place/{address}")
+    public ResponseEntity<List<Place>> getPlacesByAddress(@PathVariable String address) {
+        List<Place> places = placeService.getPlacesByAddress(address);
         log.info("search places.size:{} ", places.size());
         return new ResponseEntity<>(places, HttpStatus.OK);
     }

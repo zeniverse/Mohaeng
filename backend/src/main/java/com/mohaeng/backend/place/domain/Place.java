@@ -38,7 +38,7 @@ public class Place {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long id;
     private String name;
-    private String addr1;
+    private String address;
     private String areaCode;
     private String sigunguCode;
     private String firstImage;
@@ -56,7 +56,7 @@ public class Place {
 
     public Place(String name, String address, String areaCode, String sigunguCode, String contentId, String firstImage, String firstImage2, String mapX, String mapY) {
         this.name = name;
-        this.addr1 = address;
+        this.address = address;
         this.areaCode = areaCode;
         this.sigunguCode = sigunguCode;
         this.contentId = contentId;
@@ -69,7 +69,7 @@ public class Place {
     public Place(Long id, String name, String address, String areaCode, String firstImage, String firstImage2, String mapX, String mapY, String sigunguCode, String contentId, double rating) {
         this.id = id;
         this.name = name;
-        this.addr1 = address;
+        this.address = address;
         this.areaCode = areaCode;
         this.firstImage = firstImage;
         this.firstImage2 = firstImage2;
@@ -80,10 +80,10 @@ public class Place {
         this.rating = rating;
     }
 
-    public Place(Long id, String name, String addr1, String areaCode, String sigunguCode, String firstImage, String firstImage2, String mapX, String mapY, String contentId, double rating, List<PlaceImage> placeImages) {
+    public Place(Long id, String name, String address, String areaCode, String sigunguCode, String firstImage, String firstImage2, String mapX, String mapY, String contentId, double rating, List<PlaceImage> placeImages) {
         this.id = id;
         this.name = name;
-        this.addr1 = addr1;
+        this.address = address;
         this.areaCode = areaCode;
         this.sigunguCode = sigunguCode;
         this.firstImage = firstImage;
@@ -93,5 +93,18 @@ public class Place {
         this.contentId = contentId;
         this.rating = rating;
         this.placeImages = placeImages;
+    }
+
+    public Place(Long id, String name, String address, String areaCode, String sigunguCode, String firstImage, String firstImage2, String mapX, String mapY, String contentId) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.areaCode = areaCode;
+        this.sigunguCode = sigunguCode;
+        this.firstImage = firstImage;
+        this.firstImage2 = firstImage2;
+        this.mapX = mapX;
+        this.mapY = mapY;
+        this.contentId = contentId;
     }
 }
