@@ -94,4 +94,17 @@ public class Place {
         this.rating = rating;
         this.placeImages = placeImages;
     }
+
+    public Place(Long id, String name, String addr1, String areaCode, String sigunguCode, String firstImage, String firstImage2, String mapX, String mapY, String contentId) {
+        this.id = id;
+        this.name = name;
+        this.addr1 = addr1;
+        this.areaCode = areaCode;
+        this.sigunguCode = sigunguCode;
+        this.firstImage = firstImage;
+        this.firstImage2 = firstImage2;
+        this.mapX = mapX;
+        this.mapY = mapY;
+        this.contentId = contentId;
+    }
 }
