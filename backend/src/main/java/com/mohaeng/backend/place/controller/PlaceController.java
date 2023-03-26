@@ -45,6 +45,7 @@ public class PlaceController {
     public ResponseEntity<List<Place>> getPlacesByAddress(@PathVariable String address) {
         List<Place> places = placeService.getPlacesByAddress(address);
         log.info("search places.size:{} ", places.size());
+//        return ResponseEntity.ok().body(BaseResponse.success("OK",res));
         return new ResponseEntity<>(places, HttpStatus.OK);
     }
 
@@ -53,7 +54,7 @@ public class PlaceController {
         if (address == null || address.isEmpty()) {
             return placeRepository.findByNameContaining(keyword);
         } else {
-            return placeRepository.findByNameContainingOrAddr1Containing(keyword,address);
+            return placeRepository.findByNameContainingOrAddressContaining(keyword,address);
         }
     }
 
