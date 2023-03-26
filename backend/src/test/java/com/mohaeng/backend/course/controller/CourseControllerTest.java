@@ -70,11 +70,11 @@ class CourseControllerTest {
 
         //When & Then
         mockMvc.perform(
-                get("/api/course/placeSearch")
-                        .queryParam("keyword", req.getKeyword())
-                        .queryParam("lastPlaceId", String.valueOf(req.getLastPlaceId()))
-                        .queryParam("lastRating", String.valueOf(req.getLastRating()))
-                        .queryParam("size", String.valueOf(3)))
+                        get("/api/course/placeSearch")
+                                .queryParam("keyword", req.getKeyword())
+                                .queryParam("lastPlaceId", String.valueOf(req.getLastPlaceId()))
+                                .queryParam("lastRating", String.valueOf(req.getLastRating()))
+                                .queryParam("size", String.valueOf(3)))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -273,7 +273,7 @@ class CourseControllerTest {
         CourseSearchDto courseSearchDto = CourseSearchDto.builder()
                 .keyword("코스")
                 .build();
-        given(courseService.getCourseList(any(CourseSearchDto.class), any(PageRequest.class)))
+        given(courseService.getCourseList(any(CourseSearchDto.class), any(PageRequest.class), anyString()))
                 .willReturn(CourseListRes.from(List.of(courseListDto), totalElements, totalPages));
 
         //When & Then
@@ -295,7 +295,7 @@ class CourseControllerTest {
                 .andDo(print());
 
         verify(courseService).getCourseList(refEq(courseSearchDto),
-                eq(PageRequest.of(0, 2)));
+                eq(PageRequest.of(0, 2)), eq("test@test.com"));
     }
 
     //TODO: exceptionHandler 구현 후, 처리할 case
