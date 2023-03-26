@@ -56,8 +56,8 @@ public class RandomNameService {
                 return nickName;
             }
 
-            firstRandomIndex = (int) (Math.random() * (animalNames.length + 1));
-            secondRandomIndex = (int) (Math.random() * (adjectiveNames.length + 1));
+            firstRandomIndex = (int) (Math.random() * animalNames.length);
+            secondRandomIndex = (int) (Math.random() * adjectiveNames.length);
 
         }
     }
