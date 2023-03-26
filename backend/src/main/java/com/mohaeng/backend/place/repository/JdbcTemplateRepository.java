@@ -30,7 +30,7 @@ public class JdbcTemplateRepository {
         Map<String, Object> parameters = new HashMap<>(9);
 //        parameters.put("id", place.getId());
         parameters.put("name", place.getName());
-        parameters.put("addr", place.getAddr1());
+        parameters.put("addr", place.getAddress());
         parameters.put("areacode", place.getAreaCode());
         parameters.put("firstimage", place.getFirstImage());
         parameters.put("firstimage2", place.getFirstImage2());
@@ -61,7 +61,7 @@ public class JdbcTemplateRepository {
 
 //                        ps.setObject(1,temp.get(i).getId(),Types.VARCHAR);
                         ps.setObject(1, temp.get(i).getName(), Types.VARCHAR);
-                        ps.setObject(2, temp.get(i).getAddr1(), Types.VARCHAR);
+                        ps.setObject(2, temp.get(i).getAddress(), Types.VARCHAR);
                         ps.setObject(3, temp.get(i).getAreaCode(), Types.VARCHAR);
                         ps.setObject(4, temp.get(i).getFirstImage(), Types.VARCHAR);
                         ps.setObject(5, temp.get(i).getFirstImage2(), Types.VARCHAR);
