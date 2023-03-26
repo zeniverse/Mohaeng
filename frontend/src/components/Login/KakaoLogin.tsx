@@ -1,10 +1,16 @@
-import { setToken } from "@/src/store/reducers/loginTokenSlice";
+import {
+  setEmail,
+  setId,
+  setNickname,
+  setToken,
+  setProfileUrl,
+} from "@/src/store/reducers/loginTokenSlice";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Loading from "./Loading";
-import LoginInfo from "./LoginInfo";
+import cookie from "react-cookies";
 
 const KakaoLogin = () => {
   const router = useRouter();
@@ -12,103 +18,81 @@ const KakaoLogin = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const KAKAO_CODE = new URL(window.location.href).searchParams.get("code");
-    const postCode = async () => {
+    let code = new URL(window.location.href).searchParams.get("code");
+    const kakaoCode = async () => {
       try {
-        const response = await axios
-          .post(`/oauth2/authorization/kakao`, null, {
-            params: { authorizationCode: KAKAO_CODE },
-            withCredentials: true,
-          })
-          .then((res) => console.log(res));
-
-        // 서버에서 인가코드를 가지고 카카오에서 개인정보를 받아온 뒤, 응답값으로 회원가입 유무를 판단할 email을 보내준다.
-        const userEmail = response.data.success.kakao_account.email;
-
-        // 회원가입 유무 판단
-        const checkUser = await axios.post("/users/check/email", {
-          email: userEmail,
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/token?code=${code}`,
+          { withCredentials: true }
+        );
+        const accessToken = response.data.accessToken;
+        const refreshToken = response.data.accessToken;
+        cookie.save("accessToken", response.data.accessToken, { path: "/" });
+        cookie.save("refreshToken", response.data.refreshToken, {
+          path: "/",
         });
+        setToken(accessToken);
+        setToken(refreshToken);
+        dispatch(setToken(accessToken));
 
-        // 이미 있는 계정이라면 서버에서 액세스 토큰 받고 홈으로 이동한다.
-        if (checkUser.data.isEmailExisted) {
+        if (accessToken) {
           try {
-            // 토큰 받는 주소 설정이
-            const tokenResponse = await axios.post("/auth", {
-              email: userEmail,
-            });
-            const { accessToken } = tokenResponse.data;
-            dispatch(setToken(accessToken));
+            // loginInfo에서 정보 받아오기, 토큰 헤더에 담아서 전송
+            axios.defaults.headers.common["Access-Token"] = accessToken;
+            const userRes = await axios.get(
+              `${process.env.NEXT_PUBLIC_BASE_URL}/loginInfo`,
+              {
+                headers: {
+                  "Access-Token": `${accessToken}`,
+                },
+                withCredentials: true,
+              }
+            );
+            // 여기에서 받아온 유저 정보를 리덕스에 저장한다
+            console.log(userRes.data);
+            const { id, nickName, email, profileUrl } = userRes.data.data;
+            dispatch(setId(id));
+            dispatch(setEmail(email));
+            dispatch(setNickname(nickName));
+            dispatch(setProfileUrl(profileUrl));
             router.replace("/");
-            alert("로그인되었습니다!");
           } catch (e) {
-            console.log(e.response);
+            console.log(e);
           }
         } else {
-          console.error("error");
+          console.log("error");
         }
-
-        // 없는 계정이라면 회원정보 적을 info 컴포넌트로 간다.
         setValid(true);
       } catch (e) {
         console.log(e);
+        router.push("/");
       }
     };
-    postCode();
-  }, []);
+    kakaoCode();
+  }, [dispatch]);
 
-  // 성공하면 LoginInfo 컴포넌트로 가고, 실패하면 Loading에 머무른다.
-  return <>{valid ? <LoginInfo /> : <Loading />}</>;
+  if (!valid) {
+    return <Loading />;
+  }
+  return <></>;
 };
 
 export default KakaoLogin;
 
-// import { NextPage } from "next";
-// import { useRouter } from "next/router";
-// import { useCallback, useEffect } from "react";
+// useEffect(() => {
+//   let code = new URL(window.location.href).searchParams.get("code");
+//   const kakao = async () => {
+//     await axios
+//       .get(`http://219.255.1.253:8080/oauth/token?code=${code}`)
+//       .then((res) => {
+//         localStorage.setItem("token", res.headers.Access-Token);
+//         router.replace("/");
+//       })
+//       //.then(res => res.json())
+//       //.then(data => {
+//       // localStorage.setItem('token', data.token) })
 
-// interface ResponseType {
-//   ok: boolean;
-//   error?: any;
-// }
-
-// const Kakao: NextPage = () => {
-//   const router = useRouter();
-//   const { code: authCode, error: kakaoServerError } = router.query;
-
-//   const loginHandler = useCallback(
-//     async (code: string | string[]) => {
-//       // 백엔드에 전송
-//       const response: ResponseType = await fetch("/api/users/kakao-login", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//           authCode: code,
-//         }),
-//       }).then((res) => res.json());
-
-//       if (response.ok) {
-//         // 성공하면 홈으로 리다이렉트
-//         router.push("/");
-//       } else {
-//         // 실패하면 에러 페이지로 리다이렉트
-//         router.push("/notifications/authentication-failed");
-//       }
-//     },
-//     [router]
-//   );
-
-//   useEffect(() => {
-//     if (authCode) {
-//       loginHandler(authCode);
-
-//       // 인가코드를 제대로 못 받았을 경우에 에러 페이지를 띄운다.
-//     } else if (kakaoServerError) {
-//       router.push("/notifications/authentication-failed");
-//     }
-//   }, [loginHandler, authCode, kakaoServerError, router]);
-
-//   return <h2>로그인 중입니다..</h2>;
-// };
+//       .catch((error) => console.log(error));
+//   };
+//   kakao();
+// }, []);

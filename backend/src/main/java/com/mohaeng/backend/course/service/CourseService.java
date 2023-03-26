@@ -4,10 +4,13 @@ import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.domain.CoursePlace;
 import com.mohaeng.backend.course.dto.CourseInPlaceDto;
 import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
+import com.mohaeng.backend.course.dto.CourseSearchDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
+import com.mohaeng.backend.course.dto.CourseListDto;
+import com.mohaeng.backend.course.dto.response.CourseListRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.repository.CoursePlaceRepository;
@@ -20,12 +23,14 @@ import com.mohaeng.backend.place.repository.PlaceImageRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -168,6 +173,18 @@ public class CourseService {
         isWriter(memberEmail, course.getMember());
         courseRepository.deleteById(course.getId());
     }
+
+
+    public CourseListRes getCourseList(CourseSearchDto courseSearchDto, Pageable pageable) {
+        Page<Course> courses = courseRepository.findAllCourseWithKeyword(courseSearchDto, pageable);
+
+        List<CourseListDto> courseList = courses.stream()
+                .map(course -> CourseListDto.from(course))
+                .collect(Collectors.toList());
+
+        return CourseListRes.from(courseList, courses.getTotalElements(), courses.getTotalPages());
+    }
+
 
     private Member isWriter(String memberEmail, Member writer){
         Member member = memberRepository.findByEmail(memberEmail).orElseThrow(

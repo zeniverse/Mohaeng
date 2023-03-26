@@ -9,10 +9,15 @@ const CourseList = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/course`);
+      const res = await fetch("/api/course");
       const data = await res.json();
-      const aa = await data.data.courseList;
-      setCoueseData(aa);
+      setCoueseData(data);
+      // const courseRes = await fetch(
+      //   ${process.env.NEXT_PUBLIC_BASE_URL}/api/course
+      // );
+      // const responseData = await courseRes.json();
+      // const courseList = await responseData.data.courseList;
+      // setCoueseData(courseList);
     }
     fetchData();
   }, []);

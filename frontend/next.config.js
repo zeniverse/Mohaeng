@@ -19,5 +19,13 @@ const nextConfig = {
       },
     ];
   },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/:path*",
+  //       destination: "http://219.255.1.253:8080/:path*",
+  //     },
+  //   ];
+  // },
 };
 module.exports = nextConfig;

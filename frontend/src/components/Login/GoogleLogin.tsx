@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 // import { setToken } from "../../../store/reducers/logintokenSlice";
 // import { setSocialEmail } from "../../../store/reducers/socialSlice";
 import Loading from "./Loading";
-import LoginInfo from "./LoginInfo";
 
 const GoogleLogin = () => {
   const router = useRouter();
@@ -20,26 +19,24 @@ const GoogleLogin = () => {
     const google = async () => {
       return await axios
         .get(
-          `${process.env.NEXT_PUBLIC_GOOGLE_URL}/oauth2/authorization/google/${code}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/oauth2/authorization/google/${code}`
         )
-        .then((response) => {
-          console.log(response.data);
-          if (response.ok) {
-            // 성공하면 홈으로 리다이렉트
-            return response.data; 
-            router.push("/");
-          }
+        .then((res) => {
+          localStorage.setItem("token", res.headers.authorization);
+          router.replace("/");
         })
-        .catch((err) => {
-          console.log("에러", err.res);
-        });
+        //.then(res => res.json())
+        //.then(data => {
+        // localStorage.setItem('token', data.token) })
+
+        .catch((error) => console.log(error));
     };
     if (code) {
       google();
     }
   }, []);
 
-  return <>{valid ? <LoginInfo /> : <Loading />}</>;
+  return <></>;
 };
 
 export default GoogleLogin;

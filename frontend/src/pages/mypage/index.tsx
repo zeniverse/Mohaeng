@@ -2,6 +2,7 @@
 
 import Button from "@/src/components/Button/Button";
 import { User, userData } from "@/src/interfaces/Auth";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import MypageLayout from "./layout";
@@ -33,7 +34,10 @@ const MyPage: React.FC = () => {
           </div>
         </div>
         <div className={styles["ButtonWrapper"]}>
-          <Button text="정보수정" />
+          <Link href="/mypage/edit">
+            <Button text="정보수정" />
+          </Link>
+
           <Button text="회원탈퇴" />
         </div>
       </div>

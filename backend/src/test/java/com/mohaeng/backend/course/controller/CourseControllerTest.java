@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mohaeng.backend.config.SecurityConfig;
 import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.dto.CourseInPlaceDto;
+import com.mohaeng.backend.course.dto.CourseListDto;
+import com.mohaeng.backend.course.dto.CourseSearchDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
+import com.mohaeng.backend.course.dto.response.CourseListRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.service.CourseService;
@@ -255,6 +258,34 @@ class CourseControllerTest {
                 .andDo(print());
 
         verify(courseService).deleteCourse(eq("test@test.com"), eq(courseId));
+    }
+
+    @Test
+    @DisplayName("[GET] 코스 검색 - 정상 처리")
+    @WithMockUser
+    public void searchCourse() throws Exception {
+        //Given
+        CourseListDto courseListDto = CourseListDto.builder()
+                .title("코스입니다").build();
+        Long totalElements = 2L;
+        Integer totalPages = 1;
+
+        CourseSearchDto courseSearchDto = CourseSearchDto.builder()
+                .keyword("코스")
+                .build();
+        given(courseService.getCourseList(any(CourseSearchDto.class), any(PageRequest.class)))
+                .willReturn(CourseListRes.from(List.of(courseListDto), totalElements, totalPages));
+
+        //When & Then
+        mockMvc.perform(
+                        get("/api/course")
+                                .queryParam("keyword", courseSearchDto.getKeyword())
+                                .queryParam("page", String.valueOf(0))
+                                .queryParam("size", String.valueOf(2)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        verify(courseService).getCourseList(refEq(courseSearchDto), eq(PageRequest.of(0, 2)));
     }
 
     //TODO: exceptionHandler 구현 후, 처리할 case

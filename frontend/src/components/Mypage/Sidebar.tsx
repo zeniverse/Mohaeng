@@ -24,8 +24,7 @@ const Sidebar = () => {
     { href: "/mypage/bookmark", label: "즐겨찾기" },
     { href: "/mypage/trips", label: "나의 여행 일정" },
     { href: "/mypage/post", label: "내가 쓴 글" },
-    { href: "/activity", label: "내 활동 알림" },
-    { href: "/requests", label: "요청한 장소" },
+    // { href: "/activity", label: "내 활동 알림" },
   ];
 
   const [currentUser, setCurrentUser] = useState<User>();
