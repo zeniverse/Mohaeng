@@ -37,8 +37,8 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
                         place.id,
                         origin.imgUrl,
                         place.name,
-                        place.addr1
-//                        place.rating
+                        place.addr1,
+                        place.rating
                 ))
                 .from(place)
                 .innerJoin(place.placeImages, origin)
