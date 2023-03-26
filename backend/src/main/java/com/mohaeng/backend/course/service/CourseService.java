@@ -178,12 +178,35 @@ public class CourseService {
     }
 
 
-    public CourseListRes getCourseList(CourseSearchDto courseSearchDto, Pageable pageable) {
+    public CourseListRes getCourseList(CourseSearchDto courseSearchDto, Pageable pageable, String memberEmail) {
+        // 1.로그인 유무 화인
+        Member member = null;
+
+        if (memberEmail != null){
+            member = memberRepository.findByEmail(memberEmail).orElseThrow(
+                    // TODO: Exception 처리
+                    () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
+            );
+        }
+
+        // 2. 검색 조건으로 검색 결과 조회
         Page<Course> courses = courseRepository.findAllCourseWithKeyword(courseSearchDto, pageable);
 
-        List<CourseListDto> courseList = courses.stream()
-                .map(course -> CourseListDto.from(course))
-                .collect(Collectors.toList());
+        // 3. 검색 결과 CourseListDto 타입으로 변경
+        List<CourseListDto> courseList = new ArrayList<>();
+        for (Course course : courses) {
+            boolean isLike = false;
+            if(memberEmail != null){
+                isLike = courseLikesRepository.existsCourseLikesByMemberAndCourse(member, course);
+            }
+            CourseListDto dto = CourseListDto.from(course, isLike);
+            courseList.add(dto);
+        }
+
+//        List<CourseListDto> courseList = courses.stream()
+//                .map(course -> CourseListDto.from(course))
+//                .collect(Collectors.toList());
+//
         return CourseListRes.from(courseList, courses.getTotalElements(), courses.getTotalPages());
     }
 

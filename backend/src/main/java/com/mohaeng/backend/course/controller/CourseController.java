@@ -84,8 +84,17 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity getCourseList(CourseSearchDto courseSearchDto,Pageable pageable){
-        CourseListRes result = courseService.getCourseList(courseSearchDto, pageable);
+    public ResponseEntity getCourseList(CourseSearchDto courseSearchDto,
+                                        Pageable pageable,
+                                        @AuthenticationPrincipal OAuth2User oAuth2User){
+        String memberEmail = "";
+        try{
+            Map<String, Object> attributes = oAuth2User.getAttributes();
+            memberEmail = (String) attributes.get("email");
+        }catch(Exception e){
+            memberEmail = null;
+        }
+        CourseListRes result = courseService.getCourseList(courseSearchDto, pageable, memberEmail);
         return ResponseEntity.ok().body(BaseResponse.success("OK", result));
     }
 }
