@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class PlaceDTO {
     private String name;
-    private String addr1;
+    private String address;
     private String areaCode;
     private String sigunguCode;
     private String firstImage;
