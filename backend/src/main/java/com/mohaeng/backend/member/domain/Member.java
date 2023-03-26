@@ -26,9 +26,9 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String email;
 
-    private String imageName;
     private String originName;
     private String imageURL;
+    private String imageName;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -37,6 +37,8 @@ public class Member extends BaseTimeEntity {
     private int stopCount;
 
     private String oauthAccessToken;
+
+    private Long kakaoId;
 
 
     @OneToMany(mappedBy = "member")
@@ -70,5 +72,13 @@ public class Member extends BaseTimeEntity {
 
     public void changeImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    public void changeImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public void setKakaoId(Long kakaoId) {
+        this.kakaoId = kakaoId;
     }
 }

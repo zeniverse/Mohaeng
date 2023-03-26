@@ -5,6 +5,9 @@ import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.dto.request.UserInfoChangeRequest;
 import com.mohaeng.backend.member.service.MemberService;
 import com.mohaeng.backend.member.service.MyPageService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -53,5 +56,19 @@ public class MyPageController {
         findMember.changeImageURL(UPLOAD_PATH +"/"+fileName);
 
         return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
+    }
+
+    @DeleteMapping("/user/drop")
+    public void userDropController(HttpServletRequest request, HttpServletResponse response) {
+        String userEmail = (String) request.getAttribute("userEmail");
+        System.out.println("userEmail = " + userEmail);
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        }
+
+        Member findMember = memberService.findByEmail(userEmail);
+        myPageService.deleteMember(findMember, findMember.getOauthAccessToken());
     }
 }

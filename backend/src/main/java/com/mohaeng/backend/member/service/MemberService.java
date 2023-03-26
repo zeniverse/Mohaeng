@@ -12,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -96,12 +97,14 @@ public class MemberService {
         String body = kakaoProfileResponse.getBody();
 
         JSONObject jsonObject = new JSONObject(body);
+        long id = jsonObject.getLong("id");
+        System.out.println("id = " + id);
         String parsedEmail = jsonObject.getJSONObject("kakao_account").getString("email");
         String parsedName = jsonObject.getJSONObject("properties").getString("nickname");
         String profileImage = jsonObject.getJSONObject("properties").getString("profile_image");
         System.out.println("profileImage = " + profileImage);
 
-        return new KakaoUserDto(parsedEmail, parsedName, profileImage);
+        return new KakaoUserDto(id, parsedEmail, parsedName, profileImage);
     }
 
     public Member saveMember(String token) throws IOException {
@@ -115,6 +118,8 @@ public class MemberService {
         member.changeImageURL(IMG_PATH);
         member.changeImageName(fileName);
         member.setOauthAccessToken(token);
+        member.setKakaoId(kakaoUser.getKakaoId());
+
         memberRepository.save(member);
         return member;
     }
@@ -155,28 +160,5 @@ public class MemberService {
     }
 
 
-    public void deleteMember(Member member, String code){
-        memberRepository.delete(member);
 
-        RestTemplate restTemplate = new RestTemplate();
-        String reqURL = "https://kapi.kakao.com/v1/user/unlink";
-
-        HttpHeaders header = new HttpHeaders();
-        header.add("Authorization", "Bearer " + code);
-        header.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        HttpEntity<String> entity = new HttpEntity<String>("parameters", header);
-
-
-        ResponseEntity<String> response = restTemplate.exchange(
-                reqURL,
-                HttpMethod.POST,
-                entity,
-                String.class
-        );
-
-        String body = response.getBody();
-
-        System.out.println("body:" + body);
-    }
 }
