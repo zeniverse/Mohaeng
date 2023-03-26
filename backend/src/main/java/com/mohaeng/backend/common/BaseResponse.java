@@ -19,6 +19,6 @@ public class BaseResponse<T> {
     }
 
     public static <T> BaseResponse<T> success(String result){
-        return new BaseResponse(result);
+        return new BaseResponse(result, "");
     }
 }

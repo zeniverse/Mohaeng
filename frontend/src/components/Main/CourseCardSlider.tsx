@@ -36,10 +36,12 @@ const CourseCardSlider = () => {
           <CourseCard
             key={course.id}
             id={course.id}
+            courseDays={course.courseDays}
             courseTitle={course.title}
-            courseDesc={course.courseDesc}
-            courseLike={course.like}
-            courseList={course.items}
+            courseDesc={course.content}
+            thumbnailUrl={course.thumbnailUrl}
+            courseLike={course.likeCount}
+            courseList={course.places}
           />
         </SwiperSlide>
       ))}

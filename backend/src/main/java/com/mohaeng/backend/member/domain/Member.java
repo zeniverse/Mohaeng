@@ -1,11 +1,15 @@
 package com.mohaeng.backend.member.domain;
 
 import com.mohaeng.backend.common.BaseTimeEntity;
+import com.mohaeng.backend.course.domain.Course;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +19,7 @@ import java.util.List;
 public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "member_id")
     private Long id;
 
     @Column(nullable = false)
@@ -40,10 +45,10 @@ public class Member extends BaseTimeEntity {
 
     private Long kakaoId;
 
-
     @OneToMany(mappedBy = "member")
     private List<CourseBookMark> courseBookMarkList = new ArrayList<>();
 
+    @Builder
     public Member(String name, String email, Role role, String nickName) {
         this.name = name;
         this.email = email;
@@ -82,3 +87,4 @@ public class Member extends BaseTimeEntity {
         this.kakaoId = kakaoId;
     }
 }
+

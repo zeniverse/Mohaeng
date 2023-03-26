@@ -35,6 +35,7 @@ public class SecurityConfig {
 //                    .requestMatchers("/login/oauth2/code/google/**", "/login/oauth2/code/kakao/**").permitAll()
 //                    .requestMatchers("/loginInfo", "/user/logout").hasAnyRole(Role.NORMAL.name(), Role.ADMIN.name())
 //                    .requestMatchers("/api/**").hasAnyRole(Role.NORMAL.name(), Recyole.ADMIN.name())
+
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
