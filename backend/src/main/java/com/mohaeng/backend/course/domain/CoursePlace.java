@@ -1,8 +1,12 @@
 package com.mohaeng.backend.course.domain;
 
+import com.mohaeng.backend.common.BaseTimeEntity;
 import com.mohaeng.backend.place.domain.Place;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
+
+import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -10,7 +14,8 @@ import static jakarta.persistence.FetchType.LAZY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class CoursePlace {
+@Where(clause = "deleted_date is NULL")
+public class CoursePlace extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_place_id")
@@ -24,9 +29,15 @@ public class CoursePlace {
     @JoinColumn(name = "place_id")
     private Place place;
 
+    private LocalDateTime deletedDate;
+
     @Builder
     public CoursePlace(Course course, Place place) {
         this.course = course;
         this.place = place;
+    }
+
+    public void updateDeletedDate(){
+        this.deletedDate = LocalDateTime.now();
     }
 }
