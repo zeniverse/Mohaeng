@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //package com.mohaeng.backend.course.service;
 //
 //import com.mohaeng.backend.course.domain.Course;
@@ -34,6 +35,25 @@
 //@SpringBootTest
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 //class CourseServiceTest {
+=======
+import com.mohaeng.backend.place.repository.PlaceImageRepository;
+import com.mohaeng.backend.place.repository.PlaceRepository;
+import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class CourseServiceTest {
+>>>>>>> 1303caaaefa9ca7751c9e663fe23ef79e5e04d00
 //    @Autowired CourseService courseService;
 //    @Autowired PlaceRepository placeRepository;
 //    @Autowired PlaceImageRepository placeImageRepository;
@@ -470,7 +490,12 @@
 //                .build();
 //        return updateReq;
 //    }
+<<<<<<< HEAD
 //
 //}
 //
 //
+=======
+
+}
+>>>>>>> 1303caaaefa9ca7751c9e663fe23ef79e5e04d00

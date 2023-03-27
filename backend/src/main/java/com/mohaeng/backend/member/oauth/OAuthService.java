@@ -49,7 +49,8 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
                 , attributes.getNameAttributeKey());
     }
 
-//     혹시 이미 저장된 정보라면, update 처리
+
+    // 혹시 이미 저장된 정보라면, update 처리
 //    private Member save(OAuthAttributes attributes) {
 //        Member findMember = memberRepository.findByEmail(attributes.getEmail())
 //                .map(user -> user.update(attributes.getName()))

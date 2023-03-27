@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //package com.mohaeng.backend.course.controller;
 //
 //import com.mohaeng.backend.config.SecurityConfig;
@@ -29,6 +30,39 @@
 //        })
 //class CourseLikesControllerTest {
 //
+=======
+package com.mohaeng.backend.course.controller;
+
+import com.mohaeng.backend.config.SecurityConfig;
+import com.mohaeng.backend.course.dto.response.CourseLikesRes;
+import com.mohaeng.backend.course.service.CourseLikesService;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(controllers = CourseLikesController.class,
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+        })
+class CourseLikesControllerTest {
+
+>>>>>>> 1303caaaefa9ca7751c9e663fe23ef79e5e04d00
 //    @Autowired
 //    private MockMvc mockMvc;
 //    @MockBean private CourseLikesService courseLikesService;
@@ -145,4 +179,8 @@
 //    // 코스 좋아요 유무 - 로그인 되어있지 않을 때
 //
 //    // 코스 좋아요 갯수 조회 - 코스가 존재하지 않는 경우
+<<<<<<< HEAD
 //}
+=======
+}
+>>>>>>> 1303caaaefa9ca7751c9e663fe23ef79e5e04d00

@@ -234,7 +234,6 @@ public class CourseService {
 
 
 
-
     private Member isWriter(Member member, Member writer){
         // TODO: 존재 확인 처리
 //        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
