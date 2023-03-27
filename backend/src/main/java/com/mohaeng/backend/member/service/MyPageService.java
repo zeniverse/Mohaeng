@@ -3,17 +3,12 @@ package com.mohaeng.backend.member.service;
 import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.course.repository.CourseRepository;
 import com.mohaeng.backend.member.domain.Member;
-import com.mohaeng.backend.member.dto.response.MyPageCourseBookMarkDto;
+import com.mohaeng.backend.member.dto.response.MyPageCourseLikeDto;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,34 +20,32 @@ public class MyPageService {
     private final MemberRepository memberRepository;
 
 
-    public ResponseEntity findAllBookMarkCourse(Member member) {
-        List<MyPageCourseBookMarkDto> data = member.getCourseBookMarkList().stream()
-                .filter(m -> courseRepository.findById(m.getId()).isPresent())
-                .map(m -> new MyPageCourseBookMarkDto(m.getId(),
+    public List<MyPageCourseLikeDto> findAllLikeCourse(Member member) {
+        List<MyPageCourseLikeDto> data = member.getCourseLikesList().stream()
+                .filter(m -> courseRepository.findById(m.getId()).isPresent())  // 검증
+                .map(m -> new MyPageCourseLikeDto(m.getId(),
                         m.getCourse().getId(), m.getCourse().getTitle(),
                         m.getCourse().getRegion(), m.getCourse().getContent(),
                         m.getCourse().getIsPublished(), m.getCourse().getCreatedDate(),
                         m.getCourse().getModifiedDate()))
                 .collect(Collectors.toList());
 
-
-        return ResponseEntity.ok().body(BaseResponse.success("OK", data));
+        return data;
     }
 
-    public ResponseEntity findOneBookMarkedCourse(Member member, Long bookMarkId) {
-        MyPageCourseBookMarkDto data = member.getCourseBookMarkList()
+    public MyPageCourseLikeDto findOneBookMarkedCourse(Member member, Long bookMarkId) {
+        MyPageCourseLikeDto data = member.getCourseLikesList()
                 .stream()
                 .filter(m -> m.getId().equals(bookMarkId))
                 .findAny()
-                .map(m -> new MyPageCourseBookMarkDto(m.getId(),
+                .map(m -> new MyPageCourseLikeDto(m.getId(),
                         m.getCourse().getId(), m.getCourse().getTitle(),
                         m.getCourse().getRegion(), m.getCourse().getContent(),
                         m.getCourse().getIsPublished(), m.getCourse().getCreatedDate(),
                         m.getCourse().getModifiedDate()))
-                .orElse(null);
+                .orElseThrow(() -> new IllegalIdentifierException("NOT_EXIST_COURSE"));
 
-
-        return ResponseEntity.ok().body(BaseResponse.success("OK", data));
+        return data;
     }
 
     public void deleteMember(Member member, String code){
