@@ -28,7 +28,7 @@ export interface LoginState {
   token: string;
   nickName: string;
   email: string;
-  profileUrl: string;
+  // profileUrl: string;
 }
 
 const initialState: LoginState = {
@@ -38,7 +38,7 @@ const initialState: LoginState = {
   token: "",
   nickName: "",
   email: "",
-  profileUrl: "",
+  // profileUrl: "",
 };
 
 export const logintokenSlice = createSlice({
@@ -57,9 +57,9 @@ export const logintokenSlice = createSlice({
     setId: (state, action) => {
       state.id = action.payload;
     },
-    setProfileUrl: (state, action) => {
-      state.profileUrl = action.payload;
-    },
+    // setProfileUrl: (state, action) => {
+    //   state.profileUrl = action.payload;
+    // },
   },
   // extraReducers: (builder) => {
   //   builder.addCase(fetchUser.pending, (state) => {
@@ -77,6 +77,6 @@ export const logintokenSlice = createSlice({
   // },
 });
 
-export const { setToken, setNickname, setEmail, setId, setProfileUrl } =
+export const { setToken, setNickname, setEmail, setId } =
   logintokenSlice.actions;
 export default logintokenSlice.reducer;

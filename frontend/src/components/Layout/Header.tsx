@@ -31,33 +31,29 @@ function Header({}: Props) {
   const router = useRouter();
   const loginToken = useSelector((state: RootState) => state.token.token);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
-  const profileUrl = useSelector(
-    (state: RootState) => state.profileUrl.profileUrl
-  );
 
   useEffect(() => {
     const response = async () => {
       const accessToken = cookie.load("accessToken");
       if (accessToken) {
-        const userData = await axios.get(
-          `http://219.255.1.253:8080/loginInfo`,
-          {
-            headers: {
-              "Access-Token": accessToken,
-            },
-            withCredentials: true,
-          }
-        );
-        console.log(userData);
-        const nickName = userData.data.data.nickName;
+        const userRes = await axios.get(`http://219.255.1.253:8080/loginInfo`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          withCredentials: true,
+        });
+        console.log(userRes);
+        const { id, nickName, email } = userRes.data.data;
+        dispatch(setId(id));
+        dispatch(setEmail(email));
         dispatch(setNickname(nickName));
         console.log(nickName);
-        setUser(userData.data.data);
+        setUser(userRes.data.data);
       }
     };
     response();
-  }, [loginToken, dispatch]);
-
+  });
+  // , [loginToken, dispatch]
   const handleOpenLoginModal = () => {
     dispatch(
       openModal({

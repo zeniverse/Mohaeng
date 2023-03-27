@@ -13,7 +13,6 @@ const store = configureStore({
     nickName: nickNameReducer,
     email: emailReducer,
     id: idReducer,
-    profileUrl: profileUrlReducer,
   },
 });
 

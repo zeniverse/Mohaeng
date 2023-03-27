@@ -6,7 +6,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   console.log(res);
-  const code = res.data;
+  const code = res;
   const getToken = await axios.post(
     `http://219.255.1.253:8080/oauth/token?code=${code}`
   );
