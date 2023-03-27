@@ -50,12 +50,12 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
     }
 
     // 혹시 이미 저장된 정보라면, update 처리
-    private Member save(OAuthAttributes attributes) {
-        Member findMember = memberRepository.findByEmail(attributes.getEmail())
-                .map(user -> user.update(attributes.getName()))
-                .orElse(new Member(attributes.getName(), attributes.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
-
-        return memberRepository.save(findMember);
-    }
+//    private Member save(OAuthAttributes attributes) {
+//        Member findMember = memberRepository.findByEmail(attributes.getEmail())
+//                .map(user -> user.update(attributes.getName()))
+//                .orElse(new Member(attributes.getName(), attributes.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
+//
+//        return memberRepository.save(findMember);
+//    }
 
 }

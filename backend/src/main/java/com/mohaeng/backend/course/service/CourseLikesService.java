@@ -23,15 +23,15 @@ public class CourseLikesService {
 
 
     @Transactional
-    public CourseLikesRes addLikes(Long courseId, String memberEmail) {
+    public CourseLikesRes addLikes(Long courseId, Member member) {
         // 1. 로그인 하지 않은 유저 확인
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+//        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+//                // TODO: Exception 처리
+//                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
+//        );
 
         // 2. 존재하지 않는 Course 인지 확인
-       Course course = courseRepository.findById(courseId).orElseThrow(
+        Course course = courseRepository.findById(courseId).orElseThrow(
                 // TODO: Exception 처리
                 () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
         );
@@ -52,12 +52,12 @@ public class CourseLikesService {
     }
 
     @Transactional
-    public CourseLikesRes cancelLikes(Long courseId, String memberEmail) {
+    public CourseLikesRes cancelLikes(Long courseId, Member member) {
         // 1. 로그인 하지 않은 유저 확인
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+//        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+//                // TODO: Exception 처리
+//                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
+//        );
 
         // 2. 존재하지 않는 Course 인지 확인
         Course course = courseRepository.findById(courseId).orElseThrow(
@@ -97,12 +97,12 @@ public class CourseLikesService {
     }
 
 
-    public boolean isExistCourseLikes(Long courseId, String memberEmail) {
+    public boolean isExistCourseLikes(Long courseId, Member member) {
         // 1. 로그인 하지 않은 유저 확인
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+//        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+//                // TODO: Exception 처리
+//                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
+//        );
 
         // 2. 존재하지 않는 Course 인지 확인
         Course course = courseRepository.findById(courseId).orElseThrow(
