@@ -42,7 +42,7 @@ public class JwtFilter extends GenericFilterBean {
             String email = tokenGenerator.parseEmailFromToken(accessToken);
             Member member = memberRepository.findByEmailAndDeletedDateIsNull(email).get();
 
-            request.setAttribute("userEmail", email);
+//            request.setAttribute("userEmail", email);
 
 //            Authentication authentication = getAuthentication(member);
 //            SecurityContextHolder.getContext().setAuthentication(authentication);
