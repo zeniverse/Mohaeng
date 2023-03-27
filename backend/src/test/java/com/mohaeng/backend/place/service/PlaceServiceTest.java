@@ -3,10 +3,9 @@ package com.mohaeng.backend.place.service;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.repository.JdbcTemplateRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -26,10 +25,15 @@ class PlaceServiceTest {
     @Autowired
     private JdbcTemplateRepository jdbcTemplateRepository;
 
-    @BeforeEach
-    void clean() {
-        placeRepository.deleteAll();
-    }
+//    @BeforeEach
+//    void BeforeClean() {
+//        placeRepository.deleteAll();
+//    }
+//
+//    @AfterEach
+//    void afterClean() {
+//        placeRepository.deleteAll();
+//    }
 
     @Test
     void testGetPlaces() {
@@ -51,6 +55,7 @@ class PlaceServiceTest {
 
             Place place = new Place((long) i, name, addr1, areacode, firstimage, firstimage2, mapx, mapy, sigungucode, contentid);
             testData.add(place);
+
             placeRepository.saveAll(testData);
             placeRepository.flush();
 

@@ -38,13 +38,13 @@ class CourseLikesServiceTest {
     public void before(){
         Place place1 = Place.builder()
                 .name("경복궁")
-                .addr1("서울시 종로구")
+                .address("서울시 종로구")
                 .rating(4.5)
                 .build();
 
         Place place2 = Place.builder()
                 .name("부산 경복궁")
-                .addr1("부산시 해운대구")
+                .address("부산시 해운대구")
                 .rating(4.5)
                 .build();
 

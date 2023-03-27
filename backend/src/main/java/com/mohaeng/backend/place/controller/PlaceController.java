@@ -1,7 +1,7 @@
 package com.mohaeng.backend.place.controller;
 
 import com.mohaeng.backend.place.domain.Place;
-import com.mohaeng.backend.place.dto.request.PlaceDTO;
+import com.mohaeng.backend.place.dto.PlaceDTO;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
