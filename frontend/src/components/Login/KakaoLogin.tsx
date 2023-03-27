@@ -25,20 +25,22 @@ const KakaoLogin = () => {
           `http://219.255.1.253:8080/oauth/token?code=${code}`,
           { withCredentials: true }
         );
-        const accessToken = response.data.accessToken;
-        const refreshToken = response.data.accessToken;
-        cookie.save("accessToken", response.data.accessToken, { path: "/" });
-        cookie.save("refreshToken", response.data.refreshToken, {
+        console.log(response);
+        const { accessToken } = response.data;
+        const { refreshToken } = response.data;
+        cookie.save("accessToken", accessToken, {
           path: "/",
         });
-        setToken(accessToken);
-        setToken(refreshToken);
+        cookie.save("refreshToken", refreshToken, {
+          path: "/",
+        });
+        setToken;
         dispatch(setToken(accessToken));
 
         if (accessToken) {
           try {
             // loginInfo에서 정보 받아오기, 토큰 헤더에 담아서 전송
-            axios.defaults.headers.common["Access-Token"] = accessToken;
+            axios.defaults.headers.common["accessToken"] = accessToken;
             const userRes = await axios.get(
               `http://219.255.1.253:8080/loginInfo`,
               {

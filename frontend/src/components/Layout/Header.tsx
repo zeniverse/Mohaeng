@@ -11,13 +11,13 @@ import {
   setEmail,
   setId,
   setNickname,
-  setProfileUrl,
   setToken,
 } from "@/src/store/reducers/loginTokenSlice";
 import { RootState } from "@/src/store/store";
 import axios from "axios";
 import cookie from "react-cookies";
 import Image from "next/image";
+import { GetServerSideProps } from "next";
 
 const StyledIcon = styled(BsSearch)`
   color: #004aad;
@@ -37,27 +37,26 @@ function Header({}: Props) {
 
   useEffect(() => {
     const response = async () => {
-      if (loginToken) {
+      const accessToken = cookie.load("accessToken");
+      if (accessToken) {
         const userData = await axios.get(
           `http://219.255.1.253:8080/loginInfo`,
           {
             headers: {
-              "Access-Token": loginToken,
+              "Access-Token": accessToken,
             },
             withCredentials: true,
           }
         );
         console.log(userData);
         const nickName = userData.data.data.nickName;
-        const profileUrl = userData.data.data.profileUrl;
         dispatch(setNickname(nickName));
-        dispatch(setProfileUrl(profileUrl));
         console.log(nickName);
         setUser(userData.data.data);
       }
     };
     response();
-  }, [loginToken]);
+  }, [loginToken, dispatch]);
 
   const handleOpenLoginModal = () => {
     dispatch(
@@ -115,13 +114,13 @@ function Header({}: Props) {
           </>
         ) : (
           <>
-            <Image
+            {/* <Image
               className={styles["kakao-profile-img"]}
               src={profileUrl}
               alt="카카오프로필"
               width={40}
               height={40}
-            />
+            /> */}
             {nickName}님
             <button
               id="login-btn"
@@ -138,3 +137,9 @@ function Header({}: Props) {
 }
 
 export default Header;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return {
+    props: {},
+  };
+};
