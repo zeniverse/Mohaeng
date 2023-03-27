@@ -2,14 +2,11 @@ package com.mohaeng.backend.course.service;
 
 import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.domain.CoursePlace;
-import com.mohaeng.backend.course.dto.CourseInPlaceDto;
-import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
-import com.mohaeng.backend.course.dto.CourseSearchDto;
+import com.mohaeng.backend.course.dto.*;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
-import com.mohaeng.backend.course.dto.CourseListDto;
 import com.mohaeng.backend.course.dto.response.CourseListRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
@@ -59,12 +56,7 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseIdRes createCourse(CourseReq req, String memberEmail) {
-
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+    public CourseIdRes createCourse(CourseReq req, Member member) {
 
         Course course = Course.builder()
                 .title(req.getTitle())
@@ -133,14 +125,14 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseIdRes updateCourse(String memberEmail, Long courseId, CourseUpdateReq req) {
+    public CourseIdRes updateCourse(Member member, Long courseId, CourseUpdateReq req) {
 
         Course course = courseRepository.findById(courseId).orElseThrow(
                 // TODO: Exception 처리
                 () -> new IllegalArgumentException("존재하지 않는 course 입니다.")
         );
 
-        isWriter(memberEmail, course.getMember());
+        isWriter(member, course.getMember());
 
         List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
         coursePlaceRepository.deleteAllInBatch(coursePlaces);
@@ -167,27 +159,27 @@ public class CourseService {
     }
 
     @Transactional
-    public void deleteCourse(String memberEmail, Long courseId) {
+    public void deleteCourse(Member member, Long courseId) {
         Course course = courseRepository.findById(courseId).orElseThrow(
                 // TODO: Exception 처리
                 () -> new IllegalArgumentException("존재하지 않는 course 입니다.")
         );
 
-        isWriter(memberEmail, course.getMember());
+        isWriter(member, course.getMember());
         course.updateDeletedDate(course.getCoursePlaces());
     }
 
 
-    public CourseListRes getCourseList(CourseSearchDto courseSearchDto, Pageable pageable, String memberEmail) {
+    public CourseListRes getCourseList(CourseSearchDto courseSearchDto, Pageable pageable, Member member) {
         // 1.로그인 유무 화인
-        Member member = null;
-
-        if (memberEmail != null){
-            member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                    // TODO: Exception 처리
-                    () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-            );
-        }
+//        Member member = null;
+//
+//        if (memberEmail != null){
+//            member = memberRepository.findByEmail(memberEmail).orElseThrow(
+//                    // TODO: Exception 처리
+//                    () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
+//            );
+//        }
 
         // 2. 검색 조건으로 검색 결과 조회
         Page<Course> courses = courseRepository.findAllCourseWithKeyword(courseSearchDto, pageable);
@@ -196,9 +188,10 @@ public class CourseService {
         List<CourseListDto> courseList = new ArrayList<>();
         for (Course course : courses) {
             boolean isLike = false;
-            if(memberEmail != null){
-                isLike = courseLikesRepository.existsCourseLikesByMemberAndCourse(member, course);
-            }
+            // TODO: 수정해야함
+//            if(memberEmail != null){
+//                isLike = courseLikesRepository.existsCourseLikesByMemberAndCourse(member, course);
+//            }
             CourseListDto dto = CourseListDto.from(course, isLike);
             courseList.add(dto);
         }
@@ -211,11 +204,41 @@ public class CourseService {
     }
 
 
-    private Member isWriter(String memberEmail, Member writer){
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+//    public List<MainCourseListDto> getMainCourse(Member member) {
+//        // 1.로그인 유무 화인
+////        Member member = null;
+////
+////        if (memberEmail != null){
+////            member = memberRepository.findByEmail(memberEmail).orElseThrow(
+////                    // TODO: Exception 처리
+////                    () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
+////            );
+////        }
+//
+//        // 2. 코스 조회 결과 불러오기기
+//        List<Course> courseList = courseRepository.findTop10ByOrderByLikeCountDesc();
+//
+//        List<MainCourseListDto> MainCourseListDtoList = new ArrayList<>();
+//        for (Course course : courseList) {
+//            boolean isLike = false;
+//            // TODO: 수정
+////            if(memberEmail != null){
+////                isLike = courseLikesRepository.existsCourseLikesByMemberAndCourse(member, course);
+////            }
+//            MainCourseListDto dto = MainCourseListDto.from(course, isLike);
+//            MainCourseListDtoList.add(dto);
+//        }
+//
+//        return MainCourseListDtoList;
+//    }
+
+
+    private Member isWriter(Member member, Member writer){
+        // TODO: 존재 확인 처리
+//        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+//                // TODO: Exception 처리
+//                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
+//        );
 
         if(!member.getEmail().equals(writer.getEmail()))
             // TODO: Exception 처리
