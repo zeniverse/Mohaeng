@@ -71,7 +71,7 @@ const PlaceId = () => {
             </p>
           </div>
           <div className={styles.detailMap} id="map">
-            <KakaoMap />
+            {/* <KakaoMap /> */}
           </div>
         </div>
       </section>

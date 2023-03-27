@@ -10,13 +10,18 @@ const CourseCard = ({
   courseLike,
   courseList,
   courseDays,
+  thumbnailUrl,
 }: CourseProps) => {
-  console.log(courseList);
-  const Img = courseList[0].imgUrl;
   return (
     <div className={styles["course-card-container"]}>
       <div className={styles["course-image-container"]}>
-        <Image src={Img} alt={courseTitle} width={700} height={700} priority />
+        <Image
+          src={thumbnailUrl}
+          alt={courseTitle}
+          width={700}
+          height={700}
+          priority
+        />
         <IsLikeState courseLike={courseLike} />
       </div>
       <div className={styles["course-card-content"]}>

@@ -1,10 +1,13 @@
 package com.mohaeng.backend.course.controller;
 
 import com.mohaeng.backend.common.BaseResponse;
+import com.mohaeng.backend.course.dto.CourseSearchDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
+import com.mohaeng.backend.course.dto.CourseListDto;
+import com.mohaeng.backend.course.dto.response.CourseListRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.service.CourseService;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@CrossOrigin(origins = "", allowedHeaders = "")
 @RestController
 @RequestMapping("/api/course")
 @RequiredArgsConstructor
@@ -77,5 +81,20 @@ public class CourseController {
 
         courseService.deleteCourse(memberEmail, courseId);
         return ResponseEntity.ok().body(BaseResponse.success("OK"));
+    }
+
+    @GetMapping
+    public ResponseEntity getCourseList(CourseSearchDto courseSearchDto,
+                                        Pageable pageable,
+                                        @AuthenticationPrincipal OAuth2User oAuth2User){
+        String memberEmail = "";
+        try{
+            Map<String, Object> attributes = oAuth2User.getAttributes();
+            memberEmail = (String) attributes.get("email");
+        }catch(Exception e){
+            memberEmail = null;
+        }
+        CourseListRes result = courseService.getCourseList(courseSearchDto, pageable, memberEmail);
+        return ResponseEntity.ok().body(BaseResponse.success("OK", result));
     }
 }

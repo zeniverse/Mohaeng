@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mohaeng.backend.config.SecurityConfig;
 import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.dto.CourseInPlaceDto;
+import com.mohaeng.backend.course.dto.CourseListDto;
+import com.mohaeng.backend.course.dto.CourseSearchDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
+import com.mohaeng.backend.course.dto.response.CourseListRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.service.CourseService;
@@ -67,11 +70,11 @@ class CourseControllerTest {
 
         //When & Then
         mockMvc.perform(
-                get("/api/course/placeSearch")
-                        .queryParam("keyword", req.getKeyword())
-                        .queryParam("lastPlaceId", String.valueOf(req.getLastPlaceId()))
-                        .queryParam("lastRating", String.valueOf(req.getLastRating()))
-                        .queryParam("size", String.valueOf(3)))
+                        get("/api/course/placeSearch")
+                                .queryParam("keyword", req.getKeyword())
+                                .queryParam("lastPlaceId", String.valueOf(req.getLastPlaceId()))
+                                .queryParam("lastRating", String.valueOf(req.getLastRating()))
+                                .queryParam("size", String.valueOf(3)))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -236,6 +239,7 @@ class CourseControllerTest {
     @DisplayName("[DELETE] 코스 삭제 - 정상 처리")
     public void deleteCourse() throws Exception {
         //Given
+        doNothing().when(courseService).deleteCourse(anyString(), anyLong());
         Long courseId = 1L;
 
         //When & Then
@@ -249,12 +253,49 @@ class CourseControllerTest {
                                     attributes.put("email", "test@test.com");
                                 })
                         )
-                        .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andDo(print());
 
         verify(courseService).deleteCourse(eq("test@test.com"), eq(courseId));
+    }
+
+    @Test
+    @DisplayName("[GET] 코스 검색 - 정상 처리")
+    @WithMockUser
+    public void searchCourse() throws Exception {
+        //Given
+        CourseListDto courseListDto = CourseListDto.builder()
+                .title("코스입니다").build();
+        Long totalElements = 2L;
+        Integer totalPages = 1;
+
+        CourseSearchDto courseSearchDto = CourseSearchDto.builder()
+                .keyword("코스")
+                .build();
+        given(courseService.getCourseList(any(CourseSearchDto.class), any(PageRequest.class), anyString()))
+                .willReturn(CourseListRes.from(List.of(courseListDto), totalElements, totalPages));
+
+        //When & Then
+        mockMvc.perform(
+                        get("/api/course")
+                                .with(oauth2Login()
+                                        // 1
+                                        .authorities(new SimpleGrantedAuthority("ROLE_NORMAL"))
+                                        // 2
+                                        .attributes(attributes -> {
+                                            attributes.put("name", "kimMohaeng");
+                                            attributes.put("email", "test@test.com");
+                                        })
+                                )
+                                .queryParam("keyword", courseSearchDto.getKeyword())
+                                .queryParam("page", String.valueOf(0))
+                                .queryParam("size", String.valueOf(2)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        verify(courseService).getCourseList(refEq(courseSearchDto),
+                eq(PageRequest.of(0, 2)), eq("test@test.com"));
     }
 
     //TODO: exceptionHandler 구현 후, 처리할 case
@@ -266,7 +307,6 @@ class CourseControllerTest {
 
     // 코스 삭제 - 요청자와 작성자가 다른 경우
     // 코스 삭제 - course가 존재하지 않는 경우
-
 
 
     private CourseInPlaceDto createCourseInPlaceDTO() {

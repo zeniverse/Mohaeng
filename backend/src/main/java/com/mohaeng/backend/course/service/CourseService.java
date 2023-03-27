@@ -4,12 +4,16 @@ import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.domain.CoursePlace;
 import com.mohaeng.backend.course.dto.CourseInPlaceDto;
 import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
+import com.mohaeng.backend.course.dto.CourseSearchDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
+import com.mohaeng.backend.course.dto.CourseListDto;
+import com.mohaeng.backend.course.dto.response.CourseListRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
+import com.mohaeng.backend.course.repository.CourseLikesRepository;
 import com.mohaeng.backend.course.repository.CoursePlaceRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
 import com.mohaeng.backend.member.domain.Member;
@@ -18,18 +22,20 @@ import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.domain.PlaceImage;
 import com.mohaeng.backend.place.repository.PlaceImageRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CourseService {
 
@@ -38,6 +44,7 @@ public class CourseService {
     private final CourseRepository courseRepository;
     private final CoursePlaceRepository coursePlaceRepository;
     private final PlaceImageRepository placeImageRepository;
+    private final CourseLikesRepository courseLikesRepository;
 
     public CoursePlaceSearchRes placeSearch(CoursePlaceSearchReq req, Pageable pageable) {
         // keyword에 null이 담겨있을 때
@@ -69,7 +76,7 @@ public class CourseService {
                 .thumbnailUrl(req.getThumbnailUrl())
                 .content(req.getContent())
                 .isPublished(false)
-                .likeCount(8)
+                .likeCount(0)
                 .member(member)
                 .build();
 
@@ -115,9 +122,9 @@ public class CourseService {
                             .placeId(place.getId())
                             .name(place.getName())
                             .imgUrl(findPlaceImage.getImgUrl())
-                            .address(place.getAddr1())
-                            .mapX(place.getMapx())
-                            .mapY(place.getMapy())
+                            .address(place.getAddress())
+                            .mapX(place.getMapX())
+                            .mapY(place.getMapY())
                             .build()
             );
         }
@@ -138,13 +145,13 @@ public class CourseService {
         List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
         coursePlaceRepository.deleteAllInBatch(coursePlaces);
 
-        coursePlaces.clear();
+        List<CoursePlace> updatedCoursePlaces = new ArrayList<>();
         for (Long id : req.getPlaceIds()) {
             Place place = placeRepository.findById(id).orElseThrow(
                     // TODO: Exception 처리
                     () -> new IllegalArgumentException("존재하지 않는 장소 입니다.")
             );
-            coursePlaces.add(
+            updatedCoursePlaces.add(
                     CoursePlace.builder()
                             .course(course)
                             .place(place)
@@ -152,8 +159,9 @@ public class CourseService {
             );
         }
 
-        coursePlaceRepository.saveAll(coursePlaces);
-        course.updateCourse(req, coursePlaces);
+        coursePlaceRepository.saveAll(updatedCoursePlaces);
+        course.addCoursePlaces(updatedCoursePlaces);
+        course.updateCourse(req);
 
         return CourseIdRes.from(course.getId());
     }
@@ -166,8 +174,42 @@ public class CourseService {
         );
 
         isWriter(memberEmail, course.getMember());
-        courseRepository.deleteById(course.getId());
+        course.updateDeletedDate(course.getCoursePlaces());
     }
+
+
+    public CourseListRes getCourseList(CourseSearchDto courseSearchDto, Pageable pageable, String memberEmail) {
+        // 1.로그인 유무 화인
+        Member member = null;
+
+        if (memberEmail != null){
+            member = memberRepository.findByEmail(memberEmail).orElseThrow(
+                    // TODO: Exception 처리
+                    () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
+            );
+        }
+
+        // 2. 검색 조건으로 검색 결과 조회
+        Page<Course> courses = courseRepository.findAllCourseWithKeyword(courseSearchDto, pageable);
+
+        // 3. 검색 결과 CourseListDto 타입으로 변경
+        List<CourseListDto> courseList = new ArrayList<>();
+        for (Course course : courses) {
+            boolean isLike = false;
+            if(memberEmail != null){
+                isLike = courseLikesRepository.existsCourseLikesByMemberAndCourse(member, course);
+            }
+            CourseListDto dto = CourseListDto.from(course, isLike);
+            courseList.add(dto);
+        }
+
+//        List<CourseListDto> courseList = courses.stream()
+//                .map(course -> CourseListDto.from(course))
+//                .collect(Collectors.toList());
+//
+        return CourseListRes.from(courseList, courses.getTotalElements(), courses.getTotalPages());
+    }
+
 
     private Member isWriter(String memberEmail, Member writer){
         Member member = memberRepository.findByEmail(memberEmail).orElseThrow(

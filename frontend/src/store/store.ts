@@ -1,19 +1,19 @@
 import { configureStore } from "@reduxjs/toolkit";
 import modalReducer from "./reducers/modalSlice";
 import tokenReducer from "./reducers/loginTokenSlice";
-import socialEmailReducer from "./reducers/socialSlice";
-import nicknameReducer from "./reducers/loginTokenSlice";
+import nickNameReducer from "./reducers/loginTokenSlice";
 import emailReducer from "./reducers/loginTokenSlice";
 import idReducer from "./reducers/loginTokenSlice";
+import profileUrlReducer from "./reducers/loginTokenSlice";
 
 const store = configureStore({
   reducer: {
     modal: modalReducer,
     token: tokenReducer,
-    nickname: nicknameReducer,
+    nickName: nickNameReducer,
     email: emailReducer,
-    socialEmail: socialEmailReducer,
     id: idReducer,
+    profileUrl: profileUrlReducer,
   },
 });
 

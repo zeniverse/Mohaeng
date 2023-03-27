@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 // import { setToken } from "../../../store/reducers/logintokenSlice";
 // import { setSocialEmail } from "../../../store/reducers/socialSlice";
 import Loading from "./Loading";
-import LoginInfo from "./LoginInfo";
 
 const GoogleLogin = () => {
   const router = useRouter();
@@ -37,7 +36,7 @@ const GoogleLogin = () => {
     }
   }, []);
 
-  return <>{valid ? <LoginInfo /> : <Loading />}</>;
+  return <></>;
 };
 
 export default GoogleLogin;

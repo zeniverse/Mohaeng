@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
 import { BsSearch } from "react-icons/bs";
 import styled from "styled-components";
@@ -11,9 +11,13 @@ import {
   setEmail,
   setId,
   setNickname,
+  setProfileUrl,
   setToken,
 } from "@/src/store/reducers/loginTokenSlice";
 import { RootState } from "@/src/store/store";
+import axios from "axios";
+import cookie from "react-cookies";
+import Image from "next/image";
 
 const StyledIcon = styled(BsSearch)`
   color: #004aad;
@@ -25,14 +29,51 @@ function Header({}: Props) {
   const [text, setText] = useState("");
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    router.push(`/searchResult?=${text}`);
+    router.push(
+      {
+        pathname: `/search?=${text}`,
+        query: {
+          text: text,
+        },
+      },
+      `/search?=${text}`,
+      { scroll: true }
+    );
     setText("");
   };
 
-  const router = useRouter();
+  const [user, setUser] = useState("");
   const dispatch = useDispatch();
+  const router = useRouter();
   const loginToken = useSelector((state: RootState) => state.token.token);
-  const nickname = useSelector((state: RootState) => state.nickname.nickname);
+  const nickName = useSelector((state: RootState) => state.nickName.nickName);
+  const profileUrl = useSelector(
+    (state: RootState) => state.profileUrl.profileUrl
+  );
+
+  useEffect(() => {
+    const response = async () => {
+      if (loginToken) {
+        const userData = await axios.get(
+          `http://219.255.1.253:8080/loginInfo`,
+          {
+            headers: {
+              "Access-Token": loginToken,
+            },
+            withCredentials: true,
+          }
+        );
+        console.log(userData);
+        const nickName = userData.data.data.nickName;
+        const profileUrl = userData.data.data.profileUrl;
+        dispatch(setNickname(nickName));
+        dispatch(setProfileUrl(profileUrl));
+        console.log(nickName);
+        setUser(userData.data.data);
+      }
+    };
+    response();
+  }, [loginToken]);
 
   const handleOpenLoginModal = () => {
     dispatch(
@@ -44,7 +85,7 @@ function Header({}: Props) {
   };
 
   const handleLogout = () => {
-    localStorage.clear(); // 토큰 삭제, removeItem
+    cookie.remove("accessToken", { path: "/" });
     dispatch(setToken(""));
     dispatch(setNickname(""));
     dispatch(setEmail(""));
@@ -94,7 +135,14 @@ function Header({}: Props) {
           </>
         ) : (
           <>
-            {nickname}님
+            <Image
+              className={styles["kakao-profile-img"]}
+              src={profileUrl}
+              alt="카카오프로필"
+              width={40}
+              height={40}
+            />
+            {nickName}님
             <button
               id="login-btn"
               className={styles["login-btn"]}
@@ -107,15 +155,6 @@ function Header({}: Props) {
       </div>
     </header>
   );
-}
-
-{
-  /* <Image
-              className={styles["kakao-profile-img"]}
-              src={session.user?.image}
-              alt="카카오프로필"
-              width={40}
-              height={40} /> */
 }
 
 export default Header;

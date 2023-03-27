@@ -12,6 +12,12 @@ const CourseList = () => {
       const res = await fetch("/api/course");
       const data = await res.json();
       setCoueseData(data);
+      // const courseRes = await fetch(
+      //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/course`
+      // );
+      // const responseData = await courseRes.json();
+      // const courseList = await responseData.data.courseList;
+      // setCoueseData(courseList);
     }
     fetchData();
   }, []);
@@ -20,11 +26,12 @@ const CourseList = () => {
     <div className={styles["course-list-container"]}>
       {courseData?.map((course) => (
         <CourseItem
-          key={course.courseId}
-          id={course.courseId}
+          key={course.id}
+          id={course.id}
           courseTitle={course.title}
           courseDesc={course.content}
-          courseLike={course.like}
+          courseLike={course.likeCount}
+          thumbnailUrl={course.thumbnailUrl}
           courseDays={course.courseDays}
           courseList={course.places}
         />
