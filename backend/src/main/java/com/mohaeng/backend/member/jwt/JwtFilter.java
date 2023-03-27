@@ -31,11 +31,12 @@ public class JwtFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        Cookie[] cookies = httpServletRequest.getCookies();
-        String accessToken = null;
-        if (cookies != null) {
-            accessToken = cookies[0].getValue();
-        }
+//        Cookie[] cookies = httpServletRequest.getCookies();
+//        String accessToken = null;
+//        if (cookies != null) {
+//            accessToken = cookies[0].getValue();
+//        }
+        String accessToken = ((HttpServletRequest) request).getHeader("Access-Token");
 
         if (accessToken != null && tokenGenerator.checkToken(accessToken)) {
             String email = tokenGenerator.parseEmailFromToken(accessToken);
@@ -48,7 +49,6 @@ public class JwtFilter extends GenericFilterBean {
         }
 
         chain.doFilter(request, response);
-        addSameSite((HttpServletResponse) response, "None");
 
     }
 

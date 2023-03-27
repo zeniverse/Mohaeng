@@ -6,17 +6,15 @@ import com.mohaeng.backend.member.dto.response.MemberLoginDto;
 import com.mohaeng.backend.member.jwt.Token;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.service.MemberService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -31,22 +29,47 @@ public class LoginController {
 
 
     @GetMapping("/oauth/token")
-    public ResponseEntity getToken(@RequestParam("code") String code, HttpServletResponse response) throws IOException {
+    public Token getToken(@RequestParam("code") String code, HttpServletResponse response) throws IOException {
         String accessToken = memberService.getAccessToken(code);
         Member member = memberService.saveMember(accessToken);
         Token token = memberService.createToken(member);
 
-        Cookie accessCookie = new Cookie("Access-Token", token.getAccessToken());
-        accessCookie.setAttribute("Response-Token", token.getRefreshToken());
-        accessCookie.setMaxAge(60*60*24);
-        response.addCookie(accessCookie);
+//        Cookie accessCookie = new Cookie("Access-Token", token.getAccessToken());
+//        accessCookie.setAttribute("Response-Token", token.getRefreshToken());
+//        accessCookie.setMaxAge(60*60*24);
+//        response.addCookie(accessCookie);
+//
+//
+//        Cookie refreshCookie = new Cookie("Refresh-Token", token.getAccessToken());
+//        refreshCookie.setAttribute("Response-Token", token.getRefreshToken());
+//        refreshCookie.setMaxAge(60*60*24);
+//        response.addCookie(refreshCookie);
+//
+//        setSameSite(token, response);
 
-        Cookie refreshCookie = new Cookie("Refresh-Token", token.getAccessToken());
-        refreshCookie.setAttribute("Response-Token", token.getRefreshToken());
-        refreshCookie.setMaxAge(60*60*24);
-        response.addCookie(refreshCookie);
 
-        return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
+        return token;
+    }
+
+    private void setSameSite(Token token, HttpServletResponse response) {
+        ResponseCookie accessResponseCookie = ResponseCookie.from("Access-Token", token.getAccessToken())
+                .path("/")
+                .sameSite("None")
+                .httpOnly(false)
+                .secure(false)
+                .domain("localhost")
+                .build();
+        response.addHeader("Set-Cookie", accessResponseCookie.toString());
+
+
+        ResponseCookie refreshResponseCookie = ResponseCookie.from("Refresh-Token", token.getRefreshToken())
+                .path("/")
+                .sameSite("none")
+                .httpOnly(false)
+                .secure(false)
+                .domain("localhost")
+                .build();
+        response.addHeader("Set-Cookie", refreshResponseCookie.toString());
     }
 
     /**
