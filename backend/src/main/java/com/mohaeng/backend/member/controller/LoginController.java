@@ -96,7 +96,7 @@ public class LoginController {
 
     @GetMapping("/loginInfo")
     public ResponseEntity loginInfoController(HttpServletRequest request) throws IOException {
-        String userEmail = (String) request.getAttribute("userEmail");
+        String userEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
         System.out.println("userEmail = " + userEmail);
 
         Member findMember = memberService.findByEmail(userEmail);
