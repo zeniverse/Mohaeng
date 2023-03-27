@@ -1,0 +1,50 @@
+.roughmap-container {
+  position: absolute;
+  width: 200px;
+  background-color: #fff;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--color-border-semi);
+  border-radius: 0.4rem;
+  z-index: 1;
+  top: 106%;
+  overflow: hidden;
+  left: 0;
+}
+
+.listitem {
+  position: relative;
+  padding: 0.3rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.circle {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: rgb(174, 238, 218);
+  background: radial-gradient(
+    circle,
+    rgba(174, 238, 218, 1) 0%,
+    rgba(148, 181, 233, 1) 100%
+  );
+  position: relative;
+}
+.circle::before {
+  z-index: -1;
+  content: "";
+  width: 2px;
+  height: 30px;
+  bottom: 0;
+  position: absolute;
+  background-color: var(--color-border-dark);
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.title {
+  font-family: var(--primary-font);
+  font-size: 0.8rem;
+}
