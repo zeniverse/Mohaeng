@@ -59,7 +59,7 @@ public class MyPageController {
     }
 
     @DeleteMapping("/user/drop")
-    public void userDropController(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity userDropController(HttpServletRequest request, HttpServletResponse response) {
         String userEmail = (String) request.getAttribute("userEmail");
         System.out.println("userEmail = " + userEmail);
         Cookie[] cookies = request.getCookies();
@@ -70,5 +70,7 @@ public class MyPageController {
 
         Member findMember = memberService.findByEmail(userEmail);
         myPageService.deleteMember(findMember, findMember.getOauthAccessToken());
+        return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
+
     }
 }

@@ -12,7 +12,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -42,7 +41,7 @@ public class MemberService {
 
 
     public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email)
+        return memberRepository.findByEmailAndDeletedDateIsNull(email)
                 .orElseThrow(() -> new IllegalArgumentException("INVALID_USER"));
     }
 
@@ -109,7 +108,7 @@ public class MemberService {
 
     public Member saveMember(String token) throws IOException {
         KakaoUserDto kakaoUser = findProfile(token);
-        Member member = memberRepository.findByEmail(kakaoUser.getEmail())
+        Member member = memberRepository.findByEmailAndDeletedDateIsNull(kakaoUser.getEmail())
                 .orElse(new Member(kakaoUser.getName(),
                         kakaoUser.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
 
