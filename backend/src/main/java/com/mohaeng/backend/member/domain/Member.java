@@ -1,7 +1,7 @@
 package com.mohaeng.backend.member.domain;
 
 import com.mohaeng.backend.common.BaseTimeEntity;
-import com.mohaeng.backend.course.domain.CourseLikes;
+import com.mohaeng.backend.course.domain.CourseBookmark;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class Member extends BaseTimeEntity {
     private Long kakaoId;
 
     @OneToMany(mappedBy = "member")
-    private List<CourseLikes> courseLikesList = new ArrayList<>();
+    private List<CourseBookmark> courseBookMarkList = new ArrayList<>();
 
     @Builder
     public Member(String name, String email, Role role, String nickName) {
@@ -66,6 +67,14 @@ public class Member extends BaseTimeEntity {
 
     public void changeNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public void addCourseBookMark(CourseBookmark courseBookMark) {
+        this.courseBookMarkList.add(courseBookMark);
+    }
+
+    public void removeCourseBookMark(CourseBookmark courseBookmark){
+        this.courseBookMarkList.remove(courseBookmark);
     }
 
     public void setOauthAccessToken(String oauthAccessToken) {

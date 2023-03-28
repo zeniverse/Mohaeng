@@ -2,21 +2,20 @@ package com.mohaeng.backend.course.service;
 
 import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.domain.CoursePlace;
-import com.mohaeng.backend.course.dto.CourseInPlaceDto;
-import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
-import com.mohaeng.backend.course.dto.CourseSearchDto;
+import com.mohaeng.backend.course.dto.*;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
-import com.mohaeng.backend.course.dto.CourseListDto;
 import com.mohaeng.backend.course.dto.response.CourseListRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
+import com.mohaeng.backend.course.repository.CourseBookmarkRepository;
 import com.mohaeng.backend.course.repository.CourseLikesRepository;
 import com.mohaeng.backend.course.repository.CoursePlaceRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
 import com.mohaeng.backend.member.domain.Member;
+import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.domain.PlaceImage;
@@ -33,6 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.mohaeng.backend.course.domain.QCourse.course;
+import static java.util.Objects.isNull;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -45,6 +47,7 @@ public class CourseService {
     private final CoursePlaceRepository coursePlaceRepository;
     private final PlaceImageRepository placeImageRepository;
     private final CourseLikesRepository courseLikesRepository;
+    private final CourseBookmarkRepository courseBookmarkRepository;
 
     public CoursePlaceSearchRes placeSearch(CoursePlaceSearchReq req, Pageable pageable) {
         // keyword에 null이 담겨있을 때
@@ -59,12 +62,10 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseIdRes createCourse(CourseReq req, String memberEmail) {
+    public CourseIdRes createCourse(CourseReq req,String memberEmail) {
 
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+        // 유저 확인
+        Member member = isMember(memberEmail);
 
         Course course = Course.builder()
                 .title(req.getTitle())
@@ -104,10 +105,7 @@ public class CourseService {
 
     public CourseRes getCourse(Long courseId) {
         // 1. courseId로 course 조회
-        Course findCourse = courseRepository.findById(courseId).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
-        );
+        Course findCourse = isCourse(courseId);
 
         // 2. courseId로 CoursePlace 조회
         List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
@@ -135,11 +133,8 @@ public class CourseService {
     @Transactional
     public CourseIdRes updateCourse(String memberEmail, Long courseId, CourseUpdateReq req) {
 
-        Course course = courseRepository.findById(courseId).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 course 입니다.")
-        );
-
+        // 2. 코스 존재 여부 & 작성자와 요청자가 같은지 확인
+        Course course = isCourse(courseId);
         isWriter(memberEmail, course.getMember());
 
         List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
@@ -168,26 +163,21 @@ public class CourseService {
 
     @Transactional
     public void deleteCourse(String memberEmail, Long courseId) {
-        Course course = courseRepository.findById(courseId).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 course 입니다.")
-        );
 
+        // 1. 코스 존재 여부 확인
+        Course course = isCourse(courseId);
+
+        // 2. 작성자와 요청자가 같은지 확인
         isWriter(memberEmail, course.getMember());
+
+        // 3. course soft delete 처리
         course.updateDeletedDate(course.getCoursePlaces());
     }
 
 
     public CourseListRes getCourseList(CourseSearchDto courseSearchDto, Pageable pageable, String memberEmail) {
         // 1.로그인 유무 화인
-        Member member = null;
-
-        if (memberEmail != null){
-            member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                    // TODO: Exception 처리
-                    () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-            );
-        }
+        Member member = checkLogin(memberEmail);
 
         // 2. 검색 조건으로 검색 결과 조회
         Page<Course> courses = courseRepository.findAllCourseWithKeyword(courseSearchDto, pageable);
@@ -196,10 +186,12 @@ public class CourseService {
         List<CourseListDto> courseList = new ArrayList<>();
         for (Course course : courses) {
             boolean isLike = false;
-            if(memberEmail != null){
+            boolean isBookmark = false;
+            if(member != null){
                 isLike = courseLikesRepository.existsCourseLikesByMemberAndCourse(member, course);
+                isBookmark = courseBookmarkRepository.existsCourseBookmarkByMemberAndCourse(member, course);
             }
-            CourseListDto dto = CourseListDto.from(course, isLike);
+            CourseListDto dto = CourseListDto.from(course, isLike, isBookmark);
             courseList.add(dto);
         }
 
@@ -211,8 +203,31 @@ public class CourseService {
     }
 
 
+    public List<MainCourseListDto> getMainCourse(String memberEmail) {
+        // 1.로그인 유무 화인
+        Member member = checkLogin(memberEmail);
+
+        // 2. 코스 조회 결과 불러오기기
+        List<Course> courseList = courseRepository.findTop10ByOrderByLikeCountDesc();
+
+        List<MainCourseListDto> MainCourseListDtoList = new ArrayList<>();
+        for (Course course : courseList) {
+            boolean isLike = false;
+            boolean isBookmark = false;
+            if(member != null){
+                isLike = courseLikesRepository.existsCourseLikesByMemberAndCourse(member, course);
+                isBookmark = courseBookmarkRepository.existsCourseBookmarkByMemberAndCourse(member, course);
+            }
+            MainCourseListDto dto = MainCourseListDto.from(course, isLike, isBookmark);
+            MainCourseListDtoList.add(dto);
+        }
+
+        return MainCourseListDtoList;
+    }
+
+
     private Member isWriter(String memberEmail, Member writer){
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+        Member member = memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(
                 // TODO: Exception 처리
                 () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
         );
@@ -223,4 +238,24 @@ public class CourseService {
         return member;
 
     }
+
+    private Member checkLogin(String email){
+        return isNull(email) ? null : memberRepository.findByEmailAndDeletedDateIsNull(email)
+                                    .orElseThrow(()->new IllegalArgumentException("존재하지 않는 member 입니다."));
+    }
+
+    private Member isMember(String memberEmail){
+        return memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(
+                // TODO: Exception 처리
+                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
+        );
+    }
+
+    private Course isCourse(Long id){
+        return courseRepository.findById(id).orElseThrow(
+                // TODO: Exception 처리
+                () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
+        );
+    }
+
 }
