@@ -2,6 +2,7 @@ package com.mohaeng.backend.place.service;
 
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.domain.QPlace;
+import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
 import com.mohaeng.backend.place.dto.response.FindAllPlacesResponse;
 import com.mohaeng.backend.place.exception.PlaceNotFoundException;
@@ -203,22 +204,29 @@ public class PlaceService {
                 .filter(place -> place.getAreaCode().equals(areaCode))
                 .collect(Collectors.toList());
     }
-    public FindAllPlacesResponse getFilteredAndPaginatedPlaces(String areaCode, int page) {
+
+    public List<FindAllPlacesDto> findAllPlace(String areaCode, int page) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QPlace place = QPlace.place;
         BooleanExpression predicate = !areaCode.equals("ALL") ? place.areaCode.eq(areaCode) : null;
-        List<Place> filteredPlaces = queryFactory.selectFrom(place)
+        List<FindAllPlacesDto> filteredPlaces = queryFactory.selectFrom(place)
                 .where(predicate)
-                .offset(page * 4)
-                .limit(4)
-                .fetch();
+                .offset(page * 12)
+                .limit(12)
+                .fetch()
+                .stream()
+                .map(p -> new FindAllPlacesDto(
+                        p.getName(),
+                        p.getAddress(),
+                        p.getFirstImage(),
+                        p.getContentId()))
+                .collect(Collectors.toList());
         long totalData = queryFactory.selectFrom(place)
                 .where(predicate)
                 .fetchCount();
         int totalPages = (int) Math.ceil((double) totalData / 4);
-        return new FindAllPlacesResponse(filteredPlaces);
+        return filteredPlaces;
+
     }
-
-
 }
 
