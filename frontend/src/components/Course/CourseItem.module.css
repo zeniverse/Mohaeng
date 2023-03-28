@@ -104,15 +104,15 @@
   border-left: 1px solid var(--color-border-semi);
 }
 
-.courseDays-container {
-  display: inline-block;
-  padding: 0.3rem 0.4rem;
-  font-size: 0.7rem;
-  border-radius: 0.2rem;
-  background-color: var(--color-primary);
-  color: #fff;
-}
-
 .roughmapBtn {
   position: relative;
+}
+
+.roughmap-wrapper {
+  position: absolute;
+
+  z-index: 1;
+  top: 106%;
+  overflow: hidden;
+  left: 0;
 }
