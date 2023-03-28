@@ -23,13 +23,6 @@ public class CourseLikesController {
 
     private final CourseLikesService courseLikesService;
     private final TokenGenerator tokenGenerator;
-    private final MemberService memberService;
-
-    private Member findEmailFromHeader(HttpServletRequest request) {
-        String userEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
-        Member findMember = memberService.findByEmail(userEmail);
-        return findMember;
-    }
 
     @GetMapping("/count/{courseId}")
     public ResponseEntity countCourseLikes(@PathVariable Long courseId){
@@ -40,25 +33,24 @@ public class CourseLikesController {
     @GetMapping("/{courseId}")
     public ResponseEntity isExistsCourseLikes(@PathVariable Long courseId,
                                               HttpServletRequest request){
-        Member member = findEmailFromHeader(request);
-
-        boolean isExists = courseLikesService.isExistCourseLikes(courseId, member);
+        String memberEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
+        boolean isExists = courseLikesService.isExistCourseLikes(courseId, memberEmail);
         return ResponseEntity.ok().body(BaseResponse.success("OK", isExists));
     }
 
     @PostMapping("/{courseId}")
     public ResponseEntity addCourseLikes(@PathVariable Long courseId,
                                          HttpServletRequest request){
-        Member member = findEmailFromHeader(request);
-        CourseLikesRes courseLikesRes = courseLikesService.addLikes(courseId, member);
+        String memberEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
+        CourseLikesRes courseLikesRes = courseLikesService.addLikes(courseId, memberEmail);
         return ResponseEntity.ok().body(BaseResponse.success("OK", courseLikesRes));
     }
 
     @DeleteMapping("/{courseId}")
     public ResponseEntity cancelCourseLikes(@PathVariable Long courseId,
                                             HttpServletRequest request){
-        Member member = findEmailFromHeader(request);
-        CourseLikesRes courseLikesRes = courseLikesService.cancelLikes(courseId, member);
+        String memberEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
+        CourseLikesRes courseLikesRes = courseLikesService.cancelLikes(courseId, memberEmail);
         return ResponseEntity.ok().body(BaseResponse.success("OK", courseLikesRes));
     }
 
