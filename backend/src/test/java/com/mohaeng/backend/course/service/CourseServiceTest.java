@@ -1,41 +1,17 @@
-<<<<<<< HEAD
-//package com.mohaeng.backend.course.service;
-//
-//import com.mohaeng.backend.course.domain.Course;
-//import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
-//import com.mohaeng.backend.course.dto.CourseSearchDto;
-//import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
-//import com.mohaeng.backend.course.dto.request.CourseReq;
-//import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
-//import com.mohaeng.backend.course.dto.response.CourseIdRes;
-//import com.mohaeng.backend.course.dto.response.CourseListRes;
-//import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
-//import com.mohaeng.backend.course.dto.response.CourseRes;
-//import com.mohaeng.backend.course.repository.CoursePlaceRepository;
-//import com.mohaeng.backend.course.repository.CourseRepository;
-//import com.mohaeng.backend.member.domain.Member;
-//import com.mohaeng.backend.member.domain.Role;
-//import com.mohaeng.backend.member.repository.MemberRepository;
-//import com.mohaeng.backend.place.domain.Place;
-//import com.mohaeng.backend.place.domain.PlaceImage;
-//import com.mohaeng.backend.place.repository.PlaceImageRepository;
-//import com.mohaeng.backend.place.repository.PlaceRepository;
-//import org.assertj.core.util.Lists;
-//import org.junit.jupiter.api.*;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.data.domain.PageRequest;
-//import org.springframework.transaction.annotation.Transactional;
-//
-//import java.time.LocalDateTime;
-//import java.util.List;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//@SpringBootTest
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//class CourseServiceTest {
-=======
+package com.mohaeng.backend.course.service;
+
+import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
+import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
+import com.mohaeng.backend.course.dto.request.CourseReq;
+import com.mohaeng.backend.course.dto.response.CourseIdRes;
+import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
+import com.mohaeng.backend.course.repository.CoursePlaceRepository;
+import com.mohaeng.backend.course.repository.CourseRepository;
+import com.mohaeng.backend.course.service.CourseService;
+import com.mohaeng.backend.member.domain.Member;
+import com.mohaeng.backend.member.repository.MemberRepository;
+import com.mohaeng.backend.place.domain.Place;
+import com.mohaeng.backend.place.domain.PlaceImage;
 import com.mohaeng.backend.place.repository.PlaceImageRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import org.assertj.core.util.Lists;
@@ -53,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CourseServiceTest {
->>>>>>> 1303caaaefa9ca7751c9e663fe23ef79e5e04d00
 //    @Autowired CourseService courseService;
 //    @Autowired PlaceRepository placeRepository;
 //    @Autowired PlaceImageRepository placeImageRepository;
@@ -184,7 +159,7 @@ class CourseServiceTest {
 //        Member savedMember = createMember("create");
 //
 //        //When
-//        CourseIdRes courseIdRes = courseService.createCourse(courseReq, savedMember.getEmail());
+//        CourseIdRes courseIdRes = courseService.createCourse(courseReq, saved);
 //
 //        //Then
 //        Course course = courseRepository.findById(courseIdRes.getCourseId()).orElseThrow(
@@ -490,12 +465,5 @@ class CourseServiceTest {
 //                .build();
 //        return updateReq;
 //    }
-<<<<<<< HEAD
-//
-//}
-//
-//
-=======
 
 }
->>>>>>> 1303caaaefa9ca7751c9e663fe23ef79e5e04d00
