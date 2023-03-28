@@ -1,7 +1,10 @@
 package com.mohaeng.backend.place.controller;
 
+import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.place.domain.Place;
+import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
+import com.mohaeng.backend.place.dto.response.FindAllPlacesResponse;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
@@ -83,13 +86,9 @@ public class PlaceController {
     }
 
     @GetMapping("/places")
-    public List<Place> getPlaces(@RequestParam String areaCode,
-                                 @RequestParam(defaultValue = "0") int page) throws IOException, ParserConfigurationException, SAXException {
-        List<Place> places = placeService.getPlaces();
-        List<Place> filteredPlaces = placeService.filterPlaces(places, areaCode);
-        int start = page * 4;
-        int end = Math.min(start + 4, filteredPlaces.size());
-        return filteredPlaces.subList(start, end);
+    public ResponseEntity<BaseResponse<List<FindAllPlacesDto>>> findAllPlace(@RequestParam String areaCode, @RequestParam int page) {
+        List<FindAllPlacesDto> result = placeService.findAllPlace(areaCode, page);
+        return ResponseEntity.ok().body(BaseResponse.success("OK", result));
     }
 
 }
