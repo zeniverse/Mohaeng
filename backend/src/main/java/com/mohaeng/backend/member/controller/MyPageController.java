@@ -3,7 +3,7 @@ package com.mohaeng.backend.member.controller;
 import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.dto.request.UserInfoChangeRequest;
-import com.mohaeng.backend.member.dto.response.MyPageCourseLikeDto;
+import com.mohaeng.backend.member.dto.response.MyPageCourseBookMarkDto;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.service.MemberService;
 import com.mohaeng.backend.member.service.MyPageService;
@@ -12,8 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,15 +33,15 @@ public class MyPageController {
 
     @GetMapping("/myPage/course/bookMark")
     public ResponseEntity getAllBookMarkedCourse(HttpServletRequest request) {
-        Member findMember = findEmailFromHeader(request);
-        List<MyPageCourseLikeDto> data = myPageService.findAllLikeCourse(findMember);
+        String email = findEmailFromHeader(request);
+        List<MyPageCourseBookMarkDto> data = myPageService.findAllBookMarkCourse(email);
         return ResponseEntity.ok().body(BaseResponse.success("ok", data));
     }
 
     @GetMapping("/myPage/course/bookMark/{courseLikeId}")
     public ResponseEntity getOneBookMarkedCourse(@PathVariable Long courseLikeId, HttpServletRequest request) {
-        Member findMember = findEmailFromHeader(request);
-        MyPageCourseLikeDto data = myPageService.findOneBookMarkedCourse(findMember, courseLikeId);
+        String email = findEmailFromHeader(request);
+        MyPageCourseBookMarkDto data = myPageService.findOneBookMarkedCourse(email, courseLikeId);
         return ResponseEntity.ok().body(BaseResponse.success("OK", data));
     }
 
@@ -80,9 +78,7 @@ public class MyPageController {
         return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
     }
 
-    private Member findEmailFromHeader(HttpServletRequest request) {
-        String userEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
-        Member findMember = memberService.findByEmail(userEmail);
-        return findMember;
+    private String findEmailFromHeader(HttpServletRequest request) {
+        return tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
     }
 }
