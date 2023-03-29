@@ -18,6 +18,7 @@ const CourseDetailContent = ({ positions, content, places, router }: any) => {
         )}
         <div className={styles.info}>
           <ol className={styles["course-List"]}>
+            {/* TODO: 컴포넌트화 하기 */}
             {places.map((place: any, idx: any) => (
               <li className={styles["course-item"]} key={place.placeId}>
                 <span className={styles.number}>{idx + 1}</span>

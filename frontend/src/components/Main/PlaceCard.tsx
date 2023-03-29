@@ -2,6 +2,7 @@ import styles from "./PlaceCard.module.css";
 import React from "react";
 import { PlaceProps } from "@/src/interfaces/Place";
 import Image from "next/image";
+import FiveStarRating from "../FiveStarRating/FiveStarRating";
 
 const PlaceCard = (props: PlaceProps) => {
   const { id, placeImg, placeDesc, placeTitle, placeRating } = props;
@@ -17,7 +18,7 @@ const PlaceCard = (props: PlaceProps) => {
         />
       </div>
       <div className={styles["place-card-content"]}>
-        <div className={styles["place-card-rating"]}>{`⭐ ${placeRating}`}</div>
+        <FiveStarRating rating={placeRating} />
         <div className={styles["place-card-title"]}>
           <h3>{placeTitle}</h3>
         </div>
