@@ -4,15 +4,18 @@ import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.domain.QPlace;
 import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
-import com.mohaeng.backend.place.dto.response.FindAllPlacesResponse;
 import com.mohaeng.backend.place.exception.PlaceNotFoundException;
 import com.mohaeng.backend.place.repository.PlaceRepository;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import org.w3c.dom.Document;
@@ -48,7 +51,7 @@ public class PlaceService {
     private static final String API_KEY = "LEZGPi1UafewX40Vl5Yx8J4xwPliJNjaGSVMR8tOLVC7BTWBJMiQLb2gl12QNctUovP3VVtG6qPnrWteZGePOQ%3D%3D"; // 지혜님 키
 //    private static final String API_KEY = "DZSCfwbqP6kQHPDOAlDjWAhu63OBBX4BjGKHVNB2ocF6YW6Xpd6Do1IhFCg%2B1TfYiqZFngr57pUk3Tvs%2FYUukw%3D%3D"; // 지혜님 키
 
-    private static final String BASE_URL = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=" + API_KEY + "&pageNo=1&numOfRows=1000&MobileApp=AppTest&_type=xml&MobileOS=ETC&arrange=A&contentTypeId=12";
+    private static final String BASE_URL = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=" + API_KEY + "&pageNo=1&numOfRows=12100&MobileApp=AppTest&_type=xml&MobileOS=ETC&arrange=A&contentTypeId=12";
     private static final String BASE_URL2 = "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=" + API_KEY + "&MobileOS=ETC&MobileApp=AppTest&_type=xml&contentId=&contentTypeId=12&&overviewYN=Y";
 
     //    @Scheduled(cron = "0 0 5 * * ?") #TODO
@@ -204,29 +207,4 @@ public class PlaceService {
                 .filter(place -> place.getAreaCode().equals(areaCode))
                 .collect(Collectors.toList());
     }
-
-    public List<FindAllPlacesDto> findAllPlace(String areaCode, int page) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-        QPlace place = QPlace.place;
-        BooleanExpression predicate = !areaCode.equals("ALL") ? place.areaCode.eq(areaCode) : null;
-        List<FindAllPlacesDto> filteredPlaces = queryFactory.selectFrom(place)
-                .where(predicate)
-                .offset(page * 12)
-                .limit(12)
-                .fetch()
-                .stream()
-                .map(p -> new FindAllPlacesDto(
-                        p.getName(),
-                        p.getAddress(),
-                        p.getFirstImage(),
-                        p.getContentId()))
-                .collect(Collectors.toList());
-        long totalData = queryFactory.selectFrom(place)
-                .where(predicate)
-                .fetchCount();
-        int totalPages = (int) Math.ceil((double) totalData / 4);
-        return filteredPlaces;
-
-    }
 }
-
