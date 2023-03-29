@@ -16,7 +16,6 @@ import {
 import { RootState } from "@/src/store/store";
 import axios from "axios";
 import cookie from "react-cookies";
-import { GetServerSideProps } from "next";
 
 const StyledIcon = styled(BsSearch)`
   color: #004aad;
@@ -34,7 +33,6 @@ function Header({}: Props) {
   const [user, setUser] = useState<User[]>([]);
   const dispatch = useDispatch();
   const router = useRouter();
-  const loginToken = useSelector((state: RootState) => state.token.token);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
 

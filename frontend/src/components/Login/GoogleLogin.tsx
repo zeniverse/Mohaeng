@@ -4,9 +4,6 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-// import { setToken } from "../../../store/reducers/logintokenSlice";
-// import { setSocialEmail } from "../../../store/reducers/socialSlice";
-import Loading from "./Loading";
 
 const GoogleLogin = () => {
   const router = useRouter();
@@ -19,15 +16,12 @@ const GoogleLogin = () => {
     const google = async () => {
       return await axios
         .get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/oauth2/authorization/google/${code}`
+          `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google/${code}`
         )
         .then((res) => {
           localStorage.setItem("token", res.headers.authorization);
           router.replace("/");
         })
-        //.then(res => res.json())
-        //.then(data => {
-        // localStorage.setItem('token', data.token) })
 
         .catch((error) => console.log(error));
     };
