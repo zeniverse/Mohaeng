@@ -1,23 +1,14 @@
 [
   {
-    "id": "1",
-    "name": "북마크 장소 1",
-    "imageUrl": "https://via.placeholder.com/200",
-    "description": "이 장소는 멋진 곳입니다.",
-    "rating": 4.5
-  },
-  {
-    "id": "2",
-    "name": "북마크 장소 2",
-    "imageUrl": "https://via.placeholder.com/200",
-    "description": "이 장소는 좋은 곳입니다.",
-    "rating": 3.5
-  },
-  {
-    "id": "3",
-    "name": "북마크 장소 3",
-    "imageUrl": "https://via.placeholder.com/200",
-    "description": "이 장소는 보통입니다.",
-    "rating": 2.5
+    "bookMarkId": 1,
+    "categoryId": 2,
+    "placeId": 10,
+    "placeName": "placeName1"
+    },
+    {
+    "bookMarkId": 2,
+    "categoryId": 1,
+    "placeId": 12,
+    "placeName": "placeName2"
   }
 ]

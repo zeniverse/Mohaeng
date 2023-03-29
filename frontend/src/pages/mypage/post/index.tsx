@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./index.module.css";
 import { BookmarkItem } from "@/src/interfaces/Bookmark";
-import MypageLayout from "../MypageLayout";
+import MypageLayout from "../layout";
 
 const bookmarksPlace: BookmarkItem[] = [
   {
@@ -51,7 +51,7 @@ const bookmarksCourse: BookmarkItem[] = [
   },
 ];
 
-const MyBookmark = () => {
+const MyPost = () => {
   // const [bookmarks, setBookmarks] = useState<bookmarkItem[]>([]);
 
   // useEffect(() => {
@@ -126,4 +126,4 @@ const MyBookmark = () => {
   );
 };
 
-export default MyBookmark;
+export default MyPost;
