@@ -1,3 +1,15 @@
+import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
+import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
+import com.mohaeng.backend.course.dto.request.CourseReq;
+import com.mohaeng.backend.course.dto.response.CourseIdRes;
+import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
+import com.mohaeng.backend.course.repository.CoursePlaceRepository;
+import com.mohaeng.backend.course.repository.CourseRepository;
+import com.mohaeng.backend.course.service.CourseService;
+import com.mohaeng.backend.member.domain.Member;
+import com.mohaeng.backend.member.repository.MemberRepository;
+import com.mohaeng.backend.place.domain.Place;
+import com.mohaeng.backend.place.domain.PlaceImage;
 import com.mohaeng.backend.place.repository.PlaceImageRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import org.assertj.core.util.Lists;
@@ -145,7 +157,7 @@ class CourseServiceTest {
 //        Member savedMember = createMember("create");
 //
 //        //When
-//        CourseIdRes courseIdRes = courseService.createCourse(courseReq, savedMember.getEmail());
+//        CourseIdRes courseIdRes = courseService.createCourse(courseReq, saved);
 //
 //        //Then
 //        Course course = courseRepository.findById(courseIdRes.getCourseId()).orElseThrow(

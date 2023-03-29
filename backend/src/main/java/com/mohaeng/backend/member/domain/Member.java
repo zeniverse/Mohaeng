@@ -1,7 +1,7 @@
 package com.mohaeng.backend.member.domain;
 
 import com.mohaeng.backend.common.BaseTimeEntity;
-import com.mohaeng.backend.course.domain.Course;
+import com.mohaeng.backend.course.domain.CourseBookmark;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -49,7 +49,7 @@ public class Member extends BaseTimeEntity {
     private Long kakaoId;
 
     @OneToMany(mappedBy = "member")
-    private List<CourseBookMark> courseBookMarkList = new ArrayList<>();
+    private List<CourseBookmark> courseBookMarkList = new ArrayList<>();
 
     @Builder
     public Member(String name, String email, Role role, String nickName) {
@@ -69,9 +69,12 @@ public class Member extends BaseTimeEntity {
         this.nickName = nickName;
     }
 
-    public void addCourseBookMark(CourseBookMark courseBookMark) {
+    public void addCourseBookMark(CourseBookmark courseBookMark) {
         this.courseBookMarkList.add(courseBookMark);
-        courseBookMark.setMember(this);
+    }
+
+    public void removeCourseBookMark(CourseBookmark courseBookmark){
+        this.courseBookMarkList.remove(courseBookmark);
     }
 
     public void setOauthAccessToken(String oauthAccessToken) {

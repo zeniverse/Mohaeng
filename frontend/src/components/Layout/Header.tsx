@@ -11,51 +11,53 @@ import {
   setEmail,
   setId,
   setNickname,
-  setProfileUrl,
   setToken,
 } from "@/src/store/reducers/loginTokenSlice";
 import { RootState } from "@/src/store/store";
 import axios from "axios";
 import cookie from "react-cookies";
-import Image from "next/image";
 
 const StyledIcon = styled(BsSearch)`
   color: #004aad;
 `;
 
+type User = {
+  id: number;
+  nickName: string;
+  email: string;
+};
+
 type Props = {};
 
 function Header({}: Props) {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState<User[]>([]);
   const dispatch = useDispatch();
   const router = useRouter();
-  const loginToken = useSelector((state: RootState) => state.token.token);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
-  const profileUrl = useSelector(
-    (state: RootState) => state.profileUrl.profileUrl
-  );
+  const accessToken = cookie.load("accessToken");
 
   useEffect(() => {
     const response = async () => {
-      console.log("LOGIN TOKEN IS " + loginToken);
-      if (loginToken) {
-        const userData = await axios.get(`/loginInfo`, {
-          headers: {
-            "Access-Token": loginToken,
-          },
-          withCredentials: true,
-        });
-        console.log(userData);
-        const nickName = userData.data.data.nickName;
-        const profileUrl = userData.data.data.profileUrl;
+      if (accessToken) {
+        const userRes = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/loginInfo`,
+          {
+            headers: {
+              "Access-Token": accessToken,
+            },
+            withCredentials: true,
+          }
+        );
+        const { id, nickName, email } = userRes.data.data;
+        dispatch(setId(id));
+        dispatch(setEmail(email));
         dispatch(setNickname(nickName));
-        dispatch(setProfileUrl(profileUrl));
-        console.log(nickName);
-        setUser(userData.data.data);
+        setUser(userRes.data.data);
+        console.log(userRes.data.data);
       }
     };
     response();
-  }, [loginToken]);
+  }, [accessToken]);
 
   const handleOpenLoginModal = () => {
     dispatch(
@@ -72,6 +74,7 @@ function Header({}: Props) {
     dispatch(setNickname(""));
     dispatch(setEmail(""));
     dispatch(setId(0));
+    setUser([]);
     router.replace("/");
     window.alert("로그아웃되었습니다!");
   };
@@ -101,7 +104,7 @@ function Header({}: Props) {
         </div>
       </nav>
       <div className={styles.btn}>
-        {!loginToken ? (
+        {!nickName ? (
           <>
             <button
               id="login-btn"
@@ -113,13 +116,13 @@ function Header({}: Props) {
           </>
         ) : (
           <>
-            <Image
+            {/* <Image
               className={styles["kakao-profile-img"]}
               src={profileUrl}
               alt="카카오프로필"
               width={40}
               height={40}
-            />
+            /> */}
             {nickName}님
             <button
               id="login-btn"
@@ -136,3 +139,9 @@ function Header({}: Props) {
 }
 
 export default Header;
+
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   return {
+//     props: {},
+//   };
+// };

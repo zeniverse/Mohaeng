@@ -20,6 +20,7 @@ import java.util.List;
 @Getter
 @Table(appliesTo = "place")
 @RequiredArgsConstructor
+@ToString
 public class Place {
 
     @Id
@@ -48,12 +49,6 @@ public class Place {
     private String contentId;
     private double rating;
 
-
-    @Builder.Default
-    @OneToMany(mappedBy = "place")
-    @ToString.Exclude
-    private List<PlaceImage> placeImages = new ArrayList<>();
-
     public Place(String name, String address, String areaCode, String sigunguCode, String contentId, String firstImage, String firstImage2, String mapX, String mapY) {
         this.name = name;
         this.address = address;
@@ -80,20 +75,6 @@ public class Place {
         this.rating = rating;
     }
 
-    public Place(Long id, String name, String address, String areaCode, String sigunguCode, String firstImage, String firstImage2, String mapX, String mapY, String contentId, double rating, List<PlaceImage> placeImages) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.areaCode = areaCode;
-        this.sigunguCode = sigunguCode;
-        this.firstImage = firstImage;
-        this.firstImage2 = firstImage2;
-        this.mapX = mapX;
-        this.mapY = mapY;
-        this.contentId = contentId;
-        this.rating = rating;
-        this.placeImages = placeImages;
-    }
     public Place(Long id, String name, String address, String areaCode, String sigunguCode, String firstImage, String firstImage2, String mapX, String mapY, String contentId) {
         this.id = id;
         this.name = name;

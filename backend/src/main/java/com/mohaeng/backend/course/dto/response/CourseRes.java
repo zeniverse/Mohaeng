@@ -5,6 +5,7 @@ import com.mohaeng.backend.course.dto.CourseInPlaceDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Getter
@@ -19,14 +20,14 @@ public class CourseRes {
     private String region;
     private Boolean isPublished;
     private LocalDateTime createdDate;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private String startDate;
+    private String endDate;
     private String content;
     private List<CourseInPlaceDto> places;
 
     @Builder
-    private CourseRes(Long courseId, String title, String nickname, Integer likeCount, String courseDays, String region, Boolean isPublished, LocalDateTime createdDate, LocalDateTime startDate,
-                      LocalDateTime endDate, String content, List<CourseInPlaceDto> places) {
+    private CourseRes(Long courseId, String title, String nickname, Integer likeCount, String courseDays, String region, Boolean isPublished, LocalDateTime createdDate, String startDate,
+                      String endDate, String content, List<CourseInPlaceDto> places) {
         this.courseId = courseId;
         this.title = title;
         this.nickname = nickname;
@@ -51,11 +52,15 @@ public class CourseRes {
                 .region(course.getRegion())
                 .isPublished(course.getIsPublished())
                 .createdDate(course.getCreatedDate())
-                .startDate(course.getStartDate())
-                .endDate(course.getEndDate())
+                .startDate(dateToStr(course.getStartDate()))
+                .endDate(dateToStr(course.getEndDate()))
                 .content(course.getContent())
                 .places(courseInPlaceDtoList)
                 .build();
+    }
+
+    private static String dateToStr(LocalDateTime date){
+        return date.format(DateTimeFormatter.ofPattern("YYYY-MM-dd"));
     }
 
 }

@@ -1,5 +1,3 @@
-const { type } = require("os");
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -12,14 +10,6 @@ const nextConfig = {
   pageExtensions: ["jsx", "js", "ts", "tsx", "json"],
   compiler: {
     styledComponents: true,
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/:path*",
-        destination: "http://localhost:8080/:path*",
-      },
-    ];
   },
   // async rewrites() {
   //   return [

@@ -1,25 +1,4 @@
-import { HYDRATE } from "next-redux-wrapper";
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../store";
-
-// export const fetchUser = createAsyncThunk("token/fetchUser", async () => {
-//   try {
-//     const accessToken = localStorage.getItem("accessToken");
-//     const res = await axios.get(`http://219.255.1.253:8080/loginInfo`, {
-//       headers: {
-//         "Access-Token": `${accessToken}`,
-//       },
-//     });
-//     console.log(res);
-//     return {
-//       id: res.data.id,
-//       nickName: res.data.nickName,
-//       email: res.data.email,
-//     };
-//   } catch (err) {
-//     return console.log(err);
-//   }
-// });
 
 export interface LoginState {
   // isLoading: string;
@@ -64,6 +43,6 @@ export const logintokenSlice = createSlice({
   },
 });
 
-export const { setToken, setNickname, setEmail, setId, setProfileUrl } =
+export const { setToken, setNickname, setEmail, setId } =
   logintokenSlice.actions;
 export default logintokenSlice.reducer;

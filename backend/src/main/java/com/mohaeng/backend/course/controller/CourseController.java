@@ -2,6 +2,7 @@ package com.mohaeng.backend.course.controller;
 
 import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.course.dto.CourseSearchDto;
+import com.mohaeng.backend.course.dto.MainCourseListDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
@@ -19,6 +20,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -37,16 +39,10 @@ public class CourseController {
 
     private final CourseService courseService;
     private final TokenGenerator tokenGenerator;
-    private final MemberService memberService;
-
-    private Member findEmailFromHeader(HttpServletRequest request) {
-        String userEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
-        Member findMember = memberService.findByEmail(userEmail);
-        return findMember;
-    }
 
     @GetMapping("/placeSearch")
-    public ResponseEntity placeSearch(@ModelAttribute CoursePlaceSearchReq req, Pageable pageable){
+    public ResponseEntity placeSearch(@ModelAttribute CoursePlaceSearchReq req,
+                                      @PageableDefault(size = 5)Pageable pageable){
 
         CoursePlaceSearchRes res = courseService.placeSearch(req, pageable);
         return ResponseEntity.ok().body(BaseResponse.success("OK", res));
@@ -57,9 +53,9 @@ public class CourseController {
                                        @Valid @RequestBody CourseReq courseReq){
 
         //TODO: @Valid 결과를 RestcontrollerAdvice를 통해 처리하도록 수정해야함
-        Member member = findEmailFromHeader(request);
 
-        CourseIdRes courseIdRes = courseService.createCourse(courseReq, member);
+        String memberEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
+        CourseIdRes courseIdRes = courseService.createCourse(courseReq, memberEmail);
         return ResponseEntity.ok().body(BaseResponse.success("OK", courseIdRes));
     }
 
@@ -76,8 +72,8 @@ public class CourseController {
 
         //TODO: @Valid 결과를 RestcontrollerAdvice를 통해 처리하도록 수정해야함
 
-        Member member = findEmailFromHeader(request);
-        CourseIdRes courseIdRes = courseService.updateCourse(member, courseId, courseUpdateReq);
+        String memberEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
+        CourseIdRes courseIdRes = courseService.updateCourse(memberEmail, courseId, courseUpdateReq);
         return ResponseEntity.ok().body(BaseResponse.success("OK", courseIdRes));
     }
 
@@ -85,25 +81,30 @@ public class CourseController {
     public ResponseEntity deleteCourse(HttpServletRequest request,
                                        @PathVariable Long courseId) {
 
-        Member member = findEmailFromHeader(request);
-        courseService.deleteCourse(member, courseId);
+        String memberEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
+        courseService.deleteCourse(memberEmail, courseId);
         return ResponseEntity.ok().body(BaseResponse.success("OK"));
     }
 
     @GetMapping
     public ResponseEntity getCourseList(HttpServletRequest request,
                                         CourseSearchDto courseSearchDto,
-                                        Pageable pageable){
-
-        Member member = findEmailFromHeader(request);
-        CourseListRes result = courseService.getCourseList(courseSearchDto, pageable, member);
+                                        @PageableDefault(size = 12) Pageable pageable){
+        CourseListRes result = courseService.getCourseList(courseSearchDto, pageable, isAccessMember(request));
         return ResponseEntity.ok().body(BaseResponse.success("OK", result));
     }
 
-//    @GetMapping("/main")
-//    public ResponseEntity getMainCourse(HttpServletRequest request){
-//        Member member = findEmailFromHeader(request);
-//        List<MainCourseListDto> mainCourseList = courseService.getMainCourse(member);
-//        return ResponseEntity.ok().body(BaseResponse.success("OK", mainCourseList));
-//    }
+    @GetMapping("/main")
+    public ResponseEntity getMainCourse(HttpServletRequest request){
+        List<MainCourseListDto> mainCourseList = courseService.getMainCourse(isAccessMember(request));
+        return ResponseEntity.ok().body(BaseResponse.success("OK", mainCourseList));
+    }
+
+    private String isAccessMember(HttpServletRequest request){
+        if (request.getHeader("Access-Token") == null){
+            return null;
+        }else{
+            return tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
+        }
+    }
 }
