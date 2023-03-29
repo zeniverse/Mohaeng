@@ -37,16 +37,14 @@ function Header({}: Props) {
 
   useEffect(() => {
     const response = async () => {
+      console.log("LOGIN TOKEN IS " + loginToken);
       if (loginToken) {
-        const userData = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/loginInfo`,
-          {
-            headers: {
-              "Access-Token": loginToken,
-            },
-            withCredentials: true,
-          }
-        );
+        const userData = await axios.get(`/loginInfo`, {
+          headers: {
+            "Access-Token": loginToken,
+          },
+          withCredentials: true,
+        });
         console.log(userData);
         const nickName = userData.data.data.nickName;
         const profileUrl = userData.data.data.profileUrl;

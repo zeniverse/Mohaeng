@@ -1,3 +1,5 @@
+const { type } = require("os");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -14,8 +16,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/:path",
-        destination: "http://localhost:8080/:path",
+        source: "/:path*",
+        destination: "http://localhost:8080/:path*",
       },
     ];
   },

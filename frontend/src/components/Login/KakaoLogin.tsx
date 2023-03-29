@@ -21,10 +21,9 @@ const KakaoLogin = () => {
     let code = new URL(window.location.href).searchParams.get("code");
     const kakaoCode = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/token?code=${code}`,
-          { withCredentials: true }
-        );
+        const response = await axios.get(`/oauth/token?code=${code}`, {
+          withCredentials: true,
+        });
         const accessToken = response.data.accessToken;
         const refreshToken = response.data.accessToken;
         cookie.save("accessToken", response.data.accessToken, { path: "/" });
@@ -39,15 +38,12 @@ const KakaoLogin = () => {
           try {
             // loginInfo에서 정보 받아오기, 토큰 헤더에 담아서 전송
             axios.defaults.headers.common["Access-Token"] = accessToken;
-            const userRes = await axios.get(
-              `${process.env.NEXT_PUBLIC_BASE_URL}/loginInfo`,
-              {
-                headers: {
-                  "Access-Token": `${accessToken}`,
-                },
-                withCredentials: true,
-              }
-            );
+            const userRes = await axios.get(`/loginInfo`, {
+              headers: {
+                "Access-Token": `${accessToken}`,
+              },
+              withCredentials: true,
+            });
             // 여기에서 받아온 유저 정보를 리덕스에 저장한다
             console.log(userRes.data);
             const { id, nickName, email, profileUrl } = userRes.data.data;

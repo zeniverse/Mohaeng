@@ -3,7 +3,7 @@ import "../styles/slider.css";
 import App, { AppContext, AppProps } from "next/app";
 import Head from "next/head";
 import { Provider } from "react-redux";
-import store from "../store/store";
+import { AppStore, RootState, wrapper, AppDispatch } from "../store/store";
 import GlobalModal from "../components/Modal/GlobalModal";
 import AppLayout from "../components/Layout/AppLayout";
 import { Noto_Sans_KR } from "next/font/google";
@@ -33,12 +33,10 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
         <meta content="width=device-width, initial-scale=1" name="viewport" />
       </Head>
 
-      <Provider store={store}>
-        <GlobalModal />
-        <AppLayout>
-          <Component {...pageProps} />
-        </AppLayout>
-      </Provider>
+      <GlobalModal />
+      <AppLayout>
+        <Component {...pageProps} />
+      </AppLayout>
     </>
   );
 }
@@ -47,8 +45,10 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
 MyApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
   // 서버 사이드 쿠키 얻어오기
+
   const { ctx } = appContext;
   const allCookies = cookies(ctx);
+  console.log(allCookies);
   const accessTokenByCookie = allCookies["accessToken"];
   if (accessTokenByCookie !== undefined) {
     const refreshTokenByCookie = allCookies["refreshToken"] || "";
@@ -58,4 +58,4 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
   return { ...appProps };
 };
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);

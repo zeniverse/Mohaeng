@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import { HYDRATE } from "next-redux-wrapper";
+import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
 // export const fetchUser = createAsyncThunk("token/fetchUser", async () => {
 //   try {
@@ -61,20 +62,6 @@ export const logintokenSlice = createSlice({
       state.profileUrl = action.payload;
     },
   },
-  // extraReducers: (builder) => {
-  //   builder.addCase(fetchUser.pending, (state) => {
-  //     state.isLoading = "loading";
-  //   });
-  //   builder.addCase(fetchUser.fulfilled, (state, action) => {
-  //     state.id = action.payload.id;
-  //     state.nickName = action.payload.nickName;
-  //     state.email = action.payload.email;
-  //     state.isLoggedin = true;
-  //   });
-  //   builder.addCase(fetchUser.rejected, (state) => {
-  //     state.isLoading = "fail";
-  //   });
-  // },
 });
 
 export const { setToken, setNickname, setEmail, setId, setProfileUrl } =
