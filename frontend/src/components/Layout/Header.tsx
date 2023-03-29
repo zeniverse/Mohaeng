@@ -49,7 +49,6 @@ function Header({}: Props) {
   const [user, setUser] = useState<User[]>([]);
   const dispatch = useDispatch();
   const router = useRouter();
-  const loginToken = useSelector((state: RootState) => state.token.token);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
 
