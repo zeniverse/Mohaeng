@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import styles from "./SearchResult.module.css";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import styles from "./SearchList.module.css";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 type Keyword = {
@@ -18,7 +17,7 @@ type Keyword = {
   review: number;
 };
 
-export default function SearchPlace(): JSX.Element {
+export default function SearchList(): JSX.Element {
   const router = useRouter();
   const [keywordData, setKeywordData] = useState<Keyword[]>([]);
 

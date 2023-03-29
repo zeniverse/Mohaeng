@@ -1,6 +1,6 @@
 import Image from "next/image";
-import styles from "./SearchResult.module.css";
-import React, { useEffect, useState } from "react";
+import styles from "./SearchList.module.css";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 type Keyword = {
@@ -33,7 +33,7 @@ export default function indec(): JSX.Element {
   return (
     <>
       <section className={styles.section}>
-        <h2 className={styles.h2}>검색하신 결과 {router.query.text}</h2>
+        <h2 className={styles.h2}>검색하신 결과 </h2>
         <ul className={styles.keywordList}>
           {keywordData?.map((keyword) => (
             <li className={styles.item} key={keyword.id}>

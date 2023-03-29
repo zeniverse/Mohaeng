@@ -1,0 +1,194 @@
+/* 기본 스타일 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  background-color: #99d9d9;
+  color: #fff;
+  padding: 10px 20px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu {
+  display: flex;
+  margin-left: 32px;
+}
+
+.menu a {
+  margin-right: 10px;
+  color: #004aad;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: large;
+  margin-left: 50px;
+  writing-mode: horizontal-tb;
+  text-align: center;
+
+  white-space: nowrap;
+}
+
+.menu a:hover {
+  transform: scale(1.1);
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30rem;
+  height: 60px;
+  background-color: white;
+  border-radius: 50px;
+  border: none;
+}
+
+.search-input {
+  width: 26rem;
+  height: 60px;
+  font-size: 20px;
+  padding-left: 2rem;
+  border-bottom-left-radius: 50px;
+  border-top-left-radius: 50px;
+  border: none;
+}
+
+.search-input:focus {
+  border: solid 1px var(--color-blue);
+}
+
+.search-icon {
+  width: 4rem;
+  height: 60px;
+  border: none;
+  border-bottom-right-radius: 50px;
+  border-top-right-radius: 50px;
+  padding-right: 3px;
+  font-size: 24px;
+  text-align: center;
+  color: white;
+  background-color: var(--color-blue);
+  cursor: pointer;
+}
+
+.search-icon:hover {
+  filter: brightness(130%);
+}
+
+.logo {
+  width: 200px;
+  height: 80px;
+  margin-right: 100px;
+}
+
+.btn {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.login-btn,
+.signup-btn {
+  background-color: #ff0232;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-btn:hover {
+  background-color: #ff5461;
+  color: #fff;
+}
+
+.signup-btn {
+  background-color: #004aad;
+}
+
+.signup-btn:hover {
+  background-color: #0066cc;
+}
+
+.kakao-profile-img {
+  border-radius: 50%;
+}
+
+@media screen and (max-width: 768px) {
+  .btn {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .menu {
+    margin-top: 20px;
+  }
+
+  .menu a {
+    margin: 0;
+    margin-right: 20px;
+    margin-bottom: 10px;
+  }
+
+  .search-bar {
+    max-width: 400px;
+  }
+
+  .search-input {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-btn,
+  .signup-btn {
+    margin: 10px 0;
+  }
+}
+
+/* 
+.search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 700px;
+  height: 45px;
+  padding: 0 1rem;
+  background-color: white;
+  border: none;
+  border-radius: 50px;
+
+  z-index: 1;
+  opacity: 1;
+}
+
+.search-input {
+  width: 400px;
+  height: 45px;
+
+  font-size: 18px;
+  border: none;
+  overflow: auto;
+}
+
+.search-icon {
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  float: right;
+  background-color: white;
+} */

@@ -2,8 +2,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
-import { BsSearch } from "react-icons/bs";
-import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../store/reducers/modalSlice";
 import { useRouter } from "next/router";
@@ -16,10 +14,7 @@ import {
 import { RootState } from "@/src/store/store";
 import axios from "axios";
 import cookie from "react-cookies";
-
-const StyledIcon = styled(BsSearch)`
-  color: #004aad;
-`;
+import SearchBar from "../SearchResult/SearchBar";
 
 type User = {
   id: number;
@@ -30,27 +25,27 @@ type User = {
 type Props = {};
 
 function Header({}: Props) {
-  const [text, setText] = useState("");
-  const handleSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    router.push(
-      {
-        pathname: `/search?=${text}`,
-        query: {
-          text: text,
-        },
-      },
-      `/search?=${text}`,
-      { scroll: true }
-    );
-    setText("");
-  };
-
+  const [keyword, setKeyword] = useState("");
   const [user, setUser] = useState<User[]>([]);
   const dispatch = useDispatch();
   const router = useRouter();
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    router.replace(
+      {
+        pathname: `/search?=${keyword}`,
+        query: {
+          keyword: `${keyword}`,
+        },
+      },
+      `/search?=${keyword}`,
+      { scroll: true }
+    );
+    setKeyword("");
+  };
 
   useEffect(() => {
     const response = async () => {
@@ -103,18 +98,7 @@ function Header({}: Props) {
             <img src="/assets/logo.png" alt="logo" className={styles.logo} />
           </Link>
 
-          <form className={styles["search-bar"]} onSubmit={handleSubmit}>
-            <input
-              className={styles["search-input"]}
-              type="text"
-              placeholder="어디 가고 싶으세요?"
-              onChange={(e) => setText(e.target.value)}
-              value={text}
-            />
-            <button className={styles["search-icon"]}>
-              <BsSearch />
-            </button>
-          </form>
+          <SearchBar handleSubmit={handleSubmit} />
 
           <div className={styles.menu}>
             <Link href="/place">여행지</Link>
