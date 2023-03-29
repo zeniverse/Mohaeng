@@ -1,14 +1,13 @@
-export interface userData {
+export interface UserProps {
   id: number;
-  userId: string;
-  userNickname: string;
-  userEmail: string;
-  profileUrl: string;
+  nickName: string;
+  email: string;
+  imageUrl: string;
 }
 export interface User {
   result: string;
   status: number;
-  data: userData;
+  data: UserProps;
 }
 
 export interface Session {

@@ -37,17 +37,15 @@ function Header({}: Props) {
   const accessToken = cookie.load("accessToken");
 
   useEffect(() => {
+    console.log(accessToken);
     const response = async () => {
       if (accessToken) {
-        const userRes = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/loginInfo`,
-          {
-            headers: {
-              "Access-Token": accessToken,
-            },
-            withCredentials: true,
-          }
-        );
+        const userRes = await axios.get(`/loginInfo`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          withCredentials: true,
+        });
         const { id, nickName, email } = userRes.data.data;
         dispatch(setId(id));
         dispatch(setEmail(email));

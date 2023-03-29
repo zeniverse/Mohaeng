@@ -16,8 +16,8 @@ export const ButtonBox = styled.div<ButtonBoxPropsType>`
     cursor: pointer;
     border: none;
     border-radius: 20px;
-    background-color: #000;
-    color: #fff;
+    background-color: #99d9d9;
+    color: #333333;
     font-weight: bold;
     font-size: 14px;
     padding: 10px 20px;

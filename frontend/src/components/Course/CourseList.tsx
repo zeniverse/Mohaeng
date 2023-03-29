@@ -13,7 +13,7 @@ const CourseList = () => {
       const data = await res.json();
       setCoueseData(data);
       // const courseRes = await fetch(
-      //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/course`
+      //   ${process.env.NEXT_PUBLIC_BASE_URL}/api/course
       // );
       // const responseData = await courseRes.json();
       // const courseList = await responseData.data.courseList;
@@ -21,7 +21,6 @@ const CourseList = () => {
     }
     fetchData();
   }, []);
-
   return (
     <div className={styles["course-list-container"]}>
       {courseData?.map((course) => (

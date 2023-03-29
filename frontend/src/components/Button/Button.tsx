@@ -9,7 +9,7 @@ type ButtonPropsType = {
   width?: undefined | string;
   height?: undefined | string;
   bar?: null | boolean;
-  onCloseModal?: () => void;
+  onClick?: () => void;
 };
 export default function Button({
   text,
@@ -17,13 +17,13 @@ export default function Button({
   width,
   height,
   bar = false,
-  onCloseModal,
+  onClick,
 }: ButtonPropsType): JSX.Element {
   return (
     <ButtonBox width={width} height={height} bar={bar}>
       {type === "button" && <button type="button">{text}</button>}
       {type === "close" && (
-        <button type="button" onClick={onCloseModal}>
+        <button type="button" onClick={onClick}>
           {text}
         </button>
       )}
