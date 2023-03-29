@@ -15,11 +15,8 @@ import com.mohaeng.backend.course.repository.CourseLikesRepository;
 import com.mohaeng.backend.course.repository.CoursePlaceRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
 import com.mohaeng.backend.member.domain.Member;
-import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
-import com.mohaeng.backend.place.domain.PlaceImage;
-import com.mohaeng.backend.place.repository.PlaceImageRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,11 +25,12 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.mohaeng.backend.course.domain.QCourse.course;
 import static java.util.Objects.isNull;
 
 
@@ -45,7 +43,6 @@ public class CourseService {
     private final MemberRepository memberRepository;
     private final CourseRepository courseRepository;
     private final CoursePlaceRepository coursePlaceRepository;
-    private final PlaceImageRepository placeImageRepository;
     private final CourseLikesRepository courseLikesRepository;
     private final CourseBookmarkRepository courseBookmarkRepository;
 
@@ -58,7 +55,6 @@ public class CourseService {
 
         // rating에 점수가 담겨있지 않을 때
         double rating = req.parseRatingToDouble(req.getLastRating());
-        Slice<CoursePlaceSearchDto> placeInCourse = placeRepository.findPlaceInCourse(req.getKeyword(), req.getLastPlaceId(), rating, pageable);
 
         Slice<Place> places = placeRepository.findPlaceInCourse(req.getKeyword(), req.getLastId(), rating, pageable);
 
@@ -77,8 +73,8 @@ public class CourseService {
 
         Course course = Course.builder()
                 .title(req.getTitle())
-                .startDate(req.getStartDate())
-                .endDate(req.getEndDate())
+                .startDate(strToTime(req.getStartDate()))
+                .endDate(strToTime(req.getEndDate()))
                 .isPublished(req.getIsPublished())
                 .courseDays(req.getCourseDays())
                 .region(req.getRegion())
@@ -122,7 +118,6 @@ public class CourseService {
         // 3. CoursePlaces에 담긴 Place 정보를 사용해 CourseInPlaceDTO에 담아준다.
         for (CoursePlace coursePlace : coursePlaces) {
             Place place = coursePlace.getPlace();
-            PlaceImage findPlaceImage = placeImageRepository.findFirstByPlace(place);
             courseInPlaceDtoList.add(
                     CourseInPlaceDto.builder()
                             .placeId(place.getId())
@@ -145,6 +140,11 @@ public class CourseService {
         Course course = isCourse(courseId);
         isWriter(memberEmail, course.getMember());
 
+        // 3. 날짜 타입 변경
+        LocalDateTime start = strToTime(req.getStartDate());
+        LocalDateTime end = strToTime(req.getEndDate());
+
+        // 4. 기존에 존재하던 CoursePlaces 삭제
         List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
         coursePlaceRepository.deleteAllInBatch(coursePlaces);
 
@@ -164,7 +164,7 @@ public class CourseService {
 
         coursePlaceRepository.saveAll(updatedCoursePlaces);
         course.addCoursePlaces(updatedCoursePlaces);
-        course.updateCourse(req);
+        course.updateCourse(req, start, end);
 
         return CourseIdRes.from(course.getId());
     }
@@ -249,7 +249,7 @@ public class CourseService {
 
     private Member checkLogin(String email){
         return isNull(email) ? null : memberRepository.findByEmailAndDeletedDateIsNull(email)
-                                    .orElseThrow(()->new IllegalArgumentException("존재하지 않는 member 입니다."));
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 member 입니다."));
     }
 
     private Member isMember(String memberEmail){
@@ -266,4 +266,10 @@ public class CourseService {
         );
     }
 
+
+    /** String 타입 날짜를 LocaDateTime으로 변환 **/
+    private LocalDateTime strToTime (String strDate){
+        LocalDate date = LocalDate.parse(strDate);
+        return date.atStartOfDay();
+    }
 }
