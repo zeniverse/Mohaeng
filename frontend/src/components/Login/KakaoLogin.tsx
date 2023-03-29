@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Loading from "./Loading";
 import cookie from "react-cookies";
-
+// ${process.env.NEXT_PUBLIC_API_URL}
 const KakaoLogin = () => {
   const router = useRouter();
   const [valid, setValid] = useState(false);
@@ -21,10 +21,9 @@ const KakaoLogin = () => {
     const kakaoCode = async () => {
       try {
         // 코드 전송
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/oauth/token?code=${code}`,
-          { withCredentials: true }
-        );
+        const response = await axios.get(`/oauth/token?code=${code}`, {
+          withCredentials: true,
+        });
         console.log(response);
         const { accessToken } = response.data;
         const { refreshToken } = response.data;
@@ -41,15 +40,12 @@ const KakaoLogin = () => {
           try {
             // loginInfo에서 정보 받아오기, 토큰 헤더에 담아서 전송
             axios.defaults.headers.common["accessToken"] = accessToken;
-            const userRes = await axios.get(
-              `${process.env.NEXT_PUBLIC_API_URL}/loginInfo`,
-              {
-                headers: {
-                  "Access-Token": `${accessToken}`,
-                },
-                withCredentials: true,
-              }
-            );
+            const userRes = await axios.get(`/loginInfo`, {
+              headers: {
+                "Access-Token": `${accessToken}`,
+              },
+              withCredentials: true,
+            });
             // 여기에서 받아온 유저 정보를 리덕스에 저장한다
             console.log(userRes.data);
             const { id, nickName, email } = userRes.data.data;
