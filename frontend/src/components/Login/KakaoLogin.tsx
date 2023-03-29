@@ -3,7 +3,6 @@ import {
   setId,
   setNickname,
   setToken,
-  setProfileUrl,
 } from "@/src/store/reducers/loginTokenSlice";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -21,40 +20,39 @@ const KakaoLogin = () => {
     let code = new URL(window.location.href).searchParams.get("code");
     const kakaoCode = async () => {
       try {
+        // 코드 전송
         const response = await axios.get(
-          `http://219.255.1.253:8080/oauth/token?code=${code}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/oauth/token?code=${code}`,
           { withCredentials: true }
         );
-        const accessToken = response.data.accessToken;
-        const refreshToken = response.data.accessToken;
-        cookie.save("accessToken", response.data.accessToken, { path: "/" });
-        cookie.save("refreshToken", response.data.refreshToken, {
+        console.log(response);
+        const { accessToken } = response.data;
+        const { refreshToken } = response.data;
+        cookie.save("accessToken", accessToken, {
           path: "/",
         });
-        setToken(accessToken);
-        setToken(refreshToken);
+        cookie.save("refreshToken", refreshToken, {
+          path: "/",
+        });
+        setToken;
         dispatch(setToken(accessToken));
 
         if (accessToken) {
           try {
             // loginInfo에서 정보 받아오기, 토큰 헤더에 담아서 전송
-            axios.defaults.headers.common["Access-Token"] = accessToken;
-            const userRes = await axios.get(
-              `http://219.255.1.253:8080/loginInfo`,
-              {
-                headers: {
-                  "Access-Token": `${accessToken}`,
-                },
-                withCredentials: true,
-              }
-            );
+            axios.defaults.headers.common["accessToken"] = accessToken;
+            const userRes = await axios.get(`http://localhost:8080/loginInfo`, {
+              headers: {
+                "Access-Token": `${accessToken}`,
+              },
+              withCredentials: true,
+            });
             // 여기에서 받아온 유저 정보를 리덕스에 저장한다
             console.log(userRes.data);
-            const { id, nickName, email, profileUrl } = userRes.data.data;
+            const { id, nickName, email } = userRes.data.data;
             dispatch(setId(id));
             dispatch(setEmail(email));
             dispatch(setNickname(nickName));
-            dispatch(setProfileUrl(profileUrl));
             router.replace("/");
           } catch (e) {
             console.log(e);
