@@ -41,7 +41,7 @@ dependencies {
 
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     testImplementation 'org.springframework.security:spring-security-test'
-    
+
     // Querydsl 추가
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
@@ -61,10 +61,6 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-test.onlyIf {
-    !project.hasProperty('test')
 }
 
 //querydsl 추가 시작
