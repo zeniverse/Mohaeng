@@ -8,6 +8,7 @@ import com.mohaeng.backend.member.dto.response.MyPageCourseBookMarkDto;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ public class MyPageService {
     private final MemberRepository memberRepository;
 
 
+    @Transactional
     public List<MyPageCourseBookMarkDto> findAllBookMarkCourse(String email) {
         Member member = isMember(email);
         List<CourseBookmark> courseBookMarkList = member.getCourseBookMarkList();
@@ -36,11 +38,12 @@ public class MyPageService {
                 .collect(Collectors.toList());
     }
 
-    private Member isMember(String email) {
+    public Member isMember(String email) {
         return memberRepository.findByEmailAndDeletedDateIsNull(email)
                 .orElseThrow(() -> new IllegalArgumentException("Not_Exist_Member"));
     }
 
+    @Transactional
     public MyPageCourseBookMarkDto findOneBookMarkedCourse(String email, Long bookMarkId) {
         Member member = isMember(email);
         CourseBookmark courseBookMark = isCourseBookMark(bookMarkId);
@@ -54,11 +57,11 @@ public class MyPageService {
         return data;
     }
 
-    private boolean isBookmarkByMemberAndId(Member member, Long bookMarkId) {
+    public boolean isBookmarkByMemberAndId(Member member, Long bookMarkId) {
         return courseBookmarkRepository.existsCourseBookmarkByMemberAndId(member, bookMarkId);
     }
 
-    private CourseBookmark isCourseBookMark(Long bookMarkId) {
+    public CourseBookmark isCourseBookMark(Long bookMarkId) {
         return courseBookmarkRepository.findById(bookMarkId)
                 .orElseThrow(() -> new IllegalArgumentException("NOT_EXIST_COURSE_BOOK_MARK"));
     }

@@ -106,6 +106,10 @@ public class MemberService {
         return new KakaoUserDto(id, parsedEmail, parsedName, profileImage);
     }
 
+    public Member saveMember(Member member) {
+        return memberRepository.save(member);
+    }
+
     public Member saveMember(String token) throws IOException {
         KakaoUserDto kakaoUser = findProfile(token);
         Member member = memberRepository.findByEmailAndDeletedDateIsNull(kakaoUser.getEmail())
