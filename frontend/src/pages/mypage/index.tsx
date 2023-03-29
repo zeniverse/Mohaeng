@@ -1,36 +1,38 @@
 "use client";
 
 import Button from "@/src/components/Button/Button";
-import { User, userData } from "@/src/interfaces/Auth";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import MypageLayout from "./layout";
+import { useSelector } from "react-redux";
+import { RootState } from "@/src/store/store";
+import UserInfo from "@/src/components/Mypage/UserInfo";
 
 const MyPage: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<User>();
-  useEffect(() => {
-    async function fetchData() {
-      const res = await fetch("/api/user");
-      const data = await res.json();
-      setCurrentUser(data);
-    }
-    fetchData();
-  }, []);
-
-  const Img = currentUser?.data.profileUrl;
+  const id = useSelector((state: RootState) => state.id.id);
+  const nickName = useSelector((state: RootState) => state.nickName.nickName);
+  const email = useSelector((state: RootState) => state.email.email);
+  const imageUrl = useSelector(
+    (state: RootState) => state.profileUrl.profileUrl
+  );
   return (
     <MypageLayout>
       <h1 className={styles["Title"]}>마이페이지</h1>
-      <div className={styles["Container"]}>
+      <UserInfo
+        key={id}
+        id={id}
+        nickName={nickName}
+        email={email}
+        imageUrl={imageUrl}
+      />
+      {/* <div className={styles["Container"]}>
         <div className={styles["ProfileWrapper"]}>
-          <img src={Img} className={styles["Avatar"]} />
+          <img src={imageUrl} className={styles["Avatar"]} />
           <div>
-            <div className={styles["Name"]}>{currentUser?.data.userId}</div>
-            <div className={styles["Nickname"]}>
-              {currentUser?.data.userNickname}
-            </div>
-            <div className={styles["Email"]}>{currentUser?.data.userEmail}</div>
+            <div className={styles["Name"]}>{id}</div>
+            <div className={styles["Nickname"]}>{nickName}</div>
+            <div className={styles["Email"]}>{email}</div>
           </div>
         </div>
         <div className={styles["ButtonWrapper"]}>
@@ -40,7 +42,7 @@ const MyPage: React.FC = () => {
 
           <Button text="회원탈퇴" />
         </div>
-      </div>
+      </div> */}
     </MypageLayout>
   );
 };
