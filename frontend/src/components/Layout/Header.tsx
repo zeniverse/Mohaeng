@@ -16,7 +16,6 @@ import {
 import { RootState } from "@/src/store/store";
 import axios from "axios";
 import cookie from "react-cookies";
-import Image from "next/image";
 import { GetServerSideProps } from "next";
 
 const StyledIcon = styled(BsSearch)`
