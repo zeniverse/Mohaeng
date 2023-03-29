@@ -34,6 +34,7 @@ import java.util.Map;
 @RequestMapping("/api/course")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "", allowedHeaders = "")
 public class CourseController {
 
     private final CourseService courseService;

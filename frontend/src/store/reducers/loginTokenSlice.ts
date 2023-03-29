@@ -1,24 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-
-// export const fetchUser = createAsyncThunk("token/fetchUser", async () => {
-//   try {
-//     const accessToken = localStorage.getItem("accessToken");
-//     const res = await axios.get(`http://219.255.1.253:8080/loginInfo`, {
-//       headers: {
-//         "Access-Token": `${accessToken}`,
-//       },
-//     });
-//     console.log(res);
-//     return {
-//       id: res.data.id,
-//       nickName: res.data.nickName,
-//       email: res.data.email,
-//     };
-//   } catch (err) {
-//     return console.log(err);
-//   }
-// });
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface LoginState {
   // isLoading: string;
@@ -61,22 +41,8 @@ export const logintokenSlice = createSlice({
       state.profileUrl = action.payload;
     },
   },
-  // extraReducers: (builder) => {
-  //   builder.addCase(fetchUser.pending, (state) => {
-  //     state.isLoading = "loading";
-  //   });
-  //   builder.addCase(fetchUser.fulfilled, (state, action) => {
-  //     state.id = action.payload.id;
-  //     state.nickName = action.payload.nickName;
-  //     state.email = action.payload.email;
-  //     state.isLoggedin = true;
-  //   });
-  //   builder.addCase(fetchUser.rejected, (state) => {
-  //     state.isLoading = "fail";
-  //   });
-  // },
 });
 
-export const { setToken, setNickname, setEmail, setId, setProfileUrl } =
+export const { setToken, setNickname, setEmail, setId } =
   logintokenSlice.actions;
 export default logintokenSlice.reducer;
