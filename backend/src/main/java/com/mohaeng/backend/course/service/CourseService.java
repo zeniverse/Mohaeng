@@ -52,13 +52,21 @@ public class CourseService {
     public CoursePlaceSearchRes placeSearch(CoursePlaceSearchReq req, Pageable pageable) {
         // keyword에 null이 담겨있을 때
         if (req.getKeyword() == null){
+            // TODO: Exception 처리
             throw new IllegalArgumentException("keyword 값이 비어있습니다.");
         }
+
         // rating에 점수가 담겨있지 않을 때
-        Double rating = req.parseRatingToDouble(req.getLastRating());
+        double rating = req.parseRatingToDouble(req.getLastRating());
         Slice<CoursePlaceSearchDto> placeInCourse = placeRepository.findPlaceInCourse(req.getKeyword(), req.getLastPlaceId(), rating, pageable);
 
-        return CoursePlaceSearchRes.from(placeInCourse);
+        Slice<Place> places = placeRepository.findPlaceInCourse(req.getKeyword(), req.getLastId(), rating, pageable);
+
+        List<CoursePlaceSearchDto> coursePlaceSearchList = places.stream()
+                .map(place -> CoursePlaceSearchDto.from(place))
+                .collect(Collectors.toList());
+
+        return CoursePlaceSearchRes.from(places.hasNext(), coursePlaceSearchList);
     }
 
     @Transactional
@@ -111,7 +119,7 @@ public class CourseService {
         List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
         List<CourseInPlaceDto> courseInPlaceDtoList = new ArrayList<>();
 
-        // 3. CoursePlaces에 담긴 Place 정보와 PlaceImage를 사용해 CourseInPlaceDTO에 담아준다.
+        // 3. CoursePlaces에 담긴 Place 정보를 사용해 CourseInPlaceDTO에 담아준다.
         for (CoursePlace coursePlace : coursePlaces) {
             Place place = coursePlace.getPlace();
             PlaceImage findPlaceImage = placeImageRepository.findFirstByPlace(place);
@@ -119,7 +127,7 @@ public class CourseService {
                     CourseInPlaceDto.builder()
                             .placeId(place.getId())
                             .name(place.getName())
-                            .imgUrl(findPlaceImage.getImgUrl())
+                            .imgUrl(place.getFirstImage())
                             .address(place.getAddress())
                             .mapX(place.getMapX())
                             .mapY(place.getMapY())
