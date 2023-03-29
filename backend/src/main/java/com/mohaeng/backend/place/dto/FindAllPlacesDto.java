@@ -4,9 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.awt.print.Pageable;
-
 @Getter
+@AllArgsConstructor
 @Builder
 public class FindAllPlacesDto {
     private String name;
@@ -14,11 +13,5 @@ public class FindAllPlacesDto {
     private String firstImage;
     private String contentId;
 
-    public FindAllPlacesDto(String name, String areaCode, String firstImage, String contentId) {
-        this.name = name;
-        this.areaCode = areaCode;
-        this.firstImage = firstImage;
-        this.contentId = contentId;
-    }
 }
 
