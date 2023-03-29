@@ -34,8 +34,6 @@ public class PlaceController {
     private final PlaceService placeService;
     private final PlaceRepository placeRepository;
 
-
-
     @GetMapping("/api/place/all")
     public ResponseEntity<List<Place>> getPlaces() {
         List<Place> places = placeService.getPlacesAll();
@@ -52,14 +50,7 @@ public class PlaceController {
         return new ResponseEntity<>(places, HttpStatus.OK);
     }
 
-    @GetMapping("/api/place")
-    public List<Place> search(@RequestParam String keyword, @RequestParam(required = false) String address) {
-        if (address == null || address.isEmpty()) {
-            return placeRepository.findByNameContaining(keyword);
-        } else {
-            return placeRepository.findByNameContainingOrAddressContaining(keyword,address);
-        }
-    }
+
 
     @GetMapping("/api/place/{contentId}")
     public ResponseEntity<PlaceDTO> getPlace(@PathVariable String contentId) throws IOException, ParserConfigurationException, SAXException {
@@ -85,25 +76,28 @@ public class PlaceController {
         return placeRepository.findAll(pageable);
     }
 
-    @GetMapping("/places")
-    public ResponseEntity<BaseResponse<List<FindAllPlacesDto>>> findAllPlace(@RequestParam String areaCode, @RequestParam int page) {
-        List<FindAllPlacesDto> result = placeService.findAllPlace(areaCode, page);
-        return ResponseEntity.ok().body(BaseResponse.success("OK", result));
-    }
-
-}
-//    @GetMapping("/place/{addr1}")
-//    public ResponseEntity<List<Place>> searchPlace(@PathVariable String addr1) throws JAXBException, IOException, ParserConfigurationException, SAXException {
-//        // 데이터베이스에서 모든 데이터를 가져옵니다.
-//        List<Place> places = placeService.getPlacesByAddr1(addr1);
-//        log.info("search places.size:{} ",places.size());
-//        // addr1 값이 입력받은 검색어로 시작하는 데이터만 필터링합니다.
-////        List<Place> filteredPlaces = places.stream()
-////                .filter(place -> place.getAddr1().startsWith(addr1))
-////                .collect(Collectors.toList());
-//        // 필터링한 결과를 반환합니다.
-////        log.info("filteredPlaces.size:{} ",filteredPlaces.size());
-//        return new ResponseEntity<>(places, HttpStatus.OK);
+//    @GetMapping("/api/place")
+//    public List<Place> search(@RequestParam String keyword, @RequestParam(required = false) String address) {
+//        if (address == null || address.isEmpty()) {
+//            return placeRepository.findByNameContaining(keyword);
+//        } else {
+//            return placeRepository.findByNameContainingOrAddressContaining(keyword,address);
+//        }
 //    }
+
+
+
+
+    @GetMapping("/places")
+    public ResponseEntity<BaseResponse<FindAllPlacesResponse>> findAllPlace(
+        @RequestParam String areaCode,
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "12") int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<FindAllPlacesDto> result = placeRepository.findByAreaCodeEquals(areaCode, pageable);
+        FindAllPlacesResponse response = new FindAllPlacesResponse(result.getContent(), result.getTotalPages(), result.getTotalElements());
+        return ResponseEntity.ok().body(BaseResponse.success("OK", response));
+    }
+}
 
 
