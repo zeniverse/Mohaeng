@@ -1,24 +1,19 @@
 package com.mohaeng.backend.place.repository;
 
-import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
-import com.mohaeng.backend.place.domain.QPlaceImage;
-import com.querydsl.core.types.Projections;
+import com.mohaeng.backend.place.domain.Place;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringTemplate;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
-import static org.springframework.util.ObjectUtils.isEmpty;
-
 import java.util.List;
 
 import static com.mohaeng.backend.place.domain.QPlace.place;
-import static com.mohaeng.backend.place.domain.QPlaceImage.placeImage;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 
@@ -28,38 +23,16 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-
     @Override
-    public Slice<CoursePlaceSearchDto> findPlaceInCourse(String keyword, Long lastPlaceId, Double lastRating, Pageable pageable) {
-        QPlaceImage sub = new QPlaceImage("sub");
-        QPlaceImage origin = new QPlaceImage("origin");
-
-        List<CoursePlaceSearchDto> res = queryFactory
-                .select(Projections.constructor(CoursePlaceSearchDto.class,
-                        place.id,
-                        origin.imgUrl,
-                        place.name,
-                        place.addr1,
-                        place.rating
-                ))
-                .from(place)
-                .innerJoin(place.placeImages, origin)
+    public Slice<Place> findPlaceInCourse(String keyword, Long lastPlaceId, double lastRating, Pageable pageable) {
+        List<Place> res = queryFactory.selectFrom(place)
                 .where(
                         titleContain(keyword),
-                        placeIdAndRatingLt(lastPlaceId, lastRating),
-                        origin.id.eq(
-                                JPAExpressions.select(sub.id.min().as("place_image_id"))
-                                        .from(sub)
-                                        .where(place.id.eq(sub.place.id))
-                                        .groupBy(sub.place.id)
-                        )
+                        placeIdAndRatingLt(lastPlaceId, lastRating)
                 )
-                .groupBy(place.id, origin.imgUrl)
                 .orderBy(place.rating.desc(), place.id.desc())
-                .limit(pageable.getPageSize()+1)
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
-
-        System.out.println("res = " + res);
 
         boolean hasNext = false;
 
@@ -80,7 +53,6 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
     }
 
     private BooleanExpression placeIdAndRatingLt(Long placeId, double lastRating) {
-
         return (placeId == null && lastRating == 0.0) ? null : place.id.lt(placeId).and(place.rating.loe(lastRating));
     }
 }

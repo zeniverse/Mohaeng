@@ -43,8 +43,8 @@ public class RandomNameService {
                 .stream().map(user -> user.getNickName())
                 .toList();
 
-        int firstRandomIndex = (int) Math.random() * (animalNames.length + 1);
-        int secondRandomIndex = (int) Math.random() * (adjectiveNames.length + 1);
+        int firstRandomIndex = (int) (Math.random() * (animalNames.length + 1));
+        int secondRandomIndex = (int) (Math.random() * (adjectiveNames.length + 1));
 
         return checkDuplicateNickName(nickNameList, firstRandomIndex, secondRandomIndex);
     }
@@ -56,8 +56,8 @@ public class RandomNameService {
                 return nickName;
             }
 
-            firstRandomIndex = (int) (Math.random() * (animalNames.length + 1));
-            secondRandomIndex = (int) (Math.random() * (adjectiveNames.length + 1));
+            firstRandomIndex = (int) (Math.random() * animalNames.length);
+            secondRandomIndex = (int) (Math.random() * adjectiveNames.length);
 
         }
     }

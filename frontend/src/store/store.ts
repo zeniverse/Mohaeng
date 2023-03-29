@@ -5,6 +5,7 @@ import nickNameReducer from "./reducers/loginTokenSlice";
 import emailReducer from "./reducers/loginTokenSlice";
 import idReducer from "./reducers/loginTokenSlice";
 import profileUrlReducer from "./reducers/loginTokenSlice";
+import CourseFormSlice from "./reducers/CourseFormSlice";
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,11 @@ const store = configureStore({
     nickName: nickNameReducer,
     email: emailReducer,
     id: idReducer,
+<<<<<<< HEAD
+=======
+    profileUrl: profileUrlReducer,
+    course: CourseFormSlice,
+>>>>>>> 78269ef2728e3fc1b5e8756fbad205fc3eebac10
   },
 });
 

@@ -20,6 +20,7 @@ const KakaoLogin = () => {
     let code = new URL(window.location.href).searchParams.get("code");
     const kakaoCode = async () => {
       try {
+        // 코드 전송
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/oauth/token?code=${code}`,
           { withCredentials: true }
