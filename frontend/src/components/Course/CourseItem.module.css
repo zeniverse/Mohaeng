@@ -107,12 +107,3 @@
 .roughmapBtn {
   position: relative;
 }
-
-.roughmap-wrapper {
-  position: absolute;
-
-  z-index: 1;
-  top: 106%;
-  overflow: hidden;
-  left: 0;
-}

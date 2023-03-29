@@ -11,13 +11,13 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: "/:path*",
-  //       destination: "http://219.255.1.253:8080/:path*",
-  //     },
-  //   ];
-  // },
+  async rewrites() {
+    return [
+      {
+        source: "/:path*",
+        destination: "http://localhost:8080/:path*",
+      },
+    ];
+  },
 };
 module.exports = nextConfig;

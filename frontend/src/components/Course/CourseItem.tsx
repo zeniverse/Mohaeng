@@ -31,10 +31,6 @@ const CourseItem = ({
     setIsRoughMapOpen(false);
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
-    e.stopPropagation();
-  };
-
   return (
     <div className={styles["course-item-container"]}>
       <Link href={`/course/${id}`}>
@@ -69,11 +65,9 @@ const CourseItem = ({
           onClick={toggleRoughMapHandler}
         >
           <BiMapAlt />
-          <div className={styles["roughmap-wrapper"]} onClick={handleClick}>
-            {isRoughMapOpen && (
-              <RoughMap RoughMapData={RoughMapData} onClose={onClose} />
-            )}
-          </div>
+          {isRoughMapOpen && (
+            <RoughMap RoughMapData={RoughMapData} onClose={onClose} />
+          )}
         </div>
       </div>
     </div>

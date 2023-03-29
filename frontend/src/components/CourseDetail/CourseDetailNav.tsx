@@ -31,11 +31,9 @@ const CourseDetailNav = ({ likeCount, places }: any) => {
           onClick={toggleRoughMapHandler}
         >
           <BiMapAlt className={styles.roughmapIcon} />
-          <div className={styles["roughmap-wrapper"]} onClick={handleClick}>
-            {isRoughMapOpen && (
-              <RoughMap RoughMapData={RoughMapData} onClose={onClose} />
-            )}
-          </div>
+          {isRoughMapOpen && (
+            <RoughMap RoughMapData={RoughMapData} onClose={onClose} />
+          )}
         </div>
         <div className={styles["item-nav"]}>
           <BiBookmarkPlus />

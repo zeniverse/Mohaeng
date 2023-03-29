@@ -4,7 +4,8 @@ export const palette = {
   Lsky: "#B4E4FF",
   Msky: "#62CDFF",
   Lbeige: "#FEFBE9",
-  Lgrey: "#f3f3f3",
+  Lgrey: "var(--color-bg-lightgray)",
+  Mgrey: "var(--color-bg-gray)",
   Mpink: "#F7C8E0",
   Dyellow: "#F2CD5C",
 };

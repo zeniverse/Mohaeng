@@ -1,9 +1,14 @@
 .roughmap-container {
+  position: absolute;
   width: 200px;
   background-color: #fff;
   padding: 0.6rem 1rem;
   border: 1px solid var(--color-border-semi);
   border-radius: 0.4rem;
+  z-index: 1;
+  overflow: hidden;
+  top: 106%;
+  left: 0;
 }
 
 .listitem {
@@ -18,7 +23,6 @@
   width: 0.6rem;
   height: 0.6rem;
   border-radius: 50%;
-  background: rgb(174, 238, 218);
   background: radial-gradient(
     circle,
     rgba(174, 238, 218, 1) 0%,

@@ -6,9 +6,15 @@ import { useClickOutside } from "@/src/hooks/useClickOutSide";
 const RoughMap = ({ RoughMapData, onClose }: RoughMapTitle) => {
   const boxRef = useRef<HTMLOListElement>(null);
   useClickOutside(boxRef, onClose);
-
+  const handleClick = (e: React.MouseEvent<HTMLOListElement>): void => {
+    e.stopPropagation();
+  };
   return (
-    <ol ref={boxRef} className={styles["roughmap-container"]}>
+    <ol
+      onClick={handleClick}
+      ref={boxRef}
+      className={styles["roughmap-container"]}
+    >
       {RoughMapData.map((title, idx) => (
         <li className={styles.listitem} key={idx}>
           <div className={styles.circle}></div>
