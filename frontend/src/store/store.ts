@@ -14,8 +14,11 @@ const store = configureStore({
     nickName: nickNameReducer,
     email: emailReducer,
     id: idReducer,
+<<<<<<< HEAD
+=======
     profileUrl: profileUrlReducer,
     course: CourseFormSlice,
+>>>>>>> 78269ef2728e3fc1b5e8756fbad205fc3eebac10
   },
 });
 

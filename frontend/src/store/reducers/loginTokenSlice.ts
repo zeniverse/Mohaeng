@@ -1,5 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice } from "@reduxjs/toolkit";
 
 // export const fetchUser = createAsyncThunk("token/fetchUser", async () => {
 //   try {
@@ -77,6 +76,6 @@ export const logintokenSlice = createSlice({
   // },
 });
 
-export const { setToken, setNickname, setEmail, setId, setProfileUrl } =
+export const { setToken, setNickname, setEmail, setId } =
   logintokenSlice.actions;
 export default logintokenSlice.reducer;
