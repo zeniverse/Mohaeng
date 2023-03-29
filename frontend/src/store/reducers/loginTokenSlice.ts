@@ -1,5 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice } from "@reduxjs/toolkit";
 
 // export const fetchUser = createAsyncThunk("token/fetchUser", async () => {
 //   try {
@@ -28,7 +27,7 @@ export interface LoginState {
   token: string;
   nickName: string;
   email: string;
-  // profileUrl: string;
+  profileUrl: string;
 }
 
 const initialState: LoginState = {
@@ -38,7 +37,7 @@ const initialState: LoginState = {
   token: "",
   nickName: "",
   email: "",
-  // profileUrl: "",
+  profileUrl: "",
 };
 
 export const logintokenSlice = createSlice({
@@ -57,9 +56,9 @@ export const logintokenSlice = createSlice({
     setId: (state, action) => {
       state.id = action.payload;
     },
-    // setProfileUrl: (state, action) => {
-    //   state.profileUrl = action.payload;
-    // },
+    setProfileUrl: (state, action) => {
+      state.profileUrl = action.payload;
+    },
   },
   // extraReducers: (builder) => {
   //   builder.addCase(fetchUser.pending, (state) => {

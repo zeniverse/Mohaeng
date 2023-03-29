@@ -22,37 +22,45 @@ const StyledIcon = styled(BsSearch)`
   color: #004aad;
 `;
 
+type User = {
+  id: number;
+  nickName: string;
+  email: string;
+};
+
 type Props = {};
 
 function Header({}: Props) {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState<User[]>([]);
   const dispatch = useDispatch();
   const router = useRouter();
   const loginToken = useSelector((state: RootState) => state.token.token);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
+  const accessToken = cookie.load("accessToken");
 
   useEffect(() => {
     const response = async () => {
-      const accessToken = cookie.load("accessToken");
       if (accessToken) {
-        const userRes = await axios.get(`http://219.255.1.253:8080/loginInfo`, {
-          headers: {
-            "Access-Token": accessToken,
-          },
-          withCredentials: true,
-        });
-        console.log(userRes);
+        const userRes = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/loginInfo`,
+          {
+            headers: {
+              "Access-Token": accessToken,
+            },
+            withCredentials: true,
+          }
+        );
         const { id, nickName, email } = userRes.data.data;
         dispatch(setId(id));
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
-        console.log(nickName);
         setUser(userRes.data.data);
+        console.log(userRes.data.data);
       }
     };
     response();
-  });
-  // , [loginToken, dispatch]
+  }, [accessToken]);
+
   const handleOpenLoginModal = () => {
     dispatch(
       openModal({
@@ -68,6 +76,7 @@ function Header({}: Props) {
     dispatch(setNickname(""));
     dispatch(setEmail(""));
     dispatch(setId(0));
+    setUser([]);
     router.replace("/");
     window.alert("로그아웃되었습니다!");
   };
@@ -97,7 +106,7 @@ function Header({}: Props) {
         </div>
       </nav>
       <div className={styles.btn}>
-        {!loginToken ? (
+        {!nickName ? (
           <>
             <button
               id="login-btn"
@@ -133,8 +142,8 @@ function Header({}: Props) {
 
 export default Header;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  return {
-    props: {},
-  };
-};
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   return {
+//     props: {},
+//   };
+// };

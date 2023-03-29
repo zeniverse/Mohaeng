@@ -1,7 +1,7 @@
 import axios from "axios";
 import cookie from "react-cookies";
 
-type setToken = {
+type saveToken = {
   accessToken: string;
   refreshToken: string;
 };
@@ -25,4 +25,4 @@ function saveToken(accessToken: string, refreshToken: string) {
   });
 }
 
-export { saveToken };
+// export { saveToken };
