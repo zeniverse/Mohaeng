@@ -1,12 +1,14 @@
 package com.mohaeng.backend.course.domain;
 
 import com.mohaeng.backend.common.BaseTimeEntity;
+import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
 import com.mohaeng.backend.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Where;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,10 +72,10 @@ public class Course extends BaseTimeEntity {
         this.coursePlaces = data;
     }
 
-    public void updateCourse(CourseUpdateReq courseUpdateReq) {
+    public void updateCourse(CourseUpdateReq courseUpdateReq, LocalDateTime start, LocalDateTime end) {
         this.title = courseUpdateReq.getTitle();
-        this.startDate = courseUpdateReq.getStartDate();
-        this.endDate = courseUpdateReq.getEndDate();
+        this.startDate = start;
+        this.endDate = end;
         this.isPublished = courseUpdateReq.getIsPublished();
         this.courseDays = courseUpdateReq.getCourseDays();
         this.region = courseUpdateReq.getRegion();

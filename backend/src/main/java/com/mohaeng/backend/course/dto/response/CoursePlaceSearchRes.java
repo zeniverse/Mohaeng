@@ -16,7 +16,7 @@ public class CoursePlaceSearchRes {
     private boolean hasNext;
     private List<CoursePlaceSearchDto> places;
 
-    public static CoursePlaceSearchRes from(Slice<CoursePlaceSearchDto> slice) {
-        return new CoursePlaceSearchRes(slice.hasNext(), slice.getContent());
+    public static CoursePlaceSearchRes from(boolean hasNext, List<CoursePlaceSearchDto> places) {
+        return new CoursePlaceSearchRes(hasNext, places);
     }
 }

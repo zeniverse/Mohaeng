@@ -20,6 +20,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -39,7 +40,8 @@ public class CourseController {
     private final TokenGenerator tokenGenerator;
 
     @GetMapping("/placeSearch")
-    public ResponseEntity placeSearch(@ModelAttribute CoursePlaceSearchReq req, Pageable pageable){
+    public ResponseEntity placeSearch(@ModelAttribute CoursePlaceSearchReq req,
+                                      @PageableDefault(size = 5)Pageable pageable){
 
         CoursePlaceSearchRes res = courseService.placeSearch(req, pageable);
         return ResponseEntity.ok().body(BaseResponse.success("OK", res));
@@ -86,7 +88,7 @@ public class CourseController {
     @GetMapping
     public ResponseEntity getCourseList(HttpServletRequest request,
                                         CourseSearchDto courseSearchDto,
-                                        Pageable pageable){
+                                        @PageableDefault(size = 12) Pageable pageable){
         CourseListRes result = courseService.getCourseList(courseSearchDto, pageable, isAccessMember(request));
         return ResponseEntity.ok().body(BaseResponse.success("OK", result));
     }
