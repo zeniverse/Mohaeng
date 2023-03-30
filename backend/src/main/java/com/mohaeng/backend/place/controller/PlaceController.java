@@ -4,7 +4,9 @@ import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
+import com.mohaeng.backend.place.dto.PlaceSearchDto;
 import com.mohaeng.backend.place.dto.response.FindAllPlacesResponse;
+import com.mohaeng.backend.place.dto.response.FindSearchPlacesResponse;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
@@ -76,17 +78,22 @@ public class PlaceController {
         return placeRepository.findAll(pageable);
     }
 
-//    @GetMapping("/api/place")
-//    public List<Place> search(@RequestParam String keyword, @RequestParam(required = false) String address) {
-//        if (address == null || address.isEmpty()) {
-//            return placeRepository.findByNameContaining(keyword);
-//        } else {
-//            return placeRepository.findByNameContainingOrAddressContaining(keyword,address);
-//        }
-//    }
-
-
-
+    @GetMapping("/api/place")
+    public ResponseEntity<BaseResponse<FindSearchPlacesResponse>> search(
+            @RequestParam String keyword, @RequestParam(required = false) String address,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "12") int size) {
+            Pageable pageable = PageRequest.of(page - 1, size);
+        if (address == null || address.isEmpty()) {
+            Page<PlaceSearchDto> result = placeRepository.findByNameContaining(keyword);
+            FindSearchPlacesResponse response = new FindSearchPlacesResponse(result.getContent(), result.getTotalPages(), result.getTotalElements());
+            return ResponseEntity.ok().body(BaseResponse.success("OK", response));
+        } else {
+            Page<PlaceSearchDto> result = placeRepository.findByNameContainingOrAddressContaining(keyword, address);
+            FindSearchPlacesResponse response = new FindSearchPlacesResponse(result.getContent(), result.getTotalPages(), result.getTotalElements());
+            return ResponseEntity.ok().body(BaseResponse.success("OK", response));
+        }
+    }
 
     @GetMapping("/places")
     public ResponseEntity<BaseResponse<FindAllPlacesResponse>> findAllPlace(
