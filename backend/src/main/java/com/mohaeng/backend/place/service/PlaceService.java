@@ -76,7 +76,8 @@ public class PlaceService {
 //                String overview = "";
 //                String overview = getOverview(contentid);
                 if (firstImage == null || firstImage.isEmpty()) {
-                    firstImage = "https://lh3.google.com/u/1/d/1ic2_89fYMLjZMCN0BoEirSEai_FarJvP=w2560-h1370-iv1";
+//                    firstImage = "https://lh3.google.com/u/1/d/1ic2_89fYMLjZMCN0BoEirSEai_FarJvP=w2560-h1370-iv1";
+                    firstImage = "src/main/resources/initImage/everytrip.png";
                 }
 
                 if (address == null || address.isEmpty()) {
