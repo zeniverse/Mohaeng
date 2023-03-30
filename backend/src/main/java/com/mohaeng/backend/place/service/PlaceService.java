@@ -4,6 +4,7 @@ import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.domain.QPlace;
 import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
+import com.mohaeng.backend.place.dto.PlaceDetailsDto;
 import com.mohaeng.backend.place.exception.PlaceNotFoundException;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.querydsl.core.types.Projections;
@@ -181,14 +182,14 @@ public class PlaceService {
                 .build();
     }
 
-    public List<String> getPlaceOverview(String placeName) throws IOException, ParserConfigurationException, SAXException {
+    public List<String> getPlaceOverview(String contentId) throws IOException, ParserConfigurationException, SAXException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
         List<Place> places = getPlaces();
         List<String> overviews = new ArrayList<>();
         for (Place place : places) {
-            if (place.getName().contains(placeName)) {
+            if (place.getContentId().equals(contentId)) {
                 String overview = getOverview(place.getContentId());
                 overview = overview.replaceAll("<br>|<br >|< br>|<br />|</br>|<strong>|</ strong>", "");
                 overviews.add(overview);
@@ -208,4 +209,17 @@ public class PlaceService {
                 .filter(place -> place.getAreaCode().equals(areaCode))
                 .collect(Collectors.toList());
     }
+
+    public List<PlaceDetailsDto> getPlaceDetailsByContentId(String contentId) {
+        List<PlaceDetailsDto> places = placeRepository.findByContentId(contentId);
+        List<PlaceDetailsDto> placeDetailsDtos = places.stream()
+                .map(place -> {
+                    String overview = getOverview(place.getContentId());
+                    return new PlaceDetailsDto(place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), place.getMapX(), place.getMapY(), overview);
+                })
+                .collect(Collectors.toList());
+        return placeDetailsDtos;
+    }
+
+
 }
