@@ -52,6 +52,9 @@ dependencies {
 
     //hamcrest
     testImplementation 'org.hamcrest:hamcrest:2.2'
+
+
+    
 }
 
 tasks.named('test') {
@@ -62,4 +65,8 @@ tasks.named('test') {
 
 //test.onlyIf {
 //    !project.hasProperty('test')
+<<<<<<< HEAD
 //}
+=======
+//}
+>>>>>>> 4c01b7b55df17b119d88a4d1056ca9c11fc9d193
