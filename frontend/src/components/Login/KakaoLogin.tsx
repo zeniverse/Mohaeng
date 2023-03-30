@@ -2,6 +2,7 @@ import {
   setEmail,
   setId,
   setNickname,
+  setProfileUrl,
   setToken,
 } from "@/src/store/reducers/loginTokenSlice";
 import axios from "axios";
@@ -10,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Loading from "./Loading";
 import cookie from "react-cookies";
-// ${process.env.NEXT_PUBLIC_API_URL}
+
 const KakaoLogin = () => {
   const router = useRouter();
   const [valid, setValid] = useState(false);
@@ -24,7 +25,6 @@ const KakaoLogin = () => {
         const response = await axios.get(`/oauth/token?code=${code}`, {
           withCredentials: true,
         });
-        console.log(response);
         const { accessToken } = response.data;
         const { refreshToken } = response.data;
         cookie.save("accessToken", accessToken, {
@@ -47,11 +47,13 @@ const KakaoLogin = () => {
               withCredentials: true,
             });
             // 여기에서 받아온 유저 정보를 리덕스에 저장한다
-            console.log(userRes.data);
-            const { id, nickName, email } = userRes.data.data;
+            const { id, nickName, email, profileUrl } = userRes.data.data;
             dispatch(setId(id));
             dispatch(setEmail(email));
             dispatch(setNickname(nickName));
+            // const blob = new Blob([imageByteArray], { type: "image/jpeg" });
+            // const profileImg = URL.createObjectURL(blob);
+            dispatch(setProfileUrl(profileUrl));
             router.replace("/");
           } catch (e) {
             console.log(e);

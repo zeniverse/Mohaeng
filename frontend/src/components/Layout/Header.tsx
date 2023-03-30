@@ -11,11 +11,13 @@ import {
   setEmail,
   setId,
   setNickname,
+  setProfileUrl,
   setToken,
 } from "@/src/store/reducers/loginTokenSlice";
 import { RootState } from "@/src/store/store";
 import axios from "axios";
 import cookie from "react-cookies";
+import Image from "next/image";
 
 const StyledIcon = styled(BsSearch)`
   color: #004aad;
@@ -35,6 +37,9 @@ function Header({}: Props) {
   const router = useRouter();
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
+  const profileUrl = useSelector(
+    (state: RootState) => state.profileUrl.profileUrl
+  );
 
   useEffect(() => {
     const response = async () => {
@@ -45,12 +50,15 @@ function Header({}: Props) {
           },
           withCredentials: true,
         });
-        const { id, nickName, email } = userRes.data.data;
+        const { id, nickName, email, profileUrl } = userRes.data.data;
         dispatch(setId(id));
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
         setUser(userRes.data.data);
-        console.log(userRes.data.data);
+        // const blob = new Blob([imageByteArray], { type: "image/jpeg" });
+        // const profileImg = URL.createObjectURL(blob);
+        // console.log(profileImg);
+        dispatch(setProfileUrl(profileUrl));
       }
     };
     response();
@@ -70,6 +78,7 @@ function Header({}: Props) {
     dispatch(setToken(""));
     dispatch(setNickname(""));
     dispatch(setEmail(""));
+    dispatch(setProfileUrl(""));
     dispatch(setId(0));
     setUser([]);
     router.replace("/");
@@ -113,13 +122,13 @@ function Header({}: Props) {
           </>
         ) : (
           <>
-            {/* <Image
+            <Image
               className={styles["kakao-profile-img"]}
               src={profileUrl}
               alt="카카오프로필"
               width={40}
               height={40}
-            /> */}
+            />
             {nickName}님
             <button
               id="login-btn"
@@ -136,9 +145,3 @@ function Header({}: Props) {
 }
 
 export default Header;
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   return {
-//     props: {},
-//   };
-// };
