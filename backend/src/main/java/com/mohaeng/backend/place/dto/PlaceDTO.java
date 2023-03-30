@@ -1,10 +1,12 @@
-package com.mohaeng.backend.place.dto.request;
+package com.mohaeng.backend.place.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class PlaceDTO {
     private String name;
     private String address;
