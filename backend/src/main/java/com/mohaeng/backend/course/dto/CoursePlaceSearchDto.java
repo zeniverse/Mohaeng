@@ -13,14 +13,18 @@ public class CoursePlaceSearchDto {
     private String name;
     private String address;
     private double rating;
+    private String mapX;
+    private String mapY;
 
     @Builder
-    private CoursePlaceSearchDto(Long placeId, String imgUrl, String name, String address, double rating) {
+    public CoursePlaceSearchDto(Long placeId, String imgUrl, String name, String address, double rating, String mapX, String mapY) {
         this.placeId = placeId;
         this.imgUrl = imgUrl;
         this.name = name;
         this.address = address;
         this.rating = rating;
+        this.mapX = mapX;
+        this.mapY = mapY;
     }
 
     public static CoursePlaceSearchDto from(Place place){
@@ -30,6 +34,8 @@ public class CoursePlaceSearchDto {
                 .name(place.getName())
                 .address(place.getAddress())
                 .rating(place.getRating())
+                .mapX(place.getMapX())
+                .mapY(place.getMapY())
                 .build();
     }
 }
