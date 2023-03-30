@@ -82,14 +82,14 @@ public class PlaceController {
     public ResponseEntity<BaseResponse<FindSearchPlacesResponse>> search(
             @RequestParam String keyword, @RequestParam(required = false) String address,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "12") int size) {
+            @RequestParam(defaultValue = "20") int size) {
             Pageable pageable = PageRequest.of(page - 1, size);
         if (address == null || address.isEmpty()) {
-            Page<PlaceSearchDto> result = placeRepository.findByNameContaining(keyword);
+            Page<PlaceSearchDto> result = placeRepository.findByNameContaining(keyword, pageable);
             FindSearchPlacesResponse response = new FindSearchPlacesResponse(result.getContent(), result.getTotalPages(), result.getTotalElements());
             return ResponseEntity.ok().body(BaseResponse.success("OK", response));
         } else {
-            Page<PlaceSearchDto> result = placeRepository.findByNameContainingOrAddressContaining(keyword, address);
+            Page<PlaceSearchDto> result = placeRepository.findByNameContainingOrAddressContaining(keyword, address, pageable);
             FindSearchPlacesResponse response = new FindSearchPlacesResponse(result.getContent(), result.getTotalPages(), result.getTotalElements());
             return ResponseEntity.ok().body(BaseResponse.success("OK", response));
         }
