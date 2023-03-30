@@ -75,7 +75,7 @@ public class PlaceController {
 //    }
 
     @GetMapping("/place/overview/{contentId}")
-    public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String contentId) {
+    public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String contentId) throws IOException, ParserConfigurationException, SAXException {
         List<PlaceDetailsDto> dtos = placeService.getPlaceDetailsByContentId(contentId);
         PlaceDetailsResponse response = new PlaceDetailsResponse(dtos);
         return ResponseEntity.ok().body(BaseResponse.success("OK",response));
