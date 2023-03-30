@@ -10,4 +10,5 @@ import lombok.Getter;
 public class PlaceSearchDto {
     private String name;
     private String contentId;
+    private String firstImage;
 }
