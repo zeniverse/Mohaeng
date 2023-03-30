@@ -1,3 +1,5 @@
+package com.mohaeng.backend.course.service;
+
 import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;

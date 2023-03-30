@@ -1,3 +1,57 @@
+<<<<<<< HEAD
+//package com.mohaeng.backend.course.controller;
+//
+//import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.mohaeng.backend.config.SecurityConfig;
+//import com.mohaeng.backend.course.domain.Course;
+//import com.mohaeng.backend.course.dto.CourseInPlaceDto;
+//import com.mohaeng.backend.course.dto.CourseListDto;
+//import com.mohaeng.backend.course.dto.CourseSearchDto;
+//import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
+//import com.mohaeng.backend.course.dto.request.CourseReq;
+//import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
+//import com.mohaeng.backend.course.dto.response.CourseIdRes;
+//import com.mohaeng.backend.course.dto.response.CourseListRes;
+//import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
+//import com.mohaeng.backend.course.dto.response.CourseRes;
+//import com.mohaeng.backend.course.service.CourseService;
+//import com.mohaeng.backend.member.domain.Member;
+//import org.assertj.core.util.Lists;
+//import org.junit.jupiter.api.DisplayName;
+//import org.junit.jupiter.api.Test;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+//import org.springframework.boot.test.mock.mockito.MockBean;
+//import org.springframework.context.annotation.ComponentScan;
+//import org.springframework.context.annotation.FilterType;
+//import org.springframework.data.domain.PageRequest;
+//import org.springframework.data.domain.Pageable;
+//import org.springframework.data.domain.SliceImpl;
+//import org.springframework.http.MediaType;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.test.context.support.WithMockUser;
+//import org.springframework.test.web.servlet.MockMvc;
+//import org.springframework.web.bind.MethodArgumentNotValidException;
+//
+//import java.time.LocalDateTime;
+//import java.util.List;
+//
+//import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.mockito.BDDMockito.*;
+//import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+//import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
+//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+//import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+//
+//
+//@WebMvcTest(controllers = CourseController.class,
+//        excludeFilters = {
+//                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+//        })
+//class CourseControllerTest {
+//
+=======
 package com.mohaeng.backend.course.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,6 +104,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         })
 class CourseControllerTest {
 
+>>>>>>> 1303caaaefa9ca7751c9e663fe23ef79e5e04d00
 //    @Autowired private MockMvc mockMvc;
 //    @MockBean private CourseService courseService;
 //    @Autowired private ObjectMapper objectMapper;
@@ -333,4 +388,8 @@ class CourseControllerTest {
 //                .likeCount(0)
 //                .build();
 //    }
+<<<<<<< HEAD
+//}
+=======
 }
+>>>>>>> 1303caaaefa9ca7751c9e663fe23ef79e5e04d00

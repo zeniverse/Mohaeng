@@ -12,9 +12,6 @@ import org.hibernate.annotations.Table;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Builder
 @Getter

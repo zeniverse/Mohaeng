@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
         })
 class CourseLikesControllerTest {
-
 //    @Autowired
 //    private MockMvc mockMvc;
 //    @MockBean private CourseLikesService courseLikesService;
@@ -112,7 +111,7 @@ class CourseLikesControllerTest {
 //
 //        verify(courseLikesService).isExistCourseLikes(eq(courseId), eq("test@test.com"));
 //    }
-//
+
 //    @Test
 //    @DisplayName("[GET] 코스 좋아요 count - 정상 처리")
 //    @WithMockUser
@@ -145,4 +144,8 @@ class CourseLikesControllerTest {
 //    // 코스 좋아요 유무 - 로그인 되어있지 않을 때
 //
 //    // 코스 좋아요 갯수 조회 - 코스가 존재하지 않는 경우
+<<<<<<< HEAD
+//}
+=======
 }
+>>>>>>> 1303caaaefa9ca7751c9e663fe23ef79e5e04d00

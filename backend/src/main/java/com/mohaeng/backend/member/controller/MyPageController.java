@@ -3,6 +3,8 @@ package com.mohaeng.backend.member.controller;
 import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.dto.request.UserInfoChangeRequest;
+import com.mohaeng.backend.member.dto.response.MyPageCourseBookMarkDto;
+import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.service.MemberService;
 import com.mohaeng.backend.member.service.MyPageService;
 import jakarta.servlet.http.Cookie;
@@ -10,14 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -27,18 +28,21 @@ import java.util.UUID;
 public class MyPageController {
     private final MemberService memberService;
     private final MyPageService myPageService;
+    private final TokenGenerator tokenGenerator;
     private final String UPLOAD_PATH = "../image/";
 
     @GetMapping("/myPage/course/bookMark")
-    public ResponseEntity getAllBookMarkedCourse(@AuthenticationPrincipal OAuth2User oAuth2User) {
-        Member findMember = memberService.findByEmail((String) oAuth2User.getAttributes().get("email"));
-        return myPageService.findAllBookMarkCourse(findMember);
+    public ResponseEntity getAllBookMarkedCourse(HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        List<MyPageCourseBookMarkDto> data = myPageService.findAllBookMarkCourse(email);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", data));
     }
 
-    @GetMapping("/myPage/course/bookMark/{bookMarkId}")
-    public ResponseEntity getOneBookMarkedCourse(@PathVariable Long bookMarkId, @AuthenticationPrincipal OAuth2User oAuth2User) {
-        Member findMember = memberService.findByEmail((String) oAuth2User.getAttributes().get("email"));
-        return myPageService.findOneBookMarkedCourse(findMember, bookMarkId);
+    @GetMapping("/myPage/course/bookMark/{courseLikeId}")
+    public ResponseEntity getOneBookMarkedCourse(@PathVariable Long courseLikeId, HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        MyPageCourseBookMarkDto data = myPageService.findOneBookMarkedCourse(email, courseLikeId);
+        return ResponseEntity.ok().body(BaseResponse.success("OK", data));
     }
 
     @PutMapping("/myPage/{memberEmail}")
@@ -60,8 +64,9 @@ public class MyPageController {
 
     @DeleteMapping("/user/drop")
     public ResponseEntity userDropController(HttpServletRequest request, HttpServletResponse response) {
-        String userEmail = (String) request.getAttribute("userEmail");
+        String userEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
         System.out.println("userEmail = " + userEmail);
+
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             cookie.setMaxAge(0);
@@ -71,6 +76,9 @@ public class MyPageController {
         Member findMember = memberService.findByEmail(userEmail);
         myPageService.deleteMember(findMember, findMember.getOauthAccessToken());
         return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
+    }
 
+    private String findEmailFromHeader(HttpServletRequest request) {
+        return tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
     }
 }
