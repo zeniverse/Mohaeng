@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @Slf4j
@@ -182,13 +183,13 @@ public class PlaceService {
                 .build();
     }
 
-    public List<String> getPlaceOverview(String contentId) throws IOException, ParserConfigurationException, SAXException {
+    public List<String> getPlaceOverview(String contentId) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
-        List<Place> places = getPlaces();
+        List<PlaceDetailsDto> places = placeRepository.findByContentId(contentId);
         List<String> overviews = new ArrayList<>();
-        for (Place place : places) {
+        for (PlaceDetailsDto place : places) {
             if (place.getContentId().equals(contentId)) {
                 String overview = getOverview(place.getContentId());
                 overview = overview.replaceAll("<br>|<br >|< br>|<br />|</br>|<strong>|</ strong>", "");
@@ -210,11 +211,13 @@ public class PlaceService {
                 .collect(Collectors.toList());
     }
 
-    public List<PlaceDetailsDto> getPlaceDetailsByContentId(String contentId) {
+    public List<PlaceDetailsDto> getPlaceDetailsByContentId(String contentId) throws IOException, ParserConfigurationException, SAXException {
         List<PlaceDetailsDto> places = placeRepository.findByContentId(contentId);
-        List<PlaceDetailsDto> placeDetailsDtos = places.stream()
-                .map(place -> {
-                    String overview = getOverview(place.getContentId());
+        List<String> overviews = getPlaceOverview(contentId);
+        List<PlaceDetailsDto> placeDetailsDtos = IntStream.range(0, places.size())
+                .mapToObj(i -> {
+                    PlaceDetailsDto place = places.get(i);
+                    String overview = overviews.get(i);
                     return new PlaceDetailsDto(place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), place.getMapX(), place.getMapY(), overview);
                 })
                 .collect(Collectors.toList());
