@@ -1,27 +1,25 @@
 import { BsSearch } from "react-icons/bs";
-import styles from "./Header.module.css";
+import styles from "./SearchBar.module.css";
 import styled from "styled-components";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
-import SearchList from "./SearchList";
+import { KeywordProps } from "@/src/interfaces/Keyword";
 
-export default function SearchBar({}) {
+export default function SearchBar() {
   const router = useRouter();
-  const [places, setPlaces] = useState([]);
   const [keyword, setKeyword] = useState("");
 
-  const handleSubmit = (e: { target: { value: SetStateAction<string> } }) => {
+  const handleSubmit = () => {
     router.push(
       {
         pathname: `/search?=${keyword}`,
         query: {
           keyword: `${keyword}`,
+          page: 1,
         },
       },
-      `/search?=${keyword}`,
-      { scroll: true }
+      `/search?=${keyword}`
     );
-    setKeyword("");
   };
 
   return (

@@ -2,23 +2,38 @@ import Image from "next/image";
 import styles from "./SearchList.module.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { Keyword } from "@/src/interfaces/Keyword";
 
-type Keyword = {
-  addr: string;
-  id: number;
-  image: string;
-  mapx: string;
-  mapy: string;
-  tel: string;
-  title: string;
-  overview: string;
-  review: number;
-};
+// type Keyword = {
+//   addr: string;
+//   id: number;
+//   image: string;
+//   mapx: string;
+//   mapy: string;
+//   tel: string;
+//   title: string;
+//   overview: string;
+//   review: number;
+
+//   id: number;
+//   name: string;
+//   address: string;
+//   areaCode: string;
+//   sigunguCode: string;
+//   firstImage: string;
+//   firstImage2: string;
+//   mapX: string;
+//   mapY: string;
+//   contentId: string;
+//   rating: number;
+// };
 
 export default function indec(): JSX.Element {
+  // const [places, setPlaces] = useState([]);
   const [keywordData, setKeywordData] = useState<Keyword[]>([]);
   const router = useRouter();
-  console.log(router.query);
+  const { keyword } = router.query;
+  console.log(keyword);
 
   useEffect(() => {
     async function fetchData() {
@@ -29,6 +44,16 @@ export default function indec(): JSX.Element {
     }
     fetchData();
   }, []);
+
+  // useEffect(() => {
+  //   fetch(`/api/place?keyword=${router.qu}`, {
+  //     method: "GET",
+  //   })
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       setMonsters(res);
+  //     });
+  // }, []);
 
   return (
     <>

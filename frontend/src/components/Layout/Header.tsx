@@ -14,7 +14,7 @@ import {
 import { RootState } from "@/src/store/store";
 import axios from "axios";
 import cookie from "react-cookies";
-import SearchBar from "../SearchResult/SearchBar";
+import SearchBar from "../Search/SearchBar";
 
 type User = {
   id: number;
@@ -25,40 +25,22 @@ type User = {
 type Props = {};
 
 function Header({}: Props) {
-  const [keyword, setKeyword] = useState("");
   const [user, setUser] = useState<User[]>([]);
   const dispatch = useDispatch();
   const router = useRouter();
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    router.replace(
-      {
-        pathname: `/search?=${keyword}`,
-        query: {
-          keyword: `${keyword}`,
-        },
-      },
-      `/search?=${keyword}`,
-      { scroll: true }
-    );
-    setKeyword("");
-  };
-
   useEffect(() => {
+    console.log(accessToken);
     const response = async () => {
       if (accessToken) {
-        const userRes = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/loginInfo`,
-          {
-            headers: {
-              "Access-Token": accessToken,
-            },
-            withCredentials: true,
-          }
-        );
+        const userRes = await axios.get(`/loginInfo`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          withCredentials: true,
+        });
         const { id, nickName, email } = userRes.data.data;
         dispatch(setId(id));
         dispatch(setEmail(email));
@@ -98,7 +80,7 @@ function Header({}: Props) {
             <img src="/assets/logo.png" alt="logo" className={styles.logo} />
           </Link>
 
-          <SearchBar handleSubmit={handleSubmit} />
+          <SearchBar />
 
           <div className={styles.menu}>
             <Link href="/place">여행지</Link>
