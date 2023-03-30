@@ -112,7 +112,7 @@ class CourseLikesControllerTest {
 //
 //        verify(courseLikesService).isExistCourseLikes(eq(courseId), eq("test@test.com"));
 //    }
-//
+
 //    @Test
 //    @DisplayName("[GET] 코스 좋아요 count - 정상 처리")
 //    @WithMockUser
