@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceRepositoryCustom{
     List<Place> findByAddressContainingIgnoreCase(String searchValue);
-    Page<PlaceSearchDto> findByNameContainingOrAddressContaining(String name, String address);
-    Page<PlaceSearchDto> findByNameContaining(String name);
+    Page<PlaceSearchDto> findByNameContainingOrAddressContaining(String name, String address, Pageable pageable);
+    Page<PlaceSearchDto> findByNameContaining(String name, Pageable pageable);
     Page<FindAllPlacesDto> findByAreaCodeEquals(String areaCode, Pageable pageable);
 }
