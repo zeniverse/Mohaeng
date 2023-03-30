@@ -51,8 +51,6 @@ const KakaoLogin = () => {
             dispatch(setId(id));
             dispatch(setEmail(email));
             dispatch(setNickname(nickName));
-            // const blob = new Blob([imageByteArray], { type: "image/jpeg" });
-            // const profileImg = URL.createObjectURL(blob);
             dispatch(setProfileUrl(profileUrl));
             router.replace("/");
           } catch (e) {

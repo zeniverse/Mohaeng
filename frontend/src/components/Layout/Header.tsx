@@ -54,11 +54,8 @@ function Header({}: Props) {
         dispatch(setId(id));
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
-        setUser(userRes.data.data);
-        // const blob = new Blob([imageByteArray], { type: "image/jpeg" });
-        // const profileImg = URL.createObjectURL(blob);
-        // console.log(profileImg);
         dispatch(setProfileUrl(profileUrl));
+        setUser(nickName);
       }
     };
     response();
