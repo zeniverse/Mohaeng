@@ -1,18 +1,18 @@
-package com.mohaeng.backend.place.dto.request;
+package com.mohaeng.backend.place.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class PlaceDTO {
+@AllArgsConstructor
+public class PlaceDetailsDto {
     private String name;
-    private String address;
     private String areaCode;
-    private String sigunguCode;
     private String firstImage;
-    private String firstImage2;
+    private String contentId;
     private String mapX;
     private String mapY;
-    private String contentId;
+    private String overview;
 }

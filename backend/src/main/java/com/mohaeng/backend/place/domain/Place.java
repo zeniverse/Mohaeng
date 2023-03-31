@@ -12,9 +12,6 @@ import org.hibernate.annotations.Table;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Builder
 @Getter
@@ -47,6 +44,7 @@ public class Place {
     private String mapX;
     private String mapY;
     private String contentId;
+    private String overview;
     private double rating;
 
     public Place(String name, String address, String areaCode, String sigunguCode, String contentId, String firstImage, String firstImage2, String mapX, String mapY) {
@@ -61,7 +59,7 @@ public class Place {
         this.mapY = mapY;
     }
 
-    public Place(Long id, String name, String address, String areaCode, String firstImage, String firstImage2, String mapX, String mapY, String sigunguCode, String contentId, double rating) {
+    public Place(Long id, String name, String address, String areaCode, String firstImage, String firstImage2, String mapX, String mapY, String sigunguCode, String contentId, String overview, double rating) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -72,6 +70,7 @@ public class Place {
         this.mapY = mapY;
         this.sigunguCode = sigunguCode;
         this.contentId = contentId;
+        this.overview = overview;
         this.rating = rating;
     }
 
