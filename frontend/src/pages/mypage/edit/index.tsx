@@ -26,18 +26,6 @@ const MyPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     router.push("/mypage");
-    // const res = await fetch(`/api/myPage/${email}`, {
-    //   method: "PUT",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     nickName: { editName },
-    //     multipartFile: { imageUrl },
-    //   }),
-    // });
-    // const data = await res.json();
-    // console.log(data);
   };
   //TODO: oauth를 이용한 정보 수정 가능 항목 -> 랜덤 닉네임과 유저 프로필 사진 (반영하여 수정할 것)
   return (
@@ -53,8 +41,8 @@ const MyPage: React.FC = () => {
               <div className={styles["Name"]}>{id}</div>
               <div className={styles["FormWrapper"]}>
                 <label>
-                  닉네임:
                   <input
+                    className={styles["Input"]}
                     type="text"
                     value={editName}
                     placeholder={nickName}
@@ -67,7 +55,7 @@ const MyPage: React.FC = () => {
           </div>
 
           <div className={styles["ButtonWrapper"]}>
-            <Button type="submit" text="수정" />
+            <Button type="submit" text="수정" onClick={changeEditName} />
             <Button text="취소" />
           </div>
         </form>

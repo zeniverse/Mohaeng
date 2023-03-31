@@ -97,7 +97,6 @@ function Header({}: Props) {
           <div className={styles.menu}>
             <Link href="/place">여행지</Link>
             <Link href="/course">코스</Link>
-            <Link href="/mypage">마이페이지</Link>
           </div>
         </div>
       </nav>
@@ -121,7 +120,7 @@ function Header({}: Props) {
               width={40}
               height={40}
             /> */}
-            {nickName}님
+            <Link href="/mypage">{nickName}님</Link>
             <button
               id="login-btn"
               className={styles["login-btn"]}
