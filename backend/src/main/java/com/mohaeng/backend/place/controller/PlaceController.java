@@ -4,9 +4,11 @@ import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
+import com.mohaeng.backend.place.dto.PlaceDetailsDto;
 import com.mohaeng.backend.place.dto.PlaceSearchDto;
 import com.mohaeng.backend.place.dto.response.FindAllPlacesResponse;
 import com.mohaeng.backend.place.dto.response.FindSearchPlacesResponse;
+import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
@@ -65,12 +67,20 @@ public class PlaceController {
     }
 
 
-    @GetMapping("/place/overview/{placeName}")
-    public ResponseEntity<List<String>> getPlaceOverview(@PathVariable String placeName) throws IOException, ParserConfigurationException, SAXException {
-        List<String> overview = placeService.getPlaceOverview(placeName);
-        log.info("overview:{}", overview);
-        return ResponseEntity.ok(overview);
+//    @GetMapping("/place/overview/{placeName}")
+//    public ResponseEntity<List<String>> getPlaceOverview(@PathVariable String placeName) throws IOException, ParserConfigurationException, SAXException {
+//        List<String> overview = placeService.getPlaceOverview(placeName);
+//        log.info("overview:{}", overview);
+//        return ResponseEntity.ok(overview);
+//    }
+
+    @GetMapping("/place/overview/{contentId}")
+    public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String contentId) {
+        List<PlaceDetailsDto> dtos = placeService.getPlaceDetailsByContentId(contentId);
+        PlaceDetailsResponse response = new PlaceDetailsResponse(dtos);
+        return ResponseEntity.ok().body(BaseResponse.success("OK",response));
     }
+
 
     @GetMapping("/api/places")
     public Page<Place> getPlaces(@RequestParam(defaultValue = "0") int page) {
