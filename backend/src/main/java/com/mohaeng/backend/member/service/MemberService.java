@@ -2,6 +2,7 @@ package com.mohaeng.backend.member.service;
 
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.domain.Role;
+import com.mohaeng.backend.member.dto.request.UserInfoChangeRequest;
 import com.mohaeng.backend.member.dto.response.KakaoUserDto;
 import com.mohaeng.backend.member.dto.response.MemberLoginDto;
 import com.mohaeng.backend.member.jwt.Token;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,6 +27,7 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +35,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final RandomNameService randomNameService;
     private final TokenGenerator tokenGenerator;
+    private final String UPLOAD_PATH = "../image/";
 
     private final String CLIENT_ID = "d7c41513380cc7e5cbbfce173bf86002";
     private final String REDIRECT_URL = "http://localhost:3000/login/kakao";
@@ -95,7 +99,6 @@ public class MemberService {
         );
 
         String body = kakaoProfileResponse.getBody();
-
         JSONObject jsonObject = new JSONObject(body);
         long id = jsonObject.getLong("id");
         String parsedEmail = jsonObject.getJSONObject("kakao_account").getString("email");
@@ -165,6 +168,21 @@ public class MemberService {
                 .imgUrl(member.getImageURL() + member.getImageName())
                 .build();
         return memberLoginDto;
+    }
+
+    public void changeProfile(Member member, UserInfoChangeRequest userInfoChangeRequest) throws IOException {
+        member.changeNickName(userInfoChangeRequest.getNickName());
+        MultipartFile multipartFile = userInfoChangeRequest.getMultipartFile();
+        if (!multipartFile.isEmpty()) {
+            UUID uuid = UUID.randomUUID();
+            String fileName = uuid + "_" + multipartFile.getOriginalFilename();
+            File profileImg=  new File(UPLOAD_PATH, fileName);
+            multipartFile.transferTo(profileImg);
+
+            member.changeImageName(fileName);
+            member.changeImageURL(UPLOAD_PATH +"/"+fileName);
+        }
+
     }
 
 }
