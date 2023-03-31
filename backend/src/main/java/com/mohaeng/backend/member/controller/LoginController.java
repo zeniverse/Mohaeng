@@ -94,21 +94,17 @@ public class LoginController {
         throw new IllegalArgumentException("NotExistRefreshToken");
     }
 
+    // TODO: 이미지 byteArray이 아닌 다른 방법
     @GetMapping("/loginInfo")
     public ResponseEntity loginInfoController(HttpServletRequest request) throws IOException {
         String userEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
-        System.out.println("userEmail = " + userEmail);
 
         Member findMember = memberService.findByEmail(userEmail);
-        InputStream inputStream = new FileInputStream(findMember.getImageURL() + "/" + findMember.getImageName());
-        byte[] imageByteArray = inputStream.readAllBytes();
-        inputStream.close();
-
-        MemberLoginDto memberLoginDto = new MemberLoginDto(findMember.getId(), findMember.getNickName(),
-                findMember.getEmail(), imageByteArray);
-
-        return ResponseEntity.ok().body(BaseResponse.success("ok", memberLoginDto));
+//        InputStream inputStream = new FileInputStream(findMember.getImageURL() + "/" + findMember.getImageName());
+//        byte[] imageByteArray = inputStream.readAllBytes();
+//        inputStream.close();
+        MemberLoginDto loginInfo = memberService.getLoginInfo(findMember);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", loginInfo));
     }
-
 
 }

@@ -3,6 +3,7 @@ package com.mohaeng.backend.member.service;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.domain.Role;
 import com.mohaeng.backend.member.dto.response.KakaoUserDto;
+import com.mohaeng.backend.member.dto.response.MemberLoginDto;
 import com.mohaeng.backend.member.jwt.Token;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.repository.MemberRepository;
@@ -97,11 +98,9 @@ public class MemberService {
 
         JSONObject jsonObject = new JSONObject(body);
         long id = jsonObject.getLong("id");
-        System.out.println("id = " + id);
         String parsedEmail = jsonObject.getJSONObject("kakao_account").getString("email");
         String parsedName = jsonObject.getJSONObject("properties").getString("nickname");
         String profileImage = jsonObject.getJSONObject("properties").getString("profile_image");
-        System.out.println("profileImage = " + profileImage);
 
         return new KakaoUserDto(id, parsedEmail, parsedName, profileImage);
     }
@@ -110,19 +109,15 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Member saveMember(String token) throws IOException {
+    public Member saveMember(String token) {
         KakaoUserDto kakaoUser = findProfile(token);
         Member member = memberRepository.findByEmailAndDeletedDateIsNull(kakaoUser.getEmail())
                 .orElse(new Member(kakaoUser.getName(),
                         kakaoUser.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
 
-        String fileName = downloadFile(kakaoUser.getProfileImage());
-
-        member.changeImageURL(IMG_PATH);
-        member.changeImageName(fileName);
+        member.changeImageURL(kakaoUser.getProfileImage());
         member.setOauthAccessToken(token);
         member.setKakaoId(kakaoUser.getKakaoId());
-
         memberRepository.save(member);
         return member;
     }
@@ -162,6 +157,14 @@ public class MemberService {
         return tokenGenerator.generateToken(member.getEmail(), member.getRole());
     }
 
-
+    public MemberLoginDto getLoginInfo(Member member) {
+        MemberLoginDto memberLoginDto = MemberLoginDto.builder()
+                .id(member.getId())
+                .email(member.getEmail())
+                .nickName(member.getNickName())
+                .imgUrl(member.getImageURL() + member.getImageName())
+                .build();
+        return memberLoginDto;
+    }
 
 }
