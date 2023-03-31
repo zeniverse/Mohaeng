@@ -1,10 +1,8 @@
 package com.mohaeng.backend.course.service;
 
-import com.mohaeng.backend.course.domain.Course;
+import com.mohaeng.backend.course.domain.CourseBookmark;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
-import com.mohaeng.backend.course.dto.response.CourseLikesRes;
-import com.mohaeng.backend.course.repository.CourseRepository;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.domain.Role;
 import com.mohaeng.backend.member.repository.MemberRepository;
@@ -14,6 +12,7 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,12 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CourseLikesServiceTest {
+class CourseBookmarkServiceTest {
 
-    @Autowired CourseLikesService courseLikesService;
+    @Autowired CourseBookmarkService courseBookmarkService;
     @Autowired CourseService courseService;
     @Autowired PlaceRepository placeRepository;
-    @Autowired CourseRepository courseRepository;
     @Autowired MemberRepository memberRepository;
 
     @BeforeAll
@@ -55,36 +53,38 @@ class CourseLikesServiceTest {
     }
 
     @Test
-    @DisplayName("코스 좋아요 - 정상 처리")
-    public void addCourseLikes() throws Exception{
+    @Transactional
+    @DisplayName("코스 북마크 - 정상 처리")
+    public void addCourseBookmark() throws Exception{
         //Given
         CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("addCourseLikes");
+        Member savedMember = createMember("addCourseBookmark");
         CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
 
         Long courseId = courseIdRes.getCourseId();
 
         //When
-        courseLikesService.addLikes(courseId, savedMember.getEmail());
+        courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
 
         //Then
-        Course savedCourse = courseRepository.findById(courseId).orElseThrow(null);
-        assertEquals(1, savedCourse.getLikeCount());
+        Member member = memberRepository.findByEmailAndDeletedDateIsNull(savedMember.getEmail()).orElseThrow(null);
+        List<CourseBookmark> courseBookMarkList = member.getCourseBookMarkList();
+        assertEquals(1, courseBookMarkList.size());
     }
 
     @Test
-    @DisplayName("코스 좋아요 - 로그인 하지 않은 경우 예외 처리")
-    public void addCourseLikes_not_member() throws Exception{
+    @DisplayName("코스 북마크 - 로그인 하지 않은 경우 예외 처리")
+    public void addCourseBookmark_not_member() throws Exception{
         //Given
         CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("addCourseLikesNotmem");
+        Member savedMember = createMember("addCourseBookmarkNotmem");
         CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
 
         Long courseId = courseIdRes.getCourseId();
 
         //When
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            courseLikesService.addLikes(courseId, "null@null.com");
+            courseBookmarkService.addBookmark(courseId, "null@null.com");
         });
 
         //Then
@@ -92,16 +92,16 @@ class CourseLikesServiceTest {
     }
 
     @Test
-    @DisplayName("코스 좋아요 - 코스가 존재하지 않는 경우 예외 처리")
-    public void addCourseLikes_courseId_null() throws Exception{
+    @DisplayName("코스 북마크 - 코스가 존재하지 않는 경우 예외 처리")
+    public void addCourseBookmark_courseId_null() throws Exception{
         //Given
         CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("addCourseLikesNullId");
+        Member savedMember = createMember("addCourseBookmarksNullId");
         CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
 
         //When
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            courseLikesService.addLikes(1000L, savedMember.getEmail());
+            courseBookmarkService.addBookmark(1000L, savedMember.getEmail());
         });
 
         //Then
@@ -109,60 +109,62 @@ class CourseLikesServiceTest {
     }
 
     @Test
-    @DisplayName("코스 좋아요 - 이미 좋아요를 누른 경우 예외 처리")
-    public void addCourseLikes_already_likes() throws Exception{
+    @DisplayName("코스 뷱마크 - 이미 북마크를 누른 경우 예외 처리")
+    public void addCourseBookmark_already_likes() throws Exception{
         //Given
         CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("addCourseLikesAlready");
+        Member savedMember = createMember("addCourseBookmarkAlready");
         CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
 
         Long courseId = courseIdRes.getCourseId();
 
         // 좋아요 처리
-        courseLikesService.addLikes(courseId, savedMember.getEmail());
+        courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
 
         //When
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            courseLikesService.addLikes(courseId, savedMember.getEmail());
+            courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
         });
 
         //Then
-        assertEquals(exception.getMessage(), "이미 좋아요를 누른 회원입니다.");
+        assertEquals("이미 뷱마크를 누른 회원입니다.", exception.getMessage());
     }
 
     @Test
-    @DisplayName("코스 좋아요 취소 - 정상 처리")
-    public void cancelCourseLikes() throws Exception{
+    @Transactional
+    @DisplayName("코스 북마크 취소 - 정상 처리")
+    public void cancelCourseBookmark() throws Exception{
         //Given
         CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("cancelLikes");
+        Member savedMember = createMember("cancelBookmark");
         CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
 
         Long courseId = courseIdRes.getCourseId();
-        courseLikesService.addLikes(courseId, savedMember.getEmail());
+        courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
 
         //When
-        courseLikesService.cancelLikes(courseId, savedMember.getEmail());
+        courseBookmarkService.cancelBookmark(courseId, savedMember.getEmail());
 
         //Then
-        Course savedCourse = courseRepository.findById(courseId).orElseThrow(null);
-        assertEquals(0, savedCourse.getLikeCount());
+        Member member = memberRepository.findByEmailAndDeletedDateIsNull(savedMember.getEmail()).orElseThrow(null);
+        List<CourseBookmark> courseBookMarkList = member.getCourseBookMarkList();
+        assertEquals(0, courseBookMarkList.size());
     }
 
     @Test
-    @DisplayName("코스 좋아요 취소 - 로그인 하지 않은 경우 예외 처리")
-    public void cancelCourseLikes_not_member() throws Exception{
+    @DisplayName("코스 북마크 취소 - 로그인 하지 않은 경우 예외 처리")
+    public void cancelCourseBookmark_not_member() throws Exception{
         //Given
         CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("cancelLikesNotMem");
+        Member savedMember = createMember("cancelBookmarkNotMem");
         CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
 
         Long courseId = courseIdRes.getCourseId();
-        courseLikesService.addLikes(courseId, savedMember.getEmail());
+        courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
 
         //When
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            courseLikesService.cancelLikes(courseId, "null@null.com");
+            courseBookmarkService.cancelBookmark(courseId, "null@null.com");
         });
 
         //Then
@@ -170,19 +172,19 @@ class CourseLikesServiceTest {
     }
 
     @Test
-    @DisplayName("코스 좋아요 취소- 코스가 존재하지 않는 경우 예외 처리")
-    public void cancelCourseLikes_courseId_null() throws Exception{
+    @DisplayName("코스 북마크 취소- 코스가 존재하지 않는 경우 예외 처리")
+    public void cancelCourseBookmark_courseId_null() throws Exception{
         //Given
         CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("cancelLikesNoId");
+        Member savedMember = createMember("cancelBookmarkNoId");
         CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
 
         Long courseId = courseIdRes.getCourseId();
-        courseLikesService.addLikes(courseId, savedMember.getEmail());
+        courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
 
         //When
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            courseLikesService.cancelLikes(1000L, savedMember.getEmail());
+            courseBookmarkService.cancelBookmark(1000L, savedMember.getEmail());
         });
 
         //Then
@@ -190,18 +192,18 @@ class CourseLikesServiceTest {
     }
 
     @Test
-    @DisplayName("코스 좋아요 취소 - 유저가 좋아요 버튼을 누른적 없는 경우 에외 처리")
-    public void cancelCourseLikes_not_likes() throws Exception{
+    @DisplayName("코스 북마크 취소 - 유저가 북마크 버튼을 누른적 없는 경우 에외 처리")
+    public void cancelCourseBookmark_not_likes() throws Exception{
         //Given
         CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("cancelLikesNoLike");
+        Member savedMember = createMember("cancelBookmarkNoLike");
         CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
 
         Long courseId = courseIdRes.getCourseId();
 
         //When
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            courseLikesService.cancelLikes(courseId, savedMember.getEmail());
+            courseBookmarkService.cancelBookmark(courseId, savedMember.getEmail());
         });
 
         //Then
@@ -209,56 +211,56 @@ class CourseLikesServiceTest {
     }
 
     @Test
-    @DisplayName("코스 좋아요 존재 확인(true) - 정상 처리")
-    public void existsCourseLikes() throws Exception{
+    @DisplayName("코스 북마크 존재 확인(true) - 정상 처리")
+    public void existsCourseBookmark() throws Exception{
         //Given
         CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("existsLikes");
+        Member savedMember = createMember("existsBookmark");
         CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
 
         Long courseId = courseIdRes.getCourseId();
-        courseLikesService.addLikes(courseId, savedMember.getEmail());
+        courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
 
         //When
-        boolean isExists = courseLikesService.isExistCourseLikes(courseId, savedMember.getEmail());
+        boolean isExists = courseBookmarkService.isExistCourseBookmark(courseId, savedMember.getEmail());
 
         //Then
         assertEquals(true, isExists);
     }
 
     @Test
-    @DisplayName("코스 좋아요 존재 확인(false) - 정상 처리")
-    public void existsCourseLikes2() throws Exception{
+    @DisplayName("코스 북마크 존재 확인(false) - 정상 처리")
+    public void existsCourseBookmark2() throws Exception{
         //Given
         CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("existsLikes2");
+        Member savedMember = createMember("existsBookmark2");
         CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
 
         Long courseId = courseIdRes.getCourseId();
-        courseLikesService.addLikes(courseId, savedMember.getEmail());
-        courseLikesService.cancelLikes(courseId, savedMember.getEmail());
+        courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
+        courseBookmarkService.cancelBookmark(courseId, savedMember.getEmail());
 
         //When
-        boolean isExists = courseLikesService.isExistCourseLikes(courseId, savedMember.getEmail());
+        boolean isExists = courseBookmarkService.isExistCourseBookmark(courseId, savedMember.getEmail());
 
         //Then
         assertEquals(false, isExists);
     }
 
     @Test
-    @DisplayName("코스 좋아요 존재 확인 - 로그인 하지 않은 경우 예외 처리")
-    public void existsCourseLikes_not_member() throws Exception{
+    @DisplayName("코스 북마크 존재 확인 - 로그인 하지 않은 경우 예외 처리")
+    public void existsCourseBookmark_not_member() throws Exception{
         //Given
         CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("existsLikesNotMem");
+        Member savedMember = createMember("existsBookmarkNotMem");
         CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
 
         Long courseId = courseIdRes.getCourseId();
-        courseLikesService.addLikes(courseId, savedMember.getEmail());
+        courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
 
         //When
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            courseLikesService.isExistCourseLikes(courseId, "null@null.com");
+            courseBookmarkService.isExistCourseBookmark(courseId, "null@null.com");
         });
 
         //Then
@@ -266,63 +268,24 @@ class CourseLikesServiceTest {
     }
 
     @Test
-    @DisplayName("코스 좋아요 존재 확인 - 코스가 존재하지 않는 경우 예외 처리")
-    public void existsCourseLikes_courseId_null() throws Exception{
+    @DisplayName("코스 북마크 존재 확인 - 코스가 존재하지 않는 경우 예외 처리")
+    public void existsCourseBookmark_courseId_null() throws Exception{
         //Given
         CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("existsLikesNoId");
+        Member savedMember = createMember("existsBookmarkNoId");
         CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
 
         Long courseId = courseIdRes.getCourseId();
-        courseLikesService.addLikes(courseId, savedMember.getEmail());
+        courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
 
         //When
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            courseLikesService.isExistCourseLikes(1000L, savedMember.getEmail());
+            courseBookmarkService.isExistCourseBookmark(1000L, savedMember.getEmail());
         });
 
         //Then
         assertEquals("존재하지 않는 코스 입니다.", exception.getMessage());
     }
-
-    @Test
-    @DisplayName("코스 좋아요 count - 정상 처리")
-    public void countCourseLikes() throws Exception{
-        //Given
-        CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("countLikes");
-        CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
-
-        Long courseId = courseIdRes.getCourseId();
-        courseLikesService.addLikes(courseId, savedMember.getEmail());
-
-        //When
-        CourseLikesRes courseLikesRes = courseLikesService.countLikes(courseId);
-
-        //Then
-        assertEquals(1, courseLikesRes.getTotalLikes());
-    }
-
-    @Test
-    @DisplayName("코스 좋아요 count - 코스가 존재하지 않는 경우 예외 처리")
-    public void countCourseLikes_courseId_null() throws Exception{
-        //Given
-        CourseReq originReq1 = createCourseReq("바다 구경 코스", List.of(1L, 2L));
-        Member savedMember = createMember("countLikesNoId");
-        CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
-
-        Long courseId = courseIdRes.getCourseId();
-        courseLikesService.addLikes(courseId, savedMember.getEmail());
-
-        //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            courseLikesService.countLikes(1000L);
-        });
-
-        //Then
-        assertEquals("존재하지 않는 코스 입니다.", exception.getMessage());
-    }
-
 
     private CourseReq createCourseReq(String title, List<Long> placeIds) {
         CourseReq myCourseReq = CourseReq.builder()

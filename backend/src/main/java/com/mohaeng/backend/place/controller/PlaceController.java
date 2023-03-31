@@ -1,7 +1,14 @@
 package com.mohaeng.backend.place.controller;
 
+import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.place.domain.Place;
-import com.mohaeng.backend.place.dto.request.PlaceDTO;
+import com.mohaeng.backend.place.dto.FindAllPlacesDto;
+import com.mohaeng.backend.place.dto.PlaceDTO;
+import com.mohaeng.backend.place.dto.PlaceDetailsDto;
+import com.mohaeng.backend.place.dto.PlaceSearchDto;
+import com.mohaeng.backend.place.dto.response.FindAllPlacesResponse;
+import com.mohaeng.backend.place.dto.response.FindSearchPlacesResponse;
+import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +38,6 @@ public class PlaceController {
     private final PlaceService placeService;
     private final PlaceRepository placeRepository;
 
-
-
     @GetMapping("/api/place/all")
     public ResponseEntity<List<Place>> getPlaces() {
         List<Place> places = placeService.getPlacesAll();
@@ -49,14 +54,7 @@ public class PlaceController {
         return new ResponseEntity<>(places, HttpStatus.OK);
     }
 
-    @GetMapping("/api/place")
-    public List<Place> search(@RequestParam String keyword, @RequestParam(required = false) String address) {
-        if (address == null || address.isEmpty()) {
-            return placeRepository.findByNameContaining(keyword);
-        } else {
-            return placeRepository.findByNameContainingOrAddressContaining(keyword,address);
-        }
-    }
+
 
     @GetMapping("/api/place/{contentId}")
     public ResponseEntity<PlaceDTO> getPlace(@PathVariable String contentId) throws IOException, ParserConfigurationException, SAXException {
@@ -69,12 +67,20 @@ public class PlaceController {
     }
 
 
-    @GetMapping("/place/overview/{placeName}")
-    public ResponseEntity<List<String>> getPlaceOverview(@PathVariable String placeName) throws IOException, ParserConfigurationException, SAXException {
-        List<String> overview = placeService.getPlaceOverview(placeName);
-        log.info("overview:{}", overview);
-        return ResponseEntity.ok(overview);
+//    @GetMapping("/place/overview/{placeName}")
+//    public ResponseEntity<List<String>> getPlaceOverview(@PathVariable String placeName) throws IOException, ParserConfigurationException, SAXException {
+//        List<String> overview = placeService.getPlaceOverview(placeName);
+//        log.info("overview:{}", overview);
+//        return ResponseEntity.ok(overview);
+//    }
+
+    @GetMapping("/place/overview/{contentId}")
+    public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String contentId) {
+        List<PlaceDetailsDto> dtos = placeService.getPlaceDetailsByContentId(contentId);
+        PlaceDetailsResponse response = new PlaceDetailsResponse(dtos);
+        return ResponseEntity.ok().body(BaseResponse.success("OK",response));
     }
+
 
     @GetMapping("/api/places")
     public Page<Place> getPlaces(@RequestParam(defaultValue = "0") int page) {
@@ -82,29 +88,33 @@ public class PlaceController {
         return placeRepository.findAll(pageable);
     }
 
-    @GetMapping("/places")
-    public List<Place> getPlaces(@RequestParam String areaCode,
-                                 @RequestParam(defaultValue = "0") int page) throws IOException, ParserConfigurationException, SAXException {
-        List<Place> places = placeService.getPlaces();
-        List<Place> filteredPlaces = placeService.filterPlaces(places, areaCode);
-        int start = page * 4;
-        int end = Math.min(start + 4, filteredPlaces.size());
-        return filteredPlaces.subList(start, end);
+    @GetMapping("/api/place")
+    public ResponseEntity<BaseResponse<FindSearchPlacesResponse>> search(
+            @RequestParam String keyword, @RequestParam(required = false) String address,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int size) {
+            Pageable pageable = PageRequest.of(page - 1, size);
+        if (address == null || address.isEmpty()) {
+            Page<PlaceSearchDto> result = placeRepository.findByNameContaining(keyword, pageable);
+            FindSearchPlacesResponse response = new FindSearchPlacesResponse(result.getContent(), result.getTotalPages(), result.getTotalElements());
+            return ResponseEntity.ok().body(BaseResponse.success("OK", response));
+        } else {
+            Page<PlaceSearchDto> result = placeRepository.findByNameContainingOrAddressContaining(keyword, address, pageable);
+            FindSearchPlacesResponse response = new FindSearchPlacesResponse(result.getContent(), result.getTotalPages(), result.getTotalElements());
+            return ResponseEntity.ok().body(BaseResponse.success("OK", response));
+        }
     }
 
+    @GetMapping("/places")
+    public ResponseEntity<BaseResponse<FindAllPlacesResponse>> findAllPlace(
+        @RequestParam String areaCode,
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "12") int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<FindAllPlacesDto> result = placeRepository.findByAreaCodeEquals(areaCode, pageable);
+        FindAllPlacesResponse response = new FindAllPlacesResponse(result.getContent(), result.getTotalPages(), result.getTotalElements());
+        return ResponseEntity.ok().body(BaseResponse.success("OK", response));
+    }
 }
-//    @GetMapping("/place/{addr1}")
-//    public ResponseEntity<List<Place>> searchPlace(@PathVariable String addr1) throws JAXBException, IOException, ParserConfigurationException, SAXException {
-//        // 데이터베이스에서 모든 데이터를 가져옵니다.
-//        List<Place> places = placeService.getPlacesByAddr1(addr1);
-//        log.info("search places.size:{} ",places.size());
-//        // addr1 값이 입력받은 검색어로 시작하는 데이터만 필터링합니다.
-////        List<Place> filteredPlaces = places.stream()
-////                .filter(place -> place.getAddr1().startsWith(addr1))
-////                .collect(Collectors.toList());
-//        // 필터링한 결과를 반환합니다.
-////        log.info("filteredPlaces.size:{} ",filteredPlaces.size());
-//        return new ResponseEntity<>(places, HttpStatus.OK);
-//    }
 
 

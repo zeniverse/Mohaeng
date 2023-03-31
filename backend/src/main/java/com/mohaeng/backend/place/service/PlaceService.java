@@ -1,11 +1,22 @@
 package com.mohaeng.backend.place.service;
 
 import com.mohaeng.backend.place.domain.Place;
-import com.mohaeng.backend.place.dto.request.PlaceDTO;
+import com.mohaeng.backend.place.domain.QPlace;
+import com.mohaeng.backend.place.dto.FindAllPlacesDto;
+import com.mohaeng.backend.place.dto.PlaceDTO;
+import com.mohaeng.backend.place.dto.PlaceDetailsDto;
 import com.mohaeng.backend.place.exception.PlaceNotFoundException;
 import com.mohaeng.backend.place.repository.PlaceRepository;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import org.w3c.dom.Document;
@@ -32,6 +43,9 @@ import java.util.stream.Collectors;
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     //    private static final String API_KEY = "dpTiMvKcFS8NVB1nRTahfmZTMala0uVdt7qu81eNIxznRol2OcYVskpBXHGIfAEIQf1eY2b%2FjMA4uu5ztw8heg%3D%3D";
 //    private static final String API_KEY = "YDqng1hgvEKmXZVWZANhmv%2BKe1qPepQj%2BIxBkqBQTUyLG3XCiAXQtMzCMbNppL8OnNL8sPqvbxybFGIxrRpPnA%3D%3D"; // 승구님 키
@@ -63,7 +77,8 @@ public class PlaceService {
 //                String overview = "";
 //                String overview = getOverview(contentid);
                 if (firstImage == null || firstImage.isEmpty()) {
-                    firstImage = "https://lh3.google.com/u/1/d/1ic2_89fYMLjZMCN0BoEirSEai_FarJvP=w2560-h1370-iv1";
+//                    firstImage = "https://lh3.google.com/u/1/d/1ic2_89fYMLjZMCN0BoEirSEai_FarJvP=w2560-h1370-iv1";
+                    firstImage = "src/main/resources/initImage/everytrip.png";
                 }
 
                 if (address == null || address.isEmpty()) {
@@ -167,14 +182,14 @@ public class PlaceService {
                 .build();
     }
 
-    public List<String> getPlaceOverview(String placeName) throws IOException, ParserConfigurationException, SAXException {
+    public List<String> getPlaceOverview(String contentId) throws IOException, ParserConfigurationException, SAXException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
         List<Place> places = getPlaces();
         List<String> overviews = new ArrayList<>();
         for (Place place : places) {
-            if (place.getName().contains(placeName)) {
+            if (place.getContentId().equals(contentId)) {
                 String overview = getOverview(place.getContentId());
                 overview = overview.replaceAll("<br>|<br >|< br>|<br />|</br>|<strong>|</ strong>", "");
                 overviews.add(overview);
@@ -194,5 +209,17 @@ public class PlaceService {
                 .filter(place -> place.getAreaCode().equals(areaCode))
                 .collect(Collectors.toList());
     }
-}
 
+    public List<PlaceDetailsDto> getPlaceDetailsByContentId(String contentId) {
+        List<PlaceDetailsDto> places = placeRepository.findByContentId(contentId);
+        List<PlaceDetailsDto> placeDetailsDtos = places.stream()
+                .map(place -> {
+                    String overview = getOverview(place.getContentId());
+                    return new PlaceDetailsDto(place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), place.getMapX(), place.getMapY(), overview);
+                })
+                .collect(Collectors.toList());
+        return placeDetailsDtos;
+    }
+
+
+}
