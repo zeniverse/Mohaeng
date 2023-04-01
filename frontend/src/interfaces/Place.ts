@@ -11,6 +11,6 @@ export type PlaceProps = {
   id: string;
   placeImg: string;
   placeTitle: string;
-  placeDesc: string;
+  // placeDesc: string;
   placeRating: string;
 };

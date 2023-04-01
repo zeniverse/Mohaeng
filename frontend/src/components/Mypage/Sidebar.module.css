@@ -1,7 +1,7 @@
 .sidebar {
-  position: fixed;
+  position: relative;
   left: 0;
-  margin: 5rem 4rem;
+  margin: 5rem 6rem;
   border-radius: 10px;
   width: 300px;
   height: 70%;

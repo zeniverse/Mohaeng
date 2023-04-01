@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CourseBookmarkRepository extends JpaRepository<CourseBookmark, Long> {
     boolean existsCourseBookmarkByMemberAndCourse(Member member, Course course);
+
+    boolean existsCourseBookmarkByMemberAndId(Member member, Long id);
     CourseBookmark findByMemberAndCourse(Member member, Course course);
 }
