@@ -7,6 +7,8 @@ const nextConfig = {
       "tong.visitkorea.or.kr",
       "cdn.visitkorea.or.kr",
       "k.kakaocdn.net",
+      "lh3.google.com",
+      "drive.google.com",
     ],
   },
   pageExtensions: ["jsx", "js", "ts", "tsx", "json"],

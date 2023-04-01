@@ -1,6 +1,6 @@
 .registerReviewContainer {
   width: 70rem;
-
+  margin: 2rem 8rem;
   --color-icon: #cfcfcf;
 }
 
