@@ -3,22 +3,21 @@ import styles from "./SearchBar.module.css";
 import styled from "styled-components";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { KeywordProps } from "@/src/interfaces/Keyword";
 
 export default function SearchBar() {
   const router = useRouter();
   const [keyword, setKeyword] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
     router.push(
       {
-        pathname: `/search?=${keyword}`,
+        pathname: `/search?keyword=${keyword}`,
         query: {
-          keyword: `${keyword}`,
-          page: 1,
+          keyword: keyword,
         },
       },
-      `/search?=${keyword}`
+      `/search?keyword=${keyword}`
     );
   };
 
