@@ -24,13 +24,6 @@ public class MyPageService {
     @Transactional
     public List<MyPageCourseBookMarkDto> findAllBookMarkCourse(String email) {
         Member member = isMember(email);
-        List<CourseBookmark> courseBookMarkList = member.getCourseBookMarkList();
-
-        for (CourseBookmark courseBookmark : courseBookMarkList) {
-            if (!isBookmarkByMemberAndId(member, courseBookmark.getId())) {
-                throw new IllegalArgumentException("DO_NOT_MATCH_MEMBER_AND_BOOK_MARK");
-            }
-        }
 
         return member.getCourseBookMarkList().stream()
                 .filter(m -> courseRepository.findById(m.getId()).isPresent())
@@ -57,8 +50,15 @@ public class MyPageService {
         return data;
     }
 
+    //TODO: 쿼리 수정 or 조회 로직 수정
     public boolean isBookmarkByMemberAndId(Member member, Long bookMarkId) {
-        return courseBookmarkRepository.existsCourseBookmarkByMemberAndId(member, bookMarkId);
+        List<CourseBookmark> courseBookMarkList = member.getCourseBookMarkList();
+        for (CourseBookmark courseBookmark : courseBookMarkList) {
+            if (courseBookmark.getId() == bookMarkId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public CourseBookmark isCourseBookMark(Long bookMarkId) {
