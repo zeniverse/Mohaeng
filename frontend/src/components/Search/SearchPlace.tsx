@@ -7,6 +7,9 @@ import axios from "axios";
 import SearchTab from "./SearchTab";
 import SearchItem from "./SearchItem";
 
+// ToDo: 띄어쓰기, 단어 조합 검색에 대해서 좀 더 리팩토링 필요
+// 결과를 로드하는 동안 '검색결과가 없습니다'가 마운트되는 이슈
+
 export default function SearchPlace(): JSX.Element {
   const [searchResult, setSearchResult] = useState<Keyword[]>([]);
   const router = useRouter();
