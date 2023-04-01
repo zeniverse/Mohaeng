@@ -1,27 +1,56 @@
 "use client";
-
 import Link from "next/link";
-import React from "react";
+import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
-import { BsSearch } from "react-icons/bs";
-import { FaUserCircle } from "react-icons/fa";
-import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../store/reducers/modalSlice";
-import { signIn, signOut, useSession } from "next-auth/react";
-import Image from "next/image";
+import { useRouter } from "next/router";
+import {
+  setEmail,
+  setId,
+  setNickname,
+  setToken,
+} from "@/src/store/reducers/loginTokenSlice";
+import { RootState } from "@/src/store/store";
+import axios from "axios";
+import cookie from "react-cookies";
+import SearchBar from "../Search/SearchBar";
 
-const StyledIcon = styled(BsSearch)`
-  color: #004aad;
-`;
+type User = {
+  id: number;
+  nickName: string;
+  email: string;
+};
 
 type Props = {};
 
 function Header({}: Props) {
-  const { data: session } = useSession();
-  console.log(session);
-
+  const [user, setUser] = useState<User[]>([]);
   const dispatch = useDispatch();
+  const router = useRouter();
+  const nickName = useSelector((state: RootState) => state.nickName.nickName);
+  const accessToken = cookie.load("accessToken");
+
+  useEffect(() => {
+    console.log(accessToken);
+    const response = async () => {
+      if (accessToken) {
+        const userRes = await axios.get(`/loginInfo`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          withCredentials: true,
+        });
+        const { id, nickName, email } = userRes.data.data;
+        dispatch(setId(id));
+        dispatch(setEmail(email));
+        dispatch(setNickname(nickName));
+        setUser(userRes.data.data);
+        console.log(userRes.data.data);
+      }
+    };
+    response();
+  }, [accessToken]);
 
   const handleOpenLoginModal = () => {
     dispatch(
@@ -31,13 +60,16 @@ function Header({}: Props) {
       })
     );
   };
-  const handleOpenBasicModal = () => {
-    dispatch(
-      openModal({
-        modalType: "BasicModal",
-        isOpen: true,
-      })
-    );
+
+  const handleLogout = () => {
+    cookie.remove("accessToken", { path: "/" });
+    dispatch(setToken(""));
+    dispatch(setNickname(""));
+    dispatch(setEmail(""));
+    dispatch(setId(0));
+    setUser([]);
+    router.replace("/");
+    window.alert("로그아웃되었습니다!");
   };
 
   return (
@@ -47,66 +79,55 @@ function Header({}: Props) {
           <Link href="/">
             <img src="/assets/logo.png" alt="logo" className={styles.logo} />
           </Link>
-          <div className={styles["search-bar"]}>
-            <input
-              className={styles["search-input"]}
-              type="text"
-              placeholder="어디 가고 싶으세요?"
-            />
-            <button className={styles["search-icon"]}>
-              <StyledIcon size={20} />
-            </button>
-          </div>
+
+          <SearchBar />
+
           <div className={styles.menu}>
             <Link href="/place">여행지</Link>
             <Link href="/course">코스</Link>
-            {/* <Link href="#">동행 게시판</Link> */}
             <Link href="/mypage">마이페이지</Link>
           </div>
         </div>
       </nav>
       <div className={styles.btn}>
-        {!session ? (
+        {!nickName ? (
           <>
             <button
               id="login-btn"
               className={styles["login-btn"]}
               onClick={handleOpenLoginModal}
-              // onClick={() => signIn("kakao")}
             >
               로그인
             </button>
           </>
         ) : (
           <>
-            <Image
+            {/* <Image
               className={styles["kakao-profile-img"]}
-              src={session.user?.image}
+              src={profileUrl}
               alt="카카오프로필"
               width={40}
               height={40}
-            />
-            {session.user?.name}님
+            /> */}
+            {nickName}님
             <button
               id="login-btn"
               className={styles["login-btn"]}
-              // onClick={handleOpenLoginModal}
-              onClick={() => signOut()}
+              onClick={handleLogout}
             >
               로그아웃
             </button>
           </>
         )}
-        <button
-          id="signup-btn"
-          className={styles["signup-btn"]}
-          onClick={handleOpenBasicModal}
-        >
-          기본 모달
-        </button>
       </div>
     </header>
   );
 }
 
 export default Header;
+
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   return {
+//     props: {},
+//   };
+// };

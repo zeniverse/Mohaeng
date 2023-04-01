@@ -10,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class CoursePlaceSearchReq {
     private String keyword;
-    private Long lastPlaceId;
+    private Long lastId;
     private String lastRating;
 
     public Double parseRatingToDouble(String lastRating) {

@@ -1,10 +1,15 @@
-import { setToken } from "@/src/store/reducers/loginTokenSlice";
+import {
+  setEmail,
+  setId,
+  setNickname,
+  setToken,
+} from "@/src/store/reducers/loginTokenSlice";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Loading from "./Loading";
-import LoginInfo from "./LoginInfo";
+import cookie from "react-cookies";
 
 const KakaoLogin = () => {
   const router = useRouter();
@@ -13,30 +18,60 @@ const KakaoLogin = () => {
 
   useEffect(() => {
     let code = new URL(window.location.href).searchParams.get("code");
-    const kakao = async () => {
-      await axios
-        .get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/login/oauth2/code/kakao/${code}`
-        )
-        .then((res) => {
-          localStorage.setItem("token", res.headers.authorization);
-          router.replace("/");
-        })
-        //.then(res => res.json())
-        //.then(data => {
-        // localStorage.setItem('token', data.token) })
+    const kakaoCode = async () => {
+      try {
+        // 코드 전송
+        const response = await axios.get(`/oauth/token?code=${code}`, {
+          withCredentials: true,
+        });
+        console.log(response);
+        const { accessToken } = response.data;
+        const { refreshToken } = response.data;
+        cookie.save("accessToken", accessToken, {
+          path: "/",
+        });
+        cookie.save("refreshToken", refreshToken, {
+          path: "/",
+        });
+        setToken;
+        dispatch(setToken(accessToken));
 
-        .catch((error) => console.log(error));
+        if (accessToken) {
+          try {
+            // loginInfo에서 정보 받아오기, 토큰 헤더에 담아서 전송
+            axios.defaults.headers.common["accessToken"] = accessToken;
+            const userRes = await axios.get(`/loginInfo`, {
+              headers: {
+                "Access-Token": `${accessToken}`,
+              },
+              withCredentials: true,
+            });
+            // 여기에서 받아온 유저 정보를 리덕스에 저장한다
+            console.log(userRes.data);
+            const { id, nickName, email } = userRes.data.data;
+            dispatch(setId(id));
+            dispatch(setEmail(email));
+            dispatch(setNickname(nickName));
+            router.replace("/");
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          console.log("error");
+        }
+        setValid(true);
+      } catch (e) {
+        console.log(e);
+        router.push("/");
+      }
     };
-    kakao();
-  }, []);
-  // 성공하면 LoginInfo 컴포넌트로 가고, 실패하면 Loading에 머무른다.
-  // {valid ? <LoginInfo /> : <Loading />}
-  return (
-    <>
-      <Loading />
-    </>
-  );
+    kakaoCode();
+  }, [dispatch]);
+
+  if (!valid) {
+    return <Loading />;
+  }
+  return <></>;
 };
 
 export default KakaoLogin;

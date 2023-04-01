@@ -1,5 +1,6 @@
 :root {
   --color-primary: #99d9d9;
+  --color-bg-gray: #ebebeb;
   --color-bg-lightgray: #f9f9f9;
   --color-bg-white: #ffffff;
   --color-red: #f20000;
@@ -58,4 +59,10 @@ h5,
 h6 {
   margin: 0;
   padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  outline: none;
 }

@@ -41,21 +41,22 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         // OAuth2 로그인을 통해 가져온 OAuth2User의 attribute를 담아주는 of 메소드.
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        Member member = save(attributes);
-        httpSession.setAttribute("user", new SessionMember(member));
+//        Member member = save(attributes);
+//        httpSession.setAttribute("user", new SessionMember(member));
 
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(Role.NORMAL.getKey()))
                 , attributes.getAttributes()
                 , attributes.getNameAttributeKey());
     }
 
+
     // 혹시 이미 저장된 정보라면, update 처리
-    private Member save(OAuthAttributes attributes) {
-        Member findMember = memberRepository.findByEmail(attributes.getEmail())
-                .map(user -> user.update(attributes.getName()))
-                .orElse(new Member(attributes.getName(), attributes.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
-
-        return memberRepository.save(findMember);
-    }
-
+//    private Member save(OAuthAttributes attributes) {
+//        Member findMember = memberRepository.findByEmail(attributes.getEmail())
+//                .map(user -> user.update(attributes.getName()))
+//                .orElse(new Member(attributes.getName(), attributes.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
+//
+//        return memberRepository.save(findMember);
+//    }
+//
 }

@@ -13,7 +13,11 @@ export default function Review() {
             <div className={styles.titleBox}>
               <h2 className={styles.h1}>리뷰</h2>
             </div>
-            <Link className={styles.reviewBtn} href="/review" scroll={true}>
+            <Link
+              className={styles.reviewBtn}
+              href="/review/create-review"
+              scroll={true}
+            >
               리뷰 작성
             </Link>
           </div>

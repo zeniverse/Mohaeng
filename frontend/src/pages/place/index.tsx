@@ -1,113 +1,27 @@
-import Image from "next/image";
-import styles from "./SearchResult.module.css";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import styles from "./index.module.css";
+import { BiPencil } from "react-icons/bi";
 import { useRouter } from "next/router";
+import PlaceList from "@/src/components/Place/PlaceList";
+import PlaceFilter from "@/src/components/Place/PlaceFilter";
 
-type Keyword = {
-  addr: string;
-  id: number;
-  image: string;
-  mapx: string;
-  mapy: string;
-  tel: string;
-  title: string;
-  overview: string;
-  review: number;
-};
-
-export default function indec(): JSX.Element {
-  const [keywordData, setKeywordData] = useState<Keyword[]>([]);
+export default function Place() {
   const router = useRouter();
-
-  useEffect(() => {
-    async function fetchData() {
-      const res = await fetch("/api/keyword");
-      const newData = await res.json();
-      const getKeywordData = newData;
-      setKeywordData(getKeywordData);
-    }
-    fetchData();
-  }, []);
-
+  const handleCreateClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push("course/create-course");
+  };
   return (
-    <>
-      <section className={styles.section}>
-        <h2 className={styles.h2}>검색하신 결과 </h2>
-        <ul className={styles.keywordList}>
-          {keywordData?.map((keyword) => (
-            <li className={styles.item} key={keyword.id}>
-              <button
-                className={styles.Link}
-                onClick={() =>
-                  router.push(
-                    {
-                      pathname: "/place/[id]",
-                      query: {
-                        id: keyword.id,
-                        addr: keyword.addr,
-                        image: keyword.image,
-                        mapx: keyword.mapx,
-                        mapy: keyword.mapy,
-                        tel: keyword.tel,
-                        title: keyword.title,
-                        overview: keyword.overview,
-                        review: keyword.review,
-                      },
-                    },
-                    `place/${keyword.id}`,
-                    { scroll: true }
-                  )
-                }
-              >
-                <Image
-                  className={styles.img}
-                  src={keyword.image}
-                  alt={keyword.title}
-                  width={257}
-                  height={233}
-                />
-                <span className={styles.keywordInfo}>
-                  <p className={styles.title}>{keyword.title}</p>
-                  <p className={styles.review}>{keyword.review}건의 리뷰</p>
-                </span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </>
+    <main className={styles.main}>
+      <div className={styles["place-container"]}>
+        <div className={styles["place-header-container"]}>
+          <h1>여행지 목록</h1>
+        </div>
+        <div className={styles["place-body-container"]}>
+          <div className={styles["place-body-head"]}></div>
+          <PlaceFilter />
+          <PlaceList />
+        </div>
+      </div>
+    </main>
   );
-}
-
-{
-  /* <Link
-className={styles.Link}
-href={{
-  pathname: "/place/[id]",
-  query: {
-    id: keyword.id,
-    addr: keyword.addr,
-    image: keyword.image,
-    mapx: keyword.mapx,
-    mapy: keyword.mapy,
-    tel: keyword.tel,
-    title: keyword.title,
-    review: keyword.review,
-  },
-}}
-as={`/place/${keyword.id}`}
->
-<Image
-  className={styles.img}
-  src={keyword.image}
-  alt={keyword.title}
-  width={257}
-  height={233}
-/>
-<span className={styles.keywordInfo}>
-  <p className={styles.title}>{keyword.title}</p>
-  <p className={styles.review}>{keyword.review}건의 리뷰</p>
-</span>
-</Link> */
 }

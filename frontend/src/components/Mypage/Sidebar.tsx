@@ -24,8 +24,7 @@ const Sidebar = () => {
     { href: "/mypage/bookmark", label: "즐겨찾기" },
     { href: "/mypage/trips", label: "나의 여행 일정" },
     { href: "/mypage/post", label: "내가 쓴 글" },
-    { href: "/activity", label: "내 활동 알림" },
-    { href: "/requests", label: "요청한 장소" },
+    // { href: "/activity", label: "내 활동 알림" },
   ];
 
   const [currentUser, setCurrentUser] = useState<User>();
@@ -40,7 +39,7 @@ const Sidebar = () => {
   const Img = currentUser?.data.profileUrl;
 
   return (
-    <div className={styles.sidebar}>
+    <nav className={styles.sidebar}>
       <ul>
         <div className={styles["ProfileWrapper"]}>
           <img src={Img} className={styles["Avatar"]} />
@@ -54,7 +53,7 @@ const Sidebar = () => {
           <SidebarLink key={link.href} href={link.href} label={link.label} />
         ))}
       </ul>
-    </div>
+    </nav>
   );
 };
 

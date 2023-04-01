@@ -4,12 +4,11 @@
   justify-content: center;
   align-items: center;
   padding: 1rem 0;
-  width: 100%;
 }
 
 .banner-search-container {
   position: relative;
-  width: 100%;
+  width: 1200px;
   height: 320px;
 }
 
