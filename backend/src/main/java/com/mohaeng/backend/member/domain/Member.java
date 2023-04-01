@@ -35,8 +35,8 @@ public class Member extends BaseTimeEntity {
     private String email;
 
     private String originName;
-    private String imageURL;
-    private String imageName;
+    private String imageURL="";
+    private String imageName="";
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
