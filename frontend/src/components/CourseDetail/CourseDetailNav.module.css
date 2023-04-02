@@ -3,7 +3,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 0 0.2rem;
+  padding: 0 2rem;
   margin-bottom: 1rem;
 }
 .like {
@@ -12,8 +12,15 @@
   align-items: center;
   gap: 0.2rem;
 }
+
 .title-nav-right {
-  font-size: 1.4rem;
+  font-size: 1.8rem;
   display: flex;
-  gap: 1.1rem;
+  gap: 1.4rem;
+}
+.roughmapBtn {
+  position: relative;
+}
+.item-nav {
+  cursor: pointer;
 }

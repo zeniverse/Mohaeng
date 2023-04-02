@@ -47,7 +47,7 @@ public class MyPageController {
     }
 
     @PutMapping("/myPage/{memberEmail}")
-    public ResponseEntity changeMemberProfile(@PathVariable String memberEmail, @ModelAttribute UserInfoChangeRequest userInfoChangeRequest) throws IOException {
+    public ResponseEntity changeMemberProfile(@PathVariable String memberEmail, @RequestBody UserInfoChangeRequest userInfoChangeRequest) throws IOException {
         Member findMember = memberService.findByEmail(memberEmail);
         memberService.changeProfile(findMember, userInfoChangeRequest);
         return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
