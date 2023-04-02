@@ -1,4 +1,7 @@
-import { createCourseApi } from "@/src/services/courseService";
+import {
+  createCourseApi,
+  getCourseListApi,
+} from "@/src/services/courseService";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   ICourseForm,
@@ -27,7 +30,7 @@ export const initialState: CourseState = {
 };
 
 export const createCourseAction = createAsyncThunk(
-  "user/createUserAction",
+  "course/createUserAction",
   async (data: ICourseSubmitForm) => {
     const response = await createCourseApi(data);
     console.log(response);

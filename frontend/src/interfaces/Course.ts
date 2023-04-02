@@ -1,4 +1,6 @@
-export interface Course {
+import { placesName } from "./Course.type";
+
+export interface CourseList {
   id?: number;
   title: string;
   likeCount: number;
@@ -7,27 +9,21 @@ export interface Course {
   thumbnailUrl: string;
   isPublished?: boolean;
   content?: string;
-  places?: Places[];
-}
-export interface Places {
-  placeId?: number;
-  imgUrl?: string;
-  name?: string;
-  address?: string;
+  places?: placesName[];
 }
 
-export type CourseProps = {
-  id?: number;
-  courseTitle: string;
-  courseDesc?: string;
-  courseLike: number;
-  courseDays?: string;
+export type CourseListProps = {
+  id: number;
+  title: string;
+  content: string;
+  likeCount: number;
+  courseDays: string;
   thumbnailUrl: string;
-  courseList?: Places[];
+  places: placesName[];
 };
 
 export interface RoughMapTitle {
-  RoughMapData: string[];
+  RoughMapData: placesName[];
   onClose: any;
 }
 

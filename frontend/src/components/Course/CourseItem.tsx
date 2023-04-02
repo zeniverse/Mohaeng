@@ -1,4 +1,4 @@
-import { CourseProps } from "@/src/interfaces/Course";
+import { CourseListProps } from "@/src/interfaces/Course";
 import styles from "./CourseItem.module.css";
 import React, { useState } from "react";
 import Image from "next/image";
@@ -11,15 +11,14 @@ import TagItem from "../UI/TagItem";
 
 const CourseItem = ({
   id,
-  courseTitle,
-  courseDesc,
-  courseLike,
+  title,
+  content,
+  likeCount,
   courseDays,
   thumbnailUrl,
-  courseList,
-}: CourseProps) => {
+  places,
+}: CourseListProps) => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
-  const RoughMapData: any[] = courseList?.map((course) => course.name)!;
 
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
@@ -37,16 +36,16 @@ const CourseItem = ({
             <div className={styles["item-image-box"]}></div>
             <Image
               src={thumbnailUrl}
-              alt={courseTitle}
+              alt={title}
               width={700}
               height={700}
               priority
             />
-            <IsLikeState courseLike={courseLike} />
+            <IsLikeState courseLike={likeCount} />
           </div>
           <div className={styles["item-info-text"]}>
-            <h3>{courseTitle}</h3>
-            <p>{courseDesc}</p>
+            <h3>{title}</h3>
+            <p>{content}</p>
             {courseDays && <TagItem text={courseDays} />}
           </div>
         </div>
@@ -64,7 +63,7 @@ const CourseItem = ({
         >
           <BiMapAlt />
           {isRoughMapOpen && (
-            <RoughMap RoughMapData={RoughMapData} onClose={onClose} />
+            <RoughMap RoughMapData={places} onClose={onClose} />
           )}
         </div>
       </div>

@@ -7,6 +7,7 @@ import idReducer from "./reducers/loginTokenSlice";
 import profileUrlReducer from "./reducers/loginTokenSlice";
 import CourseFormSlice from "./reducers/CourseFormSlice";
 import FilterSlice from "./reducers/FilterSlice";
+import CourseSlice from "./reducers/CourseSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     email: emailReducer,
     id: idReducer,
     profileUrl: profileUrlReducer,
+    course: CourseSlice,
     courseForm: CourseFormSlice,
     filter: FilterSlice,
   },

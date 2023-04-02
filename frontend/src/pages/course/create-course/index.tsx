@@ -10,6 +10,8 @@ import {
 import CoursePlaceInput from "@/src/components/CreateCourse/CoursePlaceInput";
 
 import { ICourseForm } from "@/src/interfaces/Course.type";
+import KakaoMap from "@/src/components/KakaoMap/KakaoMap";
+import { kakaoPlaces } from "@/src/interfaces/Course";
 
 export default function index() {
   const dispatch = useAppDispatch();
@@ -36,12 +38,19 @@ export default function index() {
     const extractedPlaceIds = places.map((place) => place.placeId);
     const submitData = {
       ...rest,
-      thumbnailUrl: "임시",
+      thumbnailUrl: places[0].imgUrl,
       placeIds: extractedPlaceIds,
     };
     console.log(submitData);
     dispatch(createCourseAction(submitData));
   };
+
+  let mapData: kakaoPlaces[] = course.places?.map((place) => ({
+    placeId: place.placeId,
+    name: place.name,
+    mapX: place.mapX,
+    mapY: place.mapY,
+  }));
 
   return (
     <div className={styles["create-course-container"]}>
@@ -50,7 +59,9 @@ export default function index() {
         <CoursePlaceInput />
       </div>
       <div className={styles["right-container"]}>
-        <div className={styles["kakaomap-wrapper"]}>지도</div>
+        <div className={styles["kakaomap-wrapper"]}>
+          {mapData && mapData.length > 0 && <KakaoMap positions={mapData} />}
+        </div>
 
         {/* <div className={styles["orderlist-wrapper"]}>
           {places && <CourseOrderList places={places} />}

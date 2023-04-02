@@ -8,7 +8,11 @@ export interface ICourse {
   region: string;
   thumbnailUrl: string;
   content: string;
-  placeIds: number[];
+  likeCount: number;
+  places: placesName[];
+}
+export interface placesName {
+  name: string;
 }
 
 export enum ApiStatus {
