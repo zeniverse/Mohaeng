@@ -1,6 +1,7 @@
 package com.mohaeng.backend.member.dto.response;
 
 import com.mohaeng.backend.course.domain.CourseBookmark;
+import com.mohaeng.backend.course.domain.CourseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ public class MyPageCourseBookMarkDto {
     private String courseTitle;
     private String region;
     private String content;
-    private boolean isPublished;
+    private CourseStatus courseStatus;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
@@ -25,7 +26,7 @@ public class MyPageCourseBookMarkDto {
                 courseBookmark.getCourse().getTitle(),
                 courseBookmark.getCourse().getRegion(),
                 courseBookmark.getCourse().getContent(),
-                courseBookmark.getCourse().getIsPublished(),
+                courseBookmark.getCourse().getCourseStatus(),
                 courseBookmark.getCreatedDate(),
                 courseBookmark.getModifiedDate());
     }
