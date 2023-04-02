@@ -1,9 +1,10 @@
 .sidebar {
   position: relative;
   left: 0;
-  margin: 5rem 6rem;
+  margin: 0 5rem;
+  margin-right: 8rem;
   border-radius: 10px;
-  width: 300px;
+  width: 280px;
   height: 70%;
   background-color: #f3f3f3;
   border: 1px solid gray;
