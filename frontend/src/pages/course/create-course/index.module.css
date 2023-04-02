@@ -1,16 +1,14 @@
 .create-course-container {
   display: flex;
+  flex-direction: column;
   height: 100%;
   padding: 1rem 6rem 0;
-  gap: 1rem;
+  gap: 0.8rem;
 }
-.left-container {
-  flex: 2;
-}
-.right-container {
-  flex: 1;
-  display: block;
-  background-color: orange;
+.input-container {
+  display: flex;
+  gap: 0.8rem;
+  height: 340px;
 }
 .orderlist-wrapper {
   overflow-y: scroll;
@@ -21,4 +19,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.kakaomap-wrapper {
+  height: 500px;
+  width: 100%;
 }

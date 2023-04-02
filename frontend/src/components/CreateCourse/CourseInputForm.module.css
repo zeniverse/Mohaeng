@@ -1,7 +1,7 @@
 .form {
+  flex: 6;
   border: 3px solid var(--color-border-light);
   padding: 0.6rem 1.4rem;
-  width: 100%;
   border-radius: 1rem;
 }
 .first-line {

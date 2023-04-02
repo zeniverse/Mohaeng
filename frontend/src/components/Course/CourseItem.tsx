@@ -22,12 +22,10 @@ const CourseItem = ({
   const RoughMapData: any[] = courseList?.map((course) => course.name)!;
 
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
-    console.log("toggleRoughMapHandler 실행");
     e.stopPropagation();
     setIsRoughMapOpen((prev) => !prev);
   };
   const onClose = () => {
-    console.log("onClose 실행");
     setIsRoughMapOpen(false);
   };
 

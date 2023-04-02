@@ -1,11 +1,10 @@
-import { useAppDispatch, useAppSelector } from "@/src/hooks";
+import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import {
-  FormValues,
   resetFormValue,
   setFormValue,
 } from "@/src/store/reducers/CourseFormSlice";
 import React, { ChangeEvent, useState } from "react";
-import { Select } from "../Select/Select";
+import { Select } from "../Filter/Select";
 import styles from "./CourseInputForm.module.css";
 
 const DaysOptions: string[] = [
@@ -47,6 +46,9 @@ interface CourseInputFormProps {
 }
 
 const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
+  const { course } = useAppSelector((state) => {
+    return state.courseForm;
+  });
   const {
     title,
     startDate,
@@ -55,7 +57,7 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
     courseDays,
     region,
     content,
-  } = useAppSelector((state) => state.course);
+  } = course;
 
   const toggleSwitchclassName = isPublished
     ? `${styles["toggle-switch"]} ${styles.publish}`
@@ -100,7 +102,7 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
           <label>
             <span>시작일자</span>
             <input
-              type="datetime-local"
+              type="date"
               name="startDate"
               value={startDate}
               onChange={onChange}
