@@ -3,6 +3,8 @@
   position: relative;
   margin-right: 15rem;
   margin-top: 4rem;
+  height: 100%;
+  width: 100%;
 }
 
 .contentWrapper {
