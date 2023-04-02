@@ -12,7 +12,13 @@ export default function () {
   return (
     <article className={styles.reviewBox}>
       <div className={styles.reviewer}>
-        <Image className={styles.userImg} src={user} width={50} height={50} />
+        <Image
+          className={styles.userImg}
+          src={user}
+          width={50}
+          height={50}
+          alt="userImg"
+        />
         <div className={styles.reviewerInfo}>
           <div className={styles.rating}> 별점 </div>
           <p className={styles.review}>아이디 | 작성일</p>
@@ -24,11 +30,10 @@ export default function () {
       </div>
       <div className={styles.reviewContent}>
         <p className={styles.reviewTxt}>
-          {" "}
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil culpa
           nam dicta, laborum modi delectus ratione similique inventore quibusdam
           saepe facere eaque perferendis qui quas rem vel corporis? Obcaecati,
-          incidunt. 더보기
+          incidunt.
         </p>
         <button className={styles.likeBtn}>
           <FaRegThumbsUp />

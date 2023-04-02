@@ -1,26 +1,20 @@
 package com.mohaeng.backend.member.jwt;
 
 import com.mohaeng.backend.member.domain.Role;
-import com.mohaeng.backend.member.service.MemberService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 
+
 @Service
-@RequiredArgsConstructor
 public class TokenGenerator {
     private String secretKey = "SECRETKEYFORMOHAENGPROJECTWECANDOSECRETKEYTHISISKEY";
     private Key key;
