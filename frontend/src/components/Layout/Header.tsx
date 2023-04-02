@@ -32,7 +32,6 @@ function Header({}: Props) {
   const accessToken = cookie.load("accessToken");
 
   useEffect(() => {
-    console.log(accessToken);
     const response = async () => {
       if (accessToken) {
         const userRes = await axios.get(`/loginInfo`, {
