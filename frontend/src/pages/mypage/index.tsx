@@ -8,6 +8,7 @@ import MypageLayout from "./layout";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import UserInfo from "@/src/components/Mypage/UserInfo";
+import UserEdit from "@/src/components/Mypage/UserEdit";
 
 const MyPage: React.FC = () => {
   const id = useSelector((state: RootState) => state.id.id);
@@ -19,30 +20,20 @@ const MyPage: React.FC = () => {
   return (
     <MypageLayout>
       <h1 className={styles["Title"]}>마이페이지</h1>
-      <UserInfo
+      {/* <UserInfo
+        key={id}
+        id={id}
+        nickName={nickName}
+        email={email}
+        imageUrl={imageUrl}
+      /> */}
+      <UserEdit
         key={id}
         id={id}
         nickName={nickName}
         email={email}
         imageUrl={imageUrl}
       />
-      {/* <div className={styles["Container"]}>
-        <div className={styles["ProfileWrapper"]}>
-          <img src={imageUrl} className={styles["Avatar"]} />
-          <div>
-            <div className={styles["Name"]}>{id}</div>
-            <div className={styles["Nickname"]}>{nickName}</div>
-            <div className={styles["Email"]}>{email}</div>
-          </div>
-        </div>
-        <div className={styles["ButtonWrapper"]}>
-          <Link href="/mypage/edit">
-            <Button text="정보수정" />
-          </Link>
-
-          <Button text="회원탈퇴" />
-        </div>
-      </div> */}
     </MypageLayout>
   );
 };
