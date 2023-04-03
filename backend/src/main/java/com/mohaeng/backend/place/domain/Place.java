@@ -12,6 +12,9 @@ import org.hibernate.annotations.Table;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Builder
 @Getter
@@ -46,6 +49,9 @@ public class Place {
     private String contentId;
     private String overview;
     private double rating;
+
+    @OneToMany(mappedBy = "place")
+    private List<Review> reviewList = new ArrayList<>();
 
     public Place(String name, String address, String areaCode, String sigunguCode, String contentId, String firstImage, String firstImage2, String mapX, String mapY) {
         this.name = name;
@@ -85,5 +91,9 @@ public class Place {
         this.mapX = mapX;
         this.mapY = mapY;
         this.contentId = contentId;
+    }
+
+    public void addReview(Review review) {
+        this.reviewList.add(review);
     }
 }

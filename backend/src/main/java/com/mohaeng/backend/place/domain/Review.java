@@ -4,15 +4,15 @@ package com.mohaeng.backend.place.domain;
 import com.mohaeng.backend.common.BaseTimeEntity;
 import com.mohaeng.backend.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class Review extends BaseTimeEntity {
 
     @Id

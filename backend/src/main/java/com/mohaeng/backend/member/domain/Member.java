@@ -96,5 +96,9 @@ public class Member extends BaseTimeEntity {
     public void setKakaoId(Long kakaoId) {
         this.kakaoId = kakaoId;
     }
+
+    public void addReview(Review review) {
+        this.reviewList.add(review);
+    }
 }
 
