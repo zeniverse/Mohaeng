@@ -11,6 +11,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -46,10 +47,12 @@ public class MyPageController {
         return ResponseEntity.ok().body(BaseResponse.success("OK", data));
     }
 
-    @PutMapping("/myPage/{memberEmail}")
-    public ResponseEntity changeMemberProfile(@PathVariable String memberEmail, @RequestBody UserInfoChangeRequest userInfoChangeRequest) throws IOException {
+    @PutMapping(value = "/myPage/{memberEmail}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity changeMemberProfile(@PathVariable String memberEmail,
+                                              @RequestPart UserInfoChangeRequest userInfoChangeRequest,
+                                              @RequestPart MultipartFile multipartFile) throws IOException {
         Member findMember = memberService.findByEmail(memberEmail);
-        memberService.changeProfile(findMember, userInfoChangeRequest);
+        memberService.changeProfile(findMember, userInfoChangeRequest, multipartFile);
         return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
     }
 

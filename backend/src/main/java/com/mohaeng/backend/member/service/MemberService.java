@@ -170,9 +170,8 @@ public class MemberService {
         return memberLoginDto;
     }
 
-    public void changeProfile(Member member, UserInfoChangeRequest userInfoChangeRequest) throws IOException {
+    public void changeProfile(Member member, UserInfoChangeRequest userInfoChangeRequest, MultipartFile multipartFile) throws IOException {
         member.changeNickName(userInfoChangeRequest.getNickName());
-        MultipartFile multipartFile = userInfoChangeRequest.getMultipartFile();
         if (!multipartFile.isEmpty()) {
             UUID uuid = UUID.randomUUID();
             String fileName = uuid + "_" + multipartFile.getOriginalFilename();
