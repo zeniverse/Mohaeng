@@ -19,7 +19,7 @@ public class Review extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PLACE_ID")
     private Place place;
 
@@ -31,5 +31,6 @@ public class Review extends BaseTimeEntity {
     private String content;
     private int likeCount;
     private double rating;
+    private String imgUrl;
 
 }
