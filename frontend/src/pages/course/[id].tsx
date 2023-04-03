@@ -60,14 +60,6 @@ export default function CourseDetail() {
   // const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
   // const RoughMapData: string[] = places?.map((place: any) => place.name);
 
-  // const handleMouseEnter = () => {
-  //   setIsRoughMapOpen(true);
-  // };
-
-  // const handleMouseLeave = () => {
-  //   setIsRoughMapOpen(false);
-  // };
-
   useEffect(() => {
     const fetchCourseData = async (id: string) => {
       const response = await fetch(`/api/courseDetail?id=${id}`);
@@ -121,7 +113,7 @@ export default function CourseDetail() {
             <span className={styles.dateinfo}>{formattedDate}</span>
           </div>
         </div>
-        <CourseDetailNav likeCount={likeCount} />
+        <CourseDetailNav likeCount={likeCount} places={places} />
         <CourseDetailContent
           positions={mapData}
           places={places}

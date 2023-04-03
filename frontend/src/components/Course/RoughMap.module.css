@@ -6,8 +6,8 @@
   border: 1px solid var(--color-border-semi);
   border-radius: 0.4rem;
   z-index: 1;
-  top: 106%;
   overflow: hidden;
+  top: 106%;
   left: 0;
 }
 
@@ -23,7 +23,6 @@
   width: 0.6rem;
   height: 0.6rem;
   border-radius: 50%;
-  background: rgb(174, 238, 218);
   background: radial-gradient(
     circle,
     rgba(174, 238, 218, 1) 0%,

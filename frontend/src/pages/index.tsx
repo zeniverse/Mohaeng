@@ -3,8 +3,9 @@ import RecommendedSection from "../components/Main/RecommendedSection";
 import PlaceCardSlider from "../components/Main/PlaceCardSlider";
 import CourseCardSlider from "../components/Main/CourseCardSlider";
 import BannerSearch from "../components/Main/BannerSearch";
-import BoardFilters from "../components/Main/BoardFilters";
-import BoardContainer from "../components/Main/BoardContainer";
+import AreaSelector from "../components/Filter/AreaSelector";
+// import BoardFilters from "../components/Main/BoardFilters";
+// import BoardContainer from "../components/Main/BoardContainer";
 
 export default function Home() {
   return (
@@ -15,25 +16,17 @@ export default function Home() {
           <div className={styles["home-content-container"]}>
             <RecommendedSection
               title="🔥별점 Top 5 여행지"
-              bgColor="grey"
+              bgColor="Mgrey"
               linkUrl="place"
             >
               <PlaceCardSlider />
             </RecommendedSection>
             <RecommendedSection
               title="❤️추천 코스"
-              bgColor="grey"
+              bgColor="Lgrey"
               linkUrl="course"
             >
               <CourseCardSlider />
-            </RecommendedSection>
-            <RecommendedSection
-              title="🧑‍🤝‍🧑동행 게시판"
-              bgColor="grey"
-              linkUrl="accompany"
-            >
-              <BoardFilters />
-              <BoardContainer />
             </RecommendedSection>
           </div>
         </div>

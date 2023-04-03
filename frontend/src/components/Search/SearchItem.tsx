@@ -1,6 +1,7 @@
 import { KeywordProps } from "@/src/interfaces/Keyword";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { BiBookmarkPlus } from "react-icons/bi";
 import styles from "./SearchItem.module.css";
 
 export default function SearchItem({
@@ -9,9 +10,10 @@ export default function SearchItem({
   contentId,
 }: KeywordProps) {
   const router = useRouter();
+
   return (
     <li
-      className={styles.item}
+      className={styles.keywordItemContainer}
       key={contentId}
       onClick={() =>
         router.push(
@@ -21,22 +23,25 @@ export default function SearchItem({
               id: contentId,
             },
           },
-          `place/${contentId}`,
-          { scroll: true }
+          `place/${contentId}`
         )
       }
     >
-      <button className={styles.Link}>
+      <button className={styles.keywordItem}>
         <Image
           className={styles.img}
           src={firstImage}
           alt={name}
-          width={300}
-          height={230}
+          width={280}
+          height={210}
+          priority
         />
-        <span className={styles.keywordInfo}>
+        <div className={styles.keywordInfo}>
           <p className={styles.title}>{name}</p>
-        </span>
+          <div className={styles.keywordBookmark}>
+            <BiBookmarkPlus />
+          </div>
+        </div>
       </button>
     </li>
   );
