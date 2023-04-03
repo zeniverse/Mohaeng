@@ -93,6 +93,22 @@ public class Place {
         this.contentId = contentId;
     }
 
+    public Place(Long id, String name, String address, String areaCode, String firstImage, String firstImage2, String mapX, String mapY, String sigunguCode, String contentId, String overview, double rating, List<Review> reviewList) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.areaCode = areaCode;
+        this.firstImage = firstImage;
+        this.firstImage2 = firstImage2;
+        this.mapX = mapX;
+        this.mapY = mapY;
+        this.sigunguCode = sigunguCode;
+        this.contentId = contentId;
+        this.overview = overview;
+        this.rating = rating;
+        this.reviewList = reviewList;
+    }
+
     public void addReview(Review review) {
         this.reviewList.add(review);
     }
