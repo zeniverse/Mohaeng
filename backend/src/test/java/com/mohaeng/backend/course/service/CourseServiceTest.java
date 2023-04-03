@@ -13,6 +13,11 @@ import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.repository.CoursePlaceRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
+import com.mohaeng.backend.exception.badrequest.InvalidKeywordPlaceInCourse;
+import com.mohaeng.backend.exception.notfound.CourseNotFoundException;
+import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
+import com.mohaeng.backend.exception.notfound.PlaceNotFoundException;
+import com.mohaeng.backend.exception.unauthrized.MemberPermissionDenied;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.domain.Role;
 import com.mohaeng.backend.member.repository.MemberRepository;
@@ -105,12 +110,12 @@ class CourseServiceTest {
         CoursePlaceSearchReq req = new CoursePlaceSearchReq(null, null, null);
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(InvalidKeywordPlaceInCourse.class, () -> {
             courseService.placeSearch(req, PageRequest.ofSize(2));
         });
 
         //Then
-        assertEquals( "keyword 값이 비어있습니다.", exception.getMessage());
+        assertEquals( "코스에 추가할 여행지를 입력하세요.", exception.getMessage());
     }
 
     @Test
@@ -148,12 +153,12 @@ class CourseServiceTest {
         Member savedMember = createMember("createNoPlace");
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(PlaceNotFoundException.class, () -> {
             courseService.createCourse(courseReq, savedMember.getEmail());
         });
 
         //Then
-        assertEquals( "존재하지 않는 장소 입니다.", exception.getMessage());
+        assertEquals( "장소를 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -163,12 +168,12 @@ class CourseServiceTest {
         CourseReq courseReq = createCourseReq("코스 제목", List.of(1L, 2L));
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(MemberNotFoundException.class, () -> {
             courseService.createCourse(courseReq, "test@test.com");
         });
 
         //Then
-        assertEquals("존재하지 않는 member 입니다.", exception.getMessage());
+        assertEquals("회원을 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -199,12 +204,12 @@ class CourseServiceTest {
         Long courseId = 1000L;
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(CourseNotFoundException.class, () -> {
             courseService.getCourse(courseId);
         });
 
         //Then
-        assertEquals("존재하지 않는 코스 입니다.", exception.getMessage());
+        assertEquals("코스를 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -244,12 +249,12 @@ class CourseServiceTest {
 
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(CourseNotFoundException.class, () -> {
             courseService.updateCourse(savedMember.getEmail(), courseId, updateReq);
         });
 
         //Then
-        assertEquals(exception.getMessage(), "존재하지 않는 코스 입니다.");
+        assertEquals(exception.getMessage(), "코스를 찾을 수 없습니다.");
     }
 
     @Test
@@ -266,12 +271,12 @@ class CourseServiceTest {
         CourseUpdateReq updateReq = createUpdateCourseReq(List.of(placeList.get(2).getId(), placeList.get(3).getId()));
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(MemberNotFoundException.class, () -> {
             courseService.updateCourse("test@null.com", courseId, updateReq);
         });
 
         //Then
-        assertEquals("존재하지 않는 member 입니다.", exception.getMessage());
+        assertEquals("회원을 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -290,7 +295,7 @@ class CourseServiceTest {
         Member newMem = createMember("newMem");
 
         //When
-        Exception exception = assertThrows(RuntimeException.class, () -> {
+        Exception exception = assertThrows(MemberPermissionDenied.class, () -> {
             courseService.updateCourse(newMem.getEmail(), courseId, updateReq);
         });
 
@@ -339,7 +344,7 @@ class CourseServiceTest {
         Member newMem = memberRepository.save(newMember);
 
         //When
-        Exception exception = assertThrows(RuntimeException.class, () -> {
+        Exception exception = assertThrows(MemberPermissionDenied.class, () -> {
             courseService.deleteCourse(newMember.getEmail(), courseId);
         });
 
@@ -355,12 +360,12 @@ class CourseServiceTest {
         Member savedMember = createMember("deleteCourseIdNull");
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(CourseNotFoundException.class, () -> {
             courseService.deleteCourse(savedMember.getEmail(), courseId);
         });
 
         //Then
-        assertEquals("존재하지 않는 코스 입니다.", exception.getMessage());
+        assertEquals("코스를 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -388,11 +393,13 @@ class CourseServiceTest {
         assertEquals(1, courseList.getTotalPages());
     }
 
+    // TODO: valid 확인 test 작성
+
     private CourseReq createCourseReq(String title, List<Long> placeIds) {
         CourseReq myCourseReq = CourseReq.builder()
                 .title(title)
                 .courseDays("1박2일")
-                .isPublished(false)
+                .isPublished(true)
                 .region("서울")
                 .thumbnailUrl("images/01.jpg")
                 .startDate("2023-03-30")
@@ -418,7 +425,7 @@ class CourseServiceTest {
         CourseUpdateReq updateReq = CourseUpdateReq.builder()
                 .title("수정된 제목 입니다")
                 .courseDays("2박3일")
-                .isPublished(false)
+                .isPublished(true)
                 .region("서울")
                 .thumbnailUrl("images/01.jpg")
                 .startDate("2023-04-01")
