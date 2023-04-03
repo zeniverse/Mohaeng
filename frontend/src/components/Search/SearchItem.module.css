@@ -1,18 +1,15 @@
 .keywordItemContainer {
-  flex-basis: calc(25% - 20px);
-  /* width: 230px;
-    height: 270px; */
+  flex-basis: calc(25%-10px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
   margin-bottom: 3rem;
   text-align: left;
 }
 
 .keywordItem {
-  /* width: 90%; */
   border: 1px solid var(--color-border-light);
+  margin: 10px;
   background-color: transparent;
   border-radius: 16px;
   text-decoration: none;
@@ -22,7 +19,6 @@
 .keywordItem:hover {
   color: var(--color-primary);
   transition: all ease 0.3s;
-  /* filter: brightness(110%); */
   box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
   -webkit-box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
   -moz-box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
@@ -54,7 +50,7 @@
 }
 
 .keywordBookmark {
-  font-size: 30px;
+  font-size: 28px;
   margin-left: 40px;
 }
 

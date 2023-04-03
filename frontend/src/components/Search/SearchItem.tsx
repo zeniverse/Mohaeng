@@ -23,8 +23,7 @@ export default function SearchItem({
               id: contentId,
             },
           },
-          `place/${contentId}`,
-          { scroll: true }
+          `place/${contentId}`
         )
       }
     >
@@ -34,7 +33,7 @@ export default function SearchItem({
           src={firstImage}
           alt={name}
           width={280}
-          height={220}
+          height={210}
           priority
         />
         <div className={styles.keywordInfo}>

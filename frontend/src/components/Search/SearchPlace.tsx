@@ -4,10 +4,10 @@ import { useRouter } from "next/router";
 import { Keyword } from "@/src/interfaces/Keyword";
 import axios from "axios";
 import SearchItem from "./SearchItem";
-import Pagebar from "../Pagenation/Pagebar";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { setSearchPlace } from "@/src/store/reducers/SearchSlice";
+import { setSearchPlace } from "@/src/store/reducers/searchSlice";
+import Pagebar from "../Pagenation/Pagebar";
 
 // ToDo: 띄어쓰기, 단어 조합 검색에 대해서 좀 더 리팩토링 필요
 // 결과를 로드하는 동안 '검색결과가 없습니다'가 마운트되는 이슈
@@ -19,7 +19,7 @@ export default function SearchPlace(): JSX.Element {
   const dispatch = useDispatch();
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
-    (state: RootState) => state.place.totalPages
+    (state: RootState) => state.search.totalPages
   );
 
   useEffect(() => {
@@ -33,10 +33,10 @@ export default function SearchPlace(): JSX.Element {
           withCredentials: true,
         });
         if (res.data.data.content !== []) {
+          console.log(res.data.data);
           dispatch(setSearchPlace(res.data.data));
           const { content } = res.data.data;
           setSearchResult(content);
-          console.log(content);
         } else {
           console.log(res.data.data.content);
         }
@@ -64,7 +64,11 @@ export default function SearchPlace(): JSX.Element {
               />
             ))
           ) : (
-            <p>해당하는 검색 결과가 없습니다. 😢 </p>
+            <div className={styles.div}>
+              <p className={styles.noResult}>
+                해당하는 검색 결과가 없습니다. 😢
+              </p>
+            </div>
           )}
         </ul>
         <Pagebar totalPage={totalPages} />

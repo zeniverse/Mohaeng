@@ -1,18 +1,27 @@
 .section {
   margin: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .keywordList {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   list-style: none;
+  margin-left: 2rem;
 }
 
 .h2 {
   margin: 0 0 3rem 4rem;
+}
+
+.div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 2rem;
 }
 
 .review {

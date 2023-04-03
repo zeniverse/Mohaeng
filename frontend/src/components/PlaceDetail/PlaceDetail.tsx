@@ -1,4 +1,3 @@
-// "use client";
 import { useEffect, useState } from "react";
 import styles from "./PlaceDetail.module.css";
 import Image from "next/image";
@@ -7,8 +6,9 @@ import Review from "../Review/Review";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { BsBookmark, BsFillBookmarkFill } from "react-icons/bs";
+import { useDispatch } from "react-redux";
 
-type PlaceInfo = {
+interface PlaceInfo {
   name: string;
   areaCode: string;
   firstImage: string;
@@ -16,7 +16,7 @@ type PlaceInfo = {
   mapX: string;
   mapY: string;
   overview: string;
-};
+}
 
 export default function PlaceDetail() {
   const router = useRouter();
@@ -29,16 +29,15 @@ export default function PlaceDetail() {
       try {
         const res = await axios.get(`/place/overview/${id}`);
         const { content } = res.data.data;
-        console.log(content[0].name);
         setPlaceInfo(content[0]);
-        console.log(placeInfo);
+        console.log(placeInfo.name);
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchData();
   }, [id]);
+
   return (
     <>
       <section className={styles.placeDetail}>
@@ -73,7 +72,8 @@ export default function PlaceDetail() {
         <div className={styles.detailContent}>
           <div className={styles.detailDesc}>
             <p className={styles.descInfo}>
-              <span className={styles.descTitle}> 세부 설명</span>
+              <span className={styles.descTitle}>세부 설명 </span>
+              <p>{placeInfo.overview}</p>
             </p>
           </div>
           <div className={styles.detailMap} id="map">

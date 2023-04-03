@@ -10,6 +10,7 @@ import FilterSlice from "./reducers/FilterSlice";
 import placeReducer from "./reducers/PlaceSlice";
 import mypageReducer from "./reducers/mypageSlice";
 import pageReducer from "./reducers/pageSlice";
+import searchReducer from "./reducers/searchSlice";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     place: placeReducer,
     mypage: mypageReducer,
     page: pageReducer,
+    search: searchReducer,
   },
 });
 
