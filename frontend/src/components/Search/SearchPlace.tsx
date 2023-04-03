@@ -1,10 +1,8 @@
-import Image from "next/image";
 import styles from "./SearchList.module.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Keyword } from "@/src/interfaces/Keyword";
 import axios from "axios";
-import SearchTab from "./SearchTab";
 import SearchItem from "./SearchItem";
 
 // ToDo: 띄어쓰기, 단어 조합 검색에 대해서 좀 더 리팩토링 필요
@@ -37,7 +35,6 @@ export default function SearchPlace(): JSX.Element {
 
   return (
     <>
-      <SearchTab />
       <section className={styles.section}>
         <h3 className={styles.h2}>검색하신 결과: {keyword} </h3>
         <ul className={styles.keywordList}>
