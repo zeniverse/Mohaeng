@@ -47,12 +47,13 @@ public class Course extends BaseTimeEntity {
 
     private String content;
     private Integer likeCount;
-    private Boolean isPublished;
+    @Enumerated(EnumType.STRING)
+    private CourseStatus courseStatus;
     private String thumbnailUrl;
 
     @Builder
     public Course(List<CoursePlace> coursePlaces, Member member, String title, String nickname, String region, String courseDays, LocalDateTime startDate, LocalDateTime endDate,
-                  LocalDateTime deletedDate, String content, Integer likeCount, Boolean isPublished, String thumbnailUrl) {
+                  LocalDateTime deletedDate, String content, Integer likeCount, CourseStatus courseStatus, String thumbnailUrl) {
         this.coursePlaces = coursePlaces;
         this.member = member;
         this.title = title;
@@ -64,7 +65,7 @@ public class Course extends BaseTimeEntity {
         this.deletedDate = deletedDate;
         this.content = content;
         this.likeCount = likeCount;
-        this.isPublished = isPublished;
+        this.courseStatus = courseStatus;
         this.thumbnailUrl = thumbnailUrl;
     }
 
@@ -72,15 +73,30 @@ public class Course extends BaseTimeEntity {
         this.coursePlaces = data;
     }
 
-    public void updateCourse(CourseUpdateReq courseUpdateReq, LocalDateTime start, LocalDateTime end) {
+    public static Course createCourse(CourseReq req, Member member){
+        return Course.builder()
+                .title(req.getTitle())
+                .startDate(strToTime(req.getStartDate()))
+                .endDate(strToTime(req.getEndDate()))
+                .courseStatus(changeStatus(req.getIsPublished()))
+                .courseDays(req.getCourseDays())
+                .region(req.getRegion())
+                .thumbnailUrl(req.getThumbnailUrl())
+                .content(req.getContent())
+                .likeCount(0)
+                .member(member)
+                .build();
+    }
+
+    public void updateCourse(CourseUpdateReq courseUpdateReq) {
         this.title = courseUpdateReq.getTitle();
-        this.startDate = start;
-        this.endDate = end;
-        this.isPublished = courseUpdateReq.getIsPublished();
+        this.startDate = strToTime(courseUpdateReq.getStartDate());
+        this.endDate = strToTime(courseUpdateReq.getEndDate());
         this.courseDays = courseUpdateReq.getCourseDays();
         this.region = courseUpdateReq.getRegion();
         this.thumbnailUrl = courseUpdateReq.getThumbnailUrl();
         this.content = courseUpdateReq.getContent();
+        this.courseStatus = changeStatus(courseUpdateReq.getIsPublished());
     }
 
     public void updateDeletedDate(List<CoursePlace> coursePlaces){
@@ -96,6 +112,17 @@ public class Course extends BaseTimeEntity {
 
     public void cancelLikeCount(){
         this.likeCount -= 1;
+    }
+
+    /** String 타입 날짜를 LocaDateTime으로 변환 **/
+    private static LocalDateTime strToTime (String strDate){
+        LocalDate date = LocalDate.parse(strDate);
+        return date.atStartOfDay();
+    }
+
+    /** 코스 공개 비공개 여부 확인 후 Enum 타입으로 변환 **/
+    private static CourseStatus changeStatus(Boolean status){
+        return status ? CourseStatus.PUBLIC : CourseStatus.PRIVATE;
     }
 
 }

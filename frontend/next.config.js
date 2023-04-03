@@ -21,6 +21,14 @@ const nextConfig = {
         source: "/:path*",
         destination: "http://localhost:8080/:path*",
       },
+      {
+        source: "/api/course/placeSearch",
+        destination: "https://localhost:8080/api/course/placeSearch",
+      },
+      {
+        source: "/api/course",
+        destination: "https://localhost:8080/api/course",
+      },
     ];
   },
 };

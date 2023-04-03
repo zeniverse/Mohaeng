@@ -22,7 +22,7 @@ export default function Button({
   return (
     <ButtonBox width={width} height={height} bar={bar}>
       {type === "button" && <button type="button">{text}</button>}
-      {type === "close" && (
+      {type === "click" && (
         <button type="button" onClick={onClick}>
           {text}
         </button>

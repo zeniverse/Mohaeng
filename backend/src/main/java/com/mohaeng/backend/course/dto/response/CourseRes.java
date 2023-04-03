@@ -1,6 +1,7 @@
 package com.mohaeng.backend.course.dto.response;
 
 import com.mohaeng.backend.course.domain.Course;
+import com.mohaeng.backend.course.domain.CourseStatus;
 import com.mohaeng.backend.course.dto.CourseInPlaceDto;
 import lombok.*;
 
@@ -50,7 +51,7 @@ public class CourseRes {
                 .likeCount(course.getLikeCount())
                 .courseDays(course.getCourseDays())
                 .region(course.getRegion())
-                .isPublished(course.getIsPublished())
+                .isPublished(changeStatusToBoolean(course.getCourseStatus()))
                 .createdDate(course.getCreatedDate())
                 .startDate(dateToStr(course.getStartDate()))
                 .endDate(dateToStr(course.getEndDate()))
@@ -63,4 +64,7 @@ public class CourseRes {
         return date.format(DateTimeFormatter.ofPattern("YYYY-MM-dd"));
     }
 
+    private static Boolean changeStatusToBoolean(CourseStatus status){
+        return status.equals(CourseStatus.PUBLIC) ? true : false;
+    }
 }
