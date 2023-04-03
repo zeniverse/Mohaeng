@@ -76,7 +76,7 @@ class MyPageCourseBookMarkControllerTest {
     @WithMockUser
     public void 코스_전체조회_정상_처리() throws Exception {
         Member member = Member.builder().email("kim@naver.com").build();
-        Course course = Course.builder().member(member).isPublished(true).title("test").build();
+        Course course = Course.builder().member(member).title("test").build();
         CourseBookmark courseBookmark = CourseBookmark.builder().course(course).member(member).build();
 
         given(myPageService.findAllBookMarkCourse(any()))
@@ -96,7 +96,7 @@ class MyPageCourseBookMarkControllerTest {
     @WithMockUser
     public void 코스_단건_조회_정상_처리() throws Exception {
         Member member = Member.builder().email("kim@naver.com").build();
-        Course course = Course.builder().member(member).isPublished(true).title("test").build();
+        Course course = Course.builder().member(member).title("test").build();
         CourseBookmark courseBookmark = CourseBookmark.builder().id(1L).course(course).member(member).build();
 
         given(myPageService.findOneBookMarkedCourse(any(), any()))
