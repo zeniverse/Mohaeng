@@ -17,7 +17,7 @@ const CourseList = () => {
       {list?.map((course) => (
         <CourseItem
           key={course.id}
-          id={course.id}
+          id={course.id.toString()}
           title={course.title}
           content={course.content}
           likeCount={course.likeCount}

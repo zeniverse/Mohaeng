@@ -30,6 +30,7 @@ function Header({}: Props) {
   const router = useRouter();
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
+  console.log(accessToken);
 
   useEffect(() => {
     const response = async () => {

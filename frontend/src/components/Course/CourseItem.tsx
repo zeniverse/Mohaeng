@@ -30,7 +30,12 @@ const CourseItem = ({
 
   return (
     <div className={styles["course-item-container"]}>
-      <Link href={`/course/${id}`}>
+      <Link
+        href={{
+          pathname: "/course/[id]",
+          query: { id: id },
+        }}
+      >
         <div className={styles["item-info-container"]}>
           <div className={styles["item-image"]}>
             <div className={styles["item-image-box"]}></div>

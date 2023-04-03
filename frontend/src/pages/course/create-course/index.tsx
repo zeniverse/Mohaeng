@@ -45,13 +45,6 @@ export default function index() {
     dispatch(createCourseAction(submitData));
   };
 
-  let mapData: kakaoPlaces[] = course.places?.map((place) => ({
-    placeId: place.placeId,
-    name: place.name,
-    mapX: place.mapX,
-    mapY: place.mapY,
-  }));
-
   return (
     <div className={styles["create-course-container"]}>
       <div className={styles["input-container"]}>
@@ -60,7 +53,8 @@ export default function index() {
       </div>
       <div className={styles["right-container"]}>
         <div className={styles["kakaomap-wrapper"]}>
-          {mapData && mapData.length > 0 && <KakaoMap positions={mapData} />}
+          {/* TODO: 크기 잡고 목록 출력까지~ */}
+          {course?.places?.length > 0 && <KakaoMap mapData={course.places} />}
         </div>
 
         {/* <div className={styles["orderlist-wrapper"]}>

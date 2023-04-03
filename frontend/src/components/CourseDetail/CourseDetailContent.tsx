@@ -4,7 +4,7 @@ import KakaoMap from "../KakaoMap/KakaoMap";
 import styles from "./CourseDetailContent.module.css";
 import CourseOrderList from "./CourseOrderList";
 
-const CourseDetailContent = ({ positions, content, places, router }: any) => {
+const CourseDetailContent = ({ mapData, content, places, router }: any) => {
   const handleClick = () => {
     router.push("/");
   };
@@ -13,9 +13,8 @@ const CourseDetailContent = ({ positions, content, places, router }: any) => {
     <div className={styles["content-container"]}>
       <p className={styles.content}>{content}</p>
       <div className={styles.map}>
-        {positions && positions.length > 0 && (
-          <KakaoMap positions={positions} />
-        )}
+        {mapData && mapData.length > 0 && <KakaoMap mapData={mapData} />}
+
         <div className={styles.info}>
           <CourseOrderList places={places} />
         </div>

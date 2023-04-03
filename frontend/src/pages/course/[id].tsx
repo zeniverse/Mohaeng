@@ -1,14 +1,15 @@
 import { CourseDetailType, kakaoPlaces } from "@/src/interfaces/Course";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./courseDetail.module.css";
 
 import CourseDetailNav from "@/src/components/CourseDetail/CourseDetailNav";
 import CourseDetailContent from "@/src/components/CourseDetail/CourseDetailContent";
 
 const initialData = {
+  courseId: 0,
   title: "",
-  nickname: "",
+  isPublished: true,
   likeCount: "",
   courseDays: "",
   region: "",
@@ -18,10 +19,12 @@ const initialData = {
 };
 
 export default function CourseDetail() {
-  // const router = useRouter();
-  // const id = Array.isArray(router.query.id)
-  //   ? router.query.id[0]
-  //   : router.query.id;
+  const router = useRouter();
+  const id = Array.isArray(router.query.id)
+    ? parseInt(router.query.id[0], 10)
+    : router.query.id !== undefined
+    ? parseInt(router.query.id, 10)
+    : NaN;
 
   // const timeAgoFn = useCallback((a: Date) => {
   //   const now: Date = new Date();
@@ -43,49 +46,52 @@ export default function CourseDetail() {
   //   return `${Math.floor(years)}년 전`;
   // }, []);
 
-  // const [courseDetail, setcourseDetail] =
-  //   useState<CourseDetailType>(initialData);
-  // const {
-  //   title,
-  //   likeCount,
-  //   nickname,
-  //   courseDays,
-  //   region,
-  //   content,
-  //   createdDate,
-  //   places,
-  // }: CourseDetailType = courseDetail;
-  // const [formattedDate, setFormattedDate] = useState("");
+  const [courseDetail, setcourseDetail] =
+    useState<CourseDetailType>(initialData);
+  const {
+    courseId,
+    title,
+    likeCount,
+    isPublished,
+    courseDays,
+    region,
+    content,
+    createdDate,
+    places,
+  }: CourseDetailType = courseDetail;
+  const [formattedDate, setFormattedDate] = useState("");
   // const [timeAgoDate, setTimeAgoDate] = useState("");
   // const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
   // const RoughMapData: string[] = places?.map((place: any) => place.name);
 
-  // useEffect(() => {
-  //   const fetchCourseData = async (id: string) => {
-  //     const response = await fetch(`/api/courseDetail?id=${id}`);
-  //     const courseData = await response.json();
-  //     setcourseDetail(courseData);
-  //   };
+  useEffect(() => {
+    const fetchCourseData = async (id: number) => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/course/${id}`
+      );
+      const courseData = await response.json();
+      setcourseDetail(courseData.data);
+    };
 
-  //   if (id) {
-  //     fetchCourseData(id);
-  //   }
-  // }, [id]);
+    if (id) {
+      fetchCourseData(id);
+    }
+  }, [id]);
 
-  // const getFomattedDate = useCallback((date: Date) => {
-  //   const year = date.getFullYear();
-  //   const month = date.getMonth() + 1;
-  //   const day = date.getDate();
+  const getFomattedDate = useCallback((date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
 
-  //   return `${year}-${month < 10 ? "0" + month : month}-${
-  //     day < 10 ? "0" + day : day
-  //   }`;
-  // }, []);
+    return `${year}-${month < 10 ? "0" + month : month}-${
+      day < 10 ? "0" + day : day
+    }`;
+  }, []);
 
-  // useEffect(() => {
-  //   const FormattedDate = getFomattedDate(new Date(createdDate));
-  //   setFormattedDate(FormattedDate);
-  // }, [createdDate]);
+  useEffect(() => {
+    const FormattedDate = getFomattedDate(new Date(createdDate));
+    setFormattedDate(FormattedDate);
+  }, [createdDate]);
   // useEffect(() => {
   //   const agoDate = timeAgoFn(new Date(createdDate));
   //   setTimeAgoDate(agoDate);
@@ -102,24 +108,24 @@ export default function CourseDetail() {
     <>
       <div className={styles["course-id-container"]}>
         <div className={styles["title-container"]}>
-          {/* <h1 className={styles.title}>
+          <h1 className={styles.title}>
             <div
               className={styles["title-length"]}
             >{`${places.length}코스`}</div>
             {title}
-          </h1> */}
+          </h1>
           <div className={styles["title-info"]}>
             <span className={styles.userinfo}>유저 정보</span>
-            {/* <span className={styles.dateinfo}>{formattedDate}</span> */}
+            <span className={styles.dateinfo}>{formattedDate}</span>
           </div>
         </div>
-        {/* <CourseDetailNav likeCount={likeCount} places={places} />
+        <CourseDetailNav likeCount={likeCount} places={places} />
         <CourseDetailContent
-          positions={mapData}
+          mapData={courseDetail.places}
           places={places}
           content={content}
           router={router}
-        /> */}
+        />
       </div>
     </>
   );

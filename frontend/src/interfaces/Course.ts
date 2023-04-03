@@ -13,7 +13,7 @@ export interface CourseList {
 }
 
 export type CourseListProps = {
-  id: number;
+  id: string;
   title: string;
   content: string;
   likeCount: number;
@@ -28,8 +28,9 @@ export interface RoughMapTitle {
 }
 
 export interface CourseDetailType {
+  courseId: number;
   title: string;
-  nickname: string;
+  isPublished: boolean;
   likeCount: number | string;
   courseDays: string;
   region: string;
@@ -48,14 +49,16 @@ export interface CourseDetailPlaces {
 }
 
 export interface kakaoPlaces {
-  placeId: number;
+  placeId?: number;
   name: string;
   mapX: string;
   mapY: string;
+  imgUrl?: string;
+  address?: string;
 }
 
 export interface PositionsProps {
-  positions: kakaoPlaces[];
+  mapData: kakaoPlaces[];
 }
 
 export interface formatPositions {}
