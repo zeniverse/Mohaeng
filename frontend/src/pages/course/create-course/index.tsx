@@ -12,6 +12,7 @@ import CoursePlaceInput from "@/src/components/CreateCourse/CoursePlaceInput";
 import { ICourseForm } from "@/src/interfaces/Course.type";
 import KakaoMap from "@/src/components/KakaoMap/KakaoMap";
 import { kakaoPlaces } from "@/src/interfaces/Course";
+import CourseOrderList from "@/src/components/CourseDetail/CourseOrderList";
 
 export default function index() {
   const dispatch = useAppDispatch();
@@ -47,23 +48,25 @@ export default function index() {
 
   return (
     <div className={styles["create-course-container"]}>
+      <button
+        type="submit"
+        className={styles["submit-btn"]}
+        onClick={handleCourseSubmit}
+      >
+        작성하기
+      </button>
       <div className={styles["input-container"]}>
         <CourseInputForm onChange={handleInputChange} />
         <CoursePlaceInput />
       </div>
-      <div className={styles["right-container"]}>
-        <div className={styles["kakaomap-wrapper"]}>
-          {/* TODO: 크기 잡고 목록 출력까지~ */}
-          {course?.places?.length > 0 && <KakaoMap mapData={course.places} />}
+      {course?.places?.length > 0 && (
+        <div className={styles.info}>
+          <KakaoMap mapData={course.places} />
+          <div className={styles.list}>
+            <CourseOrderList places={course?.places} />
+          </div>
         </div>
-
-        {/* <div className={styles["orderlist-wrapper"]}>
-          {places && <CourseOrderList places={places} />}
-        </div> */}
-      </div>
-      <button type="submit" onClick={handleCourseSubmit}>
-        작성하기
-      </button>
+      )}
     </div>
   );
 }

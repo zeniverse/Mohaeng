@@ -9,7 +9,8 @@ const CourseList = () => {
   const { list } = useAppSelector((state) => state.course);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getCourseListAction());
+    // TODO: 들어갈 params 정리하기
+    dispatch(getCourseListAction({ region: "서울" }));
   }, [dispatch]);
 
   return (

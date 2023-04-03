@@ -21,10 +21,14 @@ export const initialState: CourseState = {
 };
 export const getCourseListAction = createAsyncThunk(
   "course/getCourseListAction",
-  async () => {
-    const response = await getCourseListApi();
-    console.log(response.data);
-    return response.data.data.courseList;
+  async (queryParams: any, { rejectWithValue }) => {
+    try {
+      const response = await getCourseListApi(queryParams);
+      console.log(response.data);
+      return response.data.data.courseList;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 

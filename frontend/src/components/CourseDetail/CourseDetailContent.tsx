@@ -12,10 +12,10 @@ const CourseDetailContent = ({ mapData, content, places, router }: any) => {
   return (
     <div className={styles["content-container"]}>
       <p className={styles.content}>{content}</p>
-      <div className={styles.map}>
+      <div className={styles.info}>
         {mapData && mapData.length > 0 && <KakaoMap mapData={mapData} />}
 
-        <div className={styles.info}>
+        <div className={styles.list}>
           <CourseOrderList places={places} />
         </div>
       </div>

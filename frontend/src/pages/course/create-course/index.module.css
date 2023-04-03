@@ -10,9 +10,17 @@
   gap: 0.8rem;
   height: 340px;
 }
-.orderlist-wrapper {
-  overflow-y: scroll;
-  transition: max-height 0.3s ease-out;
+
+.info {
+  display: flex;
+  height: 600px;
+  position: relative;
+  gap: 0.6rem;
+  padding-top: 1rem;
+}
+
+.list {
+  width: 600px;
   background-color: var(--color-bg-gray);
   border-radius: 1rem;
   height: 100%;
@@ -20,13 +28,18 @@
   justify-content: center;
   align-items: center;
 }
-.right-container {
-  display: flex;
-  position: relative;
-  gap: 0.6rem;
-  padding-top: 1rem;
+.submit-btn {
+  padding: 0.7rem 0;
+  font-size: 1.3rem;
+  background-color: #d9f8c4;
+  border-radius: 5px;
+  border: 1px solid var(--color-border-semi);
+  cursor: pointer;
+  color: var(--color-text-basic);
+  font-weight: bold;
+  margin-bottom: 0.4rem;
+  transition: 0.3s;
 }
-.kakaomap-wrapper {
-  height: 600px;
-  width: 100%;
+.submit-btn:hover {
+  transform: translateY(-10px);
 }

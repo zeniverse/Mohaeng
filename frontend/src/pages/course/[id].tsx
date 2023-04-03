@@ -119,7 +119,7 @@ export default function CourseDetail() {
             <span className={styles.dateinfo}>{formattedDate}</span>
           </div>
         </div>
-        <CourseDetailNav likeCount={likeCount} places={places} />
+        <CourseDetailNav likeCount={likeCount} places={courseDetail.places} />
         <CourseDetailContent
           mapData={courseDetail.places}
           places={places}
