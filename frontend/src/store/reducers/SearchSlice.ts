@@ -18,7 +18,7 @@ const initialState: SearchPlaceState = {
   totalElements: 0,
 };
 
-const SearchSlice = createSlice({
+const searchSlice = createSlice({
   name: "search",
   initialState,
   reducers: {
@@ -33,5 +33,5 @@ const SearchSlice = createSlice({
   },
 });
 
-export const { setSearchPlace } = SearchSlice.actions;
-export default SearchSlice.reducer;
+export const { setSearchPlace } = searchSlice.actions;
+export default searchSlice.reducer;
