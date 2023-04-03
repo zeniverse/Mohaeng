@@ -43,6 +43,6 @@ export const logintokenSlice = createSlice({
   },
 });
 
-export const { setToken, setNickname, setEmail, setId } =
+export const { setToken, setNickname, setEmail, setId, setProfileUrl } =
   logintokenSlice.actions;
 export default logintokenSlice.reducer;
