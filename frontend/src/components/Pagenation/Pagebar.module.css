@@ -37,7 +37,7 @@
   transform: translateY(2px);
 }
 
-.prev-next-button {
+.prevNextButton {
   margin: 0 1rem;
   padding: 0.5rem;
   background-color: white;
@@ -45,6 +45,6 @@
   cursor: pointer;
 }
 
-.prev-next-button:hover {
+.prevNextButton:hover {
   background-color: #f3f3f3;
 }
