@@ -8,6 +8,7 @@ import axios from "axios";
 import { BsBookmark, BsFillBookmarkFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 
+// id 값을 리덕스에 저장?
 interface PlaceInfo {
   name: string;
   areaCode: string;
@@ -27,10 +28,15 @@ export default function PlaceDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/place/overview/${id}`);
+        const res = await axios.get(`/place/overview/${id}`, {
+          params: {
+            id: id,
+          },
+          withCredentials: true,
+        });
         const { content } = res.data.data;
         setPlaceInfo(content[0]);
-        console.log(placeInfo.name);
+        console.log(content[0].name);
       } catch (error) {
         console.error(error);
       }
@@ -61,24 +67,25 @@ export default function PlaceDetail() {
             )}
           </button>
         </div>
-        <div className={styles.imgSlider}>
-          <Image
-            src={placeInfo.firstImage}
-            width={300}
-            height={300}
-            alt={placeInfo.name}
-          />
-        </div>
         <div className={styles.detailContent}>
-          <div className={styles.detailDesc}>
-            <p className={styles.descInfo}>
-              <span className={styles.descTitle}>세부 설명 </span>
-              <p>{placeInfo.overview}</p>
-            </p>
+          <div className={styles.imgBox}>
+            <Image
+              className={styles.img}
+              src={placeInfo.firstImage}
+              width={500}
+              height={350}
+              alt={placeInfo.name}
+            />
           </div>
           <div className={styles.detailMap} id="map">
             {/* <KakaoMap /> */}
           </div>
+        </div>
+
+        <div className={styles.detailDesc}>
+          <p className={styles.descTitle}>세부 설명 </p>
+
+          <p className={styles.descInfo}>{placeInfo.overview}</p>
         </div>
       </section>
 

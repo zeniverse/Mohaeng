@@ -51,9 +51,10 @@
   color: var(--color-icon);
   font-size: 40px;
 }
+
 .unbookmark:hover {
   color: var(--color-red);
-  scale: 110%;
+  scale: 105%;
   transition: 200ms;
 }
 
@@ -62,45 +63,50 @@
   font-size: 40px;
 }
 
-.imgSlider {
-  height: 12rem;
-  margin-bottom: 1rem;
-  border-radius: 12px;
-  border: 1px solid var(--color-border-light);
-  padding: 0 4rem;
-  background-color: var(--color-bg-white);
-}
-
 .detailContent {
+  width: 100%;
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   color: var(--color-text-basic);
 }
-.detailDesc {
-  width: 200rem;
+
+.imgBox {
+  margin-bottom: 1rem;
   margin-right: 1rem;
+}
+
+.img {
+  border-radius: 8px;
+}
+
+.detailMap {
+  width: 100%;
+  height: 350px;
+}
+
+.detailDesc {
+  width: 100%;
+  height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  margin-bottom: 1rem;
 }
 
 .detailDesc,
 .detailMap {
-  height: 20rem;
   padding: 1rem;
   border: 1px solid var(--color-border-light);
   background-color: var(--color-bg-white);
   border-radius: 8px;
 }
 
-.detailMap {
-  width: 100rem;
+.descTitle {
+  margin-bottom: 1rem;
+  font-weight: bold;
+  font-size: large;
 }
 
 .descInfo {
-  margin-bottom: 8px;
-}
-
-.descTitle {
-  font-weight: bold;
-}
-
-.placeMap {
-  padding: 1rem;
+  margin-bottom: 1rem;
 }
