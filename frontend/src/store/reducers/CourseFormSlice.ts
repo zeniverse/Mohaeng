@@ -1,39 +1,39 @@
-import { Course } from "@/src/interfaces/Course";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
-import { fetchCourseList } from "./fetchCourse";
+import { createCourseApi } from "@/src/services/courseService";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  ICourseForm,
+  ICourseOriginForm,
+  ICourseSubmitForm,
+} from "../../interfaces/Course.type";
 
 interface CourseState {
-  status: string;
   error?: string;
-  courses?: Array<Course>;
+  course: ICourseOriginForm;
+  // places: IPlacesForm
 }
 
-export interface FormValues {
-  title: string;
-  startDate: string;
-  endDate: string;
-  isPublished: boolean;
-  courseDays: string;
-  region: string;
-  thumbnailUrl: string;
-  content: string;
-}
-
-const initialState: FormValues = {
-  title: "",
-  startDate: "",
-  endDate: "",
-  isPublished: true,
-  courseDays: "",
-  region: "",
-  thumbnailUrl: "",
-  content: "",
+export const initialState: CourseState = {
+  course: {
+    title: "",
+    startDate: "",
+    endDate: "",
+    isPublished: true,
+    courseDays: "",
+    region: "",
+    thumbnailUrl: "",
+    content: "",
+    places: [],
+  },
 };
 
-// const initialState: CourseState = {
-//   status: "idle",
-// };
+export const createCourseAction = createAsyncThunk(
+  "user/createUserAction",
+  async (data: ICourseSubmitForm) => {
+    const response = await createCourseApi(data);
+    console.log(response);
+    return response.data;
+  }
+);
 
 export const CourseFormSlice = createSlice({
   name: "courseform",
@@ -41,31 +41,38 @@ export const CourseFormSlice = createSlice({
   reducers: {
     setFormValue: (
       state,
-      action: PayloadAction<{ name: keyof FormValues; value: string | boolean }>
+      action: PayloadAction<{
+        name: keyof ICourseForm;
+        value: string | boolean;
+      }>
     ) => {
       const { name, value } = action.payload;
-      return { ...state, [name]: value };
+      state.course = {
+        ...state.course,
+        [name]: value,
+      };
     },
-    resetFormValue: (state) => {
+    resetFormValue: () => {
       return initialState;
     },
+    addPlaceObject: (state, action) => {
+      const data = action.payload;
+      state.course.places.push(data);
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(createCourseAction.pending, (state) => {
+      // state.createUserFormStatus = ApiStatus.loading;
+    });
+    builder.addCase(createCourseAction.fulfilled, (state) => {
+      // state.createUserFormStatus = ApiStatus.success;
+    });
+    builder.addCase(createCourseAction.rejected, (state) => {
+      // state.createUserFormStatus = ApiStatus.error;
+    });
   },
 });
 
-export const { setFormValue, resetFormValue } = CourseFormSlice.actions;
+export const { setFormValue, resetFormValue, addPlaceObject } =
+  CourseFormSlice.actions;
 export default CourseFormSlice.reducer;
-
-// extraReducers: (builder) => {
-//   builder
-//     .addCase(fetchCourseList.pending, (state) => {
-//       state.status = "loading";
-//     })
-//     .addCase(fetchCourseList.fulfilled, (state, action) => {
-//       state.status = "succeeded";
-//       state.courses = action.payload;
-//     })
-//     .addCase(fetchCourseList.rejected, (state, action) => {
-//       state.status = "failed";
-//       state.error = action.error.message;
-//     });
-// },

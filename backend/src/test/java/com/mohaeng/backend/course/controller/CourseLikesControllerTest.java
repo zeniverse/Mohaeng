@@ -3,6 +3,8 @@ package com.mohaeng.backend.course.controller;
 import com.mohaeng.backend.config.SecurityConfig;
 import com.mohaeng.backend.course.dto.response.CourseLikesRes;
 import com.mohaeng.backend.course.service.CourseLikesService;
+import com.mohaeng.backend.member.jwt.TokenGenerator;
+import com.mohaeng.backend.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -18,7 +19,6 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,7 +31,8 @@ class CourseLikesControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean private CourseLikesService courseLikesService;
-
+    @MockBean private TokenGenerator tokenGenerator;
+    @MockBean private MemberRepository memberRepository;
 
     @Test
     @DisplayName("[POST] 코스 좋아요 - 정상 처리")
@@ -44,20 +45,11 @@ class CourseLikesControllerTest {
 
         //When & Then
         mockMvc.perform(post("/api/course/likes/{courseId}", courseId)
-                        .with(oauth2Login()
-                                // 1
-                                .authorities(new SimpleGrantedAuthority("ROLE_NORMAL"))
-                                // 2
-                                .attributes(attributes -> {
-                                    attributes.put("name", "kimMohaeng");
-                                    attributes.put("email", "test@test.com");
-                                })
-                        )
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        verify(courseLikesService).addLikes(eq(courseId), eq("test@test.com"));
+        verify(courseLikesService).addLikes(eq(courseId), any());
     }
 
     @Test
@@ -71,20 +63,11 @@ class CourseLikesControllerTest {
 
         //When & Then
         mockMvc.perform(delete("/api/course/likes/{courseId}", courseId)
-                        .with(oauth2Login()
-                                // 1
-                                .authorities(new SimpleGrantedAuthority("ROLE_NORMAL"))
-                                // 2
-                                .attributes(attributes -> {
-                                    attributes.put("name", "kimMohaeng");
-                                    attributes.put("email", "test@test.com");
-                                })
-                        )
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        verify(courseLikesService).cancelLikes(eq(courseId), eq("test@test.com"));
+        verify(courseLikesService).cancelLikes(eq(courseId), any());
     }
 
     @Test
@@ -96,20 +79,11 @@ class CourseLikesControllerTest {
         given(courseLikesService.isExistCourseLikes(anyLong(), anyString())).willReturn(false);
 
         //When & Then
-        mockMvc.perform(get("/api/course/likes/{courseId}", courseId)
-                        .with(oauth2Login()
-                                // 1
-                                .authorities(new SimpleGrantedAuthority("ROLE_NORMAL"))
-                                // 2
-                                .attributes(attributes -> {
-                                    attributes.put("name", "kimMohaeng");
-                                    attributes.put("email", "test@test.com");
-                                })
-                        ))
+        mockMvc.perform(get("/api/course/likes/{courseId}", courseId))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        verify(courseLikesService).isExistCourseLikes(eq(courseId), eq("test@test.com"));
+        verify(courseLikesService).isExistCourseLikes(eq(courseId), any());
     }
 
     @Test

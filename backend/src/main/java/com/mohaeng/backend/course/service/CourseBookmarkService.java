@@ -31,7 +31,7 @@ public class CourseBookmarkService {
 
         // 3. 이미 북마크를 누른 회원인지 확인
         if (isExistBookmark(member, course)){
-            throw new IllegalArgumentException("이미 좋아요를 누른 회원입니다.");
+            throw new IllegalArgumentException("이미 뷱마크를 누른 회원입니다.");
         }
 
         // 4. CourseBookmark 저장 & member에 bookmark 추가

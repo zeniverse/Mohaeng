@@ -2,7 +2,9 @@ package com.mohaeng.backend.member.service;
 
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.domain.Role;
+import com.mohaeng.backend.member.dto.request.UserInfoChangeRequest;
 import com.mohaeng.backend.member.dto.response.KakaoUserDto;
+import com.mohaeng.backend.member.dto.response.MemberLoginDto;
 import com.mohaeng.backend.member.jwt.Token;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.repository.MemberRepository;
@@ -13,9 +15,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,6 +28,7 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +36,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final RandomNameService randomNameService;
     private final TokenGenerator tokenGenerator;
+    private final String UPLOAD_PATH = "../../image/";
 
     private final String CLIENT_ID = "d7c41513380cc7e5cbbfce173bf86002";
     private final String REDIRECT_URL = "http://localhost:3000/login/kakao";
@@ -94,14 +100,11 @@ public class MemberService {
         );
 
         String body = kakaoProfileResponse.getBody();
-
         JSONObject jsonObject = new JSONObject(body);
         long id = jsonObject.getLong("id");
-        System.out.println("id = " + id);
         String parsedEmail = jsonObject.getJSONObject("kakao_account").getString("email");
         String parsedName = jsonObject.getJSONObject("properties").getString("nickname");
         String profileImage = jsonObject.getJSONObject("properties").getString("profile_image");
-        System.out.println("profileImage = " + profileImage);
 
         return new KakaoUserDto(id, parsedEmail, parsedName, profileImage);
     }
@@ -110,19 +113,15 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Member saveMember(String token) throws IOException {
+    public Member saveMember(String token) {
         KakaoUserDto kakaoUser = findProfile(token);
         Member member = memberRepository.findByEmailAndDeletedDateIsNull(kakaoUser.getEmail())
                 .orElse(new Member(kakaoUser.getName(),
                         kakaoUser.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
 
-        String fileName = downloadFile(kakaoUser.getProfileImage());
-
-        member.changeImageURL(IMG_PATH);
-        member.changeImageName(fileName);
+        member.changeImageURL(kakaoUser.getProfileImage());
         member.setOauthAccessToken(token);
         member.setKakaoId(kakaoUser.getKakaoId());
-
         memberRepository.save(member);
         return member;
     }
@@ -162,6 +161,29 @@ public class MemberService {
         return tokenGenerator.generateToken(member.getEmail(), member.getRole());
     }
 
+    public MemberLoginDto getLoginInfo(Member member) {
+        MemberLoginDto memberLoginDto = MemberLoginDto.builder()
+                .id(member.getId())
+                .email(member.getEmail())
+                .nickName(member.getNickName())
+                .imgUrl(member.getImageURL() + member.getImageName())
+                .build();
+        return memberLoginDto;
+    }
 
+    @Transactional
+    public void changeProfile(Member member, UserInfoChangeRequest userInfoChangeRequest, MultipartFile multipartFile) throws IOException {
+        member.changeNickName(userInfoChangeRequest.getNickName());
+        if (multipartFile != null) {
+            UUID uuid = UUID.randomUUID();
+            String fileName = uuid + "_" + multipartFile.getOriginalFilename();
+            File profileImg = new File(UPLOAD_PATH, fileName);
+            multipartFile.transferTo(profileImg);
+
+            member.changeImageName(fileName);
+            member.changeImageURL(UPLOAD_PATH +"/"+fileName);
+        }
+
+    }
 
 }

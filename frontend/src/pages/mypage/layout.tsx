@@ -1,4 +1,4 @@
-import styles from "./MypageLayout.module.css";
+import styles from "./layout.module.css";
 import Sidebar from "@/src/components/Mypage/Sidebar";
 
 export default function MyPageLayout({
@@ -10,7 +10,7 @@ export default function MyPageLayout({
     <>
       <div className={styles.Container}>
         <Sidebar />
-        <section className={styles.contentWrapper}>{children}</section>
+        <div className={styles.contentWrapper}>{children}</div>
       </div>
     </>
   );

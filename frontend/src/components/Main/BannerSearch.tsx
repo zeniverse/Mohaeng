@@ -13,7 +13,7 @@ const BannerSearch = () => {
           src={bannerImg}
           alt=""
         />
-        <div className={styles["banner-input-container"]}>
+        {/* <div className={styles["banner-input-container"]}>
           <form className={styles["banner-input-form"]}>
             <AiOutlineSearch className={styles["banner-input-icon"]} />
             <input
@@ -22,7 +22,7 @@ const BannerSearch = () => {
               placeholder="어디로 가시나요?"
             />
           </form>
-        </div>
+        </div> */}
       </div>
     </div>
   );

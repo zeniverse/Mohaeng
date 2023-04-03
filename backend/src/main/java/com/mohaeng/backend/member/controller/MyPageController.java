@@ -11,8 +11,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,11 +27,11 @@ import java.util.UUID;
 @RequestMapping("/api")
 @ResponseBody
 @RequiredArgsConstructor
+@Service
 public class MyPageController {
     private final MemberService memberService;
     private final MyPageService myPageService;
     private final TokenGenerator tokenGenerator;
-    private final String UPLOAD_PATH = "../image/";
 
     @GetMapping("/myPage/course/bookMark")
     public ResponseEntity getAllBookMarkedCourse(HttpServletRequest request) {
@@ -45,36 +47,20 @@ public class MyPageController {
         return ResponseEntity.ok().body(BaseResponse.success("OK", data));
     }
 
-    @PutMapping("/myPage/{memberEmail}")
-    public ResponseEntity changeMemberProfile(@PathVariable String memberEmail, @ModelAttribute UserInfoChangeRequest userInfoChangeRequest) throws IOException {
+    @PutMapping(value = "/myPage/{memberEmail}")
+    public ResponseEntity changeMemberProfile(@PathVariable String memberEmail,
+                                              @RequestPart(value = "nickName") UserInfoChangeRequest userInfoChangeRequest,
+                                              @RequestPart(value = "multipartFile", required = false) MultipartFile multipartFile) throws IOException {
         Member findMember = memberService.findByEmail(memberEmail);
-        findMember.changeNickName(userInfoChangeRequest.getNickName());
-
-        MultipartFile multipartFile = userInfoChangeRequest.getMultipartFile();
-        UUID uuid = UUID.randomUUID();
-        String fileName = uuid + "_" + multipartFile.getOriginalFilename();
-        File profileImg=  new File(UPLOAD_PATH, fileName);
-        multipartFile.transferTo(profileImg);
-
-        findMember.changeImageName(fileName);
-        findMember.changeImageURL(UPLOAD_PATH +"/"+fileName);
-
+        memberService.changeProfile(findMember, userInfoChangeRequest, multipartFile);
         return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
     }
 
     @DeleteMapping("/user/drop")
-    public ResponseEntity userDropController(HttpServletRequest request, HttpServletResponse response) {
-        String userEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
-        System.out.println("userEmail = " + userEmail);
-
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
-        }
-
+    public ResponseEntity userDropController(HttpServletRequest request) {
+        String userEmail = findEmailFromHeader(request);
         Member findMember = memberService.findByEmail(userEmail);
-        myPageService.deleteMember(findMember, findMember.getOauthAccessToken());
+        myPageService.deleteMember(findMember);
         return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
     }
 

@@ -11,7 +11,6 @@ import com.mohaeng.backend.member.repository.MemberRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,30 +30,75 @@ class MyPageServiceTest {
     private MyPageService myPageService;
 
 
-    @AfterAll
+    @AfterEach
     public void end() {
         memberRepository.deleteAll();
-        courseBookmarkRepository.deleteAll();
     }
 
     @Test
     public void 코스_전체_조회() {
+        //given
         Member member = createUser("kim@naver.com", "kim");
         Course course1 = createCourse(member);
         Course course2 = createCourse(member);
         createCourseBookMark(member, course1);
         createCourseBookMark(member, course2);
+
+        //when
         List<MyPageCourseBookMarkDto> allBookMarkCourse = myPageService.findAllBookMarkCourse(member.getEmail());
+
+        //then
         Assertions.assertEquals(allBookMarkCourse.size(), 2);
     }
 
     @Test
     public void 코스_단건_조회() {
+        //given
         Member member = createUser("kim@naver.com", "kim");
         Course course = createCourse(member);
         createCourseBookMark(member, course);
-        MyPageCourseBookMarkDto oneBookMarkedCourse = myPageService.findOneBookMarkedCourse(member.getEmail(), 1L);
-        Assertions.assertEquals(oneBookMarkedCourse.getBookMarkId(), 1);
+        List<CourseBookmark> courseBookmarkList = courseBookmarkRepository.findAll();
+        long size = courseBookmarkList.size();
+
+        //when
+        MyPageCourseBookMarkDto oneBookMarkedCourse = myPageService.findOneBookMarkedCourse(member.getEmail(), size);
+
+        //then
+        Assertions.assertEquals(oneBookMarkedCourse.getBookMarkId(), size);
+    }
+
+    @Test
+    public void 단건조회_잘못된_멤버_접근_예외_발생() {
+        //given
+        Member member = Member.builder()
+                .email("kimmohaeng@naver.com")
+                .nickName("testNick")
+                .role(Role.NORMAL)
+                .name("mohaeng").build();
+
+        //when
+        Exception e = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            myPageService.findAllBookMarkCourse(member.getEmail());
+        });
+
+        //then
+        Assertions.assertEquals(e.getMessage(), "Not_Exist_Member");
+
+    }
+
+    @Test
+    public void 존재하지_않는_북마크_예외_발생() {
+        //given
+        Member member = createUser("kim@naver.com", "kim");
+        long size = courseBookmarkRepository.findAll().size();
+
+        //when
+        System.out.println("size = " + size);
+        Exception e = Assertions.assertThrows(IllegalArgumentException.class,
+                () -> myPageService.findOneBookMarkedCourse(member.getEmail(), size + 1L));
+
+        //then
+        Assertions.assertEquals(e.getMessage(), "NOT_EXIST_COURSE_BOOK_MARK");
     }
 
 
@@ -70,7 +114,6 @@ class MyPageServiceTest {
                 .title("testTitle")
                 .content("testNickName")
                 .region("testRegion")
-                .isPublished(true)
                 .startDate(LocalDateTime.now())
                 .endDate(LocalDateTime.now().plusDays(1))
                 .build();

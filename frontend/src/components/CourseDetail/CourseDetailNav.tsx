@@ -1,11 +1,24 @@
 import styles from "./CourseDetailNav.module.css";
 import { BiMapAlt, BiShareAlt, BiBookmarkPlus } from "react-icons/bi";
 import { BsFillHeartFill } from "react-icons/bs";
+import { useState } from "react";
+import RoughMap from "../Course/RoughMap";
 
-const CourseDetailNav = ({ likeCount }: any) => {
+const CourseDetailNav = ({ likeCount, places }: any) => {
+  const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
+  const RoughMapData: any[] = places?.map((place: any) => place.name)!;
+  const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
+    e.stopPropagation();
+    setIsRoughMapOpen((prev) => !prev);
+  };
+  const onClose = () => {
+    setIsRoughMapOpen(false);
+  };
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+    e.stopPropagation();
+  };
   return (
     <div className={styles["title-nav"]}>
-      {/* 왼쪽 좋아요 오른쪽  북마크, 약도, 공유 */}
       <div className={styles["title-nav-left"]}>
         <span className={styles.like}>
           <BsFillHeartFill />
@@ -13,24 +26,19 @@ const CourseDetailNav = ({ likeCount }: any) => {
         </span>
       </div>
       <div className={styles["title-nav-right"]}>
-        <div className={`${styles["item-nav"]}`}>
-          <BiMapAlt
-            className={styles.roughmapIcon}
-            // onMouseEnter={handleMouseEnter}
-            // onMouseLeave={handleMouseLeave}
-          />
-          {/* {isRoughMapOpen && (
-        <RoughMap
-          RoughMapData={RoughMapData}
-          setIsRoughMapOpen={setIsRoughMapOpen}
-          isRoughMapOpen={isRoughMapOpen}
-        />
-      )} */}
+        <div
+          className={`${styles["item-nav"]} ${styles.roughmapBtn}`}
+          onClick={toggleRoughMapHandler}
+        >
+          <BiMapAlt className={styles.roughmapIcon} />
+          {isRoughMapOpen && (
+            <RoughMap RoughMapData={RoughMapData} onClose={onClose} />
+          )}
         </div>
         <div className={styles["item-nav"]}>
           <BiBookmarkPlus />
         </div>
-        <div className={`${styles["item-nav"]}`}>
+        <div className={styles["item-nav"]}>
           <BiShareAlt />
         </div>
       </div>

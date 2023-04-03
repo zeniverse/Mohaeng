@@ -1,56 +1,60 @@
 import Link from "next/link";
 import styles from "./Sidebar.module.css";
-import { User, userData } from "@/src/interfaces/Auth";
+import { User } from "@/src/interfaces/Auth";
 import React, { useEffect, useState } from "react";
+import { RootState } from "@/src/store/store";
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrIdx, myPageState } from "@/src/store/reducers/mypageSlice";
+import UserInfo from "./UserInfo";
 
-interface SidebarLinkProps {
-  href: string;
-  label: string;
-}
-
-const SidebarLink = ({ href, label }: SidebarLinkProps) => {
+const SidebarLink = ({ currIdx, label }: myPageState) => {
+  const dispatch = useDispatch();
+  const currComponent: myPageState = {
+    currIdx: currIdx,
+    label: label,
+  };
   return (
     <li className={styles["sidebar__list"]}>
-      <Link href={href} style={{ textDecoration: "none" }} passHref>
-        <button className={styles["sidebar__button"]}>{label}</button>
-      </Link>
+      {/* <Link href={href} style={{ textDecoration: "none" }} passHref> */}
+      <button
+        className={styles["sidebar__button"]}
+        onClick={() => dispatch(setCurrIdx(currComponent))}
+      >
+        {label}
+      </button>
+      {/* </Link> */}
     </li>
   );
 };
 
 const Sidebar = () => {
-  const links: SidebarLinkProps[] = [
-    { href: "/mypage", label: "회원정보" },
-    { href: "/mypage/bookmark", label: "즐겨찾기" },
-    { href: "/mypage/trips", label: "나의 여행 일정" },
-    { href: "/mypage/post", label: "내가 쓴 글" },
-    // { href: "/activity", label: "내 활동 알림" },
-  ];
+  const nickName = useSelector((state: RootState) => state.nickName.nickName);
+  const imageUrl = useSelector(
+    (state: RootState) => state.profileUrl.profileUrl
+  );
 
-  const [currentUser, setCurrentUser] = useState<User>();
-  useEffect(() => {
-    async function fetchData() {
-      const res = await fetch("/api/user");
-      const data = await res.json();
-      setCurrentUser(data);
-    }
-    fetchData();
-  }, []);
-  const Img = currentUser?.data.profileUrl;
+  const links: myPageState[] = [
+    { currIdx: 0, label: "회원정보" },
+    { currIdx: 1, label: "즐겨찾기" },
+    { currIdx: 2, label: "나의 여행 일정" },
+    { currIdx: 3, label: "내가 쓴 글" },
+  ];
 
   return (
     <nav className={styles.sidebar}>
       <ul>
         <div className={styles["ProfileWrapper"]}>
-          <img src={Img} className={styles["Avatar"]} />
+          <img src={imageUrl} className={styles["Avatar"]} />
           <div>
-            <div className={styles["Nickname"]}>
-              {currentUser?.data.userNickname}
-            </div>
+            <div className={styles["Nickname"]}>{nickName}</div>
           </div>
         </div>
         {links.map((link) => (
-          <SidebarLink key={link.href} href={link.href} label={link.label} />
+          <SidebarLink
+            key={link.currIdx}
+            currIdx={link.currIdx}
+            label={link.label}
+          />
         ))}
       </ul>
     </nav>
