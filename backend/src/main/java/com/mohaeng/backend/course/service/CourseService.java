@@ -2,14 +2,10 @@ package com.mohaeng.backend.course.service;
 
 import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.domain.CoursePlace;
+import com.mohaeng.backend.course.domain.CourseStatus;
 import com.mohaeng.backend.course.dto.*;
-import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
-import com.mohaeng.backend.course.dto.request.CourseReq;
-import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
-import com.mohaeng.backend.course.dto.response.CourseIdRes;
-import com.mohaeng.backend.course.dto.response.CourseListRes;
-import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
-import com.mohaeng.backend.course.dto.response.CourseRes;
+import com.mohaeng.backend.course.dto.request.*;
+import com.mohaeng.backend.course.dto.response.*;
 import com.mohaeng.backend.course.repository.CourseBookmarkRepository;
 import com.mohaeng.backend.course.repository.CourseLikesRepository;
 import com.mohaeng.backend.course.repository.CoursePlaceRepository;
@@ -61,29 +57,17 @@ public class CourseService {
         List<CoursePlaceSearchDto> coursePlaceSearchList = places.stream()
                 .map(place -> CoursePlaceSearchDto.from(place))
                 .collect(Collectors.toList());
-
         return CoursePlaceSearchRes.from(places.hasNext(), coursePlaceSearchList);
     }
 
     @Transactional
     public CourseIdRes createCourse(CourseReq req,String memberEmail) {
 
-        // 유저 확인
+        // 1.유저 확인
         Member member = isMember(memberEmail);
 
-        Course course = Course.builder()
-                .title(req.getTitle())
-                .startDate(strToTime(req.getStartDate()))
-                .endDate(strToTime(req.getEndDate()))
-                .isPublished(req.getIsPublished())
-                .courseDays(req.getCourseDays())
-                .region(req.getRegion())
-                .thumbnailUrl(req.getThumbnailUrl())
-                .content(req.getContent())
-                .isPublished(false)
-                .likeCount(0)
-                .member(member)
-                .build();
+        // 2. 코스 생성
+        Course course = Course.createCourse(req, member);
 
         List<CoursePlace> coursePlaces = new ArrayList<>();
         for (Long id : req.getPlaceIds()) {
@@ -136,15 +120,11 @@ public class CourseService {
     @Transactional
     public CourseIdRes updateCourse(String memberEmail, Long courseId, CourseUpdateReq req) {
 
-        // 2. 코스 존재 여부 & 작성자와 요청자가 같은지 확인
+        // 1. 코스 존재 여부 & 작성자와 요청자가 같은지 확인
         Course course = isCourse(courseId);
         isWriter(memberEmail, course.getMember());
 
-        // 3. 날짜 타입 변경
-        LocalDateTime start = strToTime(req.getStartDate());
-        LocalDateTime end = strToTime(req.getEndDate());
-
-        // 4. 기존에 존재하던 CoursePlaces 삭제
+        // 2. 기존에 존재하던 CoursePlaces 삭제
         List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
         coursePlaceRepository.deleteAllInBatch(coursePlaces);
 
@@ -164,7 +144,7 @@ public class CourseService {
 
         coursePlaceRepository.saveAll(updatedCoursePlaces);
         course.addCoursePlaces(updatedCoursePlaces);
-        course.updateCourse(req, start, end);
+        course.updateCourse(req);
 
         return CourseIdRes.from(course.getId());
     }
@@ -216,7 +196,7 @@ public class CourseService {
         Member member = checkLogin(memberEmail);
 
         // 2. 코스 조회 결과 불러오기기
-        List<Course> courseList = courseRepository.findTop10ByOrderByLikeCountDesc();
+        List<Course> courseList = courseRepository.findTop10ByCourseStatusOrderByLikeCountDesc(CourseStatus.PUBLIC);
 
         List<MainCourseListDto> MainCourseListDtoList = new ArrayList<>();
         for (Course course : courseList) {
@@ -264,12 +244,5 @@ public class CourseService {
                 // TODO: Exception 처리
                 () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
         );
-    }
-
-
-    /** String 타입 날짜를 LocaDateTime으로 변환 **/
-    private LocalDateTime strToTime (String strDate){
-        LocalDate date = LocalDate.parse(strDate);
-        return date.atStartOfDay();
     }
 }

@@ -5,7 +5,7 @@ import styles from "./AreaSelector.module.css";
 
 const areas = [
   { region: "서울", areaCode: "1" },
-  { region: "인천", areaCode: "18" },
+  { region: "인천", areaCode: "2" },
   { region: "대전", areaCode: "3" },
   { region: "대구", areaCode: "4" },
   { region: "광주", areaCode: "5" },
@@ -30,7 +30,7 @@ interface IArea {
 }
 
 const AreaSelector = () => {
-  const [selectedArea, setSelectedArea] = useState("");
+  const [selectedArea, setSelectedArea] = useState("all");
 
   const dispatch = useAppDispatch();
 

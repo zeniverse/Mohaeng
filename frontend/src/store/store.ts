@@ -8,6 +8,9 @@ import profileUrlReducer from "./reducers/loginTokenSlice";
 import CourseFormSlice from "./reducers/CourseFormSlice";
 import FilterSlice from "./reducers/FilterSlice";
 import CourseSlice from "./reducers/CourseSlice";
+import placeReducer from "./reducers/PlaceSlice";
+import mypageReducer from "./reducers/mypageSlice";
+import pageReducer from "./reducers/pageSlice";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +23,9 @@ const store = configureStore({
     course: CourseSlice,
     courseForm: CourseFormSlice,
     filter: FilterSlice,
+    place: placeReducer,
+    mypage: mypageReducer,
+    page: pageReducer,
   },
 });
 

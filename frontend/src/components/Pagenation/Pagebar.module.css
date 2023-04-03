@@ -1,0 +1,50 @@
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.PageContainer {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.pagination li {
+  margin: 0 10px;
+}
+
+.pagination button {
+  background-color: white;
+  border: none;
+  color: var(--color-text-basic);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.pagination button:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.pagination button:active {
+  transform: translateY(2px);
+}
+
+.prev-next-button {
+  margin: 0 1rem;
+  padding: 0.5rem;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.prev-next-button:hover {
+  background-color: #f3f3f3;
+}
