@@ -35,7 +35,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final RandomNameService randomNameService;
     private final TokenGenerator tokenGenerator;
-    private final String UPLOAD_PATH = "../image/";
+    private final String UPLOAD_PATH = "../../image/";
 
     private final String CLIENT_ID = "d7c41513380cc7e5cbbfce173bf86002";
     private final String REDIRECT_URL = "http://localhost:3000/login/kakao";
@@ -172,10 +172,10 @@ public class MemberService {
 
     public void changeProfile(Member member, UserInfoChangeRequest userInfoChangeRequest, MultipartFile multipartFile) throws IOException {
         member.changeNickName(userInfoChangeRequest.getNickName());
-        if (!multipartFile.isEmpty()) {
+        if (multipartFile != null) {
             UUID uuid = UUID.randomUUID();
             String fileName = uuid + "_" + multipartFile.getOriginalFilename();
-            File profileImg=  new File(UPLOAD_PATH, fileName);
+            File profileImg = new File(UPLOAD_PATH, fileName);
             multipartFile.transferTo(profileImg);
 
             member.changeImageName(fileName);

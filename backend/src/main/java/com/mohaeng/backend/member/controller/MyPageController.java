@@ -47,10 +47,10 @@ public class MyPageController {
         return ResponseEntity.ok().body(BaseResponse.success("OK", data));
     }
 
-    @PutMapping(value = "/myPage/{memberEmail}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PutMapping(value = "/myPage/{memberEmail}")
     public ResponseEntity changeMemberProfile(@PathVariable String memberEmail,
-                                              @RequestPart UserInfoChangeRequest userInfoChangeRequest,
-                                              @RequestPart MultipartFile multipartFile) throws IOException {
+                                              @RequestPart(value = "nickName") UserInfoChangeRequest userInfoChangeRequest,
+                                              @RequestPart(value = "multipartFile", required = false) MultipartFile multipartFile) throws IOException {
         Member findMember = memberService.findByEmail(memberEmail);
         memberService.changeProfile(findMember, userInfoChangeRequest, multipartFile);
         return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
