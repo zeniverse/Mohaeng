@@ -1,9 +1,8 @@
 .keywordItemContainer {
-  flex-basis: calc(25%-10px);
+  /* flex-basis: calc(25%-10px);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 3rem;
+  align-items: center; */
   text-align: left;
 }
 
