@@ -302,7 +302,6 @@ class CourseControllerTest {
         return Course.builder()
                 .title("Course Test Title")
                 .courseDays("1박2일")
-                .isPublished(true)
                 .startDate(LocalDateTime.now())
                 .endDate(LocalDateTime.now().plusDays(1))
                 .region("서울")
