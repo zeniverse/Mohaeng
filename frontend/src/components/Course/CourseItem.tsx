@@ -7,6 +7,7 @@ import { BiMapAlt, BiShareAlt, BiBookmarkPlus } from "react-icons/bi";
 import RoughMap from "./RoughMap";
 import IsLikeState from "../UI/IsLikeState";
 import Link from "next/link";
+import TagItem from "../UI/TagItem";
 
 const CourseItem = ({
   id,
@@ -23,6 +24,9 @@ const CourseItem = ({
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
     setIsRoughMapOpen((prev) => !prev);
+  };
+  const onClose = () => {
+    setIsRoughMapOpen(false);
   };
 
   return (
@@ -43,9 +47,7 @@ const CourseItem = ({
           <div className={styles["item-info-text"]}>
             <h3>{courseTitle}</h3>
             <p>{courseDesc}</p>
-            <div className={styles["courseDays-container"]}>
-              <span className={styles.courseDays}>{courseDays}</span>
-            </div>
+            {courseDays && <TagItem text={courseDays} />}
           </div>
         </div>
       </Link>
@@ -62,11 +64,7 @@ const CourseItem = ({
         >
           <BiMapAlt />
           {isRoughMapOpen && (
-            <RoughMap
-              RoughMapData={RoughMapData}
-              setIsRoughMapOpen={setIsRoughMapOpen}
-              isRoughMapOpen={isRoughMapOpen}
-            />
+            <RoughMap RoughMapData={RoughMapData} onClose={onClose} />
           )}
         </div>
       </div>

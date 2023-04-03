@@ -24,13 +24,6 @@ public class MyPageService {
     @Transactional
     public List<MyPageCourseBookMarkDto> findAllBookMarkCourse(String email) {
         Member member = isMember(email);
-        List<CourseBookmark> courseBookMarkList = member.getCourseBookMarkList();
-
-        for (CourseBookmark courseBookmark : courseBookMarkList) {
-            if (!isBookmarkByMemberAndId(member, courseBookmark.getId())) {
-                throw new IllegalArgumentException("DO_NOT_MATCH_MEMBER_AND_BOOK_MARK");
-            }
-        }
 
         return member.getCourseBookMarkList().stream()
                 .filter(m -> courseRepository.findById(m.getId()).isPresent())
@@ -57,8 +50,15 @@ public class MyPageService {
         return data;
     }
 
+    //TODO: 쿼리 수정 or 조회 로직 수정
     public boolean isBookmarkByMemberAndId(Member member, Long bookMarkId) {
-        return courseBookmarkRepository.existsCourseBookmarkByMemberAndId(member, bookMarkId);
+        List<CourseBookmark> courseBookMarkList = member.getCourseBookMarkList();
+        for (CourseBookmark courseBookmark : courseBookMarkList) {
+            if (courseBookmark.getId() == bookMarkId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public CourseBookmark isCourseBookMark(Long bookMarkId) {
@@ -66,27 +66,7 @@ public class MyPageService {
                 .orElseThrow(() -> new IllegalArgumentException("NOT_EXIST_COURSE_BOOK_MARK"));
     }
 
-    public void deleteMember(Member member, String code){
-//        RestTemplate restTemplate = new RestTemplate();
-//        String reqURL = "https://kapi.kakao.com/v1/user/unlink";
-//
-//        HttpHeaders header = new HttpHeaders();
-//        header.add("Authorization", "Bearer " + code);
-//        header.add("Content-type", "application/x-www-form-urlencoded");
-//
-//
-//        MultiValueMap<String, String> body= new LinkedMultiValueMap<>();
-//        body.add("target_id_type", "user_id");
-//        body.add("target_id", String.valueOf(member.getKakaoId()));
-//
-//        HttpEntity<HttpHeaders> request = new HttpEntity<>(header, body);
-//
-//        ResponseEntity<String> response = restTemplate.exchange(
-//                reqURL,
-//                HttpMethod.POST,
-//                request,
-//                String.class
-//        );
+    public void deleteMember(Member member){
         memberRepository.delete(member);
     }
 }

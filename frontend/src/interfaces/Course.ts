@@ -28,8 +28,7 @@ export type CourseProps = {
 
 export interface RoughMapTitle {
   RoughMapData: string[];
-  setIsRoughMapOpen?: any;
-  isRoughMapOpen?: any;
+  onClose: any;
 }
 
 export interface CourseDetailType {

@@ -1,3 +1,26 @@
 .create-course-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   padding: 1rem 6rem 0;
+  gap: 0.8rem;
+}
+.input-container {
+  display: flex;
+  gap: 0.8rem;
+  height: 340px;
+}
+.orderlist-wrapper {
+  overflow-y: scroll;
+  transition: max-height 0.3s ease-out;
+  background-color: var(--color-bg-gray);
+  border-radius: 1rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.kakaomap-wrapper {
+  height: 500px;
+  width: 100%;
 }
