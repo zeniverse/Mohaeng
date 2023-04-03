@@ -111,10 +111,17 @@ public class PlaceController {
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "12") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<FindAllPlacesDto> result = placeRepository.findByAreaCodeEquals(areaCode, pageable);
+        Page<FindAllPlacesDto> result;
+        if ("all".equals(areaCode)) {
+            result = placeRepository.findAll(pageable)
+                    .map(place -> new FindAllPlacesDto(place.getName(), place.getAreaCode(),place.getFirstImage(), place.getContentId()));
+        } else {
+            result = placeRepository.findByAreaCodeEquals(areaCode, pageable);
+        }
         FindAllPlacesResponse response = new FindAllPlacesResponse(result.getContent(), result.getTotalPages(), result.getTotalElements());
         return ResponseEntity.ok().body(BaseResponse.success("OK", response));
     }
+
 }
 
 
