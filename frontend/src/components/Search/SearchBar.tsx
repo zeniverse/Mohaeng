@@ -38,7 +38,3 @@ export default function SearchBar() {
     </>
   );
 }
-
-const StyledIcon = styled(BsSearch)`
-  color: #004aad;
-`;

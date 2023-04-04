@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
+import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import styles from "./Review.module.css";
 import ReviewBox from "./ReviewBox";
 
@@ -8,7 +9,7 @@ import ReviewBox from "./ReviewBox";
 export default function Review() {
   const [selectedValue, setSelectedValue] = useState("default");
 
-  const handleChange = (e) => {
+  const handleChange = (e: { target: { value: SetStateAction<string> } }) => {
     setSelectedValue(e.target.value);
   };
 
@@ -18,7 +19,7 @@ export default function Review() {
         <div className={styles.reviewContainer}>
           <div className={styles.reviewTitle}>
             <div className={styles.titleBox}>
-              <h2 className={styles.h1}>리뷰</h2>
+              <h2 className={styles.h2}>리뷰</h2>
             </div>
             <Link
               className={styles.reviewBtn}
@@ -32,7 +33,9 @@ export default function Review() {
           <aside className={styles.reviewNav}>
             <div className={styles.reviewInfo}>
               <p>총 리뷰 건수</p>
-              <span>평균 별점</span>
+              <span>
+                <FiveStarRating rating="4" />
+              </span>
             </div>
             <select
               className={styles.select}

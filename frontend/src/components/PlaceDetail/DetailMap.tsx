@@ -1,10 +1,10 @@
-import React, { FC, useState, useEffect } from "react";
+import { useEffect } from "react";
 
+// 위도, 경도 (mapY, mapX 좌표)
 interface DetailMapProps {
   latitude: string;
   longitude: string;
 }
-// 위도, 경도 (mapY, mapX 좌표)
 
 const DetailMap = ({ latitude, longitude }: DetailMapProps) => {
   useEffect(() => {
@@ -20,6 +20,8 @@ const DetailMap = ({ latitude, longitude }: DetailMapProps) => {
         const container = document.getElementById("map");
         const options = {
           center: new window.kakao.maps.LatLng(latitude, longitude),
+          draggable: true,
+          // 지도 생성할 때 확대, 축소 설정하는 옵션
         };
         const map = new window.kakao.maps.Map(container, options);
         const markerPosition = new window.kakao.maps.LatLng(

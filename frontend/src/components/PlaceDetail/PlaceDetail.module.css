@@ -25,6 +25,10 @@
   margin-bottom: 3rem;
 }
 
+.moveToReview:hover {
+  text-decoration: underline;
+}
+
 .h2 {
   font-size: 2rem;
   margin-bottom: 1rem;

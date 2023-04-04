@@ -38,12 +38,8 @@ export default function PlaceDetail() {
     mapY: "",
     overview: "",
     rating: "",
-    review: "",
+    review: "5",
   });
-
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, []);
 
   const [isbookMarked, setIsBookMarked] = useState(false);
   const handleBookmarkClick = () => {
@@ -75,11 +71,11 @@ export default function PlaceDetail() {
         <div className={styles.detailHeader}>
           <div className={styles.headerTitle}>
             <h2 className={styles.h2}>{placeInfo.name}</h2>
-            <a href="#review">
+            <a className={styles.moveToReview} href="#review">
               <div className={styles.rating}>
                 별점 <FiveStarRating rating={placeInfo.rating} />
               </div>
-              <p className={styles.review}>건의 리뷰</p>
+              <p className={styles.review}>{placeInfo.review}건의 리뷰</p>
             </a>
           </div>
           <button
