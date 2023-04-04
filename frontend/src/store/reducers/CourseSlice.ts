@@ -12,20 +12,21 @@ import {
 
 interface CourseState {
   error?: string;
-  list: ICourse[];
+  courseList: ICourse[];
+  totalElements?: number;
+  totalPages?: number;
   // places: IPlacesForm
 }
 
 export const initialState: CourseState = {
-  list: [],
+  courseList: [],
 };
 export const getCourseListAction = createAsyncThunk(
   "course/getCourseListAction",
   async (queryParams: any, { rejectWithValue }) => {
     try {
       const response = await getCourseListApi(queryParams);
-      console.log(response.data);
-      return response.data.data.courseList;
+      return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
@@ -39,7 +40,10 @@ export const CourseSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getCourseListAction.pending, (state) => {});
     builder.addCase(getCourseListAction.fulfilled, (state, action) => {
-      state.list = action.payload;
+      const { courseList, totalElements, totalPages } = action.payload;
+      state.courseList = courseList;
+      state.totalElements = totalElements;
+      state.totalPages = totalPages;
     });
     builder.addCase(getCourseListAction.rejected, (state) => {});
   },

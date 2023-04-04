@@ -42,7 +42,6 @@ export default function index() {
       thumbnailUrl: places[0].imgUrl,
       placeIds: extractedPlaceIds,
     };
-    console.log(submitData);
     dispatch(createCourseAction(submitData));
   };
 

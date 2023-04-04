@@ -33,7 +33,7 @@ export const createCourseAction = createAsyncThunk(
   "course/createUserAction",
   async (data: ICourseSubmitForm) => {
     const response = await createCourseApi(data);
-    console.log(response);
+
     return response.data;
   }
 );

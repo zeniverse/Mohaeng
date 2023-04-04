@@ -4,7 +4,6 @@ import ApiConfig from "./ApiConfig";
 import cookie from "react-cookies";
 
 export const getCourseListApi = async (queryParams = {}) => {
-  console.log(queryParams);
   return await axios.get(ApiConfig.course, { params: queryParams });
 };
 
