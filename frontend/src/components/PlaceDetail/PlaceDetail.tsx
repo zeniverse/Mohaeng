@@ -7,8 +7,12 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { BsBookmark, BsFillBookmarkFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
+import { setPlaceDetail } from "@/src/store/reducers/placeDetailSlice";
+import DetailMap from "./DetailMap";
+import FiveStarRating from "../FiveStarRating/FiveStarRating";
 
-// id 값을 리덕스에 저장?
+// 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined?
+
 interface PlaceInfo {
   name: string;
   areaCode: string;
@@ -17,13 +21,34 @@ interface PlaceInfo {
   mapX: string;
   mapY: string;
   overview: string;
+  rating: string;
+  review: string;
 }
 
 export default function PlaceDetail() {
+  const dispatch = useDispatch();
   const router = useRouter();
   const { id } = router.query;
-  const [placeInfo, setPlaceInfo] = useState<PlaceInfo[]>([]);
-  const [bookMarkIcon, setbookMarkIcon] = useState(false);
+  const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
+    name: "",
+    areaCode: "",
+    firstImage: "",
+    contentId: "",
+    mapX: "",
+    mapY: "",
+    overview: "",
+    rating: "",
+    review: "",
+  });
+
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
+
+  const [isbookMarked, setIsBookMarked] = useState(false);
+  const handleBookmarkClick = () => {
+    setIsBookMarked(!isbookMarked);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,35 +57,37 @@ export default function PlaceDetail() {
           params: {
             id: id,
           },
-          withCredentials: true,
         });
+        dispatch(setPlaceDetail(res.data.data));
         const { content } = res.data.data;
-        setPlaceInfo(content[0]);
-        console.log(content[0].name);
+        setPlaceInfo({ ...placeInfo, ...content[0] });
+        console.log(placeInfo);
       } catch (error) {
         console.error(error);
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, dispatch]);
 
   return (
     <>
       <section className={styles.placeDetail}>
         <div className={styles.detailHeader}>
           <div className={styles.headerTitle}>
-            <h2 className={styles.h1}>{placeInfo.name}</h2>
+            <h2 className={styles.h2}>{placeInfo.name}</h2>
             <a href="#review">
-              <p className={styles.rating}>별점 </p>
+              <div className={styles.rating}>
+                별점 <FiveStarRating rating={placeInfo.rating} />
+              </div>
               <p className={styles.review}>건의 리뷰</p>
             </a>
           </div>
           <button
             className={styles.likeBtn}
-            onClick={() => setbookMarkIcon(!bookMarkIcon)}
+            onClick={() => handleBookmarkClick()}
           >
             <p className={styles.likeText}>북마크에 추가</p>
-            {bookMarkIcon === true ? (
+            {isbookMarked === true ? (
               <BsFillBookmarkFill className={styles.bookmark} />
             ) : (
               <BsBookmark className={styles.unbookmark} />
@@ -78,13 +105,11 @@ export default function PlaceDetail() {
             />
           </div>
           <div className={styles.detailMap} id="map">
-            {/* <KakaoMap /> */}
+            <DetailMap latitude={placeInfo.mapY} longitude={placeInfo.mapX} />
           </div>
         </div>
-
         <div className={styles.detailDesc}>
           <p className={styles.descTitle}>세부 설명 </p>
-
           <p className={styles.descInfo}>{placeInfo.overview}</p>
         </div>
       </section>

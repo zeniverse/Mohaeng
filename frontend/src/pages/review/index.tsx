@@ -1,5 +1,5 @@
-import RegisterReview from "@/src/components/Review/RegisterReview";
+import React from "react";
 
-export default function review() {
-  return <RegisterReview />;
+export default function index() {
+  return <div></div>;
 }

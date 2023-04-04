@@ -4,13 +4,14 @@ import { IoMdRemoveCircleOutline } from "react-icons/io";
 import styles from "./CreateReview.module.css";
 import styled from "styled-components";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/router";
 
 // 선택한 여행지 이름 가져오기
 // 별점 상태 저장, 내보내기
 // 데이터 생성 백으로 보내기
 
-export default function RegisterReview() {
+export default function CreateReview() {
+  const router = useRouter();
   const [clicked, setClicked] = useState<boolean[]>([
     false,
     false,
@@ -44,6 +45,10 @@ export default function RegisterReview() {
     //     star: score,
     //   }),
     // });
+  };
+
+  const handleGoBack = () => {
+    router.back();
   };
 
   const [showImages, setShowImages] = useState<string[]>([]);
@@ -96,18 +101,22 @@ export default function RegisterReview() {
             </Stars>
           </div>
 
-          <strong className={styles.boldTitle}>리뷰내용</strong>
           <form className={styles.form} action="POST">
+            <label htmlFor="review" className={styles.boldTitle}>
+              리뷰내용
+            </label>
             <textarea
               className={styles.formTxtArea}
               name="reviewText"
               id="review"
-              placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요!"
+              placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요! (50자 이상)"
+              minlength="50"
               required
             ></textarea>
 
-            <strong className={styles.boldTitle}>사진 첨부</strong>
-
+            <label htmlFor="inputfile" className={styles.boldTitle}>
+              사진 첨부
+            </label>
             {/* label사용해서 css 입히기(onChange 여기에, input은 display:none) */}
             <input
               type="file"
@@ -117,7 +126,7 @@ export default function RegisterReview() {
               onChange={handleAddImages}
             />
             <span className={styles.inputFileDesc}>
-              * 이미지는 최대 4장까지 첨부할 수 있습니다.
+              * 이미지는 최대 []장까지 첨부할 수 있습니다.
             </span>
 
             <div className={styles.imgContainer}>
@@ -144,9 +153,9 @@ export default function RegisterReview() {
             )} */}
             <div className={styles.btnGroup}>
               <button className={styles.postBtn}>등록</button>
-              <Link href="/placeDetail" className={styles.cancelBtn}>
+              <button className={styles.cancelBtn} onClick={handleGoBack}>
                 취소
-              </Link>
+              </button>
             </div>
           </form>
         </article>

@@ -31,8 +31,10 @@
   margin-right: auto;
   margin-bottom: 1rem;
 }
+
 .boldTitle {
   margin-bottom: 1rem;
+  font-weight: 700;
 }
 
 .form {
