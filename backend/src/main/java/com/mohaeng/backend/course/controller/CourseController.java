@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -83,7 +84,9 @@ public class CourseController {
     @GetMapping
     public ResponseEntity getCourseList(HttpServletRequest request,
                                         CourseSearchDto courseSearchDto,
-                                        @PageableDefault(size = 12) Pageable pageable){
+                                        @RequestParam(defaultValue = "1") int page,
+                                        @RequestParam(defaultValue = "12") int size){
+        Pageable pageable = PageRequest.of(page - 1, size);
         CourseListRes result = courseService.getCourseList(courseSearchDto, pageable, isAccessMember(request));
         return ResponseEntity.ok().body(BaseResponse.success("OK", result));
     }
