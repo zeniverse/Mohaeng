@@ -1,0 +1,31 @@
+.btn {
+  width: 40px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  --color-icon: #cfcfcf;
+  --color-text-basic: #333333;
+  --color-blue: #004aad;
+}
+
+.bookmark,
+.unbookmark {
+  background-color: transparent;
+  border: none;
+}
+
+.unbookmark {
+  color: var(--color-icon);
+  font-size: 28px;
+}
+
+.unbookmark:hover {
+  color: var(--color-blue);
+  scale: 105%;
+  transition: 200ms;
+}
+
+.bookmark {
+  color: var(--color-blue);
+  font-size: 28px;
+}

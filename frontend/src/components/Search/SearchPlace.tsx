@@ -33,7 +33,6 @@ export default function SearchPlace(): JSX.Element {
           withCredentials: true,
         });
         if (res.data.data.content !== []) {
-          console.log(res.data.data);
           dispatch(setSearchPlace(res.data.data));
           const { content } = res.data.data;
           setSearchResult(content);

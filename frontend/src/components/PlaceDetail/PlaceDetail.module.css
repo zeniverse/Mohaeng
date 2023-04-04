@@ -39,33 +39,15 @@
   font-size: 16px;
 }
 
-.likeBtn {
+.bookMarkBox {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
 }
 
-.likeText {
+.bookMarkText {
   padding-right: 4px;
-}
-
-.unbookmark {
-  color: var(--color-icon);
-  font-size: 40px;
-}
-
-.unbookmark:hover {
-  color: var(--color-red);
-  scale: 105%;
-  transition: 200ms;
-}
-
-.bookmark {
-  color: var(--color-red);
-  font-size: 40px;
+  font-size: small;
 }
 
 /* main */

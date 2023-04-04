@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import styles from "./PlaceDetail.module.css";
 import Image from "next/image";
 import Review from "../Review/Review";
-// import KakaoMap from "../KakaoMap/KakaoMap";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { BsBookmark, BsFillBookmarkFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { setPlaceDetail } from "@/src/store/reducers/placeDetailSlice";
 import DetailMap from "./DetailMap";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
+import Bookmark from "../Bookmark/Bookmark";
 
 // 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined?
 
@@ -38,26 +37,25 @@ export default function PlaceDetail() {
     mapY: "",
     overview: "",
     rating: "",
-    review: "5",
+    review: "",
   });
 
-  const [isbookMarked, setIsBookMarked] = useState(false);
+  const [bookMarked, setBookMarked] = useState(false);
   const handleBookmarkClick = () => {
-    setIsBookMarked(!isbookMarked);
+    setBookMarked(!bookMarked);
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/place/overview/${id}`, {
-          params: {
-            id: id,
-          },
-        });
-        dispatch(setPlaceDetail(res.data.data));
-        const { content } = res.data.data;
-        setPlaceInfo({ ...placeInfo, ...content[0] });
-        console.log(placeInfo);
+        const res = await axios.get(`/place/overview/${id}`);
+        if (res.data.data.content[0] !== {}) {
+          dispatch(setPlaceDetail(res.data.data));
+          const { content } = res.data.data;
+          setPlaceInfo({ ...placeInfo, ...content[0] });
+        } else {
+          console.log(placeInfo);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -78,17 +76,10 @@ export default function PlaceDetail() {
               <p className={styles.review}>{placeInfo.review}건의 리뷰</p>
             </a>
           </div>
-          <button
-            className={styles.likeBtn}
-            onClick={() => handleBookmarkClick()}
-          >
-            <p className={styles.likeText}>북마크에 추가</p>
-            {isbookMarked === true ? (
-              <BsFillBookmarkFill className={styles.bookmark} />
-            ) : (
-              <BsBookmark className={styles.unbookmark} />
-            )}
-          </button>
+          <div className={styles.bookMarkBox}>
+            <p className={styles.bookMarkText}>북마크에 추가</p>
+            <Bookmark bookMarked={bookMarked} onToggle={handleBookmarkClick} />
+          </div>
         </div>
         <div className={styles.detailContent}>
           <div className={styles.imgBox}>
@@ -109,7 +100,6 @@ export default function PlaceDetail() {
           <p className={styles.descInfo}>{placeInfo.overview}</p>
         </div>
       </section>
-
       <div id="review">
         <Review />
       </div>
