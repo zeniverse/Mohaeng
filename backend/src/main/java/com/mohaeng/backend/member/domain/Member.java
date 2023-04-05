@@ -54,6 +54,8 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member")
     private List<PlaceBookmark> placeBookmarkList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
     private List<Review> reviewList;
 
     @Builder
@@ -105,6 +107,11 @@ public class Member extends BaseTimeEntity {
 
     public void removePlaceBookmark(PlaceBookmark placeBookmark){
         this.placeBookmarkList.remove(placeBookmark);
+    }
+
+    public void updateProfileImage(String fileName, String imageURL){
+        this.imageName = fileName;
+        this.imageURL = imageURL;
     }
 }
 
