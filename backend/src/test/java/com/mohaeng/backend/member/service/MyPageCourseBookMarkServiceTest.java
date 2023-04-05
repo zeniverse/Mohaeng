@@ -7,7 +7,12 @@ import com.mohaeng.backend.course.repository.CourseRepository;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.domain.Role;
 import com.mohaeng.backend.member.dto.response.MyPageCourseBookMarkDto;
+import com.mohaeng.backend.member.dto.response.MyPagePlaceBookMarkDto;
 import com.mohaeng.backend.member.repository.MemberRepository;
+import com.mohaeng.backend.place.domain.Place;
+import com.mohaeng.backend.place.domain.PlaceBookmark;
+import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
+import com.mohaeng.backend.place.repository.PlaceRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +23,7 @@ import java.util.List;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class MyPageServiceTest {
+class MyPageCourseBookMarkServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -28,6 +33,10 @@ class MyPageServiceTest {
     private CourseRepository courseRepository;
     @Autowired
     private MyPageService myPageService;
+    @Autowired
+    private PlaceRepository placeRepository;
+    @Autowired
+    private PlaceBookmarkRepository placeBookmarkRepository;
 
 
     @AfterEach
@@ -83,7 +92,6 @@ class MyPageServiceTest {
 
         //then
         Assertions.assertEquals(e.getMessage(), "Not_Exist_Member");
-
     }
 
     @Test
@@ -107,6 +115,7 @@ class MyPageServiceTest {
         courseBookmarkRepository.save(courseBookmark);
         member.addCourseBookMark(courseBookmark);
     }
+
 
     private Course createCourse(Member member) {
         Course course = Course.builder()
