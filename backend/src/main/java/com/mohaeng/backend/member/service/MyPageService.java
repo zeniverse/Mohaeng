@@ -81,7 +81,32 @@ public class MyPageService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public MyPagePlaceBookMarkDto findOneBookMarkedPlace(String email, Long bookMarkPlaceId) {
+        Member member = isMember(email);
+        PlaceBookmark placeBookMark = isPlaceBookMark(bookMarkPlaceId);
 
+        //현재의 Member가 가진 장소북마크가맞는지 확인
+        if (!isPlaceBookMarkByMember(member, bookMarkPlaceId)) {
+            throw new IllegalArgumentException("DO_NOT_MATCH_MEMBER_AND_PLACE_BOOK_MARK");
+        }
+
+        return MyPagePlaceBookMarkDto.of(placeBookMark);
+    }
+
+    public PlaceBookmark isPlaceBookMark(Long id) {
+        return placeBookmarkRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("NOT_EXIST_PLACE_BOOK_MARK"));
+    }
+
+    public boolean isPlaceBookMarkByMember(Member member, Long bookMarkPlaceId) {
+        for (PlaceBookmark placeBookmark : member.getPlaceBookmarkList()) {
+            if (placeBookmark.getId() == bookMarkPlaceId) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void deleteMember(Member member){
         memberRepository.delete(member);

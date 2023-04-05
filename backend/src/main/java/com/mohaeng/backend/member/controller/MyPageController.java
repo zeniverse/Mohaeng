@@ -72,7 +72,12 @@ public class MyPageController {
         return ResponseEntity.ok().body(BaseResponse.success("ok", data));
     }
 
-
+    @GetMapping("/myPage/place/bookMark/{placeBookMarkId}")
+    public ResponseEntity getAllBookMarkedPlace(@PathVariable Long placeBookMarkId, HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        MyPagePlaceBookMarkDto data = myPageService.findOneBookMarkedPlace(email, placeBookMarkId);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", data));
+    }
 
     private String findEmailFromHeader(HttpServletRequest request) {
         return tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
