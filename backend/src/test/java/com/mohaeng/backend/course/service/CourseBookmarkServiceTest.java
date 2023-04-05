@@ -3,6 +3,10 @@ package com.mohaeng.backend.course.service;
 import com.mohaeng.backend.course.domain.CourseBookmark;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.response.CourseIdRes;
+import com.mohaeng.backend.exception.badrequest.InvalidCourseBookmark;
+import com.mohaeng.backend.exception.notfound.CourseBookmarkNotFoundException;
+import com.mohaeng.backend.exception.notfound.CourseNotFoundException;
+import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.domain.Role;
 import com.mohaeng.backend.member.repository.MemberRepository;
@@ -83,12 +87,12 @@ class CourseBookmarkServiceTest {
         Long courseId = courseIdRes.getCourseId();
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(MemberNotFoundException.class, () -> {
             courseBookmarkService.addBookmark(courseId, "null@null.com");
         });
 
         //Then
-        assertEquals("존재하지 않는 member 입니다.", exception.getMessage());
+        assertEquals("회원을 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -100,12 +104,12 @@ class CourseBookmarkServiceTest {
         CourseIdRes courseIdRes = courseService.createCourse(originReq1, savedMember.getEmail());
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(CourseNotFoundException.class, () -> {
             courseBookmarkService.addBookmark(1000L, savedMember.getEmail());
         });
 
         //Then
-        assertEquals("존재하지 않는 코스 입니다.", exception.getMessage());
+        assertEquals("코스를 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -122,12 +126,12 @@ class CourseBookmarkServiceTest {
         courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(InvalidCourseBookmark.class, () -> {
             courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
         });
 
         //Then
-        assertEquals("이미 뷱마크를 누른 회원입니다.", exception.getMessage());
+        assertEquals("이미 북마크에 추가된 코스입니다.", exception.getMessage());
     }
 
     @Test
@@ -163,12 +167,12 @@ class CourseBookmarkServiceTest {
         courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(MemberNotFoundException.class, () -> {
             courseBookmarkService.cancelBookmark(courseId, "null@null.com");
         });
 
         //Then
-        assertEquals("존재하지 않는 member 입니다.", exception.getMessage());
+        assertEquals("회원을 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -183,12 +187,12 @@ class CourseBookmarkServiceTest {
         courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(CourseNotFoundException.class, () -> {
             courseBookmarkService.cancelBookmark(1000L, savedMember.getEmail());
         });
 
         //Then
-        assertEquals("존재하지 않는 코스 입니다.", exception.getMessage());
+        assertEquals("코스를 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -202,12 +206,12 @@ class CourseBookmarkServiceTest {
         Long courseId = courseIdRes.getCourseId();
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(CourseBookmarkNotFoundException.class, () -> {
             courseBookmarkService.cancelBookmark(courseId, savedMember.getEmail());
         });
 
         //Then
-        assertEquals("member가 해당 course의 좋아요룰 누르지 않았습니다", exception.getMessage());
+        assertEquals("현재 유저는 해당 코스를 북마크에 담지 않았습니다.", exception.getMessage());
     }
 
     @Test
@@ -259,12 +263,12 @@ class CourseBookmarkServiceTest {
         courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(MemberNotFoundException.class, () -> {
             courseBookmarkService.isExistCourseBookmark(courseId, "null@null.com");
         });
 
         //Then
-        assertEquals(exception.getMessage(), "존재하지 않는 member 입니다.");
+        assertEquals("회원을 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -279,12 +283,12 @@ class CourseBookmarkServiceTest {
         courseBookmarkService.addBookmark(courseId, savedMember.getEmail());
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(CourseNotFoundException.class, () -> {
             courseBookmarkService.isExistCourseBookmark(1000L, savedMember.getEmail());
         });
 
         //Then
-        assertEquals("존재하지 않는 코스 입니다.", exception.getMessage());
+        assertEquals("코스를 찾을 수 없습니다.", exception.getMessage());
     }
 
     private CourseReq createCourseReq(String title, List<Long> placeIds) {

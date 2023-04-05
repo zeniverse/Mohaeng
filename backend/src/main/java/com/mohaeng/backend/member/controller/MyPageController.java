@@ -4,6 +4,7 @@ import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.dto.request.UserInfoChangeRequest;
 import com.mohaeng.backend.member.dto.response.MyPageCourseBookMarkDto;
+import com.mohaeng.backend.member.dto.response.MyPagePlaceBookMarkDto;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.service.MemberService;
 import com.mohaeng.backend.member.service.MyPageService;
@@ -62,6 +63,20 @@ public class MyPageController {
         Member findMember = memberService.findByEmail(userEmail);
         myPageService.deleteMember(findMember);
         return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
+    }
+
+    @GetMapping("/myPage/place/bookMark")
+    public ResponseEntity getAllBookMarkedPlace(HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        List<MyPagePlaceBookMarkDto> data = myPageService.findAllBookMarkedPlace(email);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", data));
+    }
+
+    @GetMapping("/myPage/place/bookMark/{placeBookMarkId}")
+    public ResponseEntity getAllBookMarkedPlace(@PathVariable Long placeBookMarkId, HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        MyPagePlaceBookMarkDto data = myPageService.findOneBookMarkedPlace(email, placeBookMarkId);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", data));
     }
 
     private String findEmailFromHeader(HttpServletRequest request) {

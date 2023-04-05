@@ -1,6 +1,7 @@
 package com.mohaeng.backend.place.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.mohaeng.backend.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,8 +13,7 @@ import org.hibernate.annotations.Table;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
-import java.util.ArrayList;
-import java.util.List;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Builder
@@ -50,8 +50,9 @@ public class Place {
     private String overview;
     private double rating;
 
-    @OneToMany(mappedBy = "place")
-    private List<Review> reviewList = new ArrayList<>();
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     public Place(String name, String address, String areaCode, String sigunguCode, String contentId, String firstImage, String firstImage2, String mapX, String mapY) {
         this.name = name;
@@ -93,23 +94,25 @@ public class Place {
         this.contentId = contentId;
     }
 
-    public Place(Long id, String name, String address, String areaCode, String firstImage, String firstImage2, String mapX, String mapY, String sigunguCode, String contentId, String overview, double rating, List<Review> reviewList) {
+    public Place(String name, String firstImage, String contentId) {
+        this.name = name;
+        this.firstImage = firstImage;
+        this.contentId = contentId;
+    }
+
+    public Place(Long id, String name, String address, String areaCode, String sigunguCode, String firstImage, String firstImage2, String mapX, String mapY, String contentId, String overview, double rating, Member member) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.areaCode = areaCode;
+        this.sigunguCode = sigunguCode;
         this.firstImage = firstImage;
         this.firstImage2 = firstImage2;
         this.mapX = mapX;
         this.mapY = mapY;
-        this.sigunguCode = sigunguCode;
         this.contentId = contentId;
         this.overview = overview;
         this.rating = rating;
-        this.reviewList = reviewList;
-    }
-
-    public void addReview(Review review) {
-        this.reviewList.add(review);
+        this.member = member;
     }
 }

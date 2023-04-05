@@ -3,6 +3,7 @@ package com.mohaeng.backend.course.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mohaeng.backend.config.SecurityConfig;
 import com.mohaeng.backend.course.domain.Course;
+import com.mohaeng.backend.course.domain.CourseStatus;
 import com.mohaeng.backend.course.dto.CourseInPlaceDto;
 import com.mohaeng.backend.course.dto.CourseListDto;
 import com.mohaeng.backend.course.dto.CourseSearchDto;
@@ -302,6 +303,7 @@ class CourseControllerTest {
         return Course.builder()
                 .title("Course Test Title")
                 .courseDays("1박2일")
+                .courseStatus(CourseStatus.PUBLIC)
                 .startDate(LocalDateTime.now())
                 .endDate(LocalDateTime.now().plusDays(1))
                 .region("서울")
