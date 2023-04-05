@@ -1,5 +1,6 @@
 package com.mohaeng.backend.member.service;
 
+import com.mohaeng.backend.Image.AmazonS3Service;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.domain.Role;
 import com.mohaeng.backend.member.dto.request.UserInfoChangeRequest;
@@ -28,7 +29,11 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import static io.micrometer.common.util.StringUtils.isEmpty;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +41,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final RandomNameService randomNameService;
     private final TokenGenerator tokenGenerator;
+
+    private final AmazonS3Service amazonS3Service;
     private final String UPLOAD_PATH = "../../image/";
 
     private final String CLIENT_ID = "d7c41513380cc7e5cbbfce173bf86002";
@@ -184,6 +191,26 @@ public class MemberService {
             member.changeImageURL(UPLOAD_PATH +"/"+fileName);
         }
 
+    }
+
+    @Transactional
+    public List<String> changeProfile2(Member member, UserInfoChangeRequest req, List<MultipartFile> multipartFiles) throws IOException{
+        member.changeNickName(req.getNickName());
+
+        List<String> strings = new ArrayList<>();
+        if (multipartFiles != null) {
+            if (!isEmpty(member.getImageName())){
+                // 저장된 url에서 파일 이름 뽑아내기
+                String name = member.getImageURL().substring(member.getImageURL().lastIndexOf("/") + 1);
+                amazonS3Service.deleteFile(name);
+                strings = amazonS3Service.uploadFile(multipartFiles);
+
+                String newName = strings.get(0).substring(strings.get(0).lastIndexOf("/") + 1);
+                member.updateProfileImage(newName, strings.get(0));
+            }
+        }
+
+        return strings;
     }
 
 }
