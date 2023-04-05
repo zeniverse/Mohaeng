@@ -39,6 +39,7 @@ public class MyPageService {
         return member.getCourseBookMarkList().stream()
                 .filter(m -> courseRepository.findById(m.getId()).isPresent())
                 .map(bookmark -> MyPageCourseBookMarkDto.of(bookmark))
+                .sorted(Comparator.comparing(MyPageCourseBookMarkDto::getCreatedDate).reversed())
                 .collect(Collectors.toList());
     }
 
@@ -61,7 +62,6 @@ public class MyPageService {
         return data;
     }
 
-    //TODO: 쿼리 수정 or 조회 로직 수정
     public boolean isBookmarkByMemberAndId(Member member, Long bookMarkId) {
         List<CourseBookmark> courseBookMarkList = member.getCourseBookMarkList();
         for (CourseBookmark courseBookmark : courseBookMarkList) {
