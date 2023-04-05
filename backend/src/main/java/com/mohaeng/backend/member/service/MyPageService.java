@@ -5,11 +5,16 @@ import com.mohaeng.backend.course.repository.CourseBookmarkRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.dto.response.MyPageCourseBookMarkDto;
+import com.mohaeng.backend.member.dto.response.MyPagePlaceBookMarkDto;
 import com.mohaeng.backend.member.repository.MemberRepository;
+import com.mohaeng.backend.place.domain.PlaceBookmark;
+import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +24,7 @@ public class MyPageService {
     private final CourseBookmarkRepository courseBookmarkRepository;
     private final CourseRepository courseRepository;
     private final MemberRepository memberRepository;
+    private final PlaceBookmarkRepository placeBookmarkRepository;
 
 
     @Transactional
@@ -65,6 +71,17 @@ public class MyPageService {
         return courseBookmarkRepository.findById(bookMarkId)
                 .orElseThrow(() -> new IllegalArgumentException("NOT_EXIST_COURSE_BOOK_MARK"));
     }
+
+    @Transactional
+    public List<MyPagePlaceBookMarkDto> findAllBookMarkedPlace(String email) {
+        Member member = isMember(email);
+        return member.getPlaceBookmarkList().stream()
+                .map(m -> MyPagePlaceBookMarkDto.of(m))
+                .sorted(Comparator.comparing(MyPagePlaceBookMarkDto :: getCreatedDate).reversed())
+                .collect(Collectors.toList());
+    }
+
+
 
     public void deleteMember(Member member){
         memberRepository.delete(member);
