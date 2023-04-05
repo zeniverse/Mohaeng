@@ -3,6 +3,11 @@ package com.mohaeng.backend.member.service;
 import com.mohaeng.backend.course.domain.CourseBookmark;
 import com.mohaeng.backend.course.repository.CourseBookmarkRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
+import com.mohaeng.backend.exception.badrequest.NotMatchMemberCourseBookMark;
+import com.mohaeng.backend.exception.badrequest.NotMatchMemberPlaceBookMark;
+import com.mohaeng.backend.exception.notfound.CourseBookmarkNotFoundException;
+import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
+import com.mohaeng.backend.exception.notfound.PlaceBookmarkNotFoundException;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.dto.response.MyPageCourseBookMarkDto;
 import com.mohaeng.backend.member.dto.response.MyPagePlaceBookMarkDto;
@@ -39,7 +44,7 @@ public class MyPageService {
 
     public Member isMember(String email) {
         return memberRepository.findByEmailAndDeletedDateIsNull(email)
-                .orElseThrow(() -> new IllegalArgumentException("Not_Exist_Member"));
+                .orElseThrow(() -> new MemberNotFoundException());
     }
 
     @Transactional
@@ -49,7 +54,7 @@ public class MyPageService {
 
         //현재의 Member가 가진 북마크가맞는지 확인
         if (!isBookmarkByMemberAndId(member, bookMarkId)) {
-            throw new IllegalArgumentException("DO_NOT_MATCH_MEMBER_AND_BOOK_MARK");
+            throw new NotMatchMemberCourseBookMark();
         }
 
         MyPageCourseBookMarkDto data = MyPageCourseBookMarkDto.of(courseBookMark);
@@ -69,7 +74,7 @@ public class MyPageService {
 
     public CourseBookmark isCourseBookMark(Long bookMarkId) {
         return courseBookmarkRepository.findById(bookMarkId)
-                .orElseThrow(() -> new IllegalArgumentException("NOT_EXIST_COURSE_BOOK_MARK"));
+                .orElseThrow(() -> new CourseBookmarkNotFoundException());
     }
 
     @Transactional
@@ -88,7 +93,7 @@ public class MyPageService {
 
         //현재의 Member가 가진 장소북마크가맞는지 확인
         if (!isPlaceBookMarkByMember(member, bookMarkPlaceId)) {
-            throw new IllegalArgumentException("DO_NOT_MATCH_MEMBER_AND_PLACE_BOOK_MARK");
+            throw new NotMatchMemberPlaceBookMark();
         }
 
         return MyPagePlaceBookMarkDto.of(placeBookMark);
@@ -96,7 +101,7 @@ public class MyPageService {
 
     public PlaceBookmark isPlaceBookMark(Long id) {
         return placeBookmarkRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("NOT_EXIST_PLACE_BOOK_MARK"));
+                .orElseThrow(() -> new MemberNotFoundException());
     }
 
     public boolean isPlaceBookMarkByMember(Member member, Long bookMarkPlaceId) {
