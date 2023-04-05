@@ -17,6 +17,7 @@
   border: none;
   text-decoration: none;
   color: var(--color-text-basic);
+  cursor: pointer;
 }
 
 .img {

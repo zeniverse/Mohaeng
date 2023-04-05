@@ -5,7 +5,9 @@ import styles from "./Review.module.css";
 import ReviewBox from "./ReviewBox";
 
 // 해당 여행지 총 리뷰 건수, 별점 데이터 가져오기
-// 정렬 필터
+// 정렬 필터 (좋아요순?)
+// 리뷰 전체 조회
+
 export default function Review() {
   const [selectedValue, setSelectedValue] = useState("default");
 
@@ -45,8 +47,8 @@ export default function Review() {
               <option value="default" selected>
                 정렬 ▼
               </option>
-              <option value="newest">최신순</option>
-              <option value="popular">추천순</option>
+              {/* <option value="newest">최신순</option> */}
+              <option value="popular">좋아요순</option>
             </select>
           </aside>
 

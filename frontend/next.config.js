@@ -33,6 +33,10 @@ const nextConfig = {
         source: "/api/place",
         destination: "https://localhost:8080/api/place",
       },
+      {
+        source: "/place/:id",
+        destination: "https://localhost:8080/place/overview/:id",
+      },
     ];
   },
 };

@@ -1,11 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
-
 export default function Document() {
   return (
     <Html lang="ko">

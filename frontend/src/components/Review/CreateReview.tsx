@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import { AiFillStar } from "react-icons/ai";
-import { IoMdRemoveCircleOutline } from "react-icons/io";
 import styles from "./CreateReview.module.css";
 import styled from "styled-components";
+
+import { AiFillStar } from "react-icons/ai";
+import { IoMdRemoveCircleOutline } from "react-icons/io";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 // 선택한 여행지 이름 가져오기
@@ -29,23 +30,33 @@ export default function CreateReview() {
     setClicked(clickStates);
   };
 
-  useEffect(() => {
-    sendReview();
-  }, [clicked]);
+  // useEffect(() => {
+  //   sendReview();
+  // }, [clicked]);
 
-  const sendReview = (): void => {
-    let score: number = clicked.filter(Boolean).length;
-    // fetch('http://...', {
-    //   method: 'POST',
-    //   Headers: {
-    //     Authroization: 액세스토큰?,
-    //   },
-    //   body: JSON.stringify({
-    //     movie_id:1
-    //     star: score,
-    //   }),
-    // });
-  };
+  // const sendReview = (): void => {
+  //   let score: number = clicked.filter(Boolean).length;
+  //   let reviewContent = document.querySelector("#review").value;
+
+  //   // FormData 객체 생성
+  //   const formData = new FormData();
+  //   formData.append("score", score);
+  //   formData.append("reviewContent", reviewContent);
+
+  //   // 이미지 파일을 추가
+  //   for (let i = 0; i < showImages.length; i++) {
+  //     const blob = await fetch(showImages[i]).then((r) => r.blob());
+  //     formData.append("images", blob, "image-" + i + ".jpg");
+  //   }
+
+  //   fetch("http://<Spring 서버 주소>/reviews", {
+  //     method: "POST",
+  //     headers: {
+  //       Authorization: "Bearer <access_token>",
+  //     },
+  //     body: formData,
+  //   });
+  // };
 
   const handleGoBack = () => {
     router.back();
@@ -94,7 +105,7 @@ export default function CreateReview() {
                     key={idx}
                     size="50"
                     onClick={() => handleStarClick(el)}
-                    className={clicked[el] && "yellowStar"}
+                    className={`${clicked[el] && "yellowStar"}`}
                   />
                 );
               })}

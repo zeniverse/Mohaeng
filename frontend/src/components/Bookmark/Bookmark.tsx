@@ -1,5 +1,6 @@
 import styles from "./Bookmark.module.css";
-import { BsBookmark, BsFillBookmarkFill } from "react-icons/bs";
+import { BsFillBookmarkCheckFill } from "react-icons/bs";
+import { BiBookmarkPlus } from "react-icons/bi";
 
 type BookmarkProps = {
   bookMarked: boolean;
@@ -10,9 +11,9 @@ export default function Bookmark({ bookMarked, onToggle }: BookmarkProps) {
   return (
     <button className={styles.btn} onClick={() => onToggle(!bookMarked)}>
       {bookMarked ? (
-        <BsFillBookmarkFill className={styles.bookmark} />
+        <BsFillBookmarkCheckFill className={styles.bookmark} />
       ) : (
-        <BsBookmark className={styles.unbookmark} />
+        <BiBookmarkPlus className={styles.unbookmark} />
       )}
     </button>
   );

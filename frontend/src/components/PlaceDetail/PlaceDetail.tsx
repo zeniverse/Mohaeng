@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
 import styles from "./PlaceDetail.module.css";
+
 import Image from "next/image";
 import Review from "../Review/Review";
-import { useRouter } from "next/router";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import { setPlaceDetail } from "@/src/store/reducers/placeDetailSlice";
 import DetailMap from "./DetailMap";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import Bookmark from "../Bookmark/Bookmark";
 
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+
 // 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined?
+// 북마크 delete
 
 interface PlaceInfo {
   name: string;
@@ -23,6 +25,26 @@ interface PlaceInfo {
   rating: string;
   review: string;
 }
+
+// export async function getServerSideProps({ query }) {
+//   const { id } = query;
+
+//   try {
+//     const res = await axios.get(`/place/overview/${id}`);
+//     const { content } = res.data.data;
+
+//     return {
+//       props: {
+//         placeInfo: content[0],
+//       },
+//     };
+//   } catch (error) {
+//     console.error(error);
+//     return {
+//       notFound: true,
+//     };
+//   }
+// }
 
 export default function PlaceDetail() {
   const dispatch = useDispatch();
@@ -39,9 +61,10 @@ export default function PlaceDetail() {
     rating: "",
     review: "",
   });
-
   const [bookMarked, setBookMarked] = useState(false);
-  const handleBookmarkClick = () => {
+
+  const handleBookmarkClick = async () => {
+    const res = await axios.post(`/api/place/bookmark/${id}`);
     setBookMarked(!bookMarked);
   };
 
@@ -50,7 +73,6 @@ export default function PlaceDetail() {
       try {
         const res = await axios.get(`/place/overview/${id}`);
         if (res.data.data.content[0] !== {}) {
-          dispatch(setPlaceDetail(res.data.data));
           const { content } = res.data.data;
           setPlaceInfo({ ...placeInfo, ...content[0] });
         } else {

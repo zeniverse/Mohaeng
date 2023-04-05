@@ -1,5 +1,11 @@
 import { useEffect } from "react";
 
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
 // 위도, 경도 (mapY, mapX 좌표)
 interface DetailMapProps {
   latitude: string;
