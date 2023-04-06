@@ -13,6 +13,9 @@ import org.hibernate.annotations.Table;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
@@ -53,6 +56,9 @@ public class Place {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "place")
+    private List<Review> reviewList = new ArrayList<>();
 
     public Place(String name, String address, String areaCode, String sigunguCode, String contentId, String firstImage, String firstImage2, String mapX, String mapY) {
         this.name = name;
@@ -114,5 +120,9 @@ public class Place {
         this.overview = overview;
         this.rating = rating;
         this.member = member;
+    }
+
+    public void addReview(Review review) {
+        this.getReviewList().add(review);
     }
 }
