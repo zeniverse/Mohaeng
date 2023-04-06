@@ -11,16 +11,16 @@ export default function ReviewRating({
   ratingIndex,
   setRatingIndex,
 }: RatingProps) {
-  const starArray = [0, 1, 2, 3, 4];
+  const starArray = [1, 2, 3, 4, 5];
+
   return (
-    <div>
+    <div className={styles.ratingBox}>
       {starArray.map((el, index) => (
         <AiFillStar
           id={el.toString()}
-          size={50}
+          fontSize={40}
           key={index}
-          // 여기가 핵심
-          className={el <= ratingIndex ? "active" : "inactive"}
+          className={el <= ratingIndex ? styles.active : styles.inactive}
           onClick={() => setRatingIndex(el)}
         />
       ))}

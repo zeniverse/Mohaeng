@@ -10,6 +10,7 @@ import cookie from "react-cookies";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
+import FiveStarRating from "../FiveStarRating/FiveStarRating";
 
 // 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined?
 // 북마크 delete
@@ -62,6 +63,7 @@ export default function PlaceDetail() {
           withCredentials: true,
         },
       });
+      console.log(res.data);
       setBookMarked(!bookMarked);
     } catch (error) {
       console.error(error);
@@ -92,12 +94,12 @@ export default function PlaceDetail() {
         <div className={styles.detailHeader}>
           <div className={styles.headerTitle}>
             <h2 className={styles.h2}>{placeInfo.name}</h2>
-            {/* <a className={styles.moveToReview} href="#review">
+            <a className={styles.moveToReview} href="#review">
               <div className={styles.rating}>
                 별점 <FiveStarRating rating={placeInfo.rating} />
               </div>
               <p className={styles.review}>{placeInfo.review}건의 리뷰</p>
-            </a> */}
+            </a>
           </div>
           <div className={styles.bookMarkBox}>
             <p className={styles.bookMarkText}>북마크에 추가</p>

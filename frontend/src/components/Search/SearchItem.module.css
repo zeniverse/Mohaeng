@@ -43,7 +43,7 @@
 .title {
   display: block;
   width: 180px;
-  margin-top: 8px;
+  margin-top: 4px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

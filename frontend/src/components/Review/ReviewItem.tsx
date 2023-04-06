@@ -25,7 +25,7 @@ export default function ReviewItem({
     <article className={styles.reviewBox}>
       <div className={styles.reviewer}>
         {/* <Image
-          className={styles.userImg}
+          className={styles.userImg} // 프로필 url, state
           src={}
           width={50}
           height={50}
@@ -45,7 +45,7 @@ export default function ReviewItem({
       <div className={styles.reviewContent}>
         <p className={styles.reviewTxt}>{content}</p>
         <div> 이미지 박스 </div>
-        {/* 이미지 조건문으로 map 순회 */}
+        {/* 이미지 조건문으로 map 순회 최대 3개 */}
       </div>
     </article>
   );
