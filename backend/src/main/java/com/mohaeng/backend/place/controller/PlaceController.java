@@ -1,6 +1,10 @@
 package com.mohaeng.backend.place.controller;
 
 import com.mohaeng.backend.common.BaseResponse;
+import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
+import com.mohaeng.backend.member.domain.Member;
+import com.mohaeng.backend.member.jwt.TokenGenerator;
+import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
@@ -9,8 +13,10 @@ import com.mohaeng.backend.place.dto.PlaceSearchDto;
 import com.mohaeng.backend.place.dto.response.FindAllPlacesResponse;
 import com.mohaeng.backend.place.dto.response.FindSearchPlacesResponse;
 import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
+import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.service.PlaceService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,7 +33,10 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 
 @RestController
@@ -37,6 +46,9 @@ public class PlaceController {
 
     private final PlaceService placeService;
     private final PlaceRepository placeRepository;
+    private final MemberRepository memberRepository;
+    private final TokenGenerator tokenGenerator;
+    private final PlaceBookmarkRepository placeBookmarkRepository;
 
     @GetMapping("/api/place/all")
     public ResponseEntity<List<Place>> getPlaces() {
@@ -92,34 +104,69 @@ public class PlaceController {
     public ResponseEntity<BaseResponse<FindSearchPlacesResponse>> search(
             @RequestParam String keyword, @RequestParam(required = false) String address,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size) {
-            Pageable pageable = PageRequest.of(page - 1, size);
+            @RequestParam(defaultValue = "12") int size,
+            HttpServletRequest request) {
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Member member = isAccessMember(request);
+        Page<Place> places = null;
         if (address == null || address.isEmpty()) {
-            Page<PlaceSearchDto> result = placeRepository.findByNameContaining(keyword, pageable);
-            FindSearchPlacesResponse response = new FindSearchPlacesResponse(result.getContent(), result.getTotalPages(), result.getTotalElements());
-            return ResponseEntity.ok().body(BaseResponse.success("OK", response));
+            places = placeRepository.findByNameContaining(keyword, pageable);
         } else {
-            Page<PlaceSearchDto> result = placeRepository.findByNameContainingOrAddressContaining(keyword, address, pageable);
-            FindSearchPlacesResponse response = new FindSearchPlacesResponse(result.getContent(), result.getTotalPages(), result.getTotalElements());
-            return ResponseEntity.ok().body(BaseResponse.success("OK", response));
+            places = placeRepository.findByNameContainingOrAddressContaining(keyword, address, pageable);
         }
+
+        List<PlaceSearchDto> result = new ArrayList<>();
+        for (Place place : places) {
+            boolean isBookmark = false;
+            if(member != null){
+                isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, place);
+            }
+            PlaceSearchDto dto = PlaceSearchDto.from(place, isBookmark);
+            result.add(dto);
+        }
+        FindSearchPlacesResponse response = new FindSearchPlacesResponse(result, places.getTotalPages(), places.getTotalElements());
+        return ResponseEntity.ok().body(BaseResponse.success("OK", response));
     }
 
     @GetMapping("/places")
     public ResponseEntity<BaseResponse<FindAllPlacesResponse>> findAllPlace(
         @RequestParam String areaCode,
         @RequestParam(defaultValue = "1") int page,
-        @RequestParam(defaultValue = "12") int size) {
+        @RequestParam(defaultValue = "12") int size,
+        HttpServletRequest request) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<FindAllPlacesDto> result;
+        Page<Place> places = null;
+        Member member = isAccessMember(request);
+
         if ("all".equals(areaCode)) {
-            result = placeRepository.findAll(pageable)
-                    .map(place -> new FindAllPlacesDto(place.getName(), place.getAreaCode(),place.getFirstImage(), place.getContentId()));
+            places = placeRepository.findAll(pageable);
         } else {
-            result = placeRepository.findByAreaCodeEquals(areaCode, pageable);
+            places = placeRepository.findByAreaCodeEquals(areaCode, pageable);
         }
-        FindAllPlacesResponse response = new FindAllPlacesResponse(result.getContent(), result.getTotalPages(), result.getTotalElements());
+
+        List<FindAllPlacesDto> result = new ArrayList<>();
+        for (Place place : places) {
+            boolean isBookmark = false;
+            if(member != null){
+                isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, place);
+            }
+            FindAllPlacesDto dto = FindAllPlacesDto.from(place, isBookmark);
+            result.add(dto);
+        }
+
+        FindAllPlacesResponse response = new FindAllPlacesResponse(result, places.getTotalPages(), places.getTotalElements());
         return ResponseEntity.ok().body(BaseResponse.success("OK", response));
+    }
+
+    private Member isAccessMember(HttpServletRequest request){
+        if (request.getHeader("Access-Token") == null){
+            return null;
+        }else{
+            return memberRepository.findByEmailAndDeletedDateIsNull(tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token")))
+                    .orElseThrow(MemberNotFoundException::new);
+        }
     }
 
 }
