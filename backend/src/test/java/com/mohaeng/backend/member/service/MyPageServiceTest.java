@@ -114,7 +114,6 @@ class MyPageServiceTest {
                 .title("testTitle")
                 .content("testNickName")
                 .region("testRegion")
-                .isPublished(true)
                 .startDate(LocalDateTime.now())
                 .endDate(LocalDateTime.now().plusDays(1))
                 .build();

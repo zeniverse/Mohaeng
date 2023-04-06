@@ -5,6 +5,7 @@ import styles from "./courseDetail.module.css";
 
 import CourseDetailNav from "@/src/components/CourseDetail/CourseDetailNav";
 import CourseDetailContent from "@/src/components/CourseDetail/CourseDetailContent";
+import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 
 const initialData = {
   courseId: 0,
@@ -19,12 +20,7 @@ const initialData = {
 };
 
 export default function CourseDetail() {
-  const router = useRouter();
-  const id = Array.isArray(router.query.id)
-    ? parseInt(router.query.id[0], 10)
-    : router.query.id !== undefined
-    ? parseInt(router.query.id, 10)
-    : NaN;
+  const id = useRouterQuery("id");
 
   // const timeAgoFn = useCallback((a: Date) => {
   //   const now: Date = new Date();
@@ -124,7 +120,6 @@ export default function CourseDetail() {
           mapData={courseDetail.places}
           places={places}
           content={content}
-          router={router}
         />
       </div>
     </>

@@ -11,7 +11,7 @@ import { setPage } from "@/src/store/reducers/pageSlice";
 
 export default function Place() {
   const dispatch = useDispatch();
-  const areacode = useSelector((state: RootState) => state.filter.areaCode);
+  const { areaCode } = useSelector((state: RootState) => state.filter.area);
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
     (state: RootState) => state.place.totalPages
@@ -23,7 +23,7 @@ export default function Place() {
       const placeResponse = await axios
         .get(`/places`, {
           params: {
-            areaCode: areacode,
+            areaCode: areaCode,
             page: page,
           },
           withCredentials: true,
@@ -31,14 +31,14 @@ export default function Place() {
         .then((res) => dispatch(setPlace(res.data.data)));
     };
     response();
-  }, [areacode]);
+  }, [areaCode]);
 
   useEffect(() => {
     const response = async () => {
       const placeResponse = await axios
         .get(`/places`, {
           params: {
-            areaCode: areacode,
+            areaCode: areaCode,
             page: page,
           },
           withCredentials: true,

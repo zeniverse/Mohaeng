@@ -2,6 +2,7 @@ const { type } = require("os");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  fallback: true,
   images: {
     domains: [
       "tong.visitkorea.or.kr",
