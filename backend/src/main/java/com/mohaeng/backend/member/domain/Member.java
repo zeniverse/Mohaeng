@@ -36,8 +36,8 @@ public class Member extends BaseTimeEntity {
     private String email;
 
     private String originName;
-    private String imageURL="";
-    private String imageName="";
+    private String imageURL;
+    private String imageName;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -92,10 +92,6 @@ public class Member extends BaseTimeEntity {
         this.imageURL = imageURL;
     }
 
-    public void changeImageName(String imageName) {
-        this.imageName = imageName;
-    }
-
     public void setKakaoId(Long kakaoId) {
         this.kakaoId = kakaoId;
     }
@@ -109,8 +105,8 @@ public class Member extends BaseTimeEntity {
         this.placeBookmarkList.remove(placeBookmark);
     }
 
-    public void updateProfileImage(String fileName, String imageURL){
-        this.imageName = fileName;
+    public void updateProfileImage(String imageName, String imageURL){
+        this.imageName = imageName;
         this.imageURL = imageURL;
     }
 }

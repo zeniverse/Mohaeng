@@ -82,12 +82,12 @@ public class MyPageController {
      * Amazon S3에 파일 업로드
      * @return 성공 시 200 Success와 함께 업로드 된 파일의 파일명 리스트 반환
      */
-    @PutMapping(value = "/myPage2/{memberEmail}")
-    public ResponseEntity changeMemberProfile2(@PathVariable String memberEmail,
-                                               @RequestPart(value = "nickName") UserInfoChangeRequest req,
-                                               @RequestPart(value = "multipartFiles", required = false) List<MultipartFile> multipartFiles)throws IOException{
-        Member findMember = memberService.findByEmail(memberEmail);
-        List<String> strings = memberService.changeProfile2(findMember,req, multipartFiles);
-        return ResponseEntity.ok().body(BaseResponse.success("ok", strings));
-    }
+//    @PutMapping(value = "/myPage2/{memberEmail}")
+//    public ResponseEntity changeMemberProfile2(@PathVariable String memberEmail,
+//                                               @RequestPart(value = "nickName") UserInfoChangeRequest req,
+//                                               @RequestPart(value = "multipartFiles", required = false) List<MultipartFile> multipartFiles)throws IOException{
+//        Member findMember = memberService.findByEmail(memberEmail);
+//        List<String> strings = memberService.changeProfile(findMember,req, multipartFiles);
+//        return ResponseEntity.ok().body(BaseResponse.success("ok", strings));
+//    }
 }
