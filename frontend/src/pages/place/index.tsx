@@ -18,22 +18,29 @@ export default function Place() {
   );
 
   useEffect(() => {
-    dispatch(setPage(1));
-    const response = async () => {
-      const placeResponse = await axios
-        .get(`/places`, {
-          params: {
-            areaCode: areacode,
-            page: page,
-          },
-          withCredentials: true,
-        })
-        .then((res) => dispatch(setPlace(res.data.data)));
-    };
-    response();
+    // console.log("AreaCode is " + areacode);
+    if (page !== 1) {
+      console.log("페이지 바뀜");
+      dispatch(setPage(1));
+      console.log("Area Code Is " + areacode);
+    } else {
+      const response = async () => {
+        const placeResponse = await axios
+          .get(`/places`, {
+            params: {
+              areaCode: areacode,
+              page: page,
+            },
+            withCredentials: true,
+          })
+          .then((res) => dispatch(setPlace(res.data.data)));
+      };
+      response();
+    }
   }, [areacode]);
 
   useEffect(() => {
+    console.log("AreaCode is " + areacode);
     const response = async () => {
       const placeResponse = await axios
         .get(`/places`, {
