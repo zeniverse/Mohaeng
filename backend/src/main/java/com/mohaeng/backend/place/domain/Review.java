@@ -6,6 +6,7 @@ import com.mohaeng.backend.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -31,6 +32,8 @@ public class Review extends BaseTimeEntity {
     private String content;
     private int likeCount;
     private double rating;
-    private String imgUrl;
+
+    @OneToMany(mappedBy = "review")
+    private List<ReviewImage> reviewImageList = new ArrayList<>();
 
 }
