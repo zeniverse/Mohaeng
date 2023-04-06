@@ -1,32 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface bookmarkPlace {
-  bookMarkId: number;
-  categoryId: number;
-  placeId: number;
-  placeName: string;
-}
-
-export interface bookmarkCourse {
-  bookMarkId: number;
-  courseId: number;
-  courseTitle: string;
-  r: string;
-  content: string;
-  isPublished: boolean;
-  courseImgUrl: string;
-  createdDate: string;
-  modifiedDate: string;
-}
-
-export interface bookmarkPlaceState {
-  data: bookmarkPlace[];
-}
-
-export interface bookmarkCourseState {
-  data: bookmarkCourse[];
-}
-
 export interface myPageState {
   currIdx: number;
   label: string;
