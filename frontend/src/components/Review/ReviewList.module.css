@@ -1,4 +1,4 @@
-.review {
+.reviewSection {
   width: 70rem;
   margin: 2rem 8rem;
   /* 
@@ -15,6 +15,7 @@
   --color-icon: #cfcfcf;
 }
 
+/* header */
 .reviewContainer {
   display: flex;
   flex-direction: column;
@@ -78,3 +79,5 @@
 .select:hover {
   border: 2px solid var(--color-border-light);
 }
+
+/* main */

@@ -1,17 +1,39 @@
-import { KeywordProps } from "@/src/interfaces/Keyword";
+import styles from "./SearchItem.module.css";
+
+import axios from "axios";
 import Image from "next/image";
+import cookie from "react-cookies";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { KeywordProps } from "@/src/interfaces/Keyword";
 import Bookmark from "../Bookmark/Bookmark";
-import styles from "./SearchItem.module.css";
+import FiveStarRating from "../FiveStarRating/FiveStarRating";
 
 export default function SearchItem({
   name,
   firstImage,
   contentId,
+  rating,
+  review,
 }: KeywordProps) {
   const router = useRouter();
   const [bookMarked, setBookMarked] = useState(false);
+
+  // 로직 분리
+  const handleBookmarkClick = async () => {
+    const accessToken = await cookie.load("accessToken");
+    try {
+      const res = await axios.post(`/api/place/bookmark/${contentId}`, {
+        headers: {
+          "Access-Token": `${accessToken}`,
+          withCredentials: true,
+        },
+      });
+      setBookMarked(!bookMarked);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <li className={styles.keywordItemContainer} key={contentId}>
@@ -23,6 +45,7 @@ export default function SearchItem({
               pathname: `/place/[id]`,
               query: {
                 id: contentId,
+                name: name,
               },
             },
             `place/${contentId}`
@@ -33,15 +56,19 @@ export default function SearchItem({
           className={styles.img}
           src={firstImage}
           alt={name}
-          width={300}
+          width={290}
           height={210}
           priority
         />
       </button>
       <div className={styles.keywordInfo}>
-        <p className={styles.title}>{name}</p>
+        <div className={styles.keywordDesc}>
+          <p className={styles.title}>{name}</p>
+          <FiveStarRating rating={rating.toString()} />
+          <p className={styles.review}>{review}건의 리뷰</p>
+        </div>
         <div className={styles.keywordBookmark}>
-          <Bookmark bookMarked={bookMarked} onToggle={setBookMarked} />
+          <Bookmark bookMarked={bookMarked} onToggle={handleBookmarkClick} />
         </div>
       </div>
     </li>

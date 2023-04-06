@@ -1,4 +1,5 @@
 .keywordItemContainer {
+  width: 292px;
   border: 1px solid var(--color-border-light);
   border-radius: 16px;
 }
@@ -30,7 +31,13 @@
 
 .keywordInfo {
   display: flex;
-  padding: 0.5rem 1rem 1rem 1rem;
+  flex-direction: row;
+  padding: 0 1rem 0.5em 1rem;
+}
+
+.keywordDesc {
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
@@ -45,8 +52,12 @@
   font-weight: 700;
 }
 
+.review {
+  font-size: small;
+}
+
 .keywordBookmark {
   width: 30px;
-  margin-top: 4px;
+  margin-top: 1rem;
   margin-left: 50px;
 }

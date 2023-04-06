@@ -1,12 +1,12 @@
 import styles from "./PlaceDetail.module.css";
 
 import Image from "next/image";
-import Review from "../Review/Review";
-import DetailMap from "./DetailMap";
-import FiveStarRating from "../FiveStarRating/FiveStarRating";
+import ReviewList from "../Review/ReviewList";
 import Bookmark from "../Bookmark/Bookmark";
+import PlaceDetailMap from "./PlaceDetailMap";
 
 import axios from "axios";
+import cookie from "react-cookies";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
@@ -26,27 +26,8 @@ interface PlaceInfo {
   review: string;
 }
 
-// export async function getServerSideProps({ query }) {
-//   const { id } = query;
-
-//   try {
-//     const res = await axios.get(`/place/overview/${id}`);
-//     const { content } = res.data.data;
-
-//     return {
-//       props: {
-//         placeInfo: content[0],
-//       },
-//     };
-//   } catch (error) {
-//     console.error(error);
-//     return {
-//       notFound: true,
-//     };
-//   }
-// }
-
 export default function PlaceDetail() {
+  const accessToken = cookie.load("accessToken");
   const dispatch = useDispatch();
   const router = useRouter();
   const { id } = router.query;
@@ -63,11 +44,31 @@ export default function PlaceDetail() {
   });
   const [bookMarked, setBookMarked] = useState(false);
 
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
+
+  // 북마크
   const handleBookmarkClick = async () => {
-    const res = await axios.post(`/api/place/bookmark/${id}`);
-    setBookMarked(!bookMarked);
+    // const data = {
+    //   placeName: placeInfo.name,
+    //   contentId: placeInfo.contentId,
+    //   bookmark: true,
+    // };
+    try {
+      const res = await axios.post(`/api/place/bookmark/${id}`, {
+        headers: {
+          "Access-Token": `${accessToken}`,
+          withCredentials: true,
+        },
+      });
+      setBookMarked(!bookMarked);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
+  // 상세 데이터
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -91,12 +92,12 @@ export default function PlaceDetail() {
         <div className={styles.detailHeader}>
           <div className={styles.headerTitle}>
             <h2 className={styles.h2}>{placeInfo.name}</h2>
-            <a className={styles.moveToReview} href="#review">
+            {/* <a className={styles.moveToReview} href="#review">
               <div className={styles.rating}>
                 별점 <FiveStarRating rating={placeInfo.rating} />
               </div>
               <p className={styles.review}>{placeInfo.review}건의 리뷰</p>
-            </a>
+            </a> */}
           </div>
           <div className={styles.bookMarkBox}>
             <p className={styles.bookMarkText}>북마크에 추가</p>
@@ -114,7 +115,10 @@ export default function PlaceDetail() {
             />
           </div>
           <div className={styles.detailMap} id="map">
-            <DetailMap latitude={placeInfo.mapY} longitude={placeInfo.mapX} />
+            <PlaceDetailMap
+              latitude={placeInfo.mapY}
+              longitude={placeInfo.mapX}
+            />
           </div>
         </div>
         <div className={styles.detailDesc}>
@@ -123,8 +127,35 @@ export default function PlaceDetail() {
         </div>
       </section>
       <div id="review">
-        <Review />
+        <ReviewList />
       </div>
     </>
   );
 }
+
+// export async function getServerSideProps({ query: { id } }) {
+//   return {
+//     props: {
+//       classId,
+//     },
+//   };
+// }
+// export async function getServerSideProps({ query }) {
+//   const { id } = query;
+
+//   try {
+//     const res = await axios.get(`/place/overview/${id}`);
+//     const { content } = res.data.data;
+
+//     return {
+//       props: {
+//         placeInfo: content[0],
+//       },
+//     };
+//   } catch (error) {
+//     console.error(error);
+//     return {
+//       notFound: true,
+//     };
+//   }
+// }

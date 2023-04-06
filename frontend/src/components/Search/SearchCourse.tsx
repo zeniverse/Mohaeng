@@ -1,11 +1,11 @@
-import { RootState } from "@/src/store/store";
-import axios from "axios";
+import styles from "./SearchList.module.css";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { useSelector } from "react-redux";
+import { RootState } from "@/src/store/store";
 import CourseItem from "../Course/CourseItem";
 import Pagebar from "../Pagenation/Pagebar";
-import styles from "./SearchList.module.css";
 
 interface CourseList {
   id: number;

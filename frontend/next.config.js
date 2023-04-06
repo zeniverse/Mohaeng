@@ -9,6 +9,7 @@ const nextConfig = {
       "k.kakaocdn.net",
       "lh3.google.com",
       "drive.google.com",
+      "mohaeng.s3.ap-northeast-2.amazonaws.com",
     ],
   },
   pageExtensions: ["jsx", "js", "ts", "tsx", "json"],

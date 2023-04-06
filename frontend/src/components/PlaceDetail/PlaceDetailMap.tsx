@@ -12,8 +12,9 @@ interface DetailMapProps {
   longitude: string;
 }
 
-const DetailMap = ({ latitude, longitude }: DetailMapProps) => {
+const PlaceDetailMap = ({ latitude, longitude }: DetailMapProps) => {
   useEffect(() => {
+    const { kakao } = window;
     const mapScript = document.createElement("script");
 
     mapScript.async = true;
@@ -22,19 +23,16 @@ const DetailMap = ({ latitude, longitude }: DetailMapProps) => {
     document.head.appendChild(mapScript);
 
     const onLoadKakaoMap = () => {
-      window.kakao.maps.load(() => {
+      kakao.maps.load(() => {
         const container = document.getElementById("map");
         const options = {
-          center: new window.kakao.maps.LatLng(latitude, longitude),
+          center: new kakao.maps.LatLng(latitude, longitude),
           draggable: true,
           // 지도 생성할 때 확대, 축소 설정하는 옵션
         };
-        const map = new window.kakao.maps.Map(container, options);
-        const markerPosition = new window.kakao.maps.LatLng(
-          latitude,
-          longitude
-        );
-        const marker = new window.kakao.maps.Marker({
+        const map = new kakao.maps.Map(container, options);
+        const markerPosition = new kakao.maps.LatLng(latitude, longitude);
+        const marker = new kakao.maps.Marker({
           position: markerPosition,
         });
         marker.setMap(map);
@@ -56,4 +54,4 @@ const DetailMap = ({ latitude, longitude }: DetailMapProps) => {
   );
 };
 
-export default DetailMap;
+export default PlaceDetailMap;
