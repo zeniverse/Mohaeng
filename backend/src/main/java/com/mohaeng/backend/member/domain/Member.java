@@ -2,6 +2,8 @@ package com.mohaeng.backend.member.domain;
 
 import com.mohaeng.backend.common.BaseTimeEntity;
 import com.mohaeng.backend.course.domain.CourseBookmark;
+import com.mohaeng.backend.place.domain.PlaceBookmark;
+import com.mohaeng.backend.place.domain.Review;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,7 +12,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,12 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member")
     private List<CourseBookmark> courseBookMarkList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<PlaceBookmark> placeBookmarkList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Review> reviewList;
 
     @Builder
     public Member(String name, String email, Role role, String nickName) {
@@ -91,6 +98,20 @@ public class Member extends BaseTimeEntity {
 
     public void setKakaoId(Long kakaoId) {
         this.kakaoId = kakaoId;
+    }
+
+
+    public void addPlaceBookmark(PlaceBookmark placeBookmark) {
+        this.placeBookmarkList.add(placeBookmark);
+    }
+
+    public void removePlaceBookmark(PlaceBookmark placeBookmark){
+        this.placeBookmarkList.remove(placeBookmark);
+    }
+
+    public void updateProfileImage(String fileName, String imageURL){
+        this.imageName = fileName;
+        this.imageURL = imageURL;
     }
 }
 

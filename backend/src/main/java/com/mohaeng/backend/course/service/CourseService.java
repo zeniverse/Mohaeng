@@ -2,18 +2,19 @@ package com.mohaeng.backend.course.service;
 
 import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.domain.CoursePlace;
+import com.mohaeng.backend.course.domain.CourseStatus;
 import com.mohaeng.backend.course.dto.*;
-import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
-import com.mohaeng.backend.course.dto.request.CourseReq;
-import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
-import com.mohaeng.backend.course.dto.response.CourseIdRes;
-import com.mohaeng.backend.course.dto.response.CourseListRes;
-import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
-import com.mohaeng.backend.course.dto.response.CourseRes;
+import com.mohaeng.backend.course.dto.request.*;
+import com.mohaeng.backend.course.dto.response.*;
 import com.mohaeng.backend.course.repository.CourseBookmarkRepository;
 import com.mohaeng.backend.course.repository.CourseLikesRepository;
 import com.mohaeng.backend.course.repository.CoursePlaceRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
+import com.mohaeng.backend.exception.badrequest.InvalidKeywordPlaceInCourse;
+import com.mohaeng.backend.exception.notfound.CourseNotFoundException;
+import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
+import com.mohaeng.backend.exception.notfound.PlaceNotFoundException;
+import com.mohaeng.backend.exception.unauthrized.MemberPermissionDenied;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
@@ -25,8 +26,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,8 +48,7 @@ public class CourseService {
     public CoursePlaceSearchRes placeSearch(CoursePlaceSearchReq req, Pageable pageable) {
         // keyword에 null이 담겨있을 때
         if (req.getKeyword() == null){
-            // TODO: Exception 처리
-            throw new IllegalArgumentException("keyword 값이 비어있습니다.");
+            throw new InvalidKeywordPlaceInCourse();
         }
 
         // rating에 점수가 담겨있지 않을 때
@@ -61,36 +59,21 @@ public class CourseService {
         List<CoursePlaceSearchDto> coursePlaceSearchList = places.stream()
                 .map(place -> CoursePlaceSearchDto.from(place))
                 .collect(Collectors.toList());
-
         return CoursePlaceSearchRes.from(places.hasNext(), coursePlaceSearchList);
     }
 
     @Transactional
     public CourseIdRes createCourse(CourseReq req,String memberEmail) {
 
-        // 유저 확인
+        // 1.유저 확인
         Member member = isMember(memberEmail);
 
-        Course course = Course.builder()
-                .title(req.getTitle())
-                .startDate(strToTime(req.getStartDate()))
-                .endDate(strToTime(req.getEndDate()))
-                .isPublished(req.getIsPublished())
-                .courseDays(req.getCourseDays())
-                .region(req.getRegion())
-                .thumbnailUrl(req.getThumbnailUrl())
-                .content(req.getContent())
-                .isPublished(false)
-                .likeCount(0)
-                .member(member)
-                .build();
+        // 2. 코스 생성
+        Course course = Course.createCourse(req, member);
 
         List<CoursePlace> coursePlaces = new ArrayList<>();
         for (Long id : req.getPlaceIds()) {
-            Place place = placeRepository.findById(id).orElseThrow(
-                    // TODO: Exception 처리
-                    () -> new IllegalArgumentException("존재하지 않는 장소 입니다.")
-            );
+            Place place = placeRepository.findById(id).orElseThrow(PlaceNotFoundException::new);
             coursePlaces.add(
                     CoursePlace.builder()
                             .course(course)
@@ -136,24 +119,17 @@ public class CourseService {
     @Transactional
     public CourseIdRes updateCourse(String memberEmail, Long courseId, CourseUpdateReq req) {
 
-        // 2. 코스 존재 여부 & 작성자와 요청자가 같은지 확인
+        // 1. 코스 존재 여부 & 작성자와 요청자가 같은지 확인
         Course course = isCourse(courseId);
         isWriter(memberEmail, course.getMember());
 
-        // 3. 날짜 타입 변경
-        LocalDateTime start = strToTime(req.getStartDate());
-        LocalDateTime end = strToTime(req.getEndDate());
-
-        // 4. 기존에 존재하던 CoursePlaces 삭제
+        // 2. 기존에 존재하던 CoursePlaces 삭제
         List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
         coursePlaceRepository.deleteAllInBatch(coursePlaces);
 
         List<CoursePlace> updatedCoursePlaces = new ArrayList<>();
         for (Long id : req.getPlaceIds()) {
-            Place place = placeRepository.findById(id).orElseThrow(
-                    // TODO: Exception 처리
-                    () -> new IllegalArgumentException("존재하지 않는 장소 입니다.")
-            );
+            Place place = placeRepository.findById(id).orElseThrow(PlaceNotFoundException::new);
             updatedCoursePlaces.add(
                     CoursePlace.builder()
                             .course(course)
@@ -164,7 +140,7 @@ public class CourseService {
 
         coursePlaceRepository.saveAll(updatedCoursePlaces);
         course.addCoursePlaces(updatedCoursePlaces);
-        course.updateCourse(req, start, end);
+        course.updateCourse(req);
 
         return CourseIdRes.from(course.getId());
     }
@@ -185,7 +161,7 @@ public class CourseService {
 
     public CourseListRes getCourseList(CourseSearchDto courseSearchDto, Pageable pageable, String memberEmail) {
         // 1.로그인 유무 화인
-        Member member = checkLogin(memberEmail);
+        Member member = isLogin(memberEmail);
 
         // 2. 검색 조건으로 검색 결과 조회
         Page<Course> courses = courseRepository.findAllCourseWithKeyword(courseSearchDto, pageable);
@@ -213,10 +189,10 @@ public class CourseService {
 
     public List<MainCourseListDto> getMainCourse(String memberEmail) {
         // 1.로그인 유무 화인
-        Member member = checkLogin(memberEmail);
+        Member member = isLogin(memberEmail);
 
         // 2. 코스 조회 결과 불러오기기
-        List<Course> courseList = courseRepository.findTop10ByOrderByLikeCountDesc();
+        List<Course> courseList = courseRepository.findTop10ByCourseStatusOrderByLikeCountDesc(CourseStatus.PUBLIC);
 
         List<MainCourseListDto> MainCourseListDtoList = new ArrayList<>();
         for (Course course : courseList) {
@@ -235,41 +211,24 @@ public class CourseService {
 
 
     private Member isWriter(String memberEmail, Member writer){
-        Member member = memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+        Member member = isMember(memberEmail);
 
-        if(!member.getEmail().equals(writer.getEmail()))
-            // TODO: Exception 처리
-            throw new RuntimeException("요청자와 작성자가 일치하지 않습니다.");
+        if(!member.getEmail().equals(writer.getEmail())){
+            throw new MemberPermissionDenied();
+        }
         return member;
 
     }
 
-    private Member checkLogin(String email){
-        return isNull(email) ? null : memberRepository.findByEmailAndDeletedDateIsNull(email)
-                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 member 입니다."));
+    private Member isLogin(String email){
+        return isNull(email) ? null : memberRepository.findByEmailAndDeletedDateIsNull(email).orElseThrow(MemberNotFoundException::new);
     }
 
     private Member isMember(String memberEmail){
-        return memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+        return memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(MemberNotFoundException::new);
     }
 
     private Course isCourse(Long id){
-        return courseRepository.findById(id).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
-        );
-    }
-
-
-    /** String 타입 날짜를 LocaDateTime으로 변환 **/
-    private LocalDateTime strToTime (String strDate){
-        LocalDate date = LocalDate.parse(strDate);
-        return date.atStartOfDay();
+        return courseRepository.findById(id).orElseThrow(CourseNotFoundException::new);
     }
 }

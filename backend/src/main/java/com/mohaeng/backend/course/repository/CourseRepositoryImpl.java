@@ -1,6 +1,7 @@
 package com.mohaeng.backend.course.repository;
 
 import com.mohaeng.backend.course.domain.Course;
+import com.mohaeng.backend.course.domain.CourseStatus;
 import com.mohaeng.backend.course.dto.CourseSearchDto;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -36,7 +37,8 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                 .where(
                         titleEq(courseSearchDto.getKeyword()),
                         regionEq(courseSearchDto.getRegion()),
-                        daysEq(courseSearchDto.getDays())
+                        daysEq(courseSearchDto.getDays()),
+                        course.courseStatus.eq(CourseStatus.PUBLIC)
                 )
                 .orderBy(orderSpecifiers)
                 .offset(pageable.getOffset())
@@ -49,7 +51,8 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom{
                 .where(
                         titleEq(courseSearchDto.getKeyword()),
                         regionEq(courseSearchDto.getRegion()),
-                        daysEq(courseSearchDto.getDays())
+                        daysEq(courseSearchDto.getDays()),
+                        course.courseStatus.eq(CourseStatus.PUBLIC)
                 );
 
         return PageableExecutionUtils.getPage(results, pageable, totalCount::fetchOne);

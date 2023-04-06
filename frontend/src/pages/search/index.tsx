@@ -1,9 +1,9 @@
-import SearchPlace from "@/src/components/Search/SearchPlace";
+import SearchTab from "@/src/components/Search/SearchTab";
 
-export default function Search(): JSX.Element {
+export default function Search() {
   return (
     <>
-      <SearchPlace />
+      <SearchTab />
     </>
   );
 }

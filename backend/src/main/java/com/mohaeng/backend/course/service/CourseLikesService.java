@@ -5,6 +5,10 @@ import com.mohaeng.backend.course.domain.CourseLikes;
 import com.mohaeng.backend.course.dto.response.CourseLikesRes;
 import com.mohaeng.backend.course.repository.CourseLikesRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
+import com.mohaeng.backend.exception.badrequest.InvalidCourseLikes;
+import com.mohaeng.backend.exception.notfound.CourseLikesNotFoundException;
+import com.mohaeng.backend.exception.notfound.CourseNotFoundException;
+import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +34,7 @@ public class CourseLikesService {
         Course course = isCourse(courseId);
 
         // 3. 이미 좋아요를 누른 회원인지 확인
-        if (isExistLikes(member, course)){
-            throw new IllegalArgumentException("이미 좋아요를 누른 회원입니다.");
-        }
+        if (isExistLikes(member, course)){throw new InvalidCourseLikes();}
 
         // 4. CourseLikes 저장
         courseLikesRepository.save(CourseLikes.of(member, course));
@@ -53,7 +55,7 @@ public class CourseLikesService {
 
         // 3. 이미 좋아요를 누른 회원인지 확인
         if (!isExistLikes(member, course)) {
-            throw new IllegalArgumentException("member가 해당 course의 좋아요룰 누르지 않았습니다");
+            throw new CourseLikesNotFoundException();
         }
 
         // 4. 해당 CourseLikes 찾아서, deletedDate update & Course likeCount 감소
@@ -94,17 +96,11 @@ public class CourseLikesService {
     }
 
     private Member isMember(String memberEmail){
-        return memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+        return memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(MemberNotFoundException::new);
     }
 
     private Course isCourse(Long id){
-        return courseRepository.findById(id).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
-        );
+        return courseRepository.findById(id).orElseThrow(CourseNotFoundException::new);
     }
 
 
