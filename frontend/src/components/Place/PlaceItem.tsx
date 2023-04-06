@@ -8,7 +8,12 @@ import { content } from "@/src/store/reducers/PlaceSlice";
 const PlaceItem = ({ name, firstImage, areaCode, contentId }: content) => {
   return (
     <div className={styles["place-item-container"]}>
-      <Link href={`/place/${contentId}`}>
+      <Link
+        href={{
+          pathname: "/place/[id]",
+          query: { id: contentId },
+        }}
+      >
         <div className={styles["item-info-container"]}>
           <div className={styles["item-image"]}>
             <div className={styles["item-image-box"]}></div>

@@ -8,6 +8,7 @@ import styles from "./userEdit.module.css";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
+import { json } from "stream/consumers";
 
 const UserEdit = () => {
   const id = useSelector((state: RootState) => state.id.id);
@@ -33,15 +34,23 @@ const UserEdit = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = new FormData();
+
+    formData.append("multipartFile", "abc");
+    formData.append(
+      "nickName",
+      new Blob([JSON.stringify(editName)], {
+        type: "application/json",
+      })
+    );
+
     const response = async () => {
-      const editResponse = await axios.put(`/api/myPage/${email}`, {
-        nickName: editName,
-        multipartFile: null,
-        withCredentials: true,
+      const editResponse = await axios.put(`/api/myPage/${email}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
     };
     response();
-    router.push("/mypage");
+    dispatch(setCurrIdx(0));
   };
 
   return (
