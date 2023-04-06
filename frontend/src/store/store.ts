@@ -11,7 +11,9 @@ import CourseSlice from "./reducers/CourseSlice";
 import placeReducer from "./reducers/PlaceSlice";
 import mypageReducer from "./reducers/mypageSlice";
 import pageReducer from "./reducers/pageSlice";
-import searchReducer from "./reducers/searchSlice";
+import searchReducer from "./reducers/SearchSlice";
+import courseBookmarkReducer from "./reducers/CourseBoomarkSlice";
+import placeBookmarkReducer from "./reducers/PlaceBookmarkSlice";
 
 const store = configureStore({
   reducer: {

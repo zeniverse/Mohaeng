@@ -15,6 +15,7 @@ import KakaoMap from "@/src/components/KakaoMap/KakaoMap";
 import { kakaoPlaces } from "@/src/interfaces/Course";
 import CourseOrderList from "@/src/components/CourseDetail/CourseOrderList";
 import { useRouter } from "next/router";
+import { resetFilter } from "@/src/store/reducers/FilterSlice";
 
 export default function index() {
   const router = useRouter();
@@ -47,6 +48,7 @@ export default function index() {
     };
     dispatch(createCourseAction(submitData));
     dispatch(resetFormValue());
+    dispatch(resetFilter());
     // as를 전달하여 페이지가 새로 고쳐지고 데이터가 업데이트 됨.
     router.push("/course", "/course");
   };

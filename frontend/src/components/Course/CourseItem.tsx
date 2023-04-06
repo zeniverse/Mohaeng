@@ -3,7 +3,8 @@ import styles from "./CourseItem.module.css";
 import React, { useState } from "react";
 import Image from "next/image";
 
-import { BiMapAlt, BiShareAlt, BiBookmarkPlus } from "react-icons/bi";
+import { BiMapAlt, BiShareAlt } from "react-icons/bi";
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import RoughMap from "./RoughMap";
 import IsLikeState from "../UI/IsLikeState";
 import Link from "next/link";
@@ -16,6 +17,8 @@ const CourseItem = ({
   likeCount,
   courseDays,
   thumbnailUrl,
+  bookMark,
+  like,
   places,
 }: CourseListProps) => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
@@ -57,7 +60,7 @@ const CourseItem = ({
       </Link>
       <div className={styles["item-nav-container"]}>
         <div className={styles["item-nav"]}>
-          <BiBookmarkPlus />
+          {bookMark ? <BsBookmarkFill /> : <BsBookmark />}
         </div>
         <div className={`${styles["item-nav"]} ${styles.center}`}>
           <BiShareAlt />

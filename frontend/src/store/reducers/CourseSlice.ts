@@ -1,14 +1,6 @@
-import {
-  createCourseApi,
-  getCourseListApi,
-} from "@/src/services/courseService";
+import { getCourseListApi } from "@/src/services/courseService";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  ICourse,
-  ICourseForm,
-  ICourseOriginForm,
-  ICourseSubmitForm,
-} from "../../interfaces/Course.type";
+import { ICourse } from "../../interfaces/Course.type";
 
 interface CourseState {
   error?: string;

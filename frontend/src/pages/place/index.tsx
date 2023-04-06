@@ -37,7 +37,7 @@ export default function Place() {
       };
       response();
     }
-  }, [areacode]);
+  }, [areaCode]);
 
   useEffect(() => {
     console.log("AreaCode is " + areaCode);

@@ -19,6 +19,8 @@ export type CourseListProps = {
   likeCount: number;
   courseDays: string;
   thumbnailUrl: string;
+  bookMark: boolean;
+  like: boolean;
   places: placesName[];
 };
 

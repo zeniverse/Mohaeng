@@ -9,14 +9,14 @@ interface IArea {
 
 interface IFilter {
   area: IArea;
-  sort?: string;
-  keyword?: string;
+  sort?: string | null;
+  keyword?: string | null;
 }
 
 const initialFilterState: IFilter = {
   area: { region: "전체보기", areaCode: "all" },
-  sort: "",
-  keyword: "",
+  sort: null,
+  keyword: null,
 };
 
 export const FilterSlice = createSlice({
@@ -27,10 +27,10 @@ export const FilterSlice = createSlice({
       const { region, areaCode } = action.payload;
       state.area = { region, areaCode };
     },
-    clearAll: (state) => {
+    resetFilter: (state) => {
       state.area = { region: "전체보기", areaCode: "all" };
-      state.sort = "";
-      state.keyword = "";
+      state.sort = null;
+      state.keyword = null;
     },
     setSort: (state, action: PayloadAction<string>) => {
       state.sort = action.payload;
@@ -44,6 +44,6 @@ export const FilterSlice = createSlice({
   },
 });
 
-export const { selectArea, setKeyword, setSort, clearKeyword } =
+export const { selectArea, setKeyword, setSort, clearKeyword, resetFilter } =
   FilterSlice.actions;
 export default FilterSlice.reducer;

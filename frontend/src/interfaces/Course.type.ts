@@ -10,6 +10,8 @@ export interface ICourse {
   content: string;
   likeCount: number;
   places: placesName[];
+  bookMark: boolean;
+  like: boolean;
 }
 export interface placesName {
   name: string;

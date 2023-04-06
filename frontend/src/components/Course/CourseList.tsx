@@ -12,20 +12,21 @@ const CourseList = () => {
   const { courseList, totalElements, totalPages } = useAppSelector(
     (state) => state.course
   );
-  const { area, keyword } = useAppSelector((state) => state.filter);
+  const { area, keyword, sort } = useAppSelector((state) => state.filter);
   const page = useAppSelector((state) => state.page.page);
   const dispatch = useAppDispatch();
-
   const { region } = area;
   useEffect(() => {
     dispatch(setPage(page));
-    // TODO: 들어갈 params 정리하기
-    if (region && region !== "전체보기") {
-      dispatch(getCourseListAction({ region, page, keyword }));
-    } else {
-      dispatch(getCourseListAction({ page, keyword }));
-    }
-  }, [dispatch, region, page, keyword]);
+    dispatch(
+      getCourseListAction({
+        region: region !== "전체보기" ? region : null,
+        page,
+        keyword,
+        sort: sort ? sort : null,
+      })
+    );
+  }, [dispatch, region, page, keyword, sort]);
 
   return (
     <>
@@ -40,6 +41,8 @@ const CourseList = () => {
               likeCount={course.likeCount}
               thumbnailUrl={course.thumbnailUrl}
               courseDays={course.courseDays}
+              bookMark={course.bookMark}
+              like={course.like}
               places={course.places}
             />
           ))}
