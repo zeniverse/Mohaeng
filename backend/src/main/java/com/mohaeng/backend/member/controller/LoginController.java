@@ -26,7 +26,7 @@ public class LoginController {
 
 
     @GetMapping("/oauth/token")
-    public Token getToken(@RequestParam("code") String code) {
+    public Token getToken(@RequestParam("code") String code) throws IOException {
         String accessToken = memberService.getAccessToken(code);// 카카오 AccessToken
         Member member = memberService.saveMember(accessToken);
         Token token = memberService.createToken(member);

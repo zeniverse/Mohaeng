@@ -1,5 +1,6 @@
 package com.mohaeng.backend.member.service;
 
+import com.mohaeng.backend.Image.AmazonS3Service;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.domain.Role;
 import com.mohaeng.backend.member.dto.request.UserInfoChangeRequest;
@@ -10,6 +11,7 @@ import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,14 +23,12 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
-import java.util.UUID;
+import java.util.List;
+
+import static io.micrometer.common.util.StringUtils.isEmpty;
 
 @Service
 @RequiredArgsConstructor
@@ -36,14 +36,17 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final RandomNameService randomNameService;
     private final TokenGenerator tokenGenerator;
-    private final String UPLOAD_PATH = "../../image/";
+
+    private final AmazonS3Service amazonS3Service;
 
     private final String CLIENT_ID = "d7c41513380cc7e5cbbfce173bf86002";
     private final String REDIRECT_URL = "http://localhost:3000/login/kakao";
 
     private final String GET_ACCESS_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
     private final String GET_PROFILE_URL = "https://kapi.kakao.com/v2/user/me";
-    private final String IMG_PATH = "../../../../../../resources/image/";
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
 
     public Member findByEmail(String email) {
@@ -113,15 +116,15 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Member saveMember(String token) {
+    public Member saveMember(String token) throws IOException {
         KakaoUserDto kakaoUser = findProfile(token);
         Member member = memberRepository.findByEmailAndDeletedDateIsNull(kakaoUser.getEmail())
-                .orElse(new Member(kakaoUser.getName(),
-                        kakaoUser.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
-
-        member.changeImageURL(kakaoUser.getProfileImage());
+                .orElse(new Member(kakaoUser.getName(), kakaoUser.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
         member.setOauthAccessToken(token);
         member.setKakaoId(kakaoUser.getKakaoId());
+//        String fullFileName = downloadFile(kakaoUser.getProfileImage());
+        String fullUrl = kakaoUser.getProfileImage();
+        setMemberImageUrl(member, fullUrl);
         memberRepository.save(member);
         return member;
     }
@@ -130,31 +133,12 @@ public class MemberService {
         // URL 객체 생성
         URL fileUrl = new URL(url);
 
-        // 파일 경로 추출
+        // 파일 이름 추출
         String fileName = url.substring(url.lastIndexOf("/") + 1);
-
-        System.out.println("fileName = " + fileName);
-
-        // 로컬 디렉토리 경로 생성
-        File directory = new File(IMG_PATH);
-        if (!directory.exists()) {
-            directory.mkdirs();
-            System.out.println("directory.exists() = " + directory.exists());
-        }
-
-        // 파일 다운로드
-        ReadableByteChannel readableByteChannel = Channels.newChannel(fileUrl.openStream());
-        FileOutputStream fileOutputStream = new FileOutputStream(IMG_PATH + "/" + fileName);
-        FileChannel fileChannel = fileOutputStream.getChannel();
-        long transferredBytes = fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+        String urlName = url.substring(url.lastIndexOf("/"));
 
 
-        // 다운로드 완료 후 리소스 해제
-        fileOutputStream.close();
-        readableByteChannel.close();
-        System.out.println(String.format("File downloaded to %s%s%s. Total bytes transferred: %d",
-                IMG_PATH, File.separator, fileName, transferredBytes));
-        return fileName;
+        return null;
     }
 
     public Token createToken(Member member) {
@@ -166,7 +150,7 @@ public class MemberService {
                 .id(member.getId())
                 .email(member.getEmail())
                 .nickName(member.getNickName())
-                .imgUrl(member.getImageURL() + member.getImageName())
+                .imgUrl(member.getImageURL() + "/" + member.getImageName())
                 .build();
         return memberLoginDto;
     }
@@ -175,15 +159,37 @@ public class MemberService {
     public void changeProfile(Member member, UserInfoChangeRequest userInfoChangeRequest, MultipartFile multipartFile) throws IOException {
         member.changeNickName(userInfoChangeRequest.getNickName());
         if (multipartFile != null) {
-            UUID uuid = UUID.randomUUID();
-            String fileName = uuid + "_" + multipartFile.getOriginalFilename();
-            File profileImg = new File(UPLOAD_PATH, fileName);
-            multipartFile.transferTo(profileImg);
-
-            member.changeImageName(fileName);
-            member.changeImageURL(UPLOAD_PATH +"/"+fileName);
+            amazonS3Service.deleteFile(member.getImageName());
+            String fullFileName = amazonS3Service.uploadFile(List.of(multipartFile)).get(0);
+            setMemberImageUrl(member, fullFileName);
         }
 
     }
+
+    private void setMemberImageUrl(Member member, String fullFileName) {
+        String fileName = fullFileName.substring(fullFileName.lastIndexOf("/") + 1);
+        String url = fullFileName.substring(0, fullFileName.lastIndexOf("/"));
+        member.updateProfileImage(fileName, url);
+    }
+
+//    @Transactional
+//    public List<String> changeProfile2(Member member, UserInfoChangeRequest req, List<MultipartFile> multipartFiles) throws IOException {
+//        member.changeNickName(req.getNickName());
+//
+//        List<String> strings = new ArrayList<>();
+//        if (multipartFiles != null) {
+//            if (!isEmpty(member.getImageName())){
+//                // 저장된 url에서 파일 이름 뽑아내기
+//                String name = member.getImageURL().substring(member.getImageURL().lastIndexOf("/") + 1);
+//                amazonS3Service.deleteFile(name);
+//                strings = amazonS3Service.uploadFile(multipartFiles);
+//
+//                String newName = strings.get(0).substring(strings.get(0).lastIndexOf("/") + 1);
+//                member.updateProfileImage(newName, strings.get(0));
+//            }
+//        }
+//
+//        return strings;
+//    }
 
 }
