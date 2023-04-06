@@ -1,41 +1,59 @@
 import styles from "./CourseList.module.css";
 
 import React, { useEffect, useState } from "react";
-import { Course } from "@/src/interfaces/Course";
 import CourseItem from "./CourseItem";
+import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
+import { getCourseListAction } from "@/src/store/reducers/CourseSlice";
+import { setPage } from "@/src/store/reducers/pageSlice";
+import Pagebar from "../Pagenation/Pagebar";
+import ListContainer from "../UI/ListContainer";
 
 const CourseList = () => {
-  const [courseData, setCoueseData] = useState<Course[]>([]);
-
+  const { courseList, totalElements, totalPages } = useAppSelector(
+    (state) => state.course
+  );
+  const { area, keyword, sort } = useAppSelector((state) => state.filter);
+  const page = useAppSelector((state) => state.page.page);
+  const dispatch = useAppDispatch();
+  const { region } = area;
   useEffect(() => {
-    async function fetchData() {
-      const res = await fetch("/api/course");
-      const data = await res.json();
-      setCoueseData(data);
-      // const courseRes = await fetch(
-      //   ${process.env.NEXT_PUBLIC_BASE_URL}/api/course
-      // );
-      // const responseData = await courseRes.json();
-      // const courseList = await responseData.data.courseList;
-      // setCoueseData(courseList);
-    }
-    fetchData();
-  }, []);
+    dispatch(setPage(page));
+    dispatch(
+      getCourseListAction({
+        region: region !== "전체보기" ? region : null,
+        page,
+        keyword,
+        sort: sort ? sort : null,
+      })
+    );
+  }, [dispatch, region, page, keyword, sort]);
+
   return (
-    <div className={styles["course-list-container"]}>
-      {courseData?.map((course) => (
-        <CourseItem
-          key={course.id}
-          id={course.id}
-          courseTitle={course.title}
-          courseDesc={course.content}
-          courseLike={course.likeCount}
-          thumbnailUrl={course.thumbnailUrl}
-          courseDays={course.courseDays}
-          courseList={course.places}
-        />
-      ))}
-    </div>
+    <>
+      {courseList.length > 0 ? (
+        <ListContainer>
+          {courseList.map((course) => (
+            <CourseItem
+              key={course.id}
+              id={course.id.toString()}
+              title={course.title}
+              content={course.content}
+              likeCount={course.likeCount}
+              thumbnailUrl={course.thumbnailUrl}
+              courseDays={course.courseDays}
+              bookMark={course.bookMark}
+              like={course.like}
+              places={course.places}
+            />
+          ))}
+        </ListContainer>
+      ) : (
+        <p>데이터가 존재하지 않습니다. 코스를 등록해주세요.</p>
+      )}
+      {totalPages !== 0 && totalPages ? (
+        <Pagebar totalPage={totalPages} />
+      ) : null}
+    </>
   );
 };
 

@@ -19,7 +19,6 @@ const PlaceItem = ({
   const accessToken = cookie.load("accessToken");
 
   const dispatch = useDispatch();
-  const areacode = useSelector((state: RootState) => state.filter.areaCode);
   const page = useSelector((state: RootState) => state.page.page);
 
   const addBookmark = () => {
@@ -36,7 +35,7 @@ const PlaceItem = ({
       await axios
         .get(`/places`, {
           params: {
-            areaCode: areacode,
+            areaCode: areaCode,
             page: page,
           },
           withCredentials: true,
@@ -58,7 +57,7 @@ const PlaceItem = ({
       await axios
         .get(`/places`, {
           params: {
-            areaCode: areacode,
+            areaCode: areaCode,
             page: page,
           },
           withCredentials: true,

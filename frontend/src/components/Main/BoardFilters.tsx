@@ -41,7 +41,6 @@ const BoardFilters = () => {
   // >();
 
   // TODO: 컴포넌트화
-  // TODO: 컴포넌트화
   const [siguMultiValue, setSiGuMultiValue] = useState<SelectOptions[]>([]);
   const [ageMultiValue, setAgeMultiValue] = useState<SelectOptions[]>([]);
 

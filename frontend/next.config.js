@@ -2,6 +2,7 @@ const { type } = require("os");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  fallback: true,
   images: {
     domains: [
       "tong.visitkorea.or.kr",
@@ -24,10 +25,6 @@ const nextConfig = {
       {
         source: "/api/course/placeSearch",
         destination: "https://localhost:8080/api/course/placeSearch",
-      },
-      {
-        source: "/api/course",
-        destination: "https://localhost:8080/api/course",
       },
     ];
   },

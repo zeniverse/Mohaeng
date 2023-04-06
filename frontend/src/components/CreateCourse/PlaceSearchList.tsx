@@ -65,8 +65,6 @@ const PlaceSearchList = ({ places, isLoading, debouncedSearch }: any) => {
     const lastItemIndex = items?.length - 1;
     const lastid = items[lastItemIndex]?.placeId;
     const lastRating = items[lastItemIndex]?.rating;
-    console.log(page);
-    console.log("lastItemindex" + lastItemIndex);
     async function fetchItems() {
       try {
         const placeSearchRes = await fetch(
@@ -74,7 +72,6 @@ const PlaceSearchList = ({ places, isLoading, debouncedSearch }: any) => {
         );
         if (!placeSearchRes.ok) return;
         const placeSearchResult = await placeSearchRes.json();
-        console.log(placeSearchResult);
         setItems((prevItems) => [
           ...prevItems,
           ...placeSearchResult?.data.places,
@@ -91,7 +88,6 @@ const PlaceSearchList = ({ places, isLoading, debouncedSearch }: any) => {
 
   const itemClickHandler = (place: any) => {
     dispatch(addPlaceObject(place));
-    console.log(place);
   };
 
   return (
