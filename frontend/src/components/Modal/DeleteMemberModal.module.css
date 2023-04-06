@@ -1,13 +1,13 @@
 .ContentWrapper {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    width: 30rem;
-    height: 33rem;
-    background: #fff;
-    border-radius: 12px;
-    padding: 4rem;
-    z-index: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 30rem;
+  height: 33rem;
+  background: #fff;
+  border-radius: 12px;
+  padding: 4rem;
+  z-index: 1;
 }
 
 .ButtonWrapper {
@@ -15,4 +15,12 @@
   gap: 1rem;
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+.TextWrapper {
+  text-align: center;
+  margin-bottom: 1rem;  
+}
+.h3 {
+  text-align: center;
 }

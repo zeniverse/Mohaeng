@@ -19,6 +19,7 @@ const PlaceList = () => {
           firstImage={place.firstImage}
           areaCode={place.areaCode}
           contentId={place.contentId}
+          isBookmark={place.isBookmark}
         />
       ))}
     </div>

@@ -3,12 +3,23 @@ import Button from "@/src/components/Button/Button";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/src/store/store";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./userEdit.module.css";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 import { json } from "stream/consumers";
+import cookie from "react-cookies";
+import {
+  setEmail,
+  setId,
+  setNickname,
+  setProfileUrl,
+} from "@/src/store/reducers/loginTokenSlice";
+
+interface Uploader {
+  nickName: string;
+}
 
 const UserEdit = () => {
   const id = useSelector((state: RootState) => state.id.id);
@@ -17,6 +28,7 @@ const UserEdit = () => {
   const imageUrl = useSelector(
     (state: RootState) => state.profileUrl.profileUrl
   );
+  const accessToken = cookie.load("accessToken");
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -36,21 +48,41 @@ const UserEdit = () => {
     e.preventDefault();
     const formData = new FormData();
 
-    formData.append("multipartFile", "abc");
+    formData.append("multipartFile", "git.png");
+    const nickName: Uploader = { nickName: editName };
     formData.append(
       "nickName",
-      new Blob([JSON.stringify(editName)], {
+      new Blob([JSON.stringify(nickName)], {
         type: "application/json",
       })
     );
 
     const response = async () => {
-      const editResponse = await axios.put(`/api/myPage/${email}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      if (accessToken) {
+        const editResponse = await axios.put(`/api/myPage/${email}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Access-Token": accessToken,
+          },
+        });
+      }
     };
-    response();
-    dispatch(setCurrIdx(0));
+    response().then(async () => {
+      if (accessToken) {
+        const userRes = await axios.get(`/loginInfo`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          withCredentials: true,
+        });
+        const { id, nickName, email, profileUrl } = userRes.data.data;
+        dispatch(setId(id));
+        dispatch(setEmail(email));
+        dispatch(setNickname(nickName));
+        dispatch(setProfileUrl(profileUrl));
+      }
+    });
+    dispatch(setCurrIdx(cancelEdit));
   };
 
   return (

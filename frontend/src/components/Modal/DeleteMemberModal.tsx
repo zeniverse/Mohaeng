@@ -48,10 +48,13 @@ export default function DeleteMemberModal() {
   return (
     <>
       <div className={styles["ContentWrapper"]}>
-        <h3>
-          정말 탈퇴하시겠어요? 탈퇴시 회원님이 작성하신 여행 일정과 북마크해둔
-          장소들이 영구 삭제됩니다!
-        </h3>
+        <div className={styles["TextWrapper"]}>
+          <h2>회원 탈퇴</h2>
+          <h3>
+            정말 탈퇴하시겠어요? 탈퇴시 회원님이 작성하신 여행 일정과 북마크해둔
+            장소들이 영구 삭제됩니다!
+          </h3>
+        </div>
         <div className={styles["ButtonWrapper"]}>
           <Button type="click" text="회원탈퇴" onClick={() => deleteUser()} />
           <Button type="click" text="취소" onClick={() => handleModalClose()} />

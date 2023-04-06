@@ -11,6 +11,8 @@ import placeReducer from "./reducers/PlaceSlice";
 import mypageReducer from "./reducers/mypageSlice";
 import pageReducer from "./reducers/pageSlice";
 import searchReducer from "./reducers/searchSlice";
+import courseBookmarkReducer from "./reducers/CourseBoomarkSlice";
+import placeBookmarkReducer from "./reducers/PlaceBookmarkSlice";
 
 const store = configureStore({
   reducer: {
@@ -26,6 +28,8 @@ const store = configureStore({
     mypage: mypageReducer,
     page: pageReducer,
     search: searchReducer,
+    courseBookmark: courseBookmarkReducer,
+    placeBookmark: placeBookmarkReducer,
   },
 });
 
