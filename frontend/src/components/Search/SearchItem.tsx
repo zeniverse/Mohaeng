@@ -56,8 +56,8 @@ export default function SearchItem({
           className={styles.img}
           src={firstImage}
           alt={name}
-          width={290}
-          height={210}
+          width={288}
+          height={200}
           priority
         />
       </button>

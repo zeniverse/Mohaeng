@@ -25,7 +25,7 @@ export default function SearchCourse(): JSX.Element {
   const [searchResult, setSearchResult] = useState<CourseList[]>([]);
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
-    (state: RootState) => state.search.totalPages
+    (state: RootState) => state.searchCourse.totalPages
   );
 
   useEffect(() => {
@@ -33,8 +33,8 @@ export default function SearchCourse(): JSX.Element {
       try {
         const res = await axios.get(`/api/course`, {
           params: {
-            keyword: keyword,
             page: page,
+            keyword: keyword,
           },
           withCredentials: true,
         });
@@ -63,13 +63,15 @@ export default function SearchCourse(): JSX.Element {
             searchResult?.map((course) => (
               <CourseItem
                 key={course.id}
-                id={course.id}
-                courseTitle={course.title}
-                courseDesc={course.content}
-                courseLike={course.likeCount}
+                id={course.id.toString()}
+                title={course.title}
+                content={course.content}
+                likeCount={course.likeCount}
                 thumbnailUrl={course.thumbnailUrl}
                 courseDays={course.courseDays}
-                courseList={course.places}
+                bookMark={course.bookMark}
+                like={course.like}
+                places={course.places}
               />
             ))
           ) : (

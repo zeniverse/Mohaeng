@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import SearchItem from "./SearchItem";
 import Pagebar from "../Pagenation/Pagebar";
-import { setSearchPlace } from "@/src/store/reducers/SearchSlice";
+import { setSearchPlace } from "@/src/store/reducers/SearchPlaceSlice";
 
 export default function SearchPlace(): JSX.Element {
   const [searchResult, setSearchResult] = useState<Keyword[]>([]);
@@ -18,7 +18,7 @@ export default function SearchPlace(): JSX.Element {
   const dispatch = useDispatch();
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
-    (state: RootState) => state.search.totalPages
+    (state: RootState) => state.searchPlace.totalPages
   );
 
   useEffect(() => {
@@ -34,6 +34,7 @@ export default function SearchPlace(): JSX.Element {
         if (res.data.data.content !== []) {
           dispatch(setSearchPlace(res.data.data));
           const { content } = res.data.data;
+          console.log(content);
           setSearchResult(content);
         } else {
           console.log(res.data.data.content);
