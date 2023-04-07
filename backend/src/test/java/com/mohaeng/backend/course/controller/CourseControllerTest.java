@@ -160,16 +160,15 @@ class CourseControllerTest {
     @WithMockUser()
     public void getCourse() throws Exception {
         //Given
-        Long courseId = 1L;
-        given(courseService.getCourse(anyLong()))
-                .willReturn(CourseRes.from(createTestCourse(), List.of(createCourseInPlaceDTO())));
+        given(courseService.getCourse(anyLong(), anyString()))
+                .willReturn(CourseRes.from(createTestCourse(), List.of(createCourseInPlaceDTO()), true, false));
 
         //When & Then
-        mockMvc.perform(get("/api/course/" + courseId))
+        mockMvc.perform(get("/api/course/1"))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        verify(courseService).getCourse(eq(courseId));
+        verify(courseService).getCourse(any(), any());
     }
 
     @Test
