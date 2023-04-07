@@ -1,5 +1,6 @@
 package com.mohaeng.backend.place.controller;
 
+import com.mohaeng.backend.Image.AmazonS3Service;
 import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.place.dto.request.CreateReviewRequest;
@@ -24,6 +25,8 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final TokenGenerator tokenGenerator;
 
+    private final AmazonS3Service amazonS3Service;
+
     @GetMapping("/review/{placeId}")
     public ResponseEntity getPlaceReview(@PathVariable Long placeId) {
         List<FindAllReviewResponse> data = reviewService.getAllReview(placeId);
@@ -33,9 +36,10 @@ public class ReviewController {
     @PostMapping("/review/{placeId}")
     public ResponseEntity addPlaceReview(@PathVariable Long placeId, HttpServletRequest request,
                                          @RequestPart(value = "review") @Valid CreateReviewRequest createReviewRequest,
-                                         @RequestPart(value = "multipartFile", required = false) MultipartFile multipartFile) {
+                                         @RequestPart(value = "multipartFile", required = false) List<MultipartFile> multipartFileList) {
         String email = getEmail(request);
-        reviewService.createReview(email, placeId, createReviewRequest, multipartFile);
+        List<String> fileNameList = amazonS3Service.uploadFile(multipartFileList);
+        reviewService.createReview(email, placeId, createReviewRequest, fileNameList);
         return ResponseEntity.ok(BaseResponse.success("ok", ""));
     }
 
