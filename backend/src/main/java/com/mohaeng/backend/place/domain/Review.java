@@ -36,4 +36,7 @@ public class Review extends BaseTimeEntity {
     @OneToMany(mappedBy = "review")
     private List<ReviewImage> reviewImageList = new ArrayList<>();
 
+    public void addReviewImage(ReviewImage reviewImage) {
+        this.reviewImageList.add(reviewImage);
+    }
 }
