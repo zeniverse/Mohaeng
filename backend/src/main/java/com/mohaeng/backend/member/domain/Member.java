@@ -109,5 +109,9 @@ public class Member extends BaseTimeEntity {
         this.imageName = imageName;
         this.imageURL = imageURL;
     }
+
+    public void addReview(Review review) {
+        this.reviewList.add(review);
+    }
 }
 

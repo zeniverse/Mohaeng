@@ -4,14 +4,15 @@ import tokenReducer from "./reducers/loginTokenSlice";
 import nickNameReducer from "./reducers/loginTokenSlice";
 import emailReducer from "./reducers/loginTokenSlice";
 import idReducer from "./reducers/loginTokenSlice";
-import profileUrlReducer from "./reducers/loginTokenSlice";
+import imgUrlReducer from "./reducers/loginTokenSlice";
 import CourseFormSlice from "./reducers/CourseFormSlice";
 import FilterSlice from "./reducers/FilterSlice";
 import CourseSlice from "./reducers/CourseSlice";
 import placeReducer from "./reducers/PlaceSlice";
 import mypageReducer from "./reducers/mypageSlice";
 import pageReducer from "./reducers/pageSlice";
-import searchReducer from "./reducers/SearchSlice";
+import searchPlaceReducer from "./reducers/searchPlaceSlice";
+import searchCourseReducer from "./reducers/searchCourseSlice";
 import courseBookmarkReducer from "./reducers/CourseBoomarkSlice";
 import placeBookmarkReducer from "./reducers/PlaceBookmarkSlice";
 
@@ -22,14 +23,15 @@ const store = configureStore({
     nickName: nickNameReducer,
     email: emailReducer,
     id: idReducer,
-    profileUrl: profileUrlReducer,
+    imgUrl: imgUrlReducer,
     course: CourseSlice,
     courseForm: CourseFormSlice,
     filter: FilterSlice,
     place: placeReducer,
     mypage: mypageReducer,
     page: pageReducer,
-    search: searchReducer,
+    searchPlace: searchPlaceReducer,
+    searchCourse: searchCourseReducer,
     courseBookmark: courseBookmarkReducer,
     placeBookmark: placeBookmarkReducer,
   },

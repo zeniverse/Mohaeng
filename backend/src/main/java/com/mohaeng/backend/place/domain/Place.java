@@ -3,15 +3,15 @@ package com.mohaeng.backend.place.domain;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mohaeng.backend.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Table;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -21,6 +21,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Table(appliesTo = "place")
 @RequiredArgsConstructor
 @ToString
+@AllArgsConstructor
 public class Place {
 
     @Id
@@ -53,6 +54,9 @@ public class Place {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "place")
+    private List<Review> reviewList = new ArrayList<>();
 
     public Place(String name, String address, String areaCode, String sigunguCode, String contentId, String firstImage, String firstImage2, String mapX, String mapY) {
         this.name = name;
@@ -114,5 +118,9 @@ public class Place {
         this.overview = overview;
         this.rating = rating;
         this.member = member;
+    }
+
+    public void addReview(Review review) {
+        this.getReviewList().add(review);
     }
 }

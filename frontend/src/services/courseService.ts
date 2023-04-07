@@ -4,7 +4,6 @@ import ApiConfig from "./ApiConfig";
 import cookie from "react-cookies";
 
 export const getCourseListApi = async (queryParams = {}) => {
-  console.log(queryParams);
   return await axios.get(ApiConfig.course, { params: queryParams });
 };
 
@@ -21,14 +20,18 @@ export const toggleBookmarkApi = async (
   courseId: number,
   method: "POST" | "DELETE"
 ) => {
-  const accessToken = await cookie.load("accessToken");
-  const config = {
-    method: method,
-    headers: {
-      "Access-Token": accessToken,
-      withCredentials: true,
-    },
-  };
-  const response = await axios(`${ApiConfig.Cbookmark}/${courseId}`, config);
-  return response.data;
+  try {
+    const accessToken = await cookie.load("accessToken");
+    const config = {
+      method: method,
+      headers: {
+        "Access-Token": accessToken,
+        withCredentials: true,
+      },
+    };
+    const response = await axios(`${ApiConfig.Cbookmark}/${courseId}`, config);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
 };

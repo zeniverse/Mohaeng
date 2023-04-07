@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
@@ -9,8 +8,8 @@ import {
   setEmail,
   setId,
   setNickname,
-  setProfileUrl,
   setToken,
+  setImgUrl,
 } from "@/src/store/reducers/loginTokenSlice";
 import { AppDispatch, RootState } from "@/src/store/store";
 import axios from "axios";
@@ -26,6 +25,7 @@ type User = {
   id: number;
   nickName: string;
   email: string;
+  imgUrl: string;
 };
 
 type Props = {};
@@ -37,9 +37,7 @@ function Header({}: Props) {
   const router = useRouter();
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
-  const profileUrl = useSelector(
-    (state: RootState) => state.profileUrl.profileUrl
-  );
+  const imgUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
 
   useEffect(() => {
     const response = async () => {
@@ -51,11 +49,11 @@ function Header({}: Props) {
           },
           withCredentials: true,
         });
-        const { id, nickName, email, profileUrl } = userRes.data.data;
+        const { id, nickName, email, imgUrl } = userRes.data.data;
         dispatch(setId(id));
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
-        dispatch(setProfileUrl(profileUrl));
+        dispatch(setImgUrl(imgUrl));
         // appDispatch(getCourseBookmark(accessToken));
         appDispatch(getPlaceBookmark(accessToken));
         setUser(nickName);
@@ -78,7 +76,7 @@ function Header({}: Props) {
     dispatch(setToken(""));
     dispatch(setNickname(""));
     dispatch(setEmail(""));
-    dispatch(setProfileUrl(""));
+    dispatch(setImgUrl(""));
     dispatch(setId(0));
     setUser([]);
     router.replace("/");
@@ -124,7 +122,7 @@ function Header({}: Props) {
           <>
             <Image
               className={styles["kakao-profile-img"]}
-              src={profileUrl}
+              src={imgUrl}
               alt="카카오프로필"
               width={40}
               height={40}

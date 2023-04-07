@@ -22,6 +22,7 @@ export const getCourseListAction = createAsyncThunk(
   async (queryParams: any, { rejectWithValue }) => {
     try {
       const response = await getCourseListApi(queryParams);
+      console.log(response);
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -31,14 +32,19 @@ export const getCourseListAction = createAsyncThunk(
 export const toggleBookmarkAction = createAsyncThunk(
   "course/toggleBookmark",
   async (courseId: number, { getState }) => {
-    const courseState = getState() as RootState;
-    const isBookmarked = courseState.course.courseList[courseId].isBookmarked;
-    if (isBookmarked) {
+    const courseState = (await getState()) as RootState;
+    const courseList = courseState.course.courseList;
+    const index = courseList.findIndex((course) => course.id === courseId);
+    const course = courseList[index];
+    const isBookMarked = course ? course.isBookMarked : false;
+    if (isBookMarked) {
       await toggleBookmarkApi(courseId, "DELETE");
+      console.log("북마크 제거");
     } else {
       await toggleBookmarkApi(courseId, "POST");
+      console.log("북마크 추가");
     }
-    return courseId;
+    return index;
   }
 );
 
@@ -57,9 +63,9 @@ export const CourseSlice = createSlice({
     builder.addCase(getCourseListAction.rejected, (state) => {});
     builder.addCase(toggleBookmarkAction.pending, (state) => {});
     builder.addCase(toggleBookmarkAction.fulfilled, (state, action) => {
-      const courseId = action.payload;
-      state.courseList[courseId].isBookmarked =
-        !state.courseList[courseId].isBookmarked;
+      const index = action.payload;
+      state.courseList[index].isBookMarked =
+        !state.courseList[index].isBookMarked;
     });
     builder.addCase(toggleBookmarkAction.rejected, (state) => {});
   },

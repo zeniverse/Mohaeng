@@ -10,7 +10,7 @@ export interface ICourse {
   content: string;
   likeCount: number;
   places: placesName[];
-  isBookmarked: boolean;
+  isBookMarked: boolean;
   isLiked: boolean;
 }
 export interface placesName {
