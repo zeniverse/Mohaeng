@@ -11,7 +11,7 @@ import { setPage } from "@/src/store/reducers/pageSlice";
 
 export default function Place() {
   const dispatch = useDispatch();
-  const areacode = useSelector((state: RootState) => state.filter.areaCode);
+  const { areaCode } = useSelector((state: RootState) => state.filter.area);
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
     (state: RootState) => state.place.totalPages
@@ -22,13 +22,13 @@ export default function Place() {
     if (page !== 1) {
       console.log("페이지 바뀜");
       dispatch(setPage(1));
-      console.log("Area Code Is " + areacode);
+      console.log("Area Code Is " + areaCode);
     } else {
       const response = async () => {
         const placeResponse = await axios
           .get(`/places`, {
             params: {
-              areaCode: areacode,
+              areaCode: areaCode,
               page: page,
             },
             withCredentials: true,
@@ -37,15 +37,15 @@ export default function Place() {
       };
       response();
     }
-  }, [areacode]);
+  }, [areaCode]);
 
   useEffect(() => {
-    console.log("AreaCode is " + areacode);
+    console.log("AreaCode is " + areaCode);
     const response = async () => {
       const placeResponse = await axios
         .get(`/places`, {
           params: {
-            areaCode: areacode,
+            areaCode: areaCode,
             page: page,
           },
           withCredentials: true,

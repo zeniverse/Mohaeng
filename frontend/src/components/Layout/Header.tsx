@@ -17,7 +17,7 @@ import axios from "axios";
 import cookie from "react-cookies";
 import SearchBar from "../Search/SearchBar";
 import Image from "next/image";
-import { selectArea } from "@/src/store/reducers/FilterSlice";
+import { resetFilter, selectArea } from "@/src/store/reducers/FilterSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
@@ -86,7 +86,7 @@ function Header({}: Props) {
   };
 
   const ResetStatus = () => {
-    dispatch(selectArea({ region: "전체보기", areaCode: "all" }));
+    dispatch(resetFilter());
   };
 
   return (
@@ -100,8 +100,12 @@ function Header({}: Props) {
           <SearchBar />
 
           <div className={styles.menu}>
-            <Link href="/place">여행지</Link>
-            <Link href="/course">코스</Link>
+            <Link href="/place" onClick={ResetStatus}>
+              여행지
+            </Link>
+            <Link href="/course" onClick={ResetStatus}>
+              코스
+            </Link>
           </div>
         </div>
       </nav>

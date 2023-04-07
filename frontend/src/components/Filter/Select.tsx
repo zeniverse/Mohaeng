@@ -47,7 +47,6 @@ export function Select({ multiple, value, onChange, options }: SelectProps) {
     return multiple ? value.includes(option) : option === value;
   };
 
-  // TODO: 변경 필요(사전에 text 받아옴.)
   const SelectComment = () => {
     let printText;
     if (multiple) {

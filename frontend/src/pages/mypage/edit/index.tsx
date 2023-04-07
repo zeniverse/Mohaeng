@@ -26,7 +26,6 @@ const MyPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("A");
     const response = async () => {
       const editResponse = await axios
         .put(`/api/myPage/${email}`, {

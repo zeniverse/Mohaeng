@@ -1,7 +1,7 @@
-.course-list-container {
+.list-container {
   width: 100%;
   display: grid;
-  padding: 2.4rem 2.4rem;
+  padding: 2rem 2rem;
   grid-template-columns: repeat(4, 1fr);
   row-gap: 2.8rem;
   column-gap: 2.4rem;
