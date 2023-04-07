@@ -40,8 +40,8 @@ public class CourseBookmarkController {
     @DeleteMapping("/{courseId}")
     public ResponseEntity cancelCourseBookmark(@PathVariable Long courseId, HttpServletRequest request){
         String memberEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
-        CourseBookmarkRes courseLikesRes = courseBookmarkService.cancelBookmark(courseId, memberEmail);
-        return ResponseEntity.ok().body(BaseResponse.success("OK", courseLikesRes));
+        courseBookmarkService.cancelBookmark(courseId, memberEmail);
+        return ResponseEntity.ok().body(BaseResponse.success("OK"));
     }
 
 }
