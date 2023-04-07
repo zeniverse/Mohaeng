@@ -38,12 +38,13 @@ export default function CreateReview() {
   const [imgFile, setImgFile] = useState([]); // 전송할 이미지파일
   let rating = clicked.filter(Boolean).length;
 
-  const handleChangeImage = (e) => {
-    if (e.target.files === null) return;
-    if (e.target.files[0]) {
-      setImgFile(e.target.files[0]);
-    }
-  };
+  // const handleChangeImage = (e) => {
+  //   if (e.target.files === null) return;
+  //   if (e.target.files[0]) {
+  //     setImgFile(e.target.files[0]);
+  //   }
+  // };
+
   // *비동기적으로 받아오는 별점 개수 업데이트 확인
   useEffect(() => {
     console.log(rating);
@@ -206,13 +207,13 @@ export default function CreateReview() {
               id="inputFile"
               multiple
               className={styles.imageForm}
-              onChange={handleChangeImage}
+              onChange={handleAddImages}
             />
             <span className={styles.inputFileDesc}>
               * 이미지는 최대 3장까지 첨부할 수 있습니다.
             </span>
             <div className={styles.imgContainer}>
-              {/* {showImages.map((image, id) => (
+              {showImages.map((image, id) => (
                 <div className={styles.imgBox} key={id}>
                   <Image
                     src={image}
@@ -225,7 +226,7 @@ export default function CreateReview() {
                     onClick={() => handleDeleteImage(id)}
                   />
                 </div>
-              ))} */}
+              ))}
             </div>
             <div className={styles.btnGroup}>
               <button className={styles.postBtn} onClick={submitReview}>
