@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import SearchItem from "./SearchItem";
 import Pagebar from "../Pagenation/Pagebar";
-import { setSearchPlace } from "@/src/store/reducers/SearchPlaceSlice";
+import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
 
 export default function SearchPlace(): JSX.Element {
   const [searchResult, setSearchResult] = useState<Keyword[]>([]);
@@ -35,6 +35,7 @@ export default function SearchPlace(): JSX.Element {
           dispatch(setSearchPlace(res.data.data));
           const { content } = res.data.data;
           setSearchResult(content);
+          console.log(content);
         } else {
           console.log(res.data);
         }
@@ -68,6 +69,7 @@ export default function SearchPlace(): JSX.Element {
                 contentId={place.contentId}
                 rating={0}
                 review={place.review}
+                isBookmark={place.isBookmark}
               />
             ))
           ) : (

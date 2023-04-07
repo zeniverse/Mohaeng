@@ -3,10 +3,13 @@ import { FaRegThumbsUp } from "react-icons/fa";
 import Image from "next/image";
 import user from "../../../public/assets/user.png";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/src/store/store";
+import { useRouter } from "next/router";
 
 // 별점, 아이디, 작성일, 리뷰내용, 이미지
 // 유저일 경우 수정 삭제 버튼
-// 좋아요 버튼 클릭 시 +1 -1 값 저장 (리듀서 생성)
 
 type ReviewProps = {
   memberName: string;
@@ -21,6 +24,13 @@ export default function ReviewItem({
   content,
   imgUrl,
 }: ReviewProps) {
+  const router = useRouter();
+  const [user, setUser] = useState();
+  const currentUser = useSelector(
+    (state: RootState) => state.nickName.nickName
+  );
+  // setUser(currentUser);
+
   return (
     <article className={styles.reviewBox}>
       <div className={styles.reviewer}>
@@ -37,10 +47,14 @@ export default function ReviewItem({
           </div>
           <p className={styles.review}>{memberName}</p>
         </div>
-        <div className={styles.btnGroup}>
-          <button className={styles.btn}>수정</button>
-          <button className={styles.btn}>삭제</button>
-        </div>
+        {currentUser === memberName ? (
+          <div className={styles.btnGroup}>
+            <button className={styles.btn}>수정</button>
+            <button className={styles.btn}>삭제</button>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
       <div className={styles.reviewContent}>
         <p className={styles.reviewTxt}>{content}</p>

@@ -5,16 +5,15 @@ import axios from "axios";
 import Link from "next/link";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import ReviewItem from "./ReviewItem";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/src/store/store";
+import { setReview } from "@/src/store/reducers/reviewSlice";
+import Pagebar from "../Pagenation/Pagebar";
 
 // 해당 여행지 총 리뷰 건수, 별점 데이터 가져오기
-// 정렬 필터 (추천순)
+// 정렬 필터 (별점 순)
 // 리뷰 전체 조회
-// interface Review {
-//   memberName: string;
-//   rating: number;
-//   content: string;
-//   imgUrl: [];
-// }
+// 이미지 개수에 따라 배열 돌리기
 
 interface Review {
   memberName: string;
@@ -31,6 +30,11 @@ export default function Review() {
   const { id, name } = router.query;
   const [reviewData, setReviewData] = useState<Review[]>([]);
   const [selectedValue, setSelectedValue] = useState("default");
+  const dispatch = useDispatch();
+  const page = useSelector((state: RootState) => state.page.page);
+  const totalPages: number = useSelector(
+    (state: RootState) => state.searchPlace.totalPages
+  );
 
   const handleChange = (e: { target: { value: SetStateAction<string> } }) => {
     setSelectedValue(e.target.value);
@@ -40,14 +44,15 @@ export default function Review() {
     const fetchReview = async () => {
       try {
         const res = await axios.get(`/api/review/${id}`);
-        const { data } = res.data.data;
-        setReviewData(data);
+        dispatch(setReview(res.data.data));
+        const { reviews } = res.data.data;
+        setReviewData(reviews);
       } catch (err) {
         console.error(err);
       }
     };
     fetchReview();
-  }, [id]);
+  }, [id, page]);
 
   return (
     <>
@@ -105,6 +110,7 @@ export default function Review() {
           </div>
         </main>
       </section>
+      <Pagebar totalPage={totalPages} />
     </>
   );
 }

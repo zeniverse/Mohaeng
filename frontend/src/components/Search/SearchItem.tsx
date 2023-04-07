@@ -13,6 +13,7 @@ export default function SearchItem({
   name,
   firstImage,
   contentId,
+  isBookmark,
   rating,
   review,
 }: KeywordProps) {
