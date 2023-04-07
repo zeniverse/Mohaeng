@@ -20,6 +20,7 @@ import { resetFilter, selectArea } from "@/src/store/reducers/FilterSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
+import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 
 type User = {
   id: number;
@@ -85,6 +86,13 @@ function Header({}: Props) {
 
   const ResetStatus = () => {
     dispatch(resetFilter());
+
+    const currComponent: myPageState = {
+      currIdx: 0,
+      label: "회원정보",
+    };
+
+    dispatch(setCurrIdx(currComponent));
   };
 
   return (
@@ -107,6 +115,7 @@ function Header({}: Props) {
           </div>
         </div>
       </nav>
+
       <div className={styles.btn}>
         {!nickName ? (
           <>
@@ -127,6 +136,7 @@ function Header({}: Props) {
               width={40}
               height={40}
             />
+
             <Link href="/mypage">{nickName}님</Link>
             <button
               id="login-btn"

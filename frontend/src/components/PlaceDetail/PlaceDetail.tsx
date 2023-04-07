@@ -63,12 +63,16 @@ export default function PlaceDetail() {
   // 북마크
   const handleBookmarkClick = async () => {
     try {
-      const res = await axios.post(`/api/place/bookmark/${id}`, {
-        headers: {
-          "Access-Token": `${accessToken}`,
-          withCredentials: true,
-        },
-      });
+      const res = await axios.post(
+        `/api/place/bookmark/${id}`,
+        {},
+        {
+          headers: {
+            "Access-Token": `${accessToken}`,
+            withCredentials: true,
+          },
+        }
+      );
       console.log(res.data);
       setBookMarked(!bookMarked);
     } catch (error) {
@@ -92,6 +96,19 @@ export default function PlaceDetail() {
       }
     };
     fetchData();
+
+    // const getBookmark = async () => {
+    //   await axios
+    //     .get(`/api/place/bookmark/${id}`, {
+    //       headers: {
+    //         "Access-Token": accessToken,
+    //       },
+    //       withCredentials: true,
+    //     })
+    //     .then((res) => setBookMarked(res.data));
+    // };
+
+    // getBookmark();
   }, [id, dispatch]);
 
   return (

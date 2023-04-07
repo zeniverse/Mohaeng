@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { setPlace } from "@/src/store/reducers/PlaceSlice";
 import { setPage } from "@/src/store/reducers/pageSlice";
+import cookie from "react-cookies";
 
 export default function Place() {
   const dispatch = useDispatch();
@@ -16,34 +17,35 @@ export default function Place() {
   const totalPages: number = useSelector(
     (state: RootState) => state.place.totalPages
   );
+  const accessToken = cookie.load("accessToken");
 
   useEffect(() => {
-    // console.log("AreaCode is " + areacode);
-    if (page !== 1) {
-      console.log("페이지 바뀜");
-      dispatch(setPage(1));
-      console.log("Area Code Is " + areaCode);
-    } else {
-      const response = async () => {
-        const placeResponse = await axios
-          .get(`/places`, {
-            params: {
-              areaCode: areaCode,
-              page: page,
-            },
-            withCredentials: true,
-          })
-          .then((res) => dispatch(setPlace(res.data.data)));
-      };
-      response();
-    }
+    dispatch(setPage(1));
+    const response = async () => {
+      await axios
+        .get(`/places`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          params: {
+            areaCode: areaCode,
+            page: page,
+          },
+          withCredentials: true,
+        })
+        .then((res) => dispatch(setPlace(res.data.data)));
+    };
+    response();
   }, [areaCode]);
 
   useEffect(() => {
     console.log("AreaCode is " + areaCode);
     const response = async () => {
-      const placeResponse = await axios
+      await axios
         .get(`/places`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
           params: {
             areaCode: areaCode,
             page: page,
