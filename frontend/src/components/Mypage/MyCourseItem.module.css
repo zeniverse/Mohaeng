@@ -2,6 +2,10 @@
   background-color: #f3f3f3;
   padding: 2rem;
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
 }
 .bookmark-item {
   display: flex;

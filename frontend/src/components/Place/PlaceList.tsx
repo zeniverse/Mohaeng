@@ -21,6 +21,7 @@ const PlaceList = () => {
           areaCode={place.areaCode}
           contentId={place.contentId}
           isBookmark={place.isBookmark}
+          placeId={place.placeId}
         />
       ))}
     </ListContainer>

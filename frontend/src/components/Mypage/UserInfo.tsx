@@ -7,6 +7,7 @@ import React from "react";
 import styles from "./UserInfo.module.css";
 import { setCurrIdx, myPageState } from "@/src/store/reducers/mypageSlice";
 import { openModal } from "@/src/store/reducers/modalSlice";
+import Image from "next/image";
 
 const UserInfo = () => {
   const dispatch = useDispatch();
@@ -14,9 +15,7 @@ const UserInfo = () => {
   const id = useSelector((state: RootState) => state.id.id);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const email = useSelector((state: RootState) => state.email.email);
-  const imageUrl = useSelector(
-    (state: RootState) => state.profileUrl.profileUrl
-  );
+  const profileUrl = useSelector((state: RootState) => state.profileUrl.imgUrl);
 
   const editUser: myPageState = {
     currIdx: 4,
@@ -35,7 +34,13 @@ const UserInfo = () => {
   return (
     <div className={styles["Container"]}>
       <div className={styles["ProfileWrapper"]}>
-        <img src={imageUrl} className={styles["Avatar"]} />
+        <Image
+          src={profileUrl}
+          className={styles["Avatar"]}
+          alt="카카오프로필"
+          width={140}
+          height={140}
+        />
         <div>
           <div className={styles["Name"]}>{id}</div>
           <div className={styles["Nickname"]}>{nickName}</div>

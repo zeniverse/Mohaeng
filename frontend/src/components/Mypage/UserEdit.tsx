@@ -10,12 +10,15 @@ import { useRouter } from "next/router";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 import { json } from "stream/consumers";
 import cookie from "react-cookies";
+import Image from "next/image";
 import {
   setEmail,
   setId,
   setNickname,
   setProfileUrl,
 } from "@/src/store/reducers/loginTokenSlice";
+
+//TODO: Edit 값에 아무것도 치지 않을시 0으로 수정되는 것이 아닌 기존 닉네임 값 반영 혹은 닉네임 수정해달라는 alert 띄우기
 
 interface Uploader {
   nickName: string;
@@ -25,9 +28,7 @@ const UserEdit = () => {
   const id = useSelector((state: RootState) => state.id.id);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const email = useSelector((state: RootState) => state.email.email);
-  const imageUrl = useSelector(
-    (state: RootState) => state.profileUrl.profileUrl
-  );
+  const profileUrl = useSelector((state: RootState) => state.profileUrl.imgUrl);
   const accessToken = cookie.load("accessToken");
 
   const dispatch = useDispatch();
@@ -75,11 +76,11 @@ const UserEdit = () => {
           },
           withCredentials: true,
         });
-        const { id, nickName, email, profileUrl } = userRes.data.data;
+        const { id, nickName, email, imgUrl } = userRes.data.data;
         dispatch(setId(id));
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
-        dispatch(setProfileUrl(profileUrl));
+        dispatch(setProfileUrl(imgUrl));
       }
     });
     dispatch(setCurrIdx(cancelEdit));
@@ -89,7 +90,13 @@ const UserEdit = () => {
     <div className={styles["Container"]}>
       <form encType="multipart/form-data" onSubmit={handleSubmit}>
         <div className={styles["ProfileWrapper"]}>
-          <img src={imageUrl} className={styles["Avatar"]} />
+          <Image
+            src={profileUrl}
+            className={styles["Avatar"]}
+            alt="카카오프로필"
+            width={140}
+            height={140}
+          />
           <div>
             <div className={styles["Name"]}>{id}</div>
             <div className={styles["FormWrapper"]}>

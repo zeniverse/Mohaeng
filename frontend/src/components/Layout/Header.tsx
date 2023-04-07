@@ -37,9 +37,9 @@ function Header({}: Props) {
   const router = useRouter();
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
-  const profileUrl = useSelector(
-    (state: RootState) => state.profileUrl.profileUrl
-  );
+  const profileUrl = useSelector((state: RootState) => state.profileUrl.imgUrl);
+
+  console.log(profileUrl);
 
   useEffect(() => {
     const response = async () => {
@@ -51,11 +51,12 @@ function Header({}: Props) {
           },
           withCredentials: true,
         });
-        const { id, nickName, email, profileUrl } = userRes.data.data;
+        const { id, nickName, email, imgUrl } = userRes.data.data;
+        console.log("ID = " + id);
         dispatch(setId(id));
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
-        dispatch(setProfileUrl(profileUrl));
+        dispatch(setProfileUrl(imgUrl));
         appDispatch(getCourseBookmark(accessToken));
         appDispatch(getPlaceBookmark(accessToken));
         setUser(nickName);
@@ -109,6 +110,7 @@ function Header({}: Props) {
           </div>
         </div>
       </nav>
+
       <div className={styles.btn}>
         {!nickName ? (
           <>
@@ -129,6 +131,7 @@ function Header({}: Props) {
               width={40}
               height={40}
             />
+
             <Link href="/mypage">{nickName}님</Link>
             <button
               id="login-btn"

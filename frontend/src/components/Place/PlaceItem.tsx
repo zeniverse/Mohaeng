@@ -13,8 +13,9 @@ const PlaceItem = ({
   name,
   firstImage,
   areaCode,
-  contentId,
+  placeId,
   isBookmark,
+  contentId,
 }: content) => {
   const accessToken = cookie.load("accessToken");
 
@@ -24,7 +25,7 @@ const PlaceItem = ({
   const addBookmark = () => {
     console.log("ACCESS = " + accessToken);
     const response = async () => {
-      await axios.post(`/api/place/bookmark/${contentId}`, {
+      await axios.post(`/api/place/bookmark/${placeId}`, {
         headers: {
           "Access-Token": accessToken,
         },
@@ -46,7 +47,7 @@ const PlaceItem = ({
 
   const delBookmark = () => {
     const response = async () => {
-      await axios.delete(`/api/place/bookmark/${contentId}`, {
+      await axios.delete(`/api/place/bookmark/${placeId}`, {
         headers: {
           "Access-Token": accessToken,
         },
@@ -101,7 +102,7 @@ const PlaceItem = ({
         <Link
           href={{
             pathname: "/place/[id]",
-            query: { id: contentId },
+            query: { id: placeId },
           }}
         >
           <div className={styles["item-info-text"]}>

@@ -8,7 +8,7 @@ export interface LoginState {
   token: string;
   nickName: string;
   email: string;
-  profileUrl: string;
+  imgUrl: string;
 }
 
 const initialState: LoginState = {
@@ -18,7 +18,7 @@ const initialState: LoginState = {
   token: "",
   nickName: "",
   email: "",
-  profileUrl: "",
+  imgUrl: "",
 };
 
 export const logintokenSlice = createSlice({
@@ -38,7 +38,7 @@ export const logintokenSlice = createSlice({
       state.id = action.payload;
     },
     setProfileUrl: (state, action) => {
-      state.profileUrl = action.payload;
+      state.imgUrl = action.payload;
     },
   },
 });
