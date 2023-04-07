@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import SearchItem from "./SearchItem";
 import Pagebar from "../Pagenation/Pagebar";
-import { setSearchPlace } from "@/src/store/reducers/SearchPlaceSlice";
+import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
 
 export default function SearchPlace(): JSX.Element {
   const [searchResult, setSearchResult] = useState<Keyword[]>([]);
