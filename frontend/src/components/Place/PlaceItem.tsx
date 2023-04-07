@@ -23,18 +23,24 @@ const PlaceItem = ({
   const page = useSelector((state: RootState) => state.page.page);
 
   const addBookmark = () => {
-    console.log("ACCESS = " + accessToken);
     const response = async () => {
-      await axios.post(`/api/place/bookmark/${placeId}`, {
-        headers: {
-          "Access-Token": accessToken,
-        },
-        withCredentials: true,
-      });
+      await axios.post(
+        `/api/place/bookmark/${placeId}`,
+        {},
+        {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          withCredentials: true,
+        }
+      );
     };
     response().then(async () => {
       await axios
         .get(`/places`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
           params: {
             areaCode: areaCode,
             page: page,
@@ -57,6 +63,9 @@ const PlaceItem = ({
     response().then(async () => {
       await axios
         .get(`/places`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
           params: {
             areaCode: areaCode,
             page: page,

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { setPlace } from "@/src/store/reducers/PlaceSlice";
 import { setPage } from "@/src/store/reducers/pageSlice";
+import cookie from "react-cookies";
 
 export default function Place() {
   const dispatch = useDispatch();
@@ -16,19 +17,23 @@ export default function Place() {
   const totalPages: number = useSelector(
     (state: RootState) => state.place.totalPages
   );
+  const accessToken = cookie.load("accessToken");
 
   useEffect(() => {
     dispatch(setPage(1));
     const response = async () => {
       await axios
         .get(`/places`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
           params: {
             areaCode: areaCode,
             page: page,
           },
           withCredentials: true,
         })
-        .then((res) => console.log(res.data.data));
+        .then((res) => dispatch(setPlace(res.data.data)));
     };
     response();
   }, [areaCode]);
@@ -38,6 +43,9 @@ export default function Place() {
     const response = async () => {
       await axios
         .get(`/places`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
           params: {
             areaCode: areaCode,
             page: page,

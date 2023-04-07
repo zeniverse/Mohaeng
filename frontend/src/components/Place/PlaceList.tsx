@@ -12,16 +12,17 @@ import ListContainer from "../UI/ListContainer";
 
 const PlaceList = () => {
   const places = useSelector((state: RootState) => state.place.contents);
+  const { areaCode } = useSelector((state: RootState) => state.filter.area);
   return (
     <ListContainer>
       {places?.map((place: content) => (
         <PlaceItem
           name={place.name}
           firstImage={place.firstImage}
-          areaCode={place.areaCode}
           contentId={place.contentId}
           isBookmark={place.isBookmark}
           placeId={place.placeId}
+          areaCode={areaCode}
         />
       ))}
     </ListContainer>

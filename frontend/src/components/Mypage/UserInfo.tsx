@@ -15,7 +15,7 @@ const UserInfo = () => {
   const id = useSelector((state: RootState) => state.id.id);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const email = useSelector((state: RootState) => state.email.email);
-  const profileUrl = useSelector((state: RootState) => state.profileUrl.imgUrl);
+  const profileUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
 
   const editUser: myPageState = {
     currIdx: 4,
