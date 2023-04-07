@@ -3,10 +3,7 @@ package com.mohaeng.backend.place.domain;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mohaeng.backend.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Table;
@@ -24,6 +21,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Table(appliesTo = "place")
 @RequiredArgsConstructor
 @ToString
+@AllArgsConstructor
 public class Place {
 
     @Id
