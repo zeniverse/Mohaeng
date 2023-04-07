@@ -2,7 +2,7 @@ import {
   setEmail,
   setId,
   setNickname,
-  setProfileUrl,
+  setImgUrl,
   setToken,
 } from "@/src/store/reducers/loginTokenSlice";
 import axios from "axios";
@@ -47,11 +47,11 @@ const KakaoLogin = () => {
               withCredentials: true,
             });
             // 여기에서 받아온 유저 정보를 리덕스에 저장한다
-            const { id, nickName, email, profileUrl } = userRes.data.data;
+            const { id, nickName, email, imgUrl } = userRes.data.data;
             dispatch(setId(id));
             dispatch(setEmail(email));
             dispatch(setNickname(nickName));
-            dispatch(setProfileUrl(profileUrl));
+            dispatch(setImgUrl(imgUrl));
             router.replace("/");
           } catch (e) {
             console.log(e);
