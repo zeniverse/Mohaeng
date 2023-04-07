@@ -14,29 +14,29 @@ public class MainCourseListDto {
     private String content;
     private String thumbnailUrl;
     private int likeCount;
-    private boolean isLike;
-    private boolean isBookmark;
+    private Boolean isLiked;
+    private Boolean isBookmarked;
 
     @Builder
-    private MainCourseListDto(Long id, String title, String content, String thumbnailUrl, int likeCount, boolean isLike, boolean isBookmark) {
+    private MainCourseListDto(Long id, String title, String content, String thumbnailUrl, int likeCount, Boolean isLiked, Boolean isBookmarked) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.thumbnailUrl = thumbnailUrl;
         this.likeCount = likeCount;
-        this.isLike = isLike;
-        this.isBookmark = isBookmark;
+        this.isLiked = isLiked;
+        this.isBookmarked = isBookmarked;
     }
 
-    public static MainCourseListDto from(Course course, boolean isLike, boolean isBookmark){
+    public static MainCourseListDto from(Course course, Boolean isLiked, Boolean isBookmarked){
         return MainCourseListDto.builder()
                 .id(course.getId())
                 .title(course.getTitle())
                 .content(course.getContent())
                 .likeCount(course.getLikeCount())
                 .thumbnailUrl(course.getThumbnailUrl())
-                .isLike(isLike)
-                .isBookmark(isBookmark)
+                .isLiked(isLiked)
+                .isBookmarked(isBookmarked)
                 .build();
     }
 }
