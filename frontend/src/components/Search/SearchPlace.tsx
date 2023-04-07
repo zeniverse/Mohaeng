@@ -7,10 +7,9 @@ import axios from "axios";
 import { Keyword } from "@/src/interfaces/Keyword";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { setSearchPlace } from "@/src/store/reducers/searchSlice";
 import SearchItem from "./SearchItem";
 import Pagebar from "../Pagenation/Pagebar";
-import FiveStarRating from "../FiveStarRating/FiveStarRating";
+import { setSearchPlace } from "@/src/store/reducers/SearchSlice";
 
 export default function SearchPlace(): JSX.Element {
   const [searchResult, setSearchResult] = useState<Keyword[]>([]);

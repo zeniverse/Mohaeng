@@ -11,34 +11,41 @@ import { setPage } from "@/src/store/reducers/pageSlice";
 
 export default function Place() {
   const dispatch = useDispatch();
-  const areacode = useSelector((state: RootState) => state.filter.areaCode);
+  const { areaCode } = useSelector((state: RootState) => state.filter.area);
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
     (state: RootState) => state.place.totalPages
   );
 
   useEffect(() => {
-    dispatch(setPage(1));
-    const response = async () => {
-      const placeResponse = await axios
-        .get(`/places`, {
-          params: {
-            areaCode: areacode,
-            page: page,
-          },
-          withCredentials: true,
-        })
-        .then((res) => dispatch(setPlace(res.data.data)));
-    };
-    response();
-  }, [areacode]);
+    // console.log("AreaCode is " + areacode);
+    if (page !== 1) {
+      console.log("페이지 바뀜");
+      dispatch(setPage(1));
+      console.log("Area Code Is " + areaCode);
+    } else {
+      const response = async () => {
+        const placeResponse = await axios
+          .get(`/places`, {
+            params: {
+              areaCode: areaCode,
+              page: page,
+            },
+            withCredentials: true,
+          })
+          .then((res) => dispatch(setPlace(res.data.data)));
+      };
+      response();
+    }
+  }, [areaCode]);
 
   useEffect(() => {
+    console.log("AreaCode is " + areaCode);
     const response = async () => {
       const placeResponse = await axios
         .get(`/places`, {
           params: {
-            areaCode: areacode,
+            areaCode: areaCode,
             page: page,
           },
           withCredentials: true,

@@ -10,9 +10,17 @@
   gap: 0.8rem;
   height: 340px;
 }
-.orderlist-wrapper {
-  overflow-y: scroll;
-  transition: max-height 0.3s ease-out;
+
+.info {
+  display: flex;
+  height: 600px;
+  position: relative;
+  gap: 0.6rem;
+  padding-top: 1rem;
+}
+
+.list {
+  width: 600px;
   background-color: var(--color-bg-gray);
   border-radius: 1rem;
   height: 100%;
@@ -20,7 +28,32 @@
   justify-content: center;
   align-items: center;
 }
-.kakaomap-wrapper {
-  height: 500px;
-  width: 100%;
+
+.button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.7rem 0;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--color-text-basic);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  transition: 0.3s;
+  border: none;
+}
+.cancel-btn {
+  width: 80px;
+}
+.submit-btn {
+  width: 200px;
+
+  background-color: #d9f8c4;
+}
+.btn:hover {
+  transform: translateY(5px);
 }

@@ -6,7 +6,6 @@ import RoughMap from "../Course/RoughMap";
 
 const CourseDetailNav = ({ likeCount, places }: any) => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
-  const RoughMapData: any[] = places?.map((place: any) => place.name)!;
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
     setIsRoughMapOpen((prev) => !prev);
@@ -32,7 +31,7 @@ const CourseDetailNav = ({ likeCount, places }: any) => {
         >
           <BiMapAlt className={styles.roughmapIcon} />
           {isRoughMapOpen && (
-            <RoughMap RoughMapData={RoughMapData} onClose={onClose} />
+            <RoughMap RoughMapData={places} onClose={onClose} />
           )}
         </div>
         <div className={styles["item-nav"]}>

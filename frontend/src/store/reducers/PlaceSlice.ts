@@ -5,6 +5,7 @@ export interface content {
   areaCode: string;
   firstImage: string;
   contentId: string;
+  isBookmark: boolean;
 }
 
 export interface placeState {

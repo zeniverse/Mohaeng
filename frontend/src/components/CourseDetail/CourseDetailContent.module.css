@@ -2,7 +2,7 @@
   padding: 2rem 0 2rem;
 }
 
-.map {
+.info {
   display: flex;
   height: 600px;
   position: relative;
@@ -10,7 +10,7 @@
   padding-top: 1rem;
 }
 
-.info {
+.list {
   width: 600px;
   background-color: var(--color-bg-gray);
   border-radius: 1rem;

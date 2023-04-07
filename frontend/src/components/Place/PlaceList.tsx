@@ -8,20 +8,22 @@ import axios from "axios";
 import { placeState, content } from "@/src/store/reducers/PlaceSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
+import ListContainer from "../UI/ListContainer";
 
 const PlaceList = () => {
   const places = useSelector((state: RootState) => state.place.contents);
   return (
-    <div className={styles["place-list-container"]}>
+    <ListContainer>
       {places?.map((place: content) => (
         <PlaceItem
           name={place.name}
           firstImage={place.firstImage}
           areaCode={place.areaCode}
           contentId={place.contentId}
+          isBookmark={place.isBookmark}
         />
       ))}
-    </div>
+    </ListContainer>
   );
 };
 

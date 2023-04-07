@@ -5,6 +5,10 @@ import com.mohaeng.backend.course.domain.CourseBookmark;
 import com.mohaeng.backend.course.dto.response.CourseBookmarkRes;
 import com.mohaeng.backend.course.repository.CourseBookmarkRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
+import com.mohaeng.backend.exception.badrequest.InvalidCourseBookmark;
+import com.mohaeng.backend.exception.notfound.CourseBookmarkNotFoundException;
+import com.mohaeng.backend.exception.notfound.CourseNotFoundException;
+import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +35,7 @@ public class CourseBookmarkService {
 
         // 3. 이미 북마크를 누른 회원인지 확인
         if (isExistBookmark(member, course)){
-            throw new IllegalArgumentException("이미 뷱마크를 누른 회원입니다.");
+            throw new InvalidCourseBookmark();
         }
 
         // 4. CourseBookmark 저장 & member에 bookmark 추가
@@ -51,7 +55,7 @@ public class CourseBookmarkService {
 
         // 2. 이미 북마크를 누른 회원인지 확인
         if (!isExistBookmark(member, course)) {
-            throw new IllegalArgumentException("member가 해당 course의 좋아요룰 누르지 않았습니다");
+            throw new CourseBookmarkNotFoundException();
         }
 
         // 4. 해당 CourseBookmark 찾아서, deletedDate update & member의 courseBookMarkList에서 제거
@@ -75,17 +79,11 @@ public class CourseBookmarkService {
     }
 
     private Member isMember(String memberEmail){
-        return memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+        return memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(MemberNotFoundException::new);
     }
 
     private Course isCourse(Long id){
-        return courseRepository.findById(id).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
-        );
+        return courseRepository.findById(id).orElseThrow(CourseNotFoundException::new);
     }
 
 }

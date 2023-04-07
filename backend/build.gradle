@@ -46,6 +46,9 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
+    testImplementation 'org.assertj:assertj-core'
+
+
     //Json 파싱도구
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     implementation 'org.json:json:20200518'

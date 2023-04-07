@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { AiFillStar } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
 import Image from "next/image";
-import { SetStateAction, useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import cookie from "react-cookies";

@@ -7,10 +7,13 @@ import idReducer from "./reducers/loginTokenSlice";
 import profileUrlReducer from "./reducers/loginTokenSlice";
 import CourseFormSlice from "./reducers/CourseFormSlice";
 import FilterSlice from "./reducers/FilterSlice";
+import CourseSlice from "./reducers/CourseSlice";
 import placeReducer from "./reducers/PlaceSlice";
 import mypageReducer from "./reducers/mypageSlice";
 import pageReducer from "./reducers/pageSlice";
-import searchReducer from "./reducers/searchSlice";
+import searchReducer from "./reducers/SearchSlice";
+import courseBookmarkReducer from "./reducers/CourseBoomarkSlice";
+import placeBookmarkReducer from "./reducers/PlaceBookmarkSlice";
 
 const store = configureStore({
   reducer: {
@@ -20,12 +23,15 @@ const store = configureStore({
     email: emailReducer,
     id: idReducer,
     profileUrl: profileUrlReducer,
+    course: CourseSlice,
     courseForm: CourseFormSlice,
     filter: FilterSlice,
     place: placeReducer,
     mypage: mypageReducer,
     page: pageReducer,
     search: searchReducer,
+    courseBookmark: courseBookmarkReducer,
+    placeBookmark: placeBookmarkReducer,
   },
 });
 

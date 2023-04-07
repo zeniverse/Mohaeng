@@ -10,6 +10,11 @@ import com.mohaeng.backend.course.repository.CourseBookmarkRepository;
 import com.mohaeng.backend.course.repository.CourseLikesRepository;
 import com.mohaeng.backend.course.repository.CoursePlaceRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
+import com.mohaeng.backend.exception.badrequest.InvalidKeywordPlaceInCourse;
+import com.mohaeng.backend.exception.notfound.CourseNotFoundException;
+import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
+import com.mohaeng.backend.exception.notfound.PlaceNotFoundException;
+import com.mohaeng.backend.exception.unauthrized.MemberPermissionDenied;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
@@ -21,8 +26,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,8 +48,7 @@ public class CourseService {
     public CoursePlaceSearchRes placeSearch(CoursePlaceSearchReq req, Pageable pageable) {
         // keyword에 null이 담겨있을 때
         if (req.getKeyword() == null){
-            // TODO: Exception 처리
-            throw new IllegalArgumentException("keyword 값이 비어있습니다.");
+            throw new InvalidKeywordPlaceInCourse();
         }
 
         // rating에 점수가 담겨있지 않을 때
@@ -71,10 +73,7 @@ public class CourseService {
 
         List<CoursePlace> coursePlaces = new ArrayList<>();
         for (Long id : req.getPlaceIds()) {
-            Place place = placeRepository.findById(id).orElseThrow(
-                    // TODO: Exception 처리
-                    () -> new IllegalArgumentException("존재하지 않는 장소 입니다.")
-            );
+            Place place = placeRepository.findById(id).orElseThrow(PlaceNotFoundException::new);
             coursePlaces.add(
                     CoursePlace.builder()
                             .course(course)
@@ -130,10 +129,7 @@ public class CourseService {
 
         List<CoursePlace> updatedCoursePlaces = new ArrayList<>();
         for (Long id : req.getPlaceIds()) {
-            Place place = placeRepository.findById(id).orElseThrow(
-                    // TODO: Exception 처리
-                    () -> new IllegalArgumentException("존재하지 않는 장소 입니다.")
-            );
+            Place place = placeRepository.findById(id).orElseThrow(PlaceNotFoundException::new);
             updatedCoursePlaces.add(
                     CoursePlace.builder()
                             .course(course)
@@ -165,7 +161,7 @@ public class CourseService {
 
     public CourseListRes getCourseList(CourseSearchDto courseSearchDto, Pageable pageable, String memberEmail) {
         // 1.로그인 유무 화인
-        Member member = checkLogin(memberEmail);
+        Member member = isLogin(memberEmail);
 
         // 2. 검색 조건으로 검색 결과 조회
         Page<Course> courses = courseRepository.findAllCourseWithKeyword(courseSearchDto, pageable);
@@ -193,7 +189,7 @@ public class CourseService {
 
     public List<MainCourseListDto> getMainCourse(String memberEmail) {
         // 1.로그인 유무 화인
-        Member member = checkLogin(memberEmail);
+        Member member = isLogin(memberEmail);
 
         // 2. 코스 조회 결과 불러오기기
         List<Course> courseList = courseRepository.findTop10ByCourseStatusOrderByLikeCountDesc(CourseStatus.PUBLIC);
@@ -215,34 +211,24 @@ public class CourseService {
 
 
     private Member isWriter(String memberEmail, Member writer){
-        Member member = memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+        Member member = isMember(memberEmail);
 
-        if(!member.getEmail().equals(writer.getEmail()))
-            // TODO: Exception 처리
-            throw new RuntimeException("요청자와 작성자가 일치하지 않습니다.");
+        if(!member.getEmail().equals(writer.getEmail())){
+            throw new MemberPermissionDenied();
+        }
         return member;
 
     }
 
-    private Member checkLogin(String email){
-        return isNull(email) ? null : memberRepository.findByEmailAndDeletedDateIsNull(email)
-                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 member 입니다."));
+    private Member isLogin(String email){
+        return isNull(email) ? null : memberRepository.findByEmailAndDeletedDateIsNull(email).orElseThrow(MemberNotFoundException::new);
     }
 
     private Member isMember(String memberEmail){
-        return memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+        return memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(MemberNotFoundException::new);
     }
 
     private Course isCourse(Long id){
-        return courseRepository.findById(id).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
-        );
+        return courseRepository.findById(id).orElseThrow(CourseNotFoundException::new);
     }
 }

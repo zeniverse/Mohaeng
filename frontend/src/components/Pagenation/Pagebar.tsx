@@ -45,15 +45,16 @@ const Pagebar = (totalPage: totalPageProps) => {
         prev
       </button>
       <ul className={styles.pagination}>
-        {pageNumbers.map((number) => (
-          <li key={number} className={styles["page-item"]}>
-            {number <= totalPage.totalPage && (
-              <button onClick={() => dispatch(setPage(number))}>
-                {number}
-              </button>
-            )}
-          </li>
-        ))}
+        {pageNumbers.length > 0 &&
+          pageNumbers.map((number) => (
+            <li key={number} className={styles["page-item"]}>
+              {number <= totalPage.totalPage && (
+                <button onClick={() => dispatch(setPage(number))}>
+                  {number}
+                </button>
+              )}
+            </li>
+          ))}
       </ul>
       <button
         className={styles.prevNextButton}

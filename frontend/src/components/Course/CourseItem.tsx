@@ -1,9 +1,10 @@
-import { CourseProps } from "@/src/interfaces/Course";
+import { CourseListProps } from "@/src/interfaces/Course";
 import styles from "./CourseItem.module.css";
 import React, { useState } from "react";
 import Image from "next/image";
 
-import { BiMapAlt, BiShareAlt, BiBookmarkPlus } from "react-icons/bi";
+import { BiMapAlt, BiShareAlt } from "react-icons/bi";
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import RoughMap from "./RoughMap";
 import IsLikeState from "../UI/IsLikeState";
 import Link from "next/link";
@@ -11,15 +12,16 @@ import TagItem from "../UI/TagItem";
 
 const CourseItem = ({
   id,
-  courseTitle,
-  courseDesc,
-  courseLike,
+  title,
+  content,
+  likeCount,
   courseDays,
   thumbnailUrl,
-  courseList,
-}: CourseProps) => {
+  bookMark,
+  like,
+  places,
+}: CourseListProps) => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
-  const RoughMapData: any[] = courseList?.map((course) => course.name)!;
 
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
@@ -31,29 +33,34 @@ const CourseItem = ({
 
   return (
     <div className={styles["course-item-container"]}>
-      <Link href={`/course/${id}`}>
+      <Link
+        href={{
+          pathname: "/course/[id]",
+          query: { id: id },
+        }}
+      >
         <div className={styles["item-info-container"]}>
           <div className={styles["item-image"]}>
             <div className={styles["item-image-box"]}></div>
             <Image
               src={thumbnailUrl}
-              alt={courseTitle}
+              alt={title}
               width={700}
               height={700}
               priority
             />
-            <IsLikeState courseLike={courseLike} />
+            <IsLikeState courseLike={likeCount} />
           </div>
           <div className={styles["item-info-text"]}>
-            <h3>{courseTitle}</h3>
-            <p>{courseDesc}</p>
+            <h3>{title}</h3>
+            <p>{content}</p>
             {courseDays && <TagItem text={courseDays} />}
           </div>
         </div>
       </Link>
       <div className={styles["item-nav-container"]}>
         <div className={styles["item-nav"]}>
-          <BiBookmarkPlus />
+          {bookMark ? <BsBookmarkFill /> : <BsBookmark />}
         </div>
         <div className={`${styles["item-nav"]} ${styles.center}`}>
           <BiShareAlt />
@@ -64,7 +71,7 @@ const CourseItem = ({
         >
           <BiMapAlt />
           {isRoughMapOpen && (
-            <RoughMap RoughMapData={RoughMapData} onClose={onClose} />
+            <RoughMap RoughMapData={places} onClose={onClose} />
           )}
         </div>
       </div>
