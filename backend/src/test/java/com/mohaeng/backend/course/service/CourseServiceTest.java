@@ -393,8 +393,6 @@ class CourseServiceTest {
         assertEquals(1, courseList.getTotalPages());
     }
 
-    // TODO: valid 확인 test 작성
-
     private CourseReq createCourseReq(String title, List<Long> placeIds) {
         CourseReq myCourseReq = CourseReq.builder()
                 .title(title)
