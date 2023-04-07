@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { AiFillStar } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { SetStateAction, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import cookie from "react-cookies";
@@ -12,6 +12,11 @@ import ReviewRating from "./ReviewRating";
 // 별점 상태 저장, 내보내기 ㅇ
 // 이미지 상대경로말고 원본 그대로 폼데이터 생성해서 보내기. 최대 개수 지정
 // 데이터 생성 백으로 보내기
+
+interface Review {
+  rating: string;
+  content: string;
+}
 
 export default function CreateReview() {
   const router = useRouter();
@@ -33,11 +38,16 @@ export default function CreateReview() {
   const [imgFile, setImgFile] = useState([]); // 전송할 이미지파일
   let rating = clicked.filter(Boolean).length;
 
+  const handleChangeImage = (e) => {
+    if (e.target.files === null) return;
+    if (e.target.files[0]) {
+      setImgFile(e.target.files[0]);
+    }
+  };
   // *비동기적으로 받아오는 별점 개수 업데이트 확인
   useEffect(() => {
     console.log(rating);
     setStar(rating);
-    setImgFile(imgFile);
   }, [clicked, imgFile]);
 
   // *별점 클릭
@@ -74,14 +84,10 @@ export default function CreateReview() {
   // 버튼 클릭 시 이미지 삭제
   const handleDeleteImage = (id: number) => {
     setShowImages(showImages.filter((_, index) => index !== id));
-    URL.revokeObjectURL(showImages[id]);
   };
 
   // *리뷰 백엔드로 전송
-  const submitReview = async (e: {
-    target: any;
-    preventDefault: () => void;
-  }) => {
+  const submitReview = async () => {
     if (star == 0) {
       alert("별점을 입력해주세요");
       return false;
@@ -90,25 +96,28 @@ export default function CreateReview() {
       return false;
     }
     // JSON.stringify() 안 붙이고 그냥 보내보기
-    e.preventDefault();
     const formData = new FormData();
-    formData.append("rating", rating.toString());
-    formData.append("content", content);
+    const review: Review = { rating: rating.toString(), content: content };
+    // formData.append("rating", JSON.stringify(rating.toString()));
+    // formData.append("content", JSON.stringify(content));
+    formData.append("review", JSON.stringify(review));
+    // 객체 리뷰 안에 넣어서 보내기
+
     // 이미지만 제대로 받아오면 된다!
-    for (let i = 0; i < File.length; i++) {
-      formData.append("imgUrl", imgFile[i]); // 반복문을 활용하여 파일들을 formData 객체에 추가한다
+    for (let i = 0; i < imgFile.length; i++) {
+      formData.append("imgUrl", imgFile[i]);
+      // 반복문을 활용하여 파일들을 formData 객체에 추가한다
     }
-    for (const keyValue of formData) console.log(keyValue);
+    // for (const keyValue of formData) console.log(keyValue);
     const accessToken = await cookie.load("accessToken");
 
     try {
       const response = await axios
-        .post(`/api/review/${id}`, {
+        .post(`/api/review/${id}`, formData, {
           headers: {
             "Access-Token": accessToken,
-            "Content-Type": `multipart/form-data;`,
+            "Content-Type": "multipart/form-data;",
           },
-          body: formData,
         })
         .then((response) => {
           alert("작성이 완료되었습니다!");
@@ -127,31 +136,6 @@ export default function CreateReview() {
       console.error(error);
     }
   };
-
-  // const handleChangeFile = (e: any) => {
-  //   console.log(e.target.files);
-  //   setImgFile(e.target.files);
-  //   setImgBase64([]);
-  //   for (var i = 0; i < e.target.files.length; i++) {
-  //     if (e.target.files[i]) {
-  //       let reader = new FileReader();
-  //       reader.readAsDataURL(e.target.files[i]); // 1. 파일을 읽어 버퍼에 저장합니다.
-  //       // 파일 상태 업데이트
-  //       reader.onloadend = () => {
-  //         // 2. 읽기가 완료되면 아래코드가 실행됩니다.
-  //         const base64 = reader.result;
-  //         console.log(base64);
-  //         if (base64) {
-  //           var base64Sub = base64.toString();
-  //           setImgBase64((imgBase64: string[]) => [...imgBase64, base64Sub]);
-  //         }
-  //         if (imgBase64.length > 3) {
-  //           imgBase64 = imgBase64.slice(0, 3);
-  //         } // 개수 3개 제한
-  //       };
-  //     }
-  //   }
-  // };
 
   // 뒤로 가기
   const handleGoBack = () => {
@@ -222,13 +206,13 @@ export default function CreateReview() {
               id="inputFile"
               multiple
               className={styles.imageForm}
-              onChange={handleAddImages}
+              onChange={handleChangeImage}
             />
             <span className={styles.inputFileDesc}>
               * 이미지는 최대 3장까지 첨부할 수 있습니다.
             </span>
             <div className={styles.imgContainer}>
-              {showImages.map((image, id) => (
+              {/* {showImages.map((image, id) => (
                 <div className={styles.imgBox} key={id}>
                   <Image
                     src={image}
@@ -241,7 +225,7 @@ export default function CreateReview() {
                     onClick={() => handleDeleteImage(id)}
                   />
                 </div>
-              ))}
+              ))} */}
             </div>
             <div className={styles.btnGroup}>
               <button className={styles.postBtn} onClick={submitReview}>
@@ -285,3 +269,29 @@ const Stars = styled.div`
 // //set preview image
 // objectUrl = URL.createObjectURL(event.target.files[0])
 // setImgPreview(objectUrl);
+
+// 파일리더로 미리보기
+// const handleChangeFile = (e: any) => {
+//   console.log(e.target.files);
+//   setImgFile(e.target.files);
+//   setImgBase64([]);
+//   for (var i = 0; i < e.target.files.length; i++) {
+//     if (e.target.files[i]) {
+//       let reader = new FileReader();
+//       reader.readAsDataURL(e.target.files[i]); // 1. 파일을 읽어 버퍼에 저장합니다.
+//       // 파일 상태 업데이트
+//       reader.onloadend = () => {
+//         // 2. 읽기가 완료되면 아래코드가 실행됩니다.
+//         const base64 = reader.result;
+//         console.log(base64);
+//         if (base64) {
+//           var base64Sub = base64.toString();
+//           setImgBase64((imgBase64: string[]) => [...imgBase64, base64Sub]);
+//         }
+//         if (imgBase64.length > 3) {
+//           imgBase64 = imgBase64.slice(0, 3);
+//         } // 개수 3개 제한
+//       };
+//     }
+//   }
+// };

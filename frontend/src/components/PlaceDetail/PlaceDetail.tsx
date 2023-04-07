@@ -44,6 +44,16 @@ export default function PlaceDetail() {
     review: "",
   });
   const [bookMarked, setBookMarked] = useState(false);
+  // 스테이트 저장해도 새로고침 시 날아감
+  const [currentId, setCurrentId] = useState("");
+  localStorage.setItem("id", id);
+
+  useEffect(() => {
+    const id = localStorage.getItem("id");
+    if (id) {
+      setCurrentId(id);
+    }
+  }, []);
 
   // useEffect(() => {
   //   window.scrollTo(0, 0);

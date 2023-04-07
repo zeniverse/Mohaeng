@@ -10,7 +10,7 @@ import FiveStarRating from "../FiveStarRating/FiveStarRating";
 
 type ReviewProps = {
   memberName: string;
-  rating: number;
+  rating: string;
   content: string;
   imgUrl: [];
 };
@@ -33,7 +33,7 @@ export default function ReviewItem({
         /> */}
         <div className={styles.reviewerInfo}>
           <div className={styles.rating}>
-            <FiveStarRating rating={rating.toString()} />
+            <FiveStarRating rating={rating} />
           </div>
           <p className={styles.review}>{memberName}</p>
         </div>

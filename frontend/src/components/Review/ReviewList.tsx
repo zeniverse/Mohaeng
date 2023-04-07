@@ -9,11 +9,21 @@ import ReviewItem from "./ReviewItem";
 // 해당 여행지 총 리뷰 건수, 별점 데이터 가져오기
 // 정렬 필터 (추천순)
 // 리뷰 전체 조회
+// interface Review {
+//   memberName: string;
+//   rating: number;
+//   content: string;
+//   imgUrl: [];
+// }
+
 interface Review {
   memberName: string;
-  rating: number;
+  // 프로필 url 추가
   content: string;
   imgUrl: [];
+  overview: string;
+  rating: string;
+  review: string;
 }
 
 export default function Review() {
