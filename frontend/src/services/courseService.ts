@@ -17,3 +17,18 @@ export const createCourseApi = async (data: ICourseSubmitForm) => {
     },
   });
 };
+export const toggleBookmarkApi = async (
+  courseId: number,
+  method: "POST" | "DELETE"
+) => {
+  const accessToken = await cookie.load("accessToken");
+  const config = {
+    method: method,
+    headers: {
+      "Access-Token": accessToken,
+      withCredentials: true,
+    },
+  };
+  const response = await axios(`${ApiConfig.Cbookmark}/${courseId}`, config);
+  return response.data;
+};
