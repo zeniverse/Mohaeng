@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import UserInfo from "@/src/components/Mypage/UserInfo";
 import UserEdit from "@/src/components/Mypage/UserEdit";
+import UserBookmark from "@/src/components/Mypage/UserBookmark";
 import Sidebar from "@/src/components/Mypage/Sidebar";
 
 const MyPage: React.FC = () => {
@@ -20,7 +21,7 @@ const MyPage: React.FC = () => {
       <Sidebar />
       <div className={styles.contentWrapper}>
         <h1 className={styles["Title"]}>{label}</h1>
-        {{ 0: <UserInfo />, 4: <UserEdit /> }[currIdx]}
+        {{ 0: <UserInfo />, 1: <UserBookmark />, 4: <UserEdit /> }[currIdx]}
       </div>
     </div>
   );

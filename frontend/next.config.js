@@ -2,6 +2,7 @@ const { type } = require("os");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  fallback: true,
   images: {
     domains: [
       "tong.visitkorea.or.kr",
@@ -9,6 +10,7 @@ const nextConfig = {
       "k.kakaocdn.net",
       "lh3.google.com",
       "drive.google.com",
+      "mohaeng.s3.ap-northeast-2.amazonaws.com",
     ],
   },
   pageExtensions: ["jsx", "js", "ts", "tsx", "json"],
@@ -28,6 +30,14 @@ const nextConfig = {
       {
         source: "/api/course",
         destination: "https://localhost:8080/api/course",
+      },
+      {
+        source: "/api/place",
+        destination: "https://localhost:8080/api/place",
+      },
+      {
+        source: "/place/:id",
+        destination: "https://localhost:8080/place/overview/:id",
       },
     ];
   },

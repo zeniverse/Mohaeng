@@ -15,10 +15,10 @@ const RoughMap = ({ RoughMapData, onClose }: RoughMapTitle) => {
       ref={boxRef}
       className={styles["roughmap-container"]}
     >
-      {RoughMapData.map((title, idx) => (
+      {RoughMapData.map((data, idx) => (
         <li className={styles.listitem} key={idx}>
           <div className={styles.circle}></div>
-          <span className={styles.title}>{title}</span>
+          <span className={styles.title}>{data.name}</span>
         </li>
       ))}
     </ol>

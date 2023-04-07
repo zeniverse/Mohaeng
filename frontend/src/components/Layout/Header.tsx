@@ -11,11 +11,15 @@ import {
   setToken,
   setImgUrl,
 } from "@/src/store/reducers/loginTokenSlice";
-import { RootState } from "@/src/store/store";
+import { AppDispatch, RootState } from "@/src/store/store";
 import axios from "axios";
 import cookie from "react-cookies";
 import SearchBar from "../Search/SearchBar";
 import Image from "next/image";
+import { resetFilter, selectArea } from "@/src/store/reducers/FilterSlice";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
+import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 
 type User = {
   id: number;
@@ -29,6 +33,7 @@ type Props = {};
 function Header({}: Props) {
   const [user, setUser] = useState<User[]>([]);
   const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
   const router = useRouter();
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
@@ -36,6 +41,7 @@ function Header({}: Props) {
 
   useEffect(() => {
     const response = async () => {
+      console.log("ACcess = " + accessToken);
       if (accessToken) {
         const userRes = await axios.get(`/loginInfo`, {
           headers: {
@@ -48,6 +54,8 @@ function Header({}: Props) {
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
         dispatch(setImgUrl(imgUrl));
+        appDispatch(getCourseBookmark(accessToken));
+        appDispatch(getPlaceBookmark(accessToken));
         setUser(nickName);
       }
     };
@@ -75,19 +83,27 @@ function Header({}: Props) {
     window.alert("로그아웃되었습니다!");
   };
 
+  const ResetStatus = () => {
+    dispatch(resetFilter());
+  };
+
   return (
     <header className={styles.header}>
       <nav>
         <div className={styles.nav}>
-          <Link href="/">
+          <Link href="/" onClick={ResetStatus}>
             <img src="/assets/logo.png" alt="logo" className={styles.logo} />
           </Link>
 
           <SearchBar />
 
           <div className={styles.menu}>
-            <Link href="/place">여행지</Link>
-            <Link href="/course">코스</Link>
+            <Link href="/place" onClick={ResetStatus}>
+              여행지
+            </Link>
+            <Link href="/course" onClick={ResetStatus}>
+              코스
+            </Link>
           </div>
         </div>
       </nav>

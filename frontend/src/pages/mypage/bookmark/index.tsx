@@ -54,18 +54,6 @@ const bookmarksCourse: BookmarkItem[] = [
 const MyBookmark = () => {
   // const [bookmarks, setBookmarks] = useState<bookmarkItem[]>([]);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const res = await fetch(
-  //       "http://localhost:3000/api/myPage/course/bookMark"
-  //     );
-  //     const data = await res.json();
-  //     setBookmarks(data);
-  //     console.log(data);
-  //   }
-  //   fetchData();
-  // }, []);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("place");
 

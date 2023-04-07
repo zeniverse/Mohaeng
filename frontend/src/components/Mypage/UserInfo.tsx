@@ -6,14 +6,7 @@ import { RootState } from "@/src/store/store";
 import React from "react";
 import styles from "./UserInfo.module.css";
 import { setCurrIdx, myPageState } from "@/src/store/reducers/mypageSlice";
-import axios from "axios";
-import cookie from "react-cookies";
-import {
-  setEmail,
-  setId,
-  setNickname,
-  setToken,
-} from "@/src/store/reducers/loginTokenSlice";
+import { openModal } from "@/src/store/reducers/modalSlice";
 
 const UserInfo = () => {
   const dispatch = useDispatch();
@@ -25,31 +18,18 @@ const UserInfo = () => {
     (state: RootState) => state.profileUrl.profileUrl
   );
 
-  const accessToken = cookie.load("accessToken");
-
   const editUser: myPageState = {
     currIdx: 4,
     label: "회원 정보 수정",
   };
 
-  const deleteUser = () => {
-    const response = async () => {
-      if (accessToken) {
-        const userRes = await axios.delete(`api/user/drop`, {
-          headers: {
-            "Access-Token": accessToken,
-          },
-          withCredentials: true,
-        });
-      }
-
-      cookie.remove("accessToken", { path: "/" });
-      dispatch(setToken(""));
-      dispatch(setNickname(""));
-      dispatch(setEmail(""));
-      dispatch(setId(0));
-    };
-    response();
+  const handleOpenDeleteModal = () => {
+    dispatch(
+      openModal({
+        modalType: "DeleteMemberModal",
+        isOpen: true,
+      })
+    );
   };
 
   return (
@@ -69,7 +49,11 @@ const UserInfo = () => {
           onClick={() => dispatch(setCurrIdx(editUser))}
         />
 
-        <Button type="click" text="회원탈퇴" onClick={() => deleteUser()} />
+        <Button
+          type="click"
+          text="회원탈퇴"
+          onClick={() => handleOpenDeleteModal()}
+        />
       </div>
     </div>
   );
