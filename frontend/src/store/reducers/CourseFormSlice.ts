@@ -55,6 +55,12 @@ export const CourseFormSlice = createSlice({
         [name]: value,
       };
     },
+    removePlace: (state, action) => {
+      const newList = state.course.places.filter(
+        (place) => place.placeId !== action.payload
+      );
+      state.course.places = newList;
+    },
     resetFormValue: () => {
       return initialState;
     },
@@ -76,6 +82,6 @@ export const CourseFormSlice = createSlice({
   },
 });
 
-export const { setFormValue, resetFormValue, addPlaceObject } =
+export const { setFormValue, resetFormValue, addPlaceObject, removePlace } =
   CourseFormSlice.actions;
 export default CourseFormSlice.reducer;
