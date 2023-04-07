@@ -34,10 +34,9 @@ export default function SearchPlace(): JSX.Element {
         if (res.data.data.content !== []) {
           dispatch(setSearchPlace(res.data.data));
           const { content } = res.data.data;
-          console.log(content);
           setSearchResult(content);
         } else {
-          console.log(res.data.data.content);
+          console.log(res.data);
         }
       } catch (error) {
         console.log("Error", error);

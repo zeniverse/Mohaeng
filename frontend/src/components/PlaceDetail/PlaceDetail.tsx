@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
+import { palette } from "@/src/styles/palette";
 
 // 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined?
 // 북마크 delete
