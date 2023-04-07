@@ -46,14 +46,14 @@ export default function PlaceDetail() {
   const [bookMarked, setBookMarked] = useState(false);
   // 스테이트 저장해도 새로고침 시 날아감
   const [currentId, setCurrentId] = useState("");
-  localStorage.setItem("id", id);
 
-  useEffect(() => {
-    const id = localStorage.getItem("id");
-    if (id) {
-      setCurrentId(id);
-    }
-  }, []);
+  // useEffect(() => {
+  //   localStorage.setItem("id", id);
+  //   const id = localStorage.getItem("id");
+  //   if (id) {
+  //     setCurrentId(id);
+  //   }
+  // }, []);
 
   // useEffect(() => {
   //   window.scrollTo(0, 0);
@@ -61,11 +61,6 @@ export default function PlaceDetail() {
 
   // 북마크
   const handleBookmarkClick = async () => {
-    // const data = {
-    //   placeName: placeInfo.name,
-    //   contentId: placeInfo.contentId,
-    //   bookmark: true,
-    // };
     try {
       const res = await axios.post(`/api/place/bookmark/${id}`, {
         headers: {
