@@ -87,9 +87,9 @@ public class PlaceController {
 //    }
 
     @GetMapping("/place/overview/{contentId}")
-    public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String contentId) throws IOException, ParserConfigurationException, SAXException {
-        List<PlaceDetailsDto> dtos = placeService.getPlaceDetailsByContentId(contentId);
-        PlaceDetailsResponse response = new PlaceDetailsResponse(dtos);
+    public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String contentId,
+                                                                             HttpServletRequest request) throws IOException, ParserConfigurationException, SAXException {
+        PlaceDetailsResponse response = placeService.getPlaceDetailsByContentId(contentId, isAccessMember(request));
         return ResponseEntity.ok().body(BaseResponse.success("OK",response));
     }
 
