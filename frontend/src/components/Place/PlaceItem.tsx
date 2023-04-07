@@ -99,9 +99,12 @@ const PlaceItem = ({
           {/* <div className={styles["item-nav"]}>{placeRating}</div> */}
           <div className={styles["item-nav"]}>
             {isBookmark === true ? (
-              <BsBookmarkFill onClick={delBookmark} />
+              <BsBookmarkFill
+                onClick={delBookmark}
+                className={styles.bookmark}
+              />
             ) : (
-              <BsBookmark onClick={addBookmark} />
+              <BsBookmark onClick={addBookmark} className={styles.unbookmark} />
             )}
           </div>
         </div>

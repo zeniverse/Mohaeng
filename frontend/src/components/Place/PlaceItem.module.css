@@ -88,3 +88,25 @@
   border-right: 1px solid var(--color-border-semi);
   border-left: 1px solid var(--color-border-semi);
 }
+
+.bookmark,
+.unbookmark {
+  background-color: transparent;
+  border: none;
+}
+
+.unbookmark {
+  color: var(--color-primary);
+  font-size: 28px;
+}
+
+.unbookmark:hover {
+  color: var(--color-primary);
+  scale: 105%;
+  transition: 200ms;
+}
+
+.bookmark {
+  color: var(--color-primary);
+  font-size: 26px;
+}
