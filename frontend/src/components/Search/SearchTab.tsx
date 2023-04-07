@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchCourse from "./SearchCourse";
 import SearchPlace from "./SearchPlace";
 import styles from "./SearchTab.module.css";
@@ -6,8 +6,16 @@ import styles from "./SearchTab.module.css";
 export default function SearchTab() {
   const [activeTab, setActiveTab] = useState("여행지");
 
+  useEffect(() => {
+    const tab = localStorage.getItem("activeTab");
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, []);
+
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
+    localStorage.setItem("activeTab", tab);
   };
 
   return (
