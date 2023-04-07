@@ -20,6 +20,7 @@
 
 .userImg {
   margin-right: 1rem;
+  border-radius: 50%;
 }
 
 .reviewContent {
@@ -29,6 +30,7 @@
 
 .reviewTxt {
   margin-bottom: 1rem;
+  margin-left: 66px;
 }
 
 .btnGroup {

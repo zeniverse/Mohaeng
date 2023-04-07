@@ -67,6 +67,7 @@ export default function SearchPlace(): JSX.Element {
                 name={place.name}
                 firstImage={place.firstImage}
                 contentId={place.contentId}
+                placeId={place.placeId}
                 rating={0}
                 review={place.review}
                 isBookmark={place.isBookmark}

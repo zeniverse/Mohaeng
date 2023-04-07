@@ -10,6 +10,7 @@ import Bookmark from "../Bookmark/Bookmark";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 
 export default function SearchItem({
+  placeId,
   name,
   firstImage,
   contentId,
@@ -24,7 +25,7 @@ export default function SearchItem({
   const handleBookmarkClick = async () => {
     const accessToken = await cookie.load("accessToken");
     try {
-      const res = await axios.post(`/api/place/bookmark/${contentId}`, {
+      const res = await axios.post(`/api/place/bookmark/${placeId}`, {
         headers: {
           "Access-Token": `${accessToken}`,
           withCredentials: true,
@@ -45,7 +46,8 @@ export default function SearchItem({
             {
               pathname: `/place/[id]`,
               query: {
-                id: contentId,
+                contentId: contentId,
+                placeId: placeId,
                 name: name,
               },
             },

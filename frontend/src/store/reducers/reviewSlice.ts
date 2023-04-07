@@ -1,16 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface reviews {
+export interface data {
   memberName: string;
-  // 프로필 url 추가
+  memberImage: string;
+  rating: string;
   content: string;
   imgUrl: [];
-  rating: string;
-  review: string;
 }
 
 export interface ReviewState {
-  reviews: reviews[];
+  reviews: data[];
   totalPages: number;
   totalElements: number;
 }

@@ -13,43 +13,64 @@ import { useRouter } from "next/router";
 
 type ReviewProps = {
   memberName: string;
-  rating: string;
+  memberImage: string;
   content: string;
-  imgUrl: [];
+  // imgUrl: string;
+  rating: number;
 };
 
 export default function ReviewItem({
   memberName,
+  memberImage,
   rating,
   content,
-  imgUrl,
-}: ReviewProps) {
+}: // imgUrl,
+ReviewProps) {
   const router = useRouter();
+  const { id } = router.query;
   const [user, setUser] = useState();
   const currentUser = useSelector(
     (state: RootState) => state.nickName.nickName
   );
   // setUser(currentUser);
+  console.log(currentUser);
+
+  const canEdit = "김새롬" === memberName;
 
   return (
     <article className={styles.reviewBox}>
       <div className={styles.reviewer}>
-        {/* <Image
+        <Image
           className={styles.userImg} // 프로필 url, state
-          src={}
+          src={memberImage}
           width={50}
           height={50}
-          alt={}
-        /> */}
+          alt={memberName}
+        />
         <div className={styles.reviewerInfo}>
           <div className={styles.rating}>
-            <FiveStarRating rating={rating} />
+            <FiveStarRating rating={rating.toString()} />
           </div>
           <p className={styles.review}>{memberName}</p>
         </div>
-        {currentUser === memberName ? (
+        {canEdit ? (
           <div className={styles.btnGroup}>
-            <button className={styles.btn}>수정</button>
+            <button
+              onClick={() =>
+                router.push(
+                  {
+                    pathname: "/review/edit-review",
+                    query: {
+                      id: id,
+                    },
+                  },
+                  "review/edit-review"
+                )
+              }
+              className={styles.btn}
+            >
+              수정
+            </button>
             <button className={styles.btn}>삭제</button>
           </div>
         ) : (
@@ -58,8 +79,11 @@ export default function ReviewItem({
       </div>
       <div className={styles.reviewContent}>
         <p className={styles.reviewTxt}>{content}</p>
-        <div> 이미지 박스 </div>
-        {/* 이미지 조건문으로 map 순회 최대 3개 */}
+        {/* {imgUrl && (
+          <Image src={imgUrl[0]} width={100} height={100} alt={memberName} />
+        )} */}
+        {/* <div> 이미지 박스 </div>
+        이미지 조건문으로 map 순회 최대 3개 */}
       </div>
     </article>
   );

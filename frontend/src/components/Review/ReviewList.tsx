@@ -7,27 +7,25 @@ import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import ReviewItem from "./ReviewItem";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { setReview } from "@/src/store/reducers/reviewSlice";
+import { data, setReview } from "@/src/store/reducers/reviewSlice";
 import Pagebar from "../Pagenation/Pagebar";
 
-// 해당 여행지 총 리뷰 건수, 별점 데이터 가져오기
+// 해당 여행지 총 리뷰 건수, 평균 별점 데이터 가져오기
 // 정렬 필터 (별점 순)
 // 리뷰 전체 조회
 // 이미지 개수에 따라 배열 돌리기
 
 interface Review {
   memberName: string;
-  // 프로필 url 추가
+  memberImage: string;
   content: string;
-  imgUrl: [];
-  overview: string;
-  rating: string;
-  review: string;
+  // imgUrl: [];
+  rating: number;
 }
 
-export default function Review() {
+export default function ReviewList() {
   const router = useRouter();
-  const { id, name } = router.query;
+  const { placeId, name } = router.query;
   const [reviewData, setReviewData] = useState<Review[]>([]);
   const [selectedValue, setSelectedValue] = useState("default");
   const dispatch = useDispatch();
@@ -43,16 +41,16 @@ export default function Review() {
   useEffect(() => {
     const fetchReview = async () => {
       try {
-        const res = await axios.get(`/api/review/${id}`);
-        dispatch(setReview(res.data.data));
-        const { reviews } = res.data.data;
-        setReviewData(reviews);
+        const res = await axios.get(`/api/review/${placeId}`);
+        dispatch(setReview(res.data));
+        const { data } = res.data;
+        setReviewData(data);
       } catch (err) {
         console.error(err);
       }
     };
     fetchReview();
-  }, [id, page]);
+  }, [placeId, page]);
 
   return (
     <>
@@ -68,7 +66,7 @@ export default function Review() {
                 pathname: "/review/create-review",
                 query: {
                   name: name,
-                  id: id,
+                  placeId: placeId,
                 },
               }}
               as={`/review/create-review`}
@@ -101,10 +99,14 @@ export default function Review() {
           <div className={styles.reviewList}>
             {reviewData?.map((review) => (
               <ReviewItem
+                key={review.memberName}
                 memberName={review.memberName}
+                memberImage={review.memberImage}
                 rating={review.rating}
                 content={review.content}
-                imgUrl={review.imgUrl}
+                // imgUrl={review.imgUrl[0]}
+
+                // imgUrl={review.imgUrl}
               />
             ))}
           </div>
