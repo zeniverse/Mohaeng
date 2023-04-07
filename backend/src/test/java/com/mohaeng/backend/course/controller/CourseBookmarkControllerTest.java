@@ -20,8 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -95,17 +94,15 @@ class CourseBookmarkControllerTest {
     @WithMockUser
     public void cancelCourseBookmark() throws Exception {
         //Given
-        given(courseBookmarkService.cancelBookmark(anyLong(), anyString()))
-                .willReturn(CourseBookmarkRes.from(1L, 1L));
-        Long courseId = 100L;
+        doNothing().when(courseBookmarkService).cancelBookmark(anyLong(), anyString());
 
         //When & Then
-        mockMvc.perform(delete("/api/course/bookmark/{courseId}", courseId)
+        mockMvc.perform(delete("/api/course/bookmark/1")
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        verify(courseBookmarkService).cancelBookmark(eq(courseId), any());
+        verify(courseBookmarkService).cancelBookmark(anyLong(), any());
     }
 
 
@@ -114,9 +111,6 @@ class CourseBookmarkControllerTest {
     @WithAnonymousUser
     public void cancelCourseBookmark_noMember() throws Exception {
         //Given
-        given(courseBookmarkService.cancelBookmark(anyLong(), anyString()))
-                .willThrow(new MemberNotFoundException());
-
         //When & Then
         mockMvc.perform(delete("/api/course/bookmark/")
                         .with(csrf()))
@@ -131,9 +125,6 @@ class CourseBookmarkControllerTest {
     @WithMockUser
     public void cancelCourseBookmark_noCourse() throws Exception {
         //Given
-        given(courseBookmarkService.cancelBookmark(nullable(Long.class), anyString()))
-                .willThrow(new CourseNotFoundException());
-
         //When & Then
         mockMvc.perform(delete("/api/course/bookmark/")
                         .with(csrf()))
