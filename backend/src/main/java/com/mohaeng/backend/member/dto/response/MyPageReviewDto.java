@@ -13,7 +13,7 @@ public class MyPageReviewDto {
     private String title;
     private String content;
     private int likeCount;
-    private double rating;
+    private String rating;
     private LocalDateTime createdDate;
 
     public static MyPageReviewDto of(Review review) {
