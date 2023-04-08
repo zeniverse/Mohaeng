@@ -18,6 +18,8 @@ public class MyPageCourseDto {
     private String title;
     private String imgUrl;
     private int likeCount;
+    private String content;
+    private String courseDays;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private LocalDateTime createdDate;
@@ -30,6 +32,8 @@ public class MyPageCourseDto {
                 course.getTitle(),
                 course.getThumbnailUrl(),
                 course.getLikeCount(),
+                course.getContent(),
+                course.getCourseDays(),
                 course.getStartDate(),
                 course.getEndDate(),
                 course.getCreatedDate(),
