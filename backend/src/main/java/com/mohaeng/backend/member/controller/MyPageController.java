@@ -4,9 +4,11 @@ import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.dto.request.UserInfoChangeRequest;
 import com.mohaeng.backend.member.dto.response.MyPageCourseBookMarkDto;
+import com.mohaeng.backend.member.dto.response.MyPageCourseDto;
 import com.mohaeng.backend.member.dto.response.MyPagePlaceBookMarkDto;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.service.MemberService;
+import com.mohaeng.backend.member.service.MyPageCourseService;
 import com.mohaeng.backend.member.service.MyPageService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import java.util.List;
 public class MyPageController {
     private final MemberService memberService;
     private final MyPageService myPageService;
+    private final MyPageCourseService myPageCourseService;
     private final TokenGenerator tokenGenerator;
 
     @GetMapping("/myPage/course/bookMark")
@@ -73,6 +76,23 @@ public class MyPageController {
         MyPagePlaceBookMarkDto data = myPageService.findOneBookMarkedPlace(email, placeBookMarkId);
         return ResponseEntity.ok().body(BaseResponse.success("ok", data));
     }
+
+    @GetMapping("/myPage/course")
+    public ResponseEntity getAllMyCourse(HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        List<MyPageCourseDto> data = myPageCourseService.findAllMyCourse(email);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", data));
+    }
+
+    @GetMapping("/myPage/course/{courseId}")
+    public ResponseEntity getOneMyCourse(@PathVariable long courseId, HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        MyPageCourseDto data = myPageCourseService.findOneMyCourse(email, courseId);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", data));
+    }
+
+
+
 
     private String findEmailFromHeader(HttpServletRequest request) {
         return tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
