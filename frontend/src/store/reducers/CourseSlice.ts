@@ -5,13 +5,13 @@ import {
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ICourse } from "../../interfaces/Course.type";
 import { RootState } from "../store";
+import { createCourseAction } from "./CourseFormSlice";
 
 interface CourseState {
   error?: string;
   courseList: ICourse[];
   totalElements?: number;
   totalPages?: number;
-  // places: IPlacesForm
 }
 
 export const initialState: CourseState = {
@@ -29,13 +29,13 @@ export const getCourseListAction = createAsyncThunk(
     }
   }
 );
+
 export const toggleBookmarkAction = createAsyncThunk(
   "course/toggleBookmark",
   async (courseId: number, { getState }) => {
     const courseState = (await getState()) as RootState;
     const courseList = courseState.course.courseList;
-    const index = courseList.findIndex((course) => course.id === courseId);
-    const course = courseList[index];
+    const course = courseList.find((course) => course.id === courseId);
     const isBookMarked = course ? course.isBookMarked : false;
     if (isBookMarked) {
       await toggleBookmarkApi(courseId, "DELETE");
@@ -44,15 +44,25 @@ export const toggleBookmarkAction = createAsyncThunk(
       await toggleBookmarkApi(courseId, "POST");
       console.log("북마크 추가");
     }
-    return index;
+    return { courseId, course };
   }
 );
 
 export const CourseSlice = createSlice({
   name: "course",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    addCourseToList: (state, action) => {
+      state.courseList.push(action.payload);
+    },
+  },
   extraReducers: (builder) => {
+    builder.addCase(createCourseAction.fulfilled, (state, action) => {
+      // state.createUserFormStatus = ApiStatus.success;
+      const { formData, resData } = action.payload;
+      const createdCourse = { id: resData.courseId, ...formData };
+      CourseSlice.actions.addCourseToList(createdCourse);
+    });
     builder.addCase(getCourseListAction.pending, (state) => {});
     builder.addCase(getCourseListAction.fulfilled, (state, action) => {
       const { courseList, totalElements, totalPages } = action.payload;
@@ -63,13 +73,15 @@ export const CourseSlice = createSlice({
     builder.addCase(getCourseListAction.rejected, (state) => {});
     builder.addCase(toggleBookmarkAction.pending, (state) => {});
     builder.addCase(toggleBookmarkAction.fulfilled, (state, action) => {
-      const index = action.payload;
-      state.courseList[index].isBookMarked =
-        !state.courseList[index].isBookMarked;
+      const { courseId } = action.payload;
+      const course = state.courseList.find((c) => c.id === courseId);
+      if (course) {
+        course.isBookMarked = !course.isBookMarked;
+      }
     });
     builder.addCase(toggleBookmarkAction.rejected, (state) => {});
   },
 });
 
-export const {} = CourseSlice.actions;
+export const { addCourseToList } = CourseSlice.actions;
 export default CourseSlice.reducer;

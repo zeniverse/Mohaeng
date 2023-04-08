@@ -7,8 +7,6 @@ import { getCourseListAction } from "@/src/store/reducers/CourseSlice";
 import { setPage } from "@/src/store/reducers/pageSlice";
 import Pagebar from "../Pagenation/Pagebar";
 import ListContainer from "../UI/ListContainer";
-import ApiConfig from "@/src/services/ApiConfig";
-import axios from "axios";
 
 const CourseList = () => {
   const { courseList, totalElements, totalPages } = useAppSelector(
@@ -29,20 +27,6 @@ const CourseList = () => {
       })
     );
   }, [dispatch, region, page, keyword, sort]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/course`
-        );
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
 
   return (
     <>

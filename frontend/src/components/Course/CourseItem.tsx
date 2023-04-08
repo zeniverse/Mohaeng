@@ -66,6 +66,7 @@ const CourseItem = ({
       </Link>
       <div className={styles["item-nav-container"]}>
         <div className={styles["item-nav"]} onClick={() => bookmarkHandler(id)}>
+          {/* TODO: CSS 손보기 */}
           {isBookMarked ? <BsBookmarkFill /> : <BsBookmark />}
         </div>
         <div className={`${styles["item-nav"]} ${styles.center}`}>
