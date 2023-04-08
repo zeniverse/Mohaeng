@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface data {
+export interface ReviewData {
   reviewId: number;
   nickname: string;
   memberImage: string;
@@ -11,7 +11,7 @@ export interface data {
 }
 
 export interface ReviewState {
-  data: data[];
+  data: ReviewData[];
   totalPages: number;
   totalElements: number;
 }
