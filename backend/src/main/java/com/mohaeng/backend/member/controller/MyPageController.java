@@ -93,10 +93,10 @@ public class MyPageController {
         return ResponseEntity.ok().body(BaseResponse.success("ok", data));
     }
 
-    @PutMapping("/myPage/course/{placeId}")
-    public ResponseEntity changeCourseVisibility(@PathVariable long placeId, @RequestBody VisibilityRequest visibilityRequest, HttpServletRequest request) {
+    @PutMapping("/myPage/course/{courseId}")
+    public ResponseEntity changeCourseVisibility(@PathVariable long courseId, @RequestBody VisibilityRequest visibilityRequest, HttpServletRequest request) {
         String email = findEmailFromHeader(request);
-        myPageCourseService.changeVisibility(email, placeId, visibilityRequest);
+        myPageCourseService.changeVisibility(email, courseId, visibilityRequest);
         return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
     }
 
@@ -106,6 +106,15 @@ public class MyPageController {
         List<MyPageReviewDto> data = myPageService.getAllMyReview(email);
         return ResponseEntity.ok().body(BaseResponse.success("ok", data));
     }
+
+    @GetMapping("/myPage/myReview/{reviewId}")
+    public ResponseEntity getMyReview(@PathVariable long reviewId , HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        MyPageReviewDto data = myPageService.getOneMyReview(email, reviewId);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", data));
+    }
+
+
 
     private String findEmailFromHeader(HttpServletRequest request) {
         return tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
