@@ -1,0 +1,28 @@
+.bookmark-item {
+  display: flex;
+  align-items: center;
+  width: 800px;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.bookmark-item img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.bookmark-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bookmark-item h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.bookmark-item p {
+  margin: 0;
+}

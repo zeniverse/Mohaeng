@@ -1,17 +1,21 @@
 import styles from "./UserBookmarkItem.module.css";
 
-const UserBookmarkItem = () => {
+export interface bookmarkState {
+  id: number;
+  image: string;
+  name: string;
+  desc: string;
+}
+
+const UserBookmarkItem = (prop: bookmarkState) => {
   return (
-    <>
-      {" "}
-      {/* <div key={bookmark.id} className={styles["bookmark-item"]}>
-        <img src={bookmark.imageUrl} alt={bookmark.name} />
-        <div>
-          <h2>{bookmark.name}</h2>
-          <p>{bookmark.description}</p>
-        </div>
-      </div> */}
-    </>
+    <div key={prop.id} className={styles["bookmark-item"]}>
+      <img src={prop.image} alt={prop.image} />
+      <div>
+        <h2>{prop.name}</h2>
+        <p>{prop.desc}</p>
+      </div>
+    </div>
   );
 };
 

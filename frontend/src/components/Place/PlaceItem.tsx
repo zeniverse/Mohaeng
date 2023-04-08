@@ -10,12 +10,15 @@ import { setPlace } from "@/src/store/reducers/PlaceSlice";
 import { RootState } from "@/src/store/store";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
+import FiveStarRating from "../FiveStarRating/FiveStarRating";
 
 const PlaceItem = ({
   name,
   firstImage,
   areaCode,
   placeId,
+  rating,
+  review,
   isBookmarked,
   contentId,
 }: content) => {
@@ -90,8 +93,13 @@ const PlaceItem = ({
         <Link
           href={{
             pathname: "/place/[id]",
-            query: { id: contentId },
+            query: {
+              contentId: contentId,
+              placeId: placeId,
+              name: name,
+            },
           }}
+          as={`/place/${contentId}`}
         >
           <div className={styles["item-image"]}>
             <div className={styles["item-image-box"]}></div>
@@ -104,9 +112,13 @@ const PlaceItem = ({
             />
           </div>
         </Link>
-        <div className={styles["item-nav-container"]}>
-          {/* <div className={styles["item-nav"]}>{placeRating}</div> */}
-          <div className={styles["item-nav"]}>
+        <div className={styles.keywordInfo}>
+          <div className={styles.keywordDesc}>
+            <p className={styles.title}>{name}</p>
+            <FiveStarRating rating={rating} />
+            <p className={styles.review}>{review}건의 리뷰</p>
+          </div>
+          <div className={styles.keywordBookmark}>
             {isBookmarked === true ? (
               <BsBookmarkFill
                 onClick={delBookmark}
@@ -117,19 +129,6 @@ const PlaceItem = ({
             )}
           </div>
         </div>
-      </div>
-
-      <div>
-        <Link
-          href={{
-            pathname: "/place/[id]",
-            query: { id: placeId },
-          }}
-        >
-          <div className={styles["item-info-text"]}>
-            <h3> {name}</h3>
-          </div>
-        </Link>
       </div>
     </div>
   );

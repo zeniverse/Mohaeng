@@ -44,49 +44,37 @@
   object-position: center;
 }
 
-.item-info {
+.keywordInfo {
+  display: flex;
+  flex-direction: row;
+  padding: 0 1rem 0.5em 1rem;
+}
+
+.keywordDesc {
   display: flex;
   flex-direction: column;
 }
 
-.item-info-text {
-  margin-top: 0.6rem;
-  padding: 0rem 0.4rem;
-  align-items: center;
-  text-align: center;
-}
-
-.item-info-text h3 {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
+.title {
+  display: block;
+  width: 180px;
+  margin-top: 4px;
   overflow: hidden;
-  font-size: 1.1rem;
-}
-.item-info-text p {
-  font-size: 0.8rem;
-  color: var(--color-text-test);
-  white-space: normal;
-  height: 2.6rem;
-  overflow: hidden;
-  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: large;
+  text-align: left;
+  font-weight: 700;
 }
 
-.item-nav {
-  width: 100%;
-  display: flex;
-  cursor: pointer;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 0.4rem;
-  color: var(--color-text-basic);
-  font-size: 1.1rem;
+.review {
+  font-size: small;
 }
 
-.item-nav.center {
-  border-right: 1px solid var(--color-border-semi);
-  border-left: 1px solid var(--color-border-semi);
+.keywordBookmark {
+  width: 30px;
+  margin-top: 10px;
+  margin-left: 120px;
 }
 
 .bookmark,

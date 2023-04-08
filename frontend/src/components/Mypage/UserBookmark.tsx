@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { BiBookmark } from "react-icons/bi";
+import UserBookmarkItem from "./UserBookmarkItem";
 
 const UserBookmark = () => {
   const courseBookmark = useSelector(
@@ -41,28 +42,40 @@ const UserBookmark = () => {
       <div className={styles["bookmark-container"]}>
         {activeTab === "place"
           ? placeBookmark.map((bookmark) => (
-              <div
-                key={bookmark.bookMarkId}
-                className={styles["bookmark-item"]}
-              >
-                <img src={bookmark.placeImgUrl} alt={bookmark.placeImgUrl} />
-                <div>
-                  <h2>{bookmark.placeName}</h2>
-                  <p>{bookmark.address}</p>
-                </div>
-              </div>
+              <UserBookmarkItem
+                id={bookmark.bookMarkId}
+                name={bookmark.placeName}
+                image={bookmark.placeImgUrl}
+                desc={bookmark.address}
+              />
+              // <div
+              //   key={bookmark.bookMarkId}
+              //   className={styles["bookmark-item"]}
+              // >
+              //   <img src={bookmark.placeImgUrl} alt={bookmark.placeImgUrl} />
+              //   <div>
+              //     <h2>{bookmark.placeName}</h2>
+              //     <p>{bookmark.address}</p>
+              //   </div>
+              // </div>
             ))
           : courseBookmark.map((bookmark) => (
-              <div
-                key={bookmark.bookMarkId}
-                className={styles["bookmark-item"]}
-              >
-                <img src={bookmark.courseImgUrl} alt={bookmark.courseTitle} />
-                <div>
-                  <h2>{bookmark.courseTitle}</h2>
-                  <p>{bookmark.region}</p>
-                </div>
-              </div>
+              <UserBookmarkItem
+                id={bookmark.bookMarkId}
+                name={bookmark.courseTitle}
+                image={bookmark.courseImgUrl}
+                desc={bookmark.region}
+              />
+              // <div
+              //   key={bookmark.bookMarkId}
+              //   className={styles["bookmark-item"]}
+              // >
+              //   <img src={bookmark.courseImgUrl} alt={bookmark.courseTitle} />
+              //   <div>
+              //     <h2>{bookmark.courseTitle}</h2>
+              //     <p>{bookmark.region}</p>
+              //   </div>
+              // </div>
             ))}
       </div>
     </>
