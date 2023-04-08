@@ -66,6 +66,7 @@ export default function CourseDetail() {
         `${process.env.NEXT_PUBLIC_API_URL}/api/course/${id}`
       );
       const courseData = await response.json();
+      console.log(courseData);
       setcourseDetail(courseData.data);
     };
 

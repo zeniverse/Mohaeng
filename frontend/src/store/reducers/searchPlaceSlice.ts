@@ -4,6 +4,10 @@ export interface content {
   name: string;
   firstImage: string;
   contentId: string;
+  placeId: number;
+  isBookmark: boolean;
+  rating: string;
+  review: string;
 }
 
 export interface SearchPlaceState {

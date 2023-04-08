@@ -69,7 +69,7 @@ export default function index() {
         <div className={styles.info}>
           <KakaoMap mapData={course.places} />
           <div className={styles.list}>
-            <CourseOrderList places={course?.places} />
+            <CourseOrderList places={course?.places} mode={"write"} />
           </div>
         </div>
       )}

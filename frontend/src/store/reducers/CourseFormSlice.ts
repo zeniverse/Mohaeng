@@ -8,6 +8,7 @@ import {
   ICourseOriginForm,
   ICourseSubmitForm,
 } from "../../interfaces/Course.type";
+import CourseSlice from "./CourseSlice";
 
 interface CourseState {
   error?: string;
@@ -31,10 +32,10 @@ export const initialState: CourseState = {
 
 export const createCourseAction = createAsyncThunk(
   "course/createUserAction",
-  async (data: ICourseSubmitForm) => {
-    const response = await createCourseApi(data);
-
-    return response.data;
+  async (formData: ICourseSubmitForm) => {
+    const response = await createCourseApi(formData);
+    const resData = await response.data.data;
+    return { formData, resData };
   }
 );
 
@@ -55,6 +56,12 @@ export const CourseFormSlice = createSlice({
         [name]: value,
       };
     },
+    removePlace: (state, action) => {
+      const newList = state.course.places.filter(
+        (place) => place.placeId !== action.payload
+      );
+      state.course.places = newList;
+    },
     resetFormValue: () => {
       return initialState;
     },
@@ -67,7 +74,7 @@ export const CourseFormSlice = createSlice({
     builder.addCase(createCourseAction.pending, (state) => {
       // state.createUserFormStatus = ApiStatus.loading;
     });
-    builder.addCase(createCourseAction.fulfilled, (state) => {
+    builder.addCase(createCourseAction.fulfilled, (state, action) => {
       // state.createUserFormStatus = ApiStatus.success;
     });
     builder.addCase(createCourseAction.rejected, (state) => {
@@ -76,6 +83,6 @@ export const CourseFormSlice = createSlice({
   },
 });
 
-export const { setFormValue, resetFormValue, addPlaceObject } =
+export const { setFormValue, resetFormValue, addPlaceObject, removePlace } =
   CourseFormSlice.actions;
 export default CourseFormSlice.reducer;
