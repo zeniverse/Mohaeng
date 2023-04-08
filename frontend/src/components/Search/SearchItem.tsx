@@ -25,7 +25,6 @@ export default function SearchItem({
   const dispatch = useDispatch();
   const accessToken = cookie.load("accessToken");
   const page = useSelector((state: RootState) => state.page.page);
-
   const addBookmark = () => {
     const response = async () => {
       await axios.post(
