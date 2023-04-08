@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MyPageReviewDto {
     private long reviewId;
+    private long placeId;
     private String title;
     private String content;
     private int likeCount;
@@ -29,6 +30,7 @@ public class MyPageReviewDto {
 
         return new MyPageReviewDto(
                 review.getId(),
+                review.getPlace().getId(),
                 review.getTitle(),
                 review.getContent(),
                 review.getLikeCount(),
