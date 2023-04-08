@@ -13,14 +13,14 @@ export interface CourseList {
 }
 
 export type CourseListProps = {
-  id: string;
+  id: number;
   title: string;
   content: string;
   likeCount: number;
   courseDays: string;
   thumbnailUrl: string;
-  bookMark: boolean;
-  like: boolean;
+  isBookMarked: boolean;
+  isLiked: boolean;
   places: placesName[];
 };
 

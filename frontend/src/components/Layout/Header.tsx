@@ -18,7 +18,7 @@ import SearchBar from "../Search/SearchBar";
 import Image from "next/image";
 import { resetFilter, selectArea } from "@/src/store/reducers/FilterSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
+// import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 
@@ -55,7 +55,7 @@ function Header({}: Props) {
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
         dispatch(setImgUrl(imgUrl));
-        appDispatch(getCourseBookmark(accessToken));
+        // appDispatch(getCourseBookmark(accessToken));
         appDispatch(getPlaceBookmark(accessToken));
         setUser(nickName);
       }
