@@ -14,9 +14,11 @@ public class PlaceSearchDto {
     private String contentId;
     private String firstImage;
     private Boolean isBookmarked;
+    private double averageRating;
+    private long reviewTotalElements;
 
-    public static PlaceSearchDto from(Place place, Boolean isBookmarked){
+    public static PlaceSearchDto from(Place place, Boolean isBookmarked, double averageRating, long reviewTotalElements){
         return new PlaceSearchDto(place.getId(), place.getName(),
-                place.getContentId(), place.getFirstImage(),isBookmarked );
+                place.getContentId(), place.getFirstImage(), isBookmarked, averageRating, reviewTotalElements);
     }
 }
