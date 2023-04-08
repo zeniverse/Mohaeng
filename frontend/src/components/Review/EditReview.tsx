@@ -9,6 +9,7 @@ import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
 
 // 리뷰 아이디 get 정보 받아오기
+// input 기본 value로 데이터 넣기
 
 interface Review {
   title: string;

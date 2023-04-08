@@ -16,6 +16,7 @@ import Pagebar from "../Pagenation/Pagebar";
 // 이미지 개수에 따라 배열 돌리기
 
 interface Review {
+  id: number;
   nickname: string;
   memberImage: string;
   content: string;
@@ -33,6 +34,26 @@ export default function ReviewList() {
   const totalPages: number = useSelector(
     (state: RootState) => state.searchPlace.totalPages
   );
+  const currentUser = useSelector(
+    (state: RootState) => state.nickName.nickName
+  );
+
+  const handleClickReviewBtn = () => {
+    if (!currentUser) {
+      router.push(
+        {
+          pathname: "/review/create-review",
+          query: {
+            plcaceId: placeId,
+            name: name,
+          },
+        },
+        "review/create-review"
+      );
+    } else if (currentUser) {
+      window.alert("여행지별로 리뷰는 한 번만 작성할 수 있습니다.");
+    }
+  };
 
   const handleChange = (e: { target: { value: SetStateAction<string> } }) => {
     setSelectedValue(e.target.value);
@@ -60,19 +81,9 @@ export default function ReviewList() {
             <div className={styles.titleBox}>
               <h2 className={styles.h2}>리뷰</h2>
             </div>
-            <Link
-              className={styles.reviewBtn}
-              href={{
-                pathname: "/review/create-review",
-                query: {
-                  name: name,
-                  placeId: placeId,
-                },
-              }}
-              as={`/review/create-review`}
-            >
+            <button className={styles.reviewBtn} onClick={handleClickReviewBtn}>
               리뷰 작성
-            </Link>
+            </button>
           </div>
 
           <aside className={styles.reviewNav}>
@@ -106,8 +117,6 @@ export default function ReviewList() {
                 content={review.content}
                 createdDate={review.createdDate}
                 imgUrl={review.imgUrl}
-
-                // imgUrl={review.imgUrl}
               />
             ))}
           </div>

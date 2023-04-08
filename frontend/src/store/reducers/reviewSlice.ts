@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface data {
+  reviewId: number;
   nickname: string;
   memberImage: string;
   rating: string;

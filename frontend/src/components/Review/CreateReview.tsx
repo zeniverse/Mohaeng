@@ -45,6 +45,7 @@ export default function CreateReview() {
     setClicked(clickStates);
   };
 
+  // * 이미지 미리보기
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newImages = [...images];
     const newPreviews = [...previews];
@@ -85,11 +86,12 @@ export default function CreateReview() {
     }
     const formData = new FormData();
     images.forEach((image) => {
-      formData.append("multipartFile", image);
+      if (image instanceof File && image.size > 0) {
+        formData.append("multipartFile", image);
+      }
     });
 
     let review = {
-      title: "테스트",
       rating: rating,
       content: content,
     };

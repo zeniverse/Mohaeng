@@ -44,14 +44,16 @@
   height: 50px;
   padding: 1rem;
   background-color: var(--color-primary);
+  border: none;
   border-radius: 50px;
   text-decoration: none;
   text-align: center;
+  font-size: medium;
   color: var(--color-text-basic);
 }
 
 .reviewBtn:hover {
-  filter: brightness(90%);
+  filter: brightness(105%);
 }
 
 .reviewNav {

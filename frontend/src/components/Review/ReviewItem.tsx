@@ -38,7 +38,7 @@ export default function ReviewItem({
   const dispatch = useDispatch();
   // setUser(currentUser);
 
-  const isUser = nickname === nickname;
+  const isUser = nickname === currentUser;
 
   const handleOpenDeleteModal = () => {
     dispatch(
@@ -100,7 +100,7 @@ export default function ReviewItem({
       <div className={styles.reviewContent}>
         <p className={styles.reviewTxt}>{content}</p>
         <div className={styles.reviewImgBox}>
-          {imgUrl.map((imgUrl, index) => (
+          {imgUrl?.map((imgUrl, index) => (
             <div className={styles.reviewImg} key={index}>
               <Image
                 src={imgUrl}
