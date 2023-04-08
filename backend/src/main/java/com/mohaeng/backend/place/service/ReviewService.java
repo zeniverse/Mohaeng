@@ -16,7 +16,6 @@ import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.repository.ReviewImageRepository;
 import com.mohaeng.backend.place.repository.ReviewRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +52,7 @@ public class ReviewService {
     public void createReview(String email, Long placeId, CreateReviewRequest createReviewRequest, List<String> fileNameList) {
         Place findPlace = placeRepository.findById(placeId)
                 .orElseThrow(() -> new PlaceNotFoundException("NOT_EXIST_PLACE"));
-        Member findMember = memberRepository.findByEmailAndDeletedDateIsNull(email)
+        Member findMember = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberNotFoundException());
 
         LocalDateTime createdDate = createReviewRequest.getCreatedDate();

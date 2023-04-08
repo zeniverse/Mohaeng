@@ -7,7 +7,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,7 @@ public class JwtFilter extends GenericFilterBean {
 
         if (accessToken != null && tokenGenerator.checkToken(accessToken)) {
             String email = tokenGenerator.parseEmailFromToken(accessToken);
-            Member member = memberRepository.findByEmailAndDeletedDateIsNull(email).get();
+            Member member = memberRepository.findByEmail(email).get();
 
 //            request.setAttribute("userEmail", email);
 

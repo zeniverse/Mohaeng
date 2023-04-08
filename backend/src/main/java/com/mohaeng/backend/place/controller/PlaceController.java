@@ -8,7 +8,6 @@ import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
-import com.mohaeng.backend.place.dto.PlaceDetailsDto;
 import com.mohaeng.backend.place.dto.PlaceSearchDto;
 import com.mohaeng.backend.place.dto.response.FindAllPlacesResponse;
 import com.mohaeng.backend.place.dto.response.FindSearchPlacesResponse;
@@ -35,8 +34,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Objects.isNull;
 
 
 @RestController
@@ -164,7 +161,7 @@ public class PlaceController {
         if (request.getHeader("Access-Token") == null){
             return null;
         }else{
-            return memberRepository.findByEmailAndDeletedDateIsNull(tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token")))
+            return memberRepository.findByEmail(tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token")))
                     .orElseThrow(MemberNotFoundException::new);
         }
     }

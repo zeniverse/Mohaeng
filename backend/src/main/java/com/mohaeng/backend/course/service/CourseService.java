@@ -232,11 +232,11 @@ public class CourseService {
     }
 
     private Member isLogin(String email){
-        return isNull(email) ? null : memberRepository.findByEmailAndDeletedDateIsNull(email).orElseThrow(MemberNotFoundException::new);
+        return isNull(email) ? null : memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
     }
 
     private Member isMember(String memberEmail){
-        return memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(MemberNotFoundException::new);
+        return memberRepository.findByEmail(memberEmail).orElseThrow(MemberNotFoundException::new);
     }
 
     private Course isCourse(Long id){
