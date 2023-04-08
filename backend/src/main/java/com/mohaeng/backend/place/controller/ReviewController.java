@@ -33,7 +33,7 @@ public class ReviewController {
 
     @GetMapping("/review/{placeId}")
     public ResponseEntity getPlaceReview(@PathVariable Long placeId,
-                                         @RequestParam(defaultValue = "0") int page) {
+                                         @RequestParam(defaultValue = "1") int page) {
         Page<Review> reviews = reviewService.getAllReviewByPage(placeId, page);
         List<FindAllReviewResponse> data = reviews.map(FindAllReviewResponse::of).getContent();
         double averageRating = reviewService.getAverageRating(reviews.getContent());
@@ -81,6 +81,26 @@ public class ReviewController {
 
     private String getEmail(HttpServletRequest httpServletRequest) {
         return tokenGenerator.parseEmailFromToken(httpServletRequest.getHeader("Access-Token"));
+    }
+
+    @GetMapping("/review/{placeId}/rating")
+    public ResponseEntity getPlaceReviewsByRating(@PathVariable Long placeId,
+                                                  @RequestParam(defaultValue = "1") int page) {
+        Page<Review> reviews = reviewService.getAllReviewsByRating(placeId, page);
+        List<FindAllReviewResponse> data = reviews.map(FindAllReviewResponse::of).getContent();
+        double averageRating = reviewService.getAverageRating(reviews.getContent());
+        FindSearchReviewsResponse response = new FindSearchReviewsResponse(data, reviews.getTotalPages(), reviews.getTotalElements(), averageRating);
+        return ResponseEntity.ok(BaseResponse.success("ok", response));
+    }
+
+    @GetMapping("/review/{placeId}/date")
+    public ResponseEntity getPlaceReviewsByDate(@PathVariable Long placeId,
+                                                @RequestParam(defaultValue = "1") int page) {
+        Page<Review> reviews = reviewService.getAllReviewsByDate(placeId, page);
+        List<FindAllReviewResponse> data = reviews.map(FindAllReviewResponse::of).getContent();
+        double averageRating = reviewService.getAverageRating(reviews.getContent());
+        FindSearchReviewsResponse response = new FindSearchReviewsResponse(data, reviews.getTotalPages(), reviews.getTotalElements(), averageRating);
+        return ResponseEntity.ok(BaseResponse.success("ok", response));
     }
 
 }
