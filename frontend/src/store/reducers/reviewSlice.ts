@@ -27,7 +27,7 @@ export const reviewSlice = createSlice({
   initialState,
   reducers: {
     setReview: (state, action) => {
-      state.data = action.payload.review;
+      state.data = action.payload.data;
       state.totalPages = action.payload.totalPages;
       state.totalElements = action.payload.totalElements;
     },

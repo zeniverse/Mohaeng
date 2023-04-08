@@ -37,23 +37,7 @@ export default function ReviewList() {
   const currentUser = useSelector(
     (state: RootState) => state.nickName.nickName
   );
-
-  const handleClickReviewBtn = () => {
-    if (!currentUser) {
-      router.push(
-        {
-          pathname: "/review/create-review",
-          query: {
-            plcaceId: placeId,
-            name: name,
-          },
-        },
-        "review/create-review"
-      );
-    } else if (currentUser) {
-      window.alert("여행지별로 리뷰는 한 번만 작성할 수 있습니다.");
-    }
-  };
+  console.log(currentUser);
 
   const handleChange = (e: { target: { value: SetStateAction<string> } }) => {
     setSelectedValue(e.target.value);
@@ -72,6 +56,25 @@ export default function ReviewList() {
     };
     fetchReview();
   }, [placeId, page]);
+
+  const handleClickReviewBtn = () => {
+    // if (!currentUser) {
+    //   router.push("/login");
+    // } else if (currentUser) {
+    //   window.alert("여행지별로 리뷰는 한 번만 작성할 수 있습니다.");
+    // } else if (currentUser === "") {
+    router.push(
+      {
+        pathname: "/review/create-review",
+        query: {
+          plcaceId: placeId,
+          name: name,
+        },
+      },
+      "review/create-review"
+    );
+    // }
+  };
 
   return (
     <>
