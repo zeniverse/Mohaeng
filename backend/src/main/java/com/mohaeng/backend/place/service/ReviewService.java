@@ -55,11 +55,11 @@ public class ReviewService {
     }
 
 
-    public Page<Review> getAllReviewByPage(Long id, int pageNumber) {
+    public Page<Review> getAllReviewByPage(Long id, int page) {
         Place findPlace = placeRepository.findById(id)
                 .orElseThrow(() -> new PlaceNotFoundException("NOT_EXIST_PLACE"));
 
-        Pageable pageable = PageRequest.of(pageNumber, 4);
+        Pageable pageable = PageRequest.of(page - 1, 4);
         Page<Review> reviews = reviewRepository.findAllByPlaceId(id, pageable);
 //        List<FindAllReviewResponse> reviewResponses = reviews.map(FindAllReviewResponse::of).getContent();
         return reviews;
@@ -173,12 +173,12 @@ public class ReviewService {
     }
 
     public Page<Review> getAllReviewsByRating(Long placeId, int page) {
-        Pageable pageable = PageRequest.of(page, 4, Sort.by("rating").descending());
+        Pageable pageable = PageRequest.of(page - 1 , 4, Sort.by("rating").descending());
         return reviewRepository.findAllByPlaceId(placeId, pageable);
     }
 
     public Page<Review> getAllReviewsByDate(Long placeId, int page) {
-        Pageable pageable = PageRequest.of(page, 4, Sort.by("createdDate").descending());
+        Pageable pageable = PageRequest.of(page - 1, 4, Sort.by("createdDate").descending());
         return reviewRepository.findAllByPlaceId(placeId, pageable);
     }
 }
