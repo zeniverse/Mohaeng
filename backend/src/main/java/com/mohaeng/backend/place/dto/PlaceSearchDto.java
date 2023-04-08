@@ -9,13 +9,14 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class PlaceSearchDto {
+    private Long placeId;
     private String name;
     private String contentId;
     private String firstImage;
-    private Boolean isBookmark;
+    private Boolean isBookmarked;
 
-    public static PlaceSearchDto from(Place place, Boolean isBookmark){
-        return new PlaceSearchDto(place.getName(),
-                place.getContentId(), place.getFirstImage(),isBookmark );
+    public static PlaceSearchDto from(Place place, Boolean isBookmarked){
+        return new PlaceSearchDto(place.getId(), place.getName(),
+                place.getContentId(), place.getFirstImage(),isBookmarked );
     }
 }

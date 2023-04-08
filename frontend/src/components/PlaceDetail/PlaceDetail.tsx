@@ -1,12 +1,19 @@
-import { useEffect, useState } from "react";
 import styles from "./PlaceDetail.module.css";
+
 import Image from "next/image";
-import Review from "../Review/Review";
-// import KakaoMap from "../KakaoMap/KakaoMap";
-import { useRouter } from "next/router";
+import ReviewList from "../Review/ReviewList";
+import Bookmark from "../Bookmark/Bookmark";
+import PlaceDetailMap from "./PlaceDetailMap";
+
 import axios from "axios";
-import { BsBookmark, BsFillBookmarkFill } from "react-icons/bs";
+import cookie from "react-cookies";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
+import FiveStarRating from "../FiveStarRating/FiveStarRating";
+
+// 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined?
+// 북마크 delete
 
 interface PlaceInfo {
   name: string;
@@ -16,75 +23,121 @@ interface PlaceInfo {
   mapX: string;
   mapY: string;
   overview: string;
+  rating: string;
+  review: string;
 }
 
-export default function PlaceDetail() {
+const PlaceDetail = () => {
+  const accessToken = cookie.load("accessToken");
+  const dispatch = useDispatch();
   const router = useRouter();
-  const { id } = router.query;
-  const [placeInfo, setPlaceInfo] = useState<PlaceInfo[]>([]);
-  const [bookMarkIcon, setbookMarkIcon] = useState(false);
+  const { placeId, contentId } = router.query;
+  const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
+    name: "",
+    areaCode: "",
+    firstImage: "",
+    contentId: "",
+    mapX: "",
+    mapY: "",
+    overview: "",
+    rating: "",
+    review: "",
+  });
+  const [bookMarked, setBookMarked] = useState(false);
+  // 스테이트 저장해도 새로고침 시 날아감
+  const [currentId, setCurrentId] = useState("");
 
+  // useEffect(() => {
+  //   localStorage.setItem("id", id);
+  //   const id = localStorage.getItem("id");
+  //   if (id) {
+  //     setCurrentId(id);
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
+
+  // 북마크
+  const handleBookmarkClick = async () => {
+    try {
+      const res = await axios.post(`/api/place/bookmark/${placeId}`, {
+        headers: {
+          "Access-Token": `${accessToken}`,
+          withCredentials: true,
+        },
+      });
+      console.log(res.data);
+      setBookMarked(!bookMarked);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // 상세 데이터
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/place/overview/${id}`);
-        const { content } = res.data.data;
-        setPlaceInfo(content[0]);
-        console.log(placeInfo.name);
+        const res = await axios.get(`/place/overview/${contentId}`);
+        if (res.data.data.content[0] !== {}) {
+          const { content } = res.data.data;
+          setPlaceInfo({ ...placeInfo, ...content[0] });
+        } else {
+          console.log(placeInfo);
+        }
       } catch (error) {
         console.error(error);
       }
     };
     fetchData();
-  }, [id]);
+  }, [contentId, dispatch]);
 
   return (
     <>
       <section className={styles.placeDetail}>
         <div className={styles.detailHeader}>
           <div className={styles.headerTitle}>
-            <h2 className={styles.h1}>{placeInfo.name}</h2>
-            <a href="#review">
-              <p className={styles.rating}>별점 </p>
-              <p className={styles.review}>건의 리뷰</p>
+            <h2 className={styles.h2}>{placeInfo.name}</h2>
+            <a className={styles.moveToReview} href="#review">
+              <div className={styles.rating}>
+                별점 <FiveStarRating rating={placeInfo.rating} />
+              </div>
+              <p className={styles.review}>{placeInfo.review}건의 리뷰</p>
             </a>
           </div>
-          <button
-            className={styles.likeBtn}
-            onClick={() => setbookMarkIcon(!bookMarkIcon)}
-          >
-            <p className={styles.likeText}>북마크에 추가</p>
-            {bookMarkIcon === true ? (
-              <BsFillBookmarkFill className={styles.bookmark} />
-            ) : (
-              <BsBookmark className={styles.unbookmark} />
-            )}
-          </button>
-        </div>
-        <div className={styles.imgSlider}>
-          <Image
-            src={placeInfo.firstImage}
-            width={300}
-            height={300}
-            alt={placeInfo.name}
-          />
+          <div className={styles.bookMarkBox}>
+            <p className={styles.bookMarkText}>북마크에 추가</p>
+            <Bookmark bookMarked={bookMarked} onToggle={handleBookmarkClick} />
+          </div>
         </div>
         <div className={styles.detailContent}>
-          <div className={styles.detailDesc}>
-            <p className={styles.descInfo}>
-              <span className={styles.descTitle}>세부 설명 </span>
-              <p>{placeInfo.overview}</p>
-            </p>
+          <div className={styles.imgBox}>
+            <Image
+              className={styles.img}
+              src={placeInfo.firstImage}
+              width={500}
+              height={350}
+              alt={placeInfo.name}
+            />
           </div>
           <div className={styles.detailMap} id="map">
-            {/* <KakaoMap /> */}
+            <PlaceDetailMap
+              latitude={placeInfo.mapY}
+              longitude={placeInfo.mapX}
+            />
           </div>
         </div>
+        <div className={styles.detailDesc}>
+          <p className={styles.descTitle}>세부 설명 </p>
+          <p className={styles.descInfo}>{placeInfo.overview}</p>
+        </div>
       </section>
-
       <div id="review">
-        <Review />
+        <ReviewList />
       </div>
     </>
   );
-}
+};
+
+export default PlaceDetail;

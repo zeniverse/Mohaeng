@@ -35,14 +35,14 @@ const CourseList = () => {
           {courseList.map((course) => (
             <CourseItem
               key={course.id}
-              id={course.id.toString()}
+              id={course.id}
               title={course.title}
               content={course.content}
               likeCount={course.likeCount}
               thumbnailUrl={course.thumbnailUrl}
               courseDays={course.courseDays}
-              bookMark={course.bookMark}
-              like={course.like}
+              isBookMarked={course.isBookMarked}
+              isLiked={course.isLiked}
               places={course.places}
             />
           ))}

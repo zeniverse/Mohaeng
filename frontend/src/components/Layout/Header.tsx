@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
@@ -9,8 +8,8 @@ import {
   setEmail,
   setId,
   setNickname,
-  setProfileUrl,
   setToken,
+  setImgUrl,
 } from "@/src/store/reducers/loginTokenSlice";
 import { AppDispatch, RootState } from "@/src/store/store";
 import axios from "axios";
@@ -19,13 +18,15 @@ import SearchBar from "../Search/SearchBar";
 import Image from "next/image";
 import { resetFilter, selectArea } from "@/src/store/reducers/FilterSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
+// import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
+import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 
 type User = {
   id: number;
   nickName: string;
   email: string;
+  imgUrl: string;
 };
 
 type Props = {};
@@ -37,9 +38,7 @@ function Header({}: Props) {
   const router = useRouter();
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
-  const profileUrl = useSelector(
-    (state: RootState) => state.profileUrl.profileUrl
-  );
+  const imgUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
 
   useEffect(() => {
     const response = async () => {
@@ -51,12 +50,12 @@ function Header({}: Props) {
           },
           withCredentials: true,
         });
-        const { id, nickName, email, profileUrl } = userRes.data.data;
+        const { id, nickName, email, imgUrl } = userRes.data.data;
         dispatch(setId(id));
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
-        dispatch(setProfileUrl(profileUrl));
-        appDispatch(getCourseBookmark(accessToken));
+        dispatch(setImgUrl(imgUrl));
+        // appDispatch(getCourseBookmark(accessToken));
         appDispatch(getPlaceBookmark(accessToken));
         setUser(nickName);
       }
@@ -78,7 +77,7 @@ function Header({}: Props) {
     dispatch(setToken(""));
     dispatch(setNickname(""));
     dispatch(setEmail(""));
-    dispatch(setProfileUrl(""));
+    dispatch(setImgUrl(""));
     dispatch(setId(0));
     setUser([]);
     router.replace("/");
@@ -87,6 +86,13 @@ function Header({}: Props) {
 
   const ResetStatus = () => {
     dispatch(resetFilter());
+
+    const currComponent: myPageState = {
+      currIdx: 0,
+      label: "회원정보",
+    };
+
+    dispatch(setCurrIdx(currComponent));
   };
 
   return (
@@ -109,6 +115,7 @@ function Header({}: Props) {
           </div>
         </div>
       </nav>
+
       <div className={styles.btn}>
         {!nickName ? (
           <>
@@ -124,11 +131,12 @@ function Header({}: Props) {
           <>
             <Image
               className={styles["kakao-profile-img"]}
-              src={profileUrl}
+              src={imgUrl}
               alt="카카오프로필"
               width={40}
               height={40}
             />
+
             <Link href="/mypage">{nickName}님</Link>
             <button
               id="login-btn"

@@ -48,7 +48,7 @@ public class CourseBookmarkService {
     }
 
     @Transactional
-    public CourseBookmarkRes cancelBookmark(Long courseId, String memberEmail) {
+    public void cancelBookmark(Long courseId, String memberEmail) {
         // 1. 유저 확인 & 코스 확인
         Member member = isMember(memberEmail);
         Course course = isCourse(courseId);
@@ -62,8 +62,6 @@ public class CourseBookmarkService {
         CourseBookmark courseBookmark = courseBookmarkRepository.findByMemberAndCourse(member, course);
         courseBookmark.updateDeleteDate();
         member.removeCourseBookMark(courseBookmark);
-
-        return CourseBookmarkRes.from(courseId, member.getId());
     }
 
     public boolean isExistCourseBookmark(Long courseId, String memberEmail) {

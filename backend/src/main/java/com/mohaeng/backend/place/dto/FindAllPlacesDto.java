@@ -9,14 +9,15 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class FindAllPlacesDto {
+    private Long placeId;
     private String name;
     private String areaCode;
     private String firstImage;
     private String contentId;
-    private Boolean isBookmark;
+    private Boolean isBookmarked;
 
-    public static FindAllPlacesDto from(Place place, Boolean isBookmark){
-        return new FindAllPlacesDto(place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), isBookmark);
+    public static FindAllPlacesDto from(Place place, Boolean isBookmarked){
+        return new FindAllPlacesDto(place.getId(), place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), isBookmarked);
     }
 }
 

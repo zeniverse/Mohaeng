@@ -8,6 +8,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class PlaceDetailsDto {
+    private Long placeId;
     private String name;
     private String areaCode;
     private String firstImage;

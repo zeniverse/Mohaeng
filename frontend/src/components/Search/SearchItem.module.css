@@ -1,30 +1,28 @@
 .keywordItemContainer {
-  /* flex-basis: calc(25%-10px);
-  display: flex;
-  flex-direction: column;
-  align-items: center; */
-  text-align: left;
-}
-
-.keywordItem {
-  border: 1px solid var(--color-border-light);
-  margin: 10px;
-  background-color: transparent;
+  width: 292px;
+  border: 2px solid var(--color-border-light);
   border-radius: 16px;
-  text-decoration: none;
-  color: var(--color-text-basic);
 }
 
-.keywordItem:hover {
-  color: var(--color-primary);
+.keywordItemContainer:hover {
+  color: var(--color-text-basic);
   transition: all ease 0.3s;
   box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
   -webkit-box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
   -moz-box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
 }
 
+.keywordItem {
+  /* margin: 10px; */
+  background-color: transparent;
+  border: none;
+  text-decoration: none;
+  color: var(--color-text-basic);
+  cursor: pointer;
+}
+
 .img {
-  max-width: "auto";
+  width: "auto";
   height: "auto";
   text-align: center;
   border-top-left-radius: 14px;
@@ -33,13 +31,19 @@
 
 .keywordInfo {
   display: flex;
-  padding: 12px;
+  flex-direction: row;
+  padding: 0 1rem 0.5em 1rem;
+}
+
+.keywordDesc {
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
   display: block;
   width: 180px;
-  margin-top: 8px;
+  margin-top: 4px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -48,11 +52,43 @@
   font-weight: 700;
 }
 
-.keywordBookmark {
-  font-size: 28px;
-  margin-left: 40px;
+.review {
+  font-size: small;
 }
 
-.keywordBookmark:hover {
-  color: var(--color-red);
+.keywordBookmark {
+  width: 30px;
+  margin-top: 1rem;
+  margin-left: 50px;
+}
+
+.btn {
+  width: 30px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  --color-icon: #cfcfcf;
+}
+
+.bookmark,
+.unbookmark {
+  background-color: transparent;
+  border: none;
+  color: var(--color-border-light);
+}
+
+.unbookmark {
+  color: var(--color-border-light);
+  font-size: 30px;
+}
+
+.unbookmark:hover {
+  color: var(--color-blue);
+  scale: 105%;
+  transition: 200ms;
+}
+
+.bookmark {
+  color: var(--color-blue);
+  font-size: 28px;
 }

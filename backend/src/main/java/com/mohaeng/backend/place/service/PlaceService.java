@@ -1,11 +1,16 @@
 package com.mohaeng.backend.place.service;
 
+import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
+import com.mohaeng.backend.member.domain.Member;
+import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.domain.QPlace;
 import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
 import com.mohaeng.backend.place.dto.PlaceDetailsDto;
+import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
 import com.mohaeng.backend.place.exception.PlaceNotFoundException;
+import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -38,12 +43,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static java.util.Objects.isNull;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
+    private final PlaceBookmarkRepository placeBookmarkRepository;
+    private final MemberRepository memberRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -186,9 +195,9 @@ public class PlaceService {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
-        List<PlaceDetailsDto> places = placeRepository.findByContentId(contentId);
+        List<Place> places = placeRepository.findByContentId(contentId);
         List<String> overviews = new ArrayList<>();
-        for (PlaceDetailsDto place : places) {
+        for (Place place : places) {
             if (place.getContentId().equals(contentId)) {
                 String overview = getOverview(place.getContentId());
                 overview = overview.replaceAll("<br>|<br >|< br>|<br />|</br>|<strong>|</ strong>", "");
@@ -210,17 +219,25 @@ public class PlaceService {
                 .collect(Collectors.toList());
     }
 
-    public List<PlaceDetailsDto> getPlaceDetailsByContentId(String contentId) throws IOException, ParserConfigurationException, SAXException {
-        List<PlaceDetailsDto> places = placeRepository.findByContentId(contentId);
+    public PlaceDetailsResponse getPlaceDetailsByContentId(String contentId, Member member) throws IOException, ParserConfigurationException, SAXException {
+        Place currentPlace = null;
+        Boolean isBookmark = false;
+
+        List<Place> places = placeRepository.findByContentId(contentId);
         List<String> overviews = getPlaceOverview(contentId);
         List<PlaceDetailsDto> placeDetailsDtos = IntStream.range(0, places.size())
                 .mapToObj(i -> {
-                    PlaceDetailsDto place = places.get(i);
+                    Place place = places.get(i);
                     String overview = overviews.get(i);
-                    return new PlaceDetailsDto(place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), place.getMapX(), place.getMapY(), overview);
+                    return new PlaceDetailsDto(place.getId(), place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), place.getMapX(), place.getMapY(), overview);
                 })
                 .collect(Collectors.toList());
-        return placeDetailsDtos;
-    }
 
+        if (member != null){
+            isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, places.get(0));
+        }
+
+        PlaceDetailsResponse response = new PlaceDetailsResponse(placeDetailsDtos, isBookmark);
+        return response;
+    }
 }

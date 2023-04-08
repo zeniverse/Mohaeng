@@ -1,4 +1,4 @@
-.review {
+.reviewSection {
   width: 70rem;
   margin: 2rem 8rem;
   /* 
@@ -15,12 +15,14 @@
   --color-icon: #cfcfcf;
 }
 
+/* header */
 .reviewContainer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 2rem 3rem;
   background-color: var(--color-bg-lightgray);
+  /* border: 3px solid var(--color-border-semi); */
   border-radius: 12px;
 }
 
@@ -42,14 +44,16 @@
   height: 50px;
   padding: 1rem;
   background-color: var(--color-primary);
+  border: none;
   border-radius: 50px;
   text-decoration: none;
   text-align: center;
+  font-size: medium;
   color: var(--color-text-basic);
 }
 
 .reviewBtn:hover {
-  filter: brightness(90%);
+  filter: brightness(105%);
 }
 
 .reviewNav {
@@ -78,3 +82,5 @@
 .select:hover {
   border: 2px solid var(--color-border-light);
 }
+
+/* main */

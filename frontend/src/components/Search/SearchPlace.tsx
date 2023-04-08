@@ -1,16 +1,16 @@
 import styles from "./SearchList.module.css";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Keyword } from "@/src/interfaces/Keyword";
+
 import axios from "axios";
-import SearchItem from "./SearchItem";
+import { Keyword } from "@/src/interfaces/Keyword";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { setSearchPlace } from "@/src/store/reducers/searchSlice";
+import SearchItem from "./SearchItem";
 import Pagebar from "../Pagenation/Pagebar";
-
-// ToDo: 띄어쓰기, 단어 조합 검색에 대해서 좀 더 리팩토링 필요
-// 결과를 로드하는 동안 '검색결과가 없습니다'가 마운트되는 이슈
+import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
+import PlaceItem from "../Place/PlaceItem";
 
 export default function SearchPlace(): JSX.Element {
   const [searchResult, setSearchResult] = useState<Keyword[]>([]);
@@ -19,7 +19,7 @@ export default function SearchPlace(): JSX.Element {
   const dispatch = useDispatch();
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
-    (state: RootState) => state.search.totalPages
+    (state: RootState) => state.searchPlace.totalPages
   );
 
   useEffect(() => {
@@ -33,12 +33,12 @@ export default function SearchPlace(): JSX.Element {
           withCredentials: true,
         });
         if (res.data.data.content !== []) {
-          console.log(res.data.data);
           dispatch(setSearchPlace(res.data.data));
           const { content } = res.data.data;
           setSearchResult(content);
+          console.log(content);
         } else {
-          console.log(res.data.data.content);
+          console.log(res.data);
         }
       } catch (error) {
         console.log("Error", error);
@@ -55,12 +55,25 @@ export default function SearchPlace(): JSX.Element {
         <h3 className={styles.h2}>검색하신 결과: {keyword} </h3>
         <ul className={styles.keywordList}>
           {searchResult.length > 0 ? (
-            searchResult?.map((keyword) => (
+            searchResult?.map((place) => (
+              // <PlaceItem
+              //   key={place.contentId}
+              //   name={place.name}
+              //   firstImage={place.firstImage}
+              //   areaCode={place.areaCode}
+              //   contentId={place.contentId}
+              //   placeId={place.placeId}
+              //   isBookmark={place.isBookmark}
+              // />
               <SearchItem
-                key={keyword.contentId}
-                name={keyword.name}
-                firstImage={keyword.firstImage}
-                contentId={keyword.contentId}
+                key={place.contentId}
+                name={place.name}
+                firstImage={place.firstImage}
+                contentId={place.contentId}
+                placeId={place.placeId}
+                rating={place.rating}
+                review={place.review}
+                isBookmark={place.isBookmark}
               />
             ))
           ) : (

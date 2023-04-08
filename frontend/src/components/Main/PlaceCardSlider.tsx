@@ -16,7 +16,7 @@ const PlaceCardSlider = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch("/api/place");
+      const res = await fetch("/api/placeMock");
       const data = await res.json();
       // if (getPlaceData && getPlaceData.length > 5) {
       //   let slicedData = getPlaceData.slice(0, 5);

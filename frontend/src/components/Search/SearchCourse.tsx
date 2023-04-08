@@ -1,13 +1,13 @@
-import { RootState } from "@/src/store/store";
-import axios from "axios";
+import styles from "./SearchList.module.css";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { useSelector } from "react-redux";
+import { RootState } from "@/src/store/store";
+import CourseItem from "../Course/CourseItem";
 import Pagebar from "../Pagenation/Pagebar";
-import SearchItem from "./SearchItem";
-import styles from "./SearchList.module.css";
 
-interface Course {
+interface CourseList {
   id: number;
   title: string;
   content: string;
@@ -22,9 +22,10 @@ interface Course {
 export default function SearchCourse(): JSX.Element {
   const router = useRouter();
   const { keyword } = router.query;
-  const [searchResult, setSearchResult] = useState([]);
+  const [searchResult, setSearchResult] = useState<CourseList[]>([]);
+  const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
-    (state: RootState) => state.search.totalPages
+    (state: RootState) => state.searchCourse.totalPages
   );
 
   useEffect(() => {
@@ -32,8 +33,8 @@ export default function SearchCourse(): JSX.Element {
       try {
         const res = await axios.get(`/api/course`, {
           params: {
+            page: page,
             keyword: keyword,
-            // page: page,
           },
           withCredentials: true,
         });
@@ -59,22 +60,29 @@ export default function SearchCourse(): JSX.Element {
         <h3 className={styles.h2}>검색하신 결과: {keyword} </h3>
         <ul className={styles.keywordList}>
           {searchResult.length > 0 ? (
-            searchResult?.map((keyword) => (
-              <SearchItem
-                key={keyword.id}
-                name={keyword.title}
-                firstImage={keyword.thumbnailUrl}
-                contentId={keyword.id}
+            searchResult?.map((course) => (
+              <CourseItem
+                key={course.id}
+                id={course.id.toString()}
+                title={course.title}
+                content={course.content}
+                likeCount={course.likeCount}
+                thumbnailUrl={course.thumbnailUrl}
+                courseDays={course.courseDays}
+                bookMark={course.bookMark}
+                like={course.like}
+                places={course.places}
               />
             ))
           ) : (
             <div className={styles.div}>
-              코스 검색 결과 페이지입니다.
-              <p className={styles.noResult}></p>
+              <p className={styles.noResult}>
+                해당하는 검색 결과가 없습니다. 😢
+              </p>
             </div>
           )}
         </ul>
-        {/* <Pagebar totalPage={totalPages} /> */}
+        <Pagebar totalPage={totalPages} />
       </section>
     </>
   );

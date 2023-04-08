@@ -1,7 +1,14 @@
 import Image from "next/image";
 import styles from "./CourseOrderList.module.css";
+import { AiOutlineMinus } from "react-icons/ai";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { removePlace } from "@/src/store/reducers/CourseFormSlice";
 
-const CourseOrderList = ({ places }: any) => {
+const CourseOrderList = ({ places, mode }: any) => {
+  const dispatch = useAppDispatch();
+  const handleRemovePlace = (placeId: number) => {
+    dispatch(removePlace(placeId));
+  };
   return (
     <ol className={styles["course-List"]}>
       {places.map((place: any, idx: any) => (
@@ -26,6 +33,16 @@ const CourseOrderList = ({ places }: any) => {
               자세히 보기
             </button>
           </div>
+          {mode === "write" && (
+            <div className={styles["remove-btn-wrapper"]}>
+              <div
+                className={styles["remove-btn"]}
+                onClick={() => handleRemovePlace(place.placeId)}
+              >
+                <AiOutlineMinus />
+              </div>
+            </div>
+          )}
         </li>
       ))}
     </ol>

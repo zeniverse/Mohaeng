@@ -18,6 +18,7 @@
   border-radius: 12px;
 }
 
+/* 선택한 여행지 이름 */
 .reviewTitle {
   margin-bottom: 2rem;
   padding: 1rem;
@@ -25,36 +26,47 @@
   border: 1px solid var(--color-border-light);
 }
 
-.reviewTitleBox {
-  display: flex;
-  flex-direction: column;
-  margin-right: auto;
-  margin-bottom: 1rem;
-}
 .boldTitle {
   margin-bottom: 1rem;
+  font-weight: 700;
 }
 
+/* 별점 */
+.ratingBox {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.star:hover {
+  color: yellow;
+}
+
+.ratingTxt {
+  margin-top: 4px;
+  padding: 8px;
+}
+
+.ratingDesc {
+  margin-left: 4px;
+  font-size: small;
+  color: var(--color-border-semi);
+}
+
+/* form */
 .form {
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
 }
 
-.star:hover {
-  color: yellow;
-}
 .formTxtArea {
   resize: none;
-  height: 20rem;
+  height: 12rem;
   margin-bottom: 1rem;
   padding: 1rem;
   border: 1px solid var(--color-border-light);
   font-size: 16px;
-}
-
-.ratingBox {
-  margin-bottom: 2rem;
 }
 
 .imageForm {
@@ -83,13 +95,14 @@
   margin: 1rem;
 }
 
-.removeImg {
-  font-size: 2rem;
+.deleteImg {
+  font-size: 24px;
   cursor: pointer;
   position: absolute;
   right: 0;
 }
-.removeImg:hover {
+
+.deleteImg:hover {
   color: var(--color-red);
 }
 

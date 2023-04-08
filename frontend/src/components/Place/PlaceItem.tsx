@@ -13,8 +13,9 @@ const PlaceItem = ({
   name,
   firstImage,
   areaCode,
-  contentId,
+  placeId,
   isBookmark,
+  contentId,
 }: content) => {
   const accessToken = cookie.load("accessToken");
 
@@ -22,18 +23,24 @@ const PlaceItem = ({
   const page = useSelector((state: RootState) => state.page.page);
 
   const addBookmark = () => {
-    console.log("ACCESS = " + accessToken);
     const response = async () => {
-      await axios.post(`/api/place/bookmark/${contentId}`, {
-        headers: {
-          "Access-Token": accessToken,
-        },
-        withCredentials: true,
-      });
+      await axios.post(
+        `/api/place/bookmark/${placeId}`,
+        {},
+        {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          withCredentials: true,
+        }
+      );
     };
     response().then(async () => {
       await axios
         .get(`/places`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
           params: {
             areaCode: areaCode,
             page: page,
@@ -46,7 +53,7 @@ const PlaceItem = ({
 
   const delBookmark = () => {
     const response = async () => {
-      await axios.delete(`/api/place/bookmark/${contentId}`, {
+      await axios.delete(`/api/place/bookmark/${placeId}`, {
         headers: {
           "Access-Token": accessToken,
         },
@@ -56,6 +63,9 @@ const PlaceItem = ({
     response().then(async () => {
       await axios
         .get(`/places`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
           params: {
             areaCode: areaCode,
             page: page,
@@ -89,9 +99,12 @@ const PlaceItem = ({
           {/* <div className={styles["item-nav"]}>{placeRating}</div> */}
           <div className={styles["item-nav"]}>
             {isBookmark === true ? (
-              <BsBookmarkFill onClick={delBookmark} />
+              <BsBookmarkFill
+                onClick={delBookmark}
+                className={styles.bookmark}
+              />
             ) : (
-              <BsBookmark onClick={addBookmark} />
+              <BsBookmark onClick={addBookmark} className={styles.unbookmark} />
             )}
           </div>
         </div>
@@ -101,7 +114,7 @@ const PlaceItem = ({
         <Link
           href={{
             pathname: "/place/[id]",
-            query: { id: contentId },
+            query: { id: placeId },
           }}
         >
           <div className={styles["item-info-text"]}>

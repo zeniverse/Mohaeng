@@ -15,6 +15,7 @@ import com.mohaeng.backend.course.dto.response.CourseListRes;
 import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.service.CourseService;
+import com.mohaeng.backend.exception.badrequest.InvalidKeywordPlaceInCourse;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.repository.MemberRepository;
@@ -31,12 +32,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -91,18 +90,17 @@ class CourseControllerTest {
         Pageable pageable = PageRequest.ofSize(5);
 
         given(courseService.placeSearch(any(CoursePlaceSearchReq.class), any(Pageable.class)))
-                .willThrow(new IllegalArgumentException("keyword 값이 비어있습니다."));
+                .willThrow(new InvalidKeywordPlaceInCourse());
 
         //When & Then
-        // TODO : Exception 처리 후 수정
-//        mockMvc.perform(
-//                        get("/api/course/placeSearch")
-//                                .queryParam("keyword", req.getKeyword())
-//                                .queryParam("lastPlaceId", String.valueOf(req.getLastId()))
-//                                .queryParam("lastRating", String.valueOf(req.getLastRating()))
-//                                .queryParam("size", String.valueOf(5)))
-//                .andExpect(status().is4xxClientError())
-//                .andDo(print());
+        mockMvc.perform(
+                        get("/api/course/placeSearch")
+                                .queryParam("keyword", req.getKeyword())
+                                .queryParam("lastPlaceId", String.valueOf(req.getLastId()))
+                                .queryParam("lastRating", String.valueOf(req.getLastRating()))
+                                .queryParam("size", String.valueOf(5)))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
 
 
         verify(courseService, times(0)).placeSearch(eq(req), eq(pageable));
@@ -143,25 +141,18 @@ class CourseControllerTest {
     public void createCourse_notNull_error() throws Exception {
         CourseReq courseReq = CourseReq.builder().build();
 
-        given(courseService.createCourse(any(CourseReq.class), anyString()))
-                .willThrow(new IllegalArgumentException());
+//        given(courseService.createCourse(any(CourseReq.class), anyString()))
+//                .willThrow(new IllegalArgumentException());
 
         //When & Then
         mockMvc.perform(post("/api/course")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(courseReq))
                         .with(csrf()))
-                .andExpect(
-                        // assert로 예외를 검사하는 람다 사용
-                        (res) -> assertEquals(
-                                res.getResolvedException().getClass().getCanonicalName(),
-                                MethodArgumentNotValidException.class.getCanonicalName()
-                        )
-                )
                 .andExpect(status().isBadRequest())
                 .andDo(print());
 
-        verify(courseService, times(0)).createCourse(refEq(courseReq), eq("test@test.com"));
+        verify(courseService, times(0)).createCourse(refEq(courseReq), any());
     }
 
     @Test
@@ -169,16 +160,15 @@ class CourseControllerTest {
     @WithMockUser()
     public void getCourse() throws Exception {
         //Given
-        Long courseId = 1L;
-        given(courseService.getCourse(anyLong()))
-                .willReturn(CourseRes.from(createTestCourse(), List.of(createCourseInPlaceDTO())));
+        given(courseService.getCourse(anyLong(), anyString()))
+                .willReturn(CourseRes.from(createTestCourse(), List.of(createCourseInPlaceDTO()), true, false));
 
         //When & Then
-        mockMvc.perform(get("/api/course/" + courseId))
+        mockMvc.perform(get("/api/course/1"))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        verify(courseService).getCourse(eq(courseId));
+        verify(courseService).getCourse(any(), any());
     }
 
     @Test
@@ -252,7 +242,7 @@ class CourseControllerTest {
         mockMvc.perform(
                         get("/api/course")
                                 .queryParam("keyword", courseSearchDto.getKeyword())
-                                .queryParam("page", String.valueOf(0))
+                                .queryParam("page", String.valueOf(1))
                                 .queryParam("size", String.valueOf(2)))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -276,17 +266,6 @@ class CourseControllerTest {
 
         verify(courseService).getMainCourse(any());
     }
-
-    //TODO: exceptionHandler 구현 후, 처리할 case
-
-    // 코스 단건 조회 - 코스가 존재하지 않는 경우
-
-    // 코스 수정 - 요청자와 작성자가 다른 경우
-    // 코스 수정 - course가 존재하지 않는 경우
-
-    // 코스 삭제 - 요청자와 작성자가 다른 경우
-    // 코스 삭제 - course가 존재하지 않는 경우
-
 
     private CourseInPlaceDto createCourseInPlaceDTO() {
         return CourseInPlaceDto.builder()

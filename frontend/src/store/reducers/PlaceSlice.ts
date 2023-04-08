@@ -4,6 +4,7 @@ export interface content {
   name: string;
   areaCode: string;
   firstImage: string;
+  placeId: number;
   contentId: string;
   isBookmark: boolean;
 }
