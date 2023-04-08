@@ -13,6 +13,7 @@ import UserBookmark from "@/src/components/Mypage/UserBookmark";
 import Sidebar from "@/src/components/Mypage/Sidebar";
 import { useRouter } from "next/router";
 import cookie from "react-cookies";
+import withAuth from "../withAuth";
 
 const MyPage: React.FC = () => {
   const currIdx = useSelector((state: RootState) => state.mypage.currIdx);
@@ -22,11 +23,11 @@ const MyPage: React.FC = () => {
   const router = useRouter();
 
   //TODO: 로그인 페이지 완성시 경로 '/login'으로 바꿔두기
-  useEffect(() => {
-    if (!accessToken) {
-      router.replace("/");
-    }
-  }, [accessToken]);
+  // useEffect(() => {
+  //   if (!accessToken) {
+  //     router.replace("/");
+  //   }
+  // }, [accessToken]);
 
   return (
     <div className={styles.Container}>
@@ -41,4 +42,5 @@ const MyPage: React.FC = () => {
   );
 };
 
-export default MyPage;
+export default withAuth(MyPage);
+// export default MyPage;

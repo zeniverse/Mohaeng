@@ -21,6 +21,8 @@ import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 // import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
+import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
+import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
 
 type User = {
   id: number;
@@ -36,6 +38,7 @@ function Header({}: Props) {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const router = useRouter();
+  const userid = useSelector((state: RootState) => state.id.id);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
   const imgUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
@@ -55,8 +58,9 @@ function Header({}: Props) {
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
         dispatch(setImgUrl(imgUrl));
-        // appDispatch(getCourseBookmark(accessToken));
+        appDispatch(getCourseBookmark(accessToken));
         appDispatch(getPlaceBookmark(accessToken));
+        appDispatch(getMyCourse({ userid, accessToken }));
         setUser(nickName);
       }
     };

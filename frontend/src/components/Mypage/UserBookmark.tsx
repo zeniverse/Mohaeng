@@ -45,8 +45,8 @@ const UserBookmark = () => {
               <UserBookmarkItem
                 id={bookmark.bookMarkId}
                 name={bookmark.placeName}
-                image={bookmark.placeImgUrl}
-                desc={bookmark.address}
+                image={bookmark.imgUrl}
+                desc={bookmark.content}
               />
               // <div
               //   key={bookmark.bookMarkId}
@@ -63,19 +63,9 @@ const UserBookmark = () => {
               <UserBookmarkItem
                 id={bookmark.bookMarkId}
                 name={bookmark.courseTitle}
-                image={bookmark.courseImgUrl}
+                image={bookmark.courseStatus}
                 desc={bookmark.region}
               />
-              // <div
-              //   key={bookmark.bookMarkId}
-              //   className={styles["bookmark-item"]}
-              // >
-              //   <img src={bookmark.courseImgUrl} alt={bookmark.courseTitle} />
-              //   <div>
-              //     <h2>{bookmark.courseTitle}</h2>
-              //     <p>{bookmark.region}</p>
-              //   </div>
-              // </div>
             ))}
       </div>
     </>
