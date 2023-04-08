@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 public class FindAllReviewResponse {
 
-    private Long id;
+    private Long reviewId;
     private String nickname;
     private String memberImage;
     private String rating;

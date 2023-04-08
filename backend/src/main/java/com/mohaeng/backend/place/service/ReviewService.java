@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,11 +55,11 @@ public class ReviewService {
     }
 
 
-    public Page<Review> getAllReviewByPage(Long id, int pageNumber) {
+    public Page<Review> getAllReviewByPage(Long id, int page) {
         Place findPlace = placeRepository.findById(id)
                 .orElseThrow(() -> new PlaceNotFoundException("NOT_EXIST_PLACE"));
 
-        Pageable pageable = PageRequest.of(pageNumber, 4);
+        Pageable pageable = PageRequest.of(page - 1, 4);
         Page<Review> reviews = reviewRepository.findAllByPlaceId(id, pageable);
 //        List<FindAllReviewResponse> reviewResponses = reviews.map(FindAllReviewResponse::of).getContent();
         return reviews;
@@ -169,5 +170,15 @@ public class ReviewService {
     public Review getReviewById(Long reviewId) {
         return reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException());
+    }
+
+    public Page<Review> getAllReviewsByRating(Long placeId, int page) {
+        Pageable pageable = PageRequest.of(page - 1 , 4, Sort.by("rating").descending());
+        return reviewRepository.findAllByPlaceId(placeId, pageable);
+    }
+
+    public Page<Review> getAllReviewsByDate(Long placeId, int page) {
+        Pageable pageable = PageRequest.of(page - 1, 4, Sort.by("createdDate").descending());
+        return reviewRepository.findAllByPlaceId(placeId, pageable);
     }
 }
