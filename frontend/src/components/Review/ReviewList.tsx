@@ -65,13 +65,13 @@ export default function ReviewList() {
     // } else if (currentUser === "") {
     router.push(
       {
-        pathname: "/review/create-review",
+        pathname: `/review/create-review`,
         query: {
-          plcaceId: placeId,
+          placeId: placeId,
           name: name,
         },
       },
-      "review/create-review"
+      `review/create-review`
     );
     // }
   };
