@@ -8,9 +8,6 @@ import axios from "axios";
 import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
 
-// 이미지 상대경로말고 원본 그대로 폼데이터 생성해서 보내기. 최대 개수 3 지정
-// 데이터 생성 백으로 보내기
-
 interface Review {
   title: string;
   rating: number;
@@ -90,20 +87,17 @@ export default function CreateReview() {
     images.forEach((image) => {
       formData.append("multipartFile", image);
     });
-    // imgUrl
-    let review = [
-      {
-        title: "테스트",
-        rating: rating,
-        content: content,
-      },
-    ];
-    // formData.append(
-    //   "review",
-    //   new Blob([JSON.stringify(review)], { type: "application/json" })
-    // );
-    formData.append("review", JSON.stringify(review));
-    // formData.append("review", JSON.stringify(review));
+
+    let review = {
+      title: "테스트",
+      rating: rating,
+      content: content,
+    };
+    formData.append(
+      "review",
+      new Blob([JSON.stringify(review)], { type: "application/json" })
+    );
+    // 성공!!!!
     // formData.append("rating", JSON.stringify(rating.toString()));
     // formData.append("content", JSON.stringify(content));
 
@@ -155,7 +149,6 @@ export default function CreateReview() {
               name="review"
               id="review"
               placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요! (20자 이상)"
-              minLength={20}
               required={true}
               value={content}
               onChange={(e) => setContent(e.target.value)}

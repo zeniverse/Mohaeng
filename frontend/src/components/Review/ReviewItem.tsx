@@ -4,56 +4,70 @@ import Image from "next/image";
 import user from "../../../public/assets/user.png";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { useRouter } from "next/router";
+import { openModal } from "@/src/store/reducers/modalSlice";
 
 // 별점, 아이디, 작성일, 리뷰내용, 이미지
 // 유저일 경우 수정 삭제 버튼
 
 type ReviewProps = {
-  memberName: string;
+  nickname: string;
   memberImage: string;
   content: string;
-  // imgUrl: string;
-  rating: number;
+  imgUrl: string[];
+  rating: string;
+  createdDate: string;
 };
 
 export default function ReviewItem({
-  memberName,
+  nickname,
   memberImage,
   rating,
   content,
-}: // imgUrl,
-ReviewProps) {
+  createdDate,
+  imgUrl,
+}: ReviewProps) {
   const router = useRouter();
-  const { placeId } = router.query;
+  const { placeId, name } = router.query;
   const [user, setUser] = useState();
   const currentUser = useSelector(
     (state: RootState) => state.nickName.nickName
   );
+  const dispatch = useDispatch();
   // setUser(currentUser);
-  console.log(currentUser);
 
-  const canEdit = "김새롬" === memberName;
+  const isUser = nickname === nickname;
+
+  const handleOpenDeleteModal = () => {
+    dispatch(
+      openModal({
+        modalType: "DeleteReviewModal",
+        isOpen: true,
+      })
+    );
+  };
 
   return (
     <article className={styles.reviewBox}>
       <div className={styles.reviewer}>
         <Image
-          className={styles.userImg} // 프로필 url, state
+          className={styles.userImg}
           src={memberImage}
           width={50}
           height={50}
-          alt={memberName}
+          alt={nickname}
         />
         <div className={styles.reviewerInfo}>
           <div className={styles.rating}>
             <FiveStarRating rating={rating.toString()} />
           </div>
-          <p className={styles.review}>{memberName}</p>
+          <p className={styles.review}>
+            {nickname} | {createdDate}
+          </p>
         </div>
-        {canEdit ? (
+        {isUser ? (
           <div className={styles.btnGroup}>
             <button
               onClick={() =>
@@ -62,6 +76,7 @@ ReviewProps) {
                     pathname: "/review/edit-review",
                     query: {
                       plcaceId: placeId,
+                      name: name,
                     },
                   },
                   "review/edit-review"
@@ -71,7 +86,12 @@ ReviewProps) {
             >
               수정
             </button>
-            <button className={styles.btn}>삭제</button>
+            <button
+              onClick={() => handleOpenDeleteModal()}
+              className={styles.btn}
+            >
+              삭제
+            </button>
           </div>
         ) : (
           ""
@@ -79,11 +99,18 @@ ReviewProps) {
       </div>
       <div className={styles.reviewContent}>
         <p className={styles.reviewTxt}>{content}</p>
-        {/* {imgUrl && (
-          <Image src={imgUrl[0]} width={100} height={100} alt={memberName} />
-        )} */}
-        {/* <div> 이미지 박스 </div>
-        이미지 조건문으로 map 순회 최대 3개 */}
+        <div className={styles.reviewImgBox}>
+          {imgUrl.map((imgUrl, index) => (
+            <div className={styles.reviewImg} key={index}>
+              <Image
+                src={imgUrl}
+                width={200}
+                height={180}
+                alt={`img-${index}`}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </article>
   );

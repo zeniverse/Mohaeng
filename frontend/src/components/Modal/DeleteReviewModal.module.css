@@ -1,0 +1,8 @@
+.deleteReviewModalContainer {
+  width: 31rem;
+  height: 36rem;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  z-index: 1;
+}

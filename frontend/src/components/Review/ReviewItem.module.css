@@ -24,13 +24,22 @@
 }
 
 .reviewContent {
+  margin-left: 66px;
   display: flex;
   flex-direction: column;
 }
 
 .reviewTxt {
   margin-bottom: 1rem;
-  margin-left: 66px;
+}
+
+.reviewImgBox {
+  display: flex;
+  flex-direction: row;
+}
+.reviewImg {
+  padding: 4px;
+  margin-right: 0.5rem;
 }
 
 .btnGroup {

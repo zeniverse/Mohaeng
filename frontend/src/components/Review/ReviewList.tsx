@@ -16,7 +16,7 @@ import Pagebar from "../Pagenation/Pagebar";
 // 이미지 개수에 따라 배열 돌리기
 
 interface Review {
-  memberName: string;
+  nickname: string;
   memberImage: string;
   content: string;
   // imgUrl: [];
@@ -26,7 +26,7 @@ interface Review {
 export default function ReviewList() {
   const router = useRouter();
   const { placeId, name } = router.query;
-  const [reviewData, setReviewData] = useState<Review[]>([]);
+  const [reviewData, setReviewData] = useState<data[]>([]);
   const [selectedValue, setSelectedValue] = useState("default");
   const dispatch = useDispatch();
   const page = useSelector((state: RootState) => state.page.page);
@@ -99,12 +99,13 @@ export default function ReviewList() {
           <div className={styles.reviewList}>
             {reviewData?.map((review) => (
               <ReviewItem
-                key={review.memberName}
-                memberName={review.memberName}
+                key={review.nickname}
+                nickname={review.nickname}
                 memberImage={review.memberImage}
                 rating={review.rating}
                 content={review.content}
-                // imgUrl={review.imgUrl[0]}
+                createdDate={review.createdDate}
+                imgUrl={review.imgUrl}
 
                 // imgUrl={review.imgUrl}
               />
