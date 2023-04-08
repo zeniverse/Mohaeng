@@ -187,7 +187,7 @@ class CourseServiceTest {
 
 
         //When
-        CourseRes courseRes = courseService.getCourse(courseIdRes.getCourseId());
+        CourseRes courseRes = courseService.getCourse(courseIdRes.getCourseId(), savedMember.getEmail());
         System.out.println("courseRes = " + courseRes);
 
         //Then
@@ -202,10 +202,11 @@ class CourseServiceTest {
     public void getCourse_courseId_isNull() throws Exception{
         //Given
         Long courseId = 1000L;
+        Member savedMember = createMember("getCourseIdIsNull");
 
         //When
         Exception exception = assertThrows(CourseNotFoundException.class, () -> {
-            courseService.getCourse(courseId);
+            courseService.getCourse(courseId, savedMember.getEmail());
         });
 
         //Then
@@ -392,8 +393,6 @@ class CourseServiceTest {
         assertEquals(originReq1.getTitle(), courseList.getCourseList().get(0).getTitle());
         assertEquals(1, courseList.getTotalPages());
     }
-
-    // TODO: valid 확인 test 작성
 
     private CourseReq createCourseReq(String title, List<Long> placeIds) {
         CourseReq myCourseReq = CourseReq.builder()

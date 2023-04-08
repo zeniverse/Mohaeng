@@ -27,7 +27,7 @@ export default function ReviewItem({
 }: // imgUrl,
 ReviewProps) {
   const router = useRouter();
-  const { id } = router.query;
+  const { placeId } = router.query;
   const [user, setUser] = useState();
   const currentUser = useSelector(
     (state: RootState) => state.nickName.nickName
@@ -61,7 +61,7 @@ ReviewProps) {
                   {
                     pathname: "/review/edit-review",
                     query: {
-                      id: id,
+                      plcaceId: placeId,
                     },
                   },
                   "review/edit-review"

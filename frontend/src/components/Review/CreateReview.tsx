@@ -94,14 +94,15 @@ export default function CreateReview() {
     let review = [
       {
         title: "테스트",
-        rating: rating.toString(),
+        rating: rating,
         content: content,
       },
     ];
-    formData.append(
-      "review",
-      new Blob([JSON.stringify(review)], { type: "application/json" })
-    );
+    // formData.append(
+    //   "review",
+    //   new Blob([JSON.stringify(review)], { type: "application/json" })
+    // );
+    formData.append("review", JSON.stringify(review));
     // formData.append("review", JSON.stringify(review));
     // formData.append("rating", JSON.stringify(rating.toString()));
     // formData.append("content", JSON.stringify(content));
@@ -112,7 +113,7 @@ export default function CreateReview() {
         .post(`/api/review/${placeId}`, formData, {
           headers: {
             "Access-Token": accessToken,
-            // "Content-Type": "multipart/form-data;",
+            "Content-Type": "multipart/form-data",
           },
         })
         .then((response) => {

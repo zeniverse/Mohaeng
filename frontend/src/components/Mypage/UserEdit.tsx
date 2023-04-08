@@ -3,32 +3,38 @@ import Button from "@/src/components/Button/Button";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/src/store/store";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "./userEdit.module.css";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 import { json } from "stream/consumers";
 import cookie from "react-cookies";
+import Image from "next/image";
 import {
   setEmail,
   setId,
   setNickname,
-  setProfileUrl,
+  setImgUrl,
 } from "@/src/store/reducers/loginTokenSlice";
+import { blob } from "node:stream/consumers";
+
+//TODO: Edit 값에 아무것도 치지 않을시 0으로 수정되는 것이 아닌 기존 닉네임 값 반영 혹은 닉네임 수정해달라는 alert 띄우기
 
 interface Uploader {
   nickName: string;
 }
 
 const UserEdit = () => {
+  const selectFile = useRef("");
+
   const id = useSelector((state: RootState) => state.id.id);
-  const nickName = useSelector((state: RootState) => state.nickName.nickName);
+  const nickname = useSelector((state: RootState) => state.nickName.nickName);
   const email = useSelector((state: RootState) => state.email.email);
-  const imageUrl = useSelector(
-    (state: RootState) => state.profileUrl.profileUrl
-  );
+  const profileUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
   const accessToken = cookie.load("accessToken");
+  const [imagePath, changeUrl] = useState("");
+  const [imgFile, setFile] = useState();
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -38,28 +44,44 @@ const UserEdit = () => {
     label: "회원 정보",
   };
 
+  useEffect(() => {
+    changeUrl(profileUrl);
+  }, [dispatch, profileUrl]);
+
   const [editName, setEditName] = useState("");
 
-  const changeEditName = () => {
-    console.log("Button Event Test For componetnts");
+  const changeProfile = (e: any) => {
+    const img = e.target.files[0];
+    changeUrl(URL.createObjectURL(img));
+    setFile(img);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
 
-    formData.append("multipartFile", "git.png");
-    const nickName: Uploader = { nickName: editName };
-    formData.append(
-      "nickName",
-      new Blob([JSON.stringify(nickName)], {
-        type: "application/json",
-      })
-    );
+    formData.append("multipartFile", imgFile);
+    if (editName.trim() !== "") {
+      const nickName: Uploader = { nickName: editName };
+      formData.append(
+        "nickName",
+        new Blob([JSON.stringify(nickName)], {
+          type: "application/json",
+        })
+      );
+    } else {
+      const nickName: Uploader = { nickName: nickname };
+      formData.append(
+        "nickName",
+        new Blob([JSON.stringify(nickName)], {
+          type: "application/json",
+        })
+      );
+    }
 
     const response = async () => {
       if (accessToken) {
-        const editResponse = await axios.put(`/api/myPage/${email}`, formData, {
+        await axios.put(`/api/myPage/${email}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             "Access-Token": accessToken,
@@ -67,6 +89,8 @@ const UserEdit = () => {
         });
       }
     };
+
+    // if (editName.trim() !== "") {
     response().then(async () => {
       if (accessToken) {
         const userRes = await axios.get(`/loginInfo`, {
@@ -75,13 +99,14 @@ const UserEdit = () => {
           },
           withCredentials: true,
         });
-        const { id, nickName, email, profileUrl } = userRes.data.data;
+        const { id, nickName, email, imgUrl } = userRes.data.data;
         dispatch(setId(id));
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
-        dispatch(setProfileUrl(profileUrl));
+        dispatch(setImgUrl(imgUrl));
       }
     });
+    // }
     dispatch(setCurrIdx(cancelEdit));
   };
 
@@ -89,7 +114,26 @@ const UserEdit = () => {
     <div className={styles["Container"]}>
       <form encType="multipart/form-data" onSubmit={handleSubmit}>
         <div className={styles["ProfileWrapper"]}>
-          <img src={imageUrl} className={styles["Avatar"]} />
+          <div>
+            <input
+              type="file"
+              accept="image/jpg,impge/png,image/jpeg,image/gif"
+              name="profile_img"
+              onChange={changeProfile}
+              className={styles["NoneInput"]}
+              ref={selectFile}
+            ></input>
+            <label>
+              <Image
+                onClick={() => selectFile.current.click()}
+                src={imagePath}
+                className={styles["Avatar"]}
+                alt="카카오프로필"
+                width={140}
+                height={140}
+              />
+            </label>
+          </div>
           <div>
             <div className={styles["Name"]}>{id}</div>
             <div className={styles["FormWrapper"]}>
@@ -98,7 +142,7 @@ const UserEdit = () => {
                   className={styles["Input"]}
                   type="text"
                   value={editName}
-                  placeholder={nickName}
+                  placeholder={nickname}
                   onChange={(e) => setEditName(e.target.value)}
                 />
               </label>
@@ -107,7 +151,7 @@ const UserEdit = () => {
           </div>
         </div>
         <div className={styles["ButtonWrapper"]}>
-          <Button type="submit" text="수정" onClick={changeEditName} />
+          <Button type="submit" text="수정" />
           <Button
             type="click"
             text="취소"

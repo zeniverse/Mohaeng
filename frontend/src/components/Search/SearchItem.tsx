@@ -4,37 +4,80 @@ import axios from "axios";
 import Image from "next/image";
 import cookie from "react-cookies";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { KeywordProps } from "@/src/interfaces/Keyword";
-import Bookmark from "../Bookmark/Bookmark";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
+import { content } from "@/src/store/reducers/searchPlaceSlice";
+import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/src/store/store";
 
 export default function SearchItem({
-  placeId,
   name,
   firstImage,
-  contentId,
+  placeId,
   isBookmark,
+  contentId,
   rating,
   review,
-}: KeywordProps) {
+}: content) {
   const router = useRouter();
-  const [bookMarked, setBookMarked] = useState(false);
+  const { keyword } = router.query;
+  const dispatch = useDispatch();
+  const accessToken = cookie.load("accessToken");
+  const page = useSelector((state: RootState) => state.page.page);
 
-  // 로직 분리
-  const handleBookmarkClick = async () => {
-    const accessToken = await cookie.load("accessToken");
-    try {
-      const res = await axios.post(`/api/place/bookmark/${placeId}`, {
-        headers: {
-          "Access-Token": `${accessToken}`,
+  const addBookmark = () => {
+    const response = async () => {
+      await axios.post(
+        `/api/place/bookmark/${placeId}`,
+        {},
+        {
+          headers: {
+            "Access-Token": accessToken,
+          },
           withCredentials: true,
+        }
+      );
+    };
+    response().then(async () => {
+      await axios
+        .get(`/api/place`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          params: {
+            keyword: keyword,
+            page: page,
+          },
+          withCredentials: true,
+        })
+        .then((res) => dispatch(setSearchPlace(res.data.data)));
+    });
+  };
+
+  const delBookmark = () => {
+    const response = async () => {
+      await axios.delete(`/api/place/bookmark/${placeId}`, {
+        headers: {
+          "Access-Token": accessToken,
         },
+        withCredentials: true,
       });
-      setBookMarked(!bookMarked);
-    } catch (error) {
-      console.error(error);
-    }
+    };
+    response().then(async () => {
+      await axios
+        .get(`/api/place`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          params: {
+            keyword: keyword,
+            page: page,
+          },
+          withCredentials: true,
+        })
+        .then((res) => dispatch(setSearchPlace(res.data.data)));
+    });
   };
 
   return (
@@ -67,11 +110,15 @@ export default function SearchItem({
       <div className={styles.keywordInfo}>
         <div className={styles.keywordDesc}>
           <p className={styles.title}>{name}</p>
-          <FiveStarRating rating={rating.toString()} />
+          <FiveStarRating rating={rating} />
           <p className={styles.review}>{review}건의 리뷰</p>
         </div>
         <div className={styles.keywordBookmark}>
-          <Bookmark bookMarked={bookMarked} onToggle={handleBookmarkClick} />
+          {isBookmark === true ? (
+            <BsBookmarkFill onClick={delBookmark} className={styles.bookmark} />
+          ) : (
+            <BsBookmark onClick={addBookmark} className={styles.unbookmark} />
+          )}
         </div>
       </div>
     </li>

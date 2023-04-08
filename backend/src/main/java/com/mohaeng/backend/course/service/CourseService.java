@@ -90,15 +90,18 @@ public class CourseService {
         return CourseIdRes.from(createdCourse.getId());
     }
 
-    public CourseRes getCourse(Long courseId) {
-        // 1. courseId로 course 조회
+    public CourseRes getCourse(Long courseId, String memberEmail) {
+        // 1.로그인 유무 화인
+        Member member = isLogin(memberEmail);
+
+        // 2. courseId로 course 조회
         Course findCourse = isCourse(courseId);
 
-        // 2. courseId로 CoursePlace 조회
+        // 3. courseId로 CoursePlace 조회
         List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
         List<CourseInPlaceDto> courseInPlaceDtoList = new ArrayList<>();
 
-        // 3. CoursePlaces에 담긴 Place 정보를 사용해 CourseInPlaceDTO에 담아준다.
+        // 4. CoursePlaces에 담긴 Place 정보를 사용해 CourseInPlaceDTO에 담아준다.
         for (CoursePlace coursePlace : coursePlaces) {
             Place place = coursePlace.getPlace();
             courseInPlaceDtoList.add(
@@ -113,7 +116,15 @@ public class CourseService {
             );
         }
 
-        return CourseRes.from(findCourse, courseInPlaceDtoList);
+        Boolean isLiked = false;
+        Boolean isBookmarked = false;
+
+        if (member != null){
+            isLiked = courseLikesRepository.existsCourseLikesByMemberAndCourse(member, findCourse);
+            isBookmarked = courseBookmarkRepository.existsCourseBookmarkByMemberAndCourse(member, findCourse);
+        }
+
+        return CourseRes.from(findCourse, courseInPlaceDtoList, isLiked, isBookmarked);
     }
 
     @Transactional

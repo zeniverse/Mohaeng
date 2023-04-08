@@ -55,8 +55,9 @@ public class CourseController {
     }
 
     @GetMapping("/{courseId}")
-    public ResponseEntity getCourse(@PathVariable Long courseId){
-        CourseRes courseRes = courseService.getCourse(courseId);
+    public ResponseEntity getCourse(@PathVariable Long courseId,
+                                    HttpServletRequest request){
+        CourseRes courseRes = courseService.getCourse(courseId, isAccessMember(request));
         return  ResponseEntity.ok().body(BaseResponse.success("OK", courseRes));
     }
 

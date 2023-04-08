@@ -25,10 +25,12 @@ public class CourseRes {
     private String endDate;
     private String content;
     private List<CourseInPlaceDto> places;
+    private Boolean isLiked;
+    private Boolean isBookmarked;
 
     @Builder
-    private CourseRes(Long courseId, String title, String nickname, Integer likeCount, String courseDays, String region, Boolean isPublished, LocalDateTime createdDate, String startDate,
-                      String endDate, String content, List<CourseInPlaceDto> places) {
+    public CourseRes(Long courseId, String title, String nickname, Integer likeCount, String courseDays, String region, Boolean isPublished, LocalDateTime createdDate, String startDate, String endDate,
+                     String content, List<CourseInPlaceDto> places, Boolean isLiked, Boolean isBookmarked) {
         this.courseId = courseId;
         this.title = title;
         this.nickname = nickname;
@@ -41,9 +43,12 @@ public class CourseRes {
         this.endDate = endDate;
         this.content = content;
         this.places = places;
+        this.isLiked = isLiked;
+        this.isBookmarked = isBookmarked;
     }
 
-    public static CourseRes from(Course course, List<CourseInPlaceDto> courseInPlaceDtoList){
+
+    public static CourseRes from(Course course, List<CourseInPlaceDto> courseInPlaceDtoList, Boolean isLiked, Boolean isBookmarked){
         return CourseRes.builder()
                 .courseId(course.getId())
                 .title(course.getTitle())
@@ -57,6 +62,8 @@ public class CourseRes {
                 .endDate(dateToStr(course.getEndDate()))
                 .content(course.getContent())
                 .places(courseInPlaceDtoList)
+                .isBookmarked(isBookmarked)
+                .isLiked(isLiked)
                 .build();
     }
 

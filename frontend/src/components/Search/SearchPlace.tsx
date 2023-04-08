@@ -10,6 +10,7 @@ import { RootState } from "@/src/store/store";
 import SearchItem from "./SearchItem";
 import Pagebar from "../Pagenation/Pagebar";
 import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
+import PlaceItem from "../Place/PlaceItem";
 
 export default function SearchPlace(): JSX.Element {
   const [searchResult, setSearchResult] = useState<Keyword[]>([]);
@@ -61,6 +62,8 @@ export default function SearchPlace(): JSX.Element {
               //   firstImage={place.firstImage}
               //   areaCode={place.areaCode}
               //   contentId={place.contentId}
+              //   placeId={place.placeId}
+              //   isBookmark={place.isBookmark}
               // />
               <SearchItem
                 key={place.contentId}
@@ -68,7 +71,7 @@ export default function SearchPlace(): JSX.Element {
                 firstImage={place.firstImage}
                 contentId={place.contentId}
                 placeId={place.placeId}
-                rating={0}
+                rating={place.rating}
                 review={place.review}
                 isBookmark={place.isBookmark}
               />

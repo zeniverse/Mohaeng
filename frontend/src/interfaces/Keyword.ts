@@ -5,7 +5,7 @@ export interface Keyword {
   firstImage: string;
   contentId: string;
   isBookmark: boolean;
-  rating: number;
+  rating: string;
   review: string;
 }
 
