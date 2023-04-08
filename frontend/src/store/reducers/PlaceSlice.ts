@@ -6,7 +6,7 @@ export interface content {
   firstImage: string;
   placeId: number;
   contentId: string;
-  isBookmark: boolean;
+  isBookmarked: boolean;
 }
 
 export interface placeState {

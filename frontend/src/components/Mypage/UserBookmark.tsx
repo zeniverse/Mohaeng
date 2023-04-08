@@ -1,5 +1,5 @@
 import styles from "./UserBookmark.module.css";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { BiBookmark } from "react-icons/bi";
@@ -45,7 +45,7 @@ const UserBookmark = () => {
                 key={bookmark.bookMarkId}
                 className={styles["bookmark-item"]}
               >
-                <img src={bookmark.placeImgUrl} alt={bookmark.placeName} />
+                <img src={bookmark.placeImgUrl} alt={bookmark.placeImgUrl} />
                 <div>
                   <h2>{bookmark.placeName}</h2>
                   <p>{bookmark.address}</p>

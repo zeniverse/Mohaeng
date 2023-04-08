@@ -11,6 +11,7 @@ import UserInfo from "@/src/components/Mypage/UserInfo";
 import UserEdit from "@/src/components/Mypage/UserEdit";
 import UserBookmark from "@/src/components/Mypage/UserBookmark";
 import Sidebar from "@/src/components/Mypage/Sidebar";
+import withAuth from "../withAuth";
 
 const MyPage: React.FC = () => {
   const currIdx = useSelector((state: RootState) => state.mypage.currIdx);
@@ -21,10 +22,12 @@ const MyPage: React.FC = () => {
       <Sidebar />
       <div className={styles.contentWrapper}>
         <h1 className={styles["Title"]}>{label}</h1>
-        {{ 0: <UserInfo />, 1: <UserBookmark />, 4: <UserEdit /> }[currIdx]}
+        <div className={styles.itemWrapper}>
+          {{ 0: <UserInfo />, 1: <UserBookmark />, 4: <UserEdit /> }[currIdx]}
+        </div>
       </div>
     </div>
   );
 };
 
-export default MyPage;
+export default withAuth(MyPage);
