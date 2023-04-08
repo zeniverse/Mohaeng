@@ -15,6 +15,7 @@ public class MyPageCourseBookMarkDto {
     private String courseTitle;
     private String region;
     private String content;
+    private String imgUrl;
     private CourseStatus courseStatus;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
@@ -26,6 +27,7 @@ public class MyPageCourseBookMarkDto {
                 courseBookmark.getCourse().getTitle(),
                 courseBookmark.getCourse().getRegion(),
                 courseBookmark.getCourse().getContent(),
+                courseBookmark.getCourse().getThumbnailUrl(),
                 courseBookmark.getCourse().getCourseStatus(),
                 courseBookmark.getCreatedDate(),
                 courseBookmark.getModifiedDate());

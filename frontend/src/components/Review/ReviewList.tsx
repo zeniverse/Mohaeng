@@ -5,33 +5,39 @@ import axios from "axios";
 import Link from "next/link";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import ReviewItem from "./ReviewItem";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/src/store/store";
+import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
+import Pagebar from "../Pagenation/Pagebar";
 
-// 해당 여행지 총 리뷰 건수, 별점 데이터 가져오기
-// 정렬 필터 (추천순)
+// 해당 여행지 총 리뷰 건수, 평균 별점 데이터 가져오기
+// 정렬 필터 (별점 순)
 // 리뷰 전체 조회
-// interface Review {
-//   memberName: string;
-//   rating: number;
-//   content: string;
-//   imgUrl: [];
-// }
 
 interface Review {
-  memberName: string;
-  // 프로필 url 추가
-  content: string;
-  imgUrl: [];
-  overview: string;
+  reviewId: number;
+  nickname: string;
+  memberImage: string;
   rating: string;
-  review: string;
+  content: string;
+  createdDate: string;
+  imgUrl: string[];
 }
 
-export default function Review() {
+export default function ReviewList() {
   const router = useRouter();
-  const { id, name } = router.query;
-  const [reviewData, setReviewData] = useState<Review[]>([]);
+  const { placeId, name } = router.query;
+  const [reviewData, setReviewData] = useState<ReviewData[]>([]);
   const [selectedValue, setSelectedValue] = useState("default");
-
+  const dispatch = useDispatch();
+  const page = useSelector((state: RootState) => state.page.page);
+  const totalPages: number = useSelector(
+    (state: RootState) => state.searchPlace.totalPages
+  );
+  const currentUser = useSelector(
+    (state: RootState) => state.nickName.nickName
+  );
+  const accessToken = useSelector((state: RootState) => state.token.token);
   const handleChange = (e: { target: { value: SetStateAction<string> } }) => {
     setSelectedValue(e.target.value);
   };
@@ -39,15 +45,34 @@ export default function Review() {
   useEffect(() => {
     const fetchReview = async () => {
       try {
-        const res = await axios.get(`/api/review/${id}`);
-        const { data } = res.data.data;
+        const res = await axios.get(`/api/review/${placeId}`);
+        dispatch(setReview(res.data));
+        const { data } = res.data;
         setReviewData(data);
       } catch (err) {
         console.error(err);
       }
     };
     fetchReview();
-  }, [id]);
+  }, [placeId, page]);
+
+  // 리뷰 한 번만 쓰도록 (여행지별 리뷰는 한 번만 작성할 수 있습니다. || 이미 작성하신 리뷰가 있습니다.)
+  const handleClickReviewBtn = () => {
+    if (!accessToken && !currentUser) {
+      router.push("/login");
+    } else {
+      router.push(
+        {
+          pathname: `/review/create-review`,
+          query: {
+            placeId: placeId,
+            name: name,
+          },
+        },
+        `review/create-review`
+      );
+    }
+  };
 
   return (
     <>
@@ -57,19 +82,9 @@ export default function Review() {
             <div className={styles.titleBox}>
               <h2 className={styles.h2}>리뷰</h2>
             </div>
-            <Link
-              className={styles.reviewBtn}
-              href={{
-                pathname: "/review/create-review",
-                query: {
-                  name: name,
-                  id: id,
-                },
-              }}
-              as={`/review/create-review`}
-            >
+            <button className={styles.reviewBtn} onClick={handleClickReviewBtn}>
               리뷰 작성
-            </Link>
+            </button>
           </div>
 
           <aside className={styles.reviewNav}>
@@ -96,15 +111,19 @@ export default function Review() {
           <div className={styles.reviewList}>
             {reviewData?.map((review) => (
               <ReviewItem
-                memberName={review.memberName}
+                key={review.nickname}
+                nickname={review.nickname}
+                memberImage={review.memberImage}
                 rating={review.rating}
                 content={review.content}
+                createdDate={review.createdDate}
                 imgUrl={review.imgUrl}
               />
             ))}
           </div>
         </main>
       </section>
+      <Pagebar totalPage={totalPages} />
     </>
   );
 }

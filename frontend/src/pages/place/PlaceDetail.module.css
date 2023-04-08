@@ -1,0 +1,91 @@
+.placeDetail {
+  width: 70rem;
+  margin: 2rem 8rem 2rem;
+  padding: 2rem 3rem;
+  background-color: var(--color-bg-lightgray);
+  border-radius: 12px;
+
+  --color-icon: #cfcfcf;
+}
+
+/* header */
+.detailHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+}
+
+.moveToReview:hover {
+  text-decoration: underline;
+}
+
+.h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.rating,
+.review {
+  font-size: 16px;
+}
+
+.bookMarkBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bookMarkText {
+  padding-right: 4px;
+  font-size: small;
+}
+
+/* main */
+.detailContent {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: var(--color-text-basic);
+}
+
+.imgBox {
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+  border-radius: 8px;
+}
+
+.img {
+  border-radius: 8px;
+}
+
+.detailMap {
+  width: 100%;
+  height: 350px;
+}
+
+.detailDesc {
+  width: 100%;
+  height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  margin-bottom: 1rem;
+}
+
+.detailDesc,
+.detailMap {
+  padding: 1rem;
+  border: 1px solid var(--color-border-light);
+  background-color: var(--color-bg-white);
+  border-radius: 8px;
+}
+
+.descTitle {
+  margin-bottom: 1rem;
+  font-weight: bold;
+  font-size: large;
+}
+
+.descInfo {
+  margin-bottom: 1rem;
+}

@@ -5,20 +5,23 @@ import com.mohaeng.backend.course.repository.CourseBookmarkRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
 import com.mohaeng.backend.exception.badrequest.NotMatchMemberCourseBookMark;
 import com.mohaeng.backend.exception.badrequest.NotMatchMemberPlaceBookMark;
+import com.mohaeng.backend.exception.badrequest.NotMatchMemberReview;
 import com.mohaeng.backend.exception.notfound.CourseBookmarkNotFoundException;
 import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
-import com.mohaeng.backend.exception.notfound.PlaceBookmarkNotFoundException;
+import com.mohaeng.backend.exception.notfound.ReviewNotFoundException;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.dto.response.MyPageCourseBookMarkDto;
 import com.mohaeng.backend.member.dto.response.MyPagePlaceBookMarkDto;
+import com.mohaeng.backend.member.dto.response.MyPageReviewDto;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.PlaceBookmark;
+import com.mohaeng.backend.place.domain.Review;
 import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
+import com.mohaeng.backend.place.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +33,7 @@ public class MyPageService {
     private final CourseRepository courseRepository;
     private final MemberRepository memberRepository;
     private final PlaceBookmarkRepository placeBookmarkRepository;
+    private final ReviewRepository reviewRepository;
 
 
     @Transactional
@@ -115,5 +119,39 @@ public class MyPageService {
 
     public void deleteMember(Member member){
         memberRepository.delete(member);
+    }
+
+    @Transactional
+    public List<MyPageReviewDto> getAllMyReview(String email) {
+        Member member = isMember(email);
+        return member.getReviewList().stream()
+                .map(m -> MyPageReviewDto.of(m))
+                .sorted(Comparator.comparing(MyPageReviewDto::getCreatedDate).reversed())
+                .collect(Collectors.toList());
+    }
+
+    public MyPageReviewDto getOneMyReview(String email, long reviewId) {
+        Member member = isMember(email);
+        Review review = isReview(reviewId);
+
+        if (isMemberHasReview(member, review)) {
+            throw new NotMatchMemberReview();
+        }
+
+        return MyPageReviewDto.of(review);
+    }
+
+    public Review isReview(Long id) {
+        return reviewRepository.findById(id)
+                .orElseThrow(() -> new ReviewNotFoundException());
+    }
+
+    public boolean isMemberHasReview(Member member, Review review) {
+        for (Review findReview : member.getReviewList()) {
+            if (review.getId() == findReview.getId()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

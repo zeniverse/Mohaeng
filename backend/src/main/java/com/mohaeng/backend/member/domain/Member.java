@@ -1,6 +1,7 @@
 package com.mohaeng.backend.member.domain;
 
 import com.mohaeng.backend.common.BaseTimeEntity;
+import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.domain.CourseBookmark;
 import com.mohaeng.backend.place.domain.PlaceBookmark;
 import com.mohaeng.backend.place.domain.Review;
@@ -57,6 +58,10 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member")
     private List<Review> reviewList;
+
+    @OneToMany(mappedBy = "member")
+    private List<Course> courseList = new ArrayList<>();
+
 
     @Builder
     public Member(String name, String email, Role role, String nickName) {

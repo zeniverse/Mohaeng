@@ -9,6 +9,8 @@ import RoughMap from "./RoughMap";
 import IsLikeState from "../UI/IsLikeState";
 import Link from "next/link";
 import TagItem from "../UI/TagItem";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { toggleBookmarkAction } from "@/src/store/reducers/CourseSlice";
 
 const CourseItem = ({
   id,
@@ -17,11 +19,12 @@ const CourseItem = ({
   likeCount,
   courseDays,
   thumbnailUrl,
-  bookMark,
-  like,
+  isBookMarked,
+  isLiked,
   places,
 }: CourseListProps) => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
+  const dispatch = useAppDispatch();
 
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
@@ -29,6 +32,9 @@ const CourseItem = ({
   };
   const onClose = () => {
     setIsRoughMapOpen(false);
+  };
+  const bookmarkHandler = (id: number) => {
+    dispatch(toggleBookmarkAction(id));
   };
 
   return (
@@ -59,8 +65,9 @@ const CourseItem = ({
         </div>
       </Link>
       <div className={styles["item-nav-container"]}>
-        <div className={styles["item-nav"]}>
-          {bookMark ? <BsBookmarkFill /> : <BsBookmark />}
+        <div className={styles["item-nav"]} onClick={() => bookmarkHandler(id)}>
+          {/* TODO: CSS 손보기 */}
+          {isBookMarked ? <BsBookmarkFill /> : <BsBookmark />}
         </div>
         <div className={`${styles["item-nav"]} ${styles.center}`}>
           <BiShareAlt />

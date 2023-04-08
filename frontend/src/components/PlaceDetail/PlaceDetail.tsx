@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
-import { palette } from "@/src/styles/palette";
 
 // 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined?
 // 북마크 delete
@@ -28,11 +27,11 @@ interface PlaceInfo {
   review: string;
 }
 
-export default function PlaceDetail() {
+const PlaceDetail = () => {
   const accessToken = cookie.load("accessToken");
   const dispatch = useDispatch();
   const router = useRouter();
-  const { id } = router.query;
+  const { placeId, contentId } = router.query;
   const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
     name: "",
     areaCode: "",
@@ -47,6 +46,7 @@ export default function PlaceDetail() {
   const [bookMarked, setBookMarked] = useState(false);
   // 스테이트 저장해도 새로고침 시 날아감
   const [currentId, setCurrentId] = useState("");
+  console.log(placeId);
 
   // useEffect(() => {
   //   localStorage.setItem("id", id);
@@ -63,16 +63,12 @@ export default function PlaceDetail() {
   // 북마크
   const handleBookmarkClick = async () => {
     try {
-      const res = await axios.post(
-        `/api/place/bookmark/${id}`,
-        {},
-        {
-          headers: {
-            "Access-Token": `${accessToken}`,
-            withCredentials: true,
-          },
-        }
-      );
+      const res = await axios.post(`/api/place/bookmark/${placeId}`, {
+        headers: {
+          "Access-Token": `${accessToken}`,
+          withCredentials: true,
+        },
+      });
       console.log(res.data);
       setBookMarked(!bookMarked);
     } catch (error) {
@@ -84,7 +80,7 @@ export default function PlaceDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/place/overview/${id}`);
+        const res = await axios.get(`/place/overview/${contentId}`);
         if (res.data.data.content[0] !== {}) {
           const { content } = res.data.data;
           setPlaceInfo({ ...placeInfo, ...content[0] });
@@ -96,20 +92,7 @@ export default function PlaceDetail() {
       }
     };
     fetchData();
-
-    // const getBookmark = async () => {
-    //   await axios
-    //     .get(`/api/place/bookmark/${id}`, {
-    //       headers: {
-    //         "Access-Token": accessToken,
-    //       },
-    //       withCredentials: true,
-    //     })
-    //     .then((res) => setBookMarked(res.data));
-    // };
-
-    // getBookmark();
-  }, [id, dispatch]);
+  }, [contentId, dispatch]);
 
   return (
     <>
@@ -156,31 +139,6 @@ export default function PlaceDetail() {
       </div>
     </>
   );
-}
+};
 
-// export async function getServerSideProps({ query: { id } }) {
-//   return {
-//     props: {
-//       classId,
-//     },
-//   };
-// }
-// export async function getServerSideProps({ query }) {
-//   const { id } = query;
-
-//   try {
-//     const res = await axios.get(`/place/overview/${id}`);
-//     const { content } = res.data.data;
-
-//     return {
-//       props: {
-//         placeInfo: content[0],
-//       },
-//     };
-//   } catch (error) {
-//     console.error(error);
-//     return {
-//       notFound: true,
-//     };
-//   }
-// }
+export default PlaceDetail;

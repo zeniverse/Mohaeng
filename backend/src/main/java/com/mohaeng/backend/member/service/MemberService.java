@@ -118,13 +118,16 @@ public class MemberService {
 
     public Member saveMember(String token) throws IOException {
         KakaoUserDto kakaoUser = findProfile(token);
-        Member member = memberRepository.findByEmailAndDeletedDateIsNull(kakaoUser.getEmail())
-                .orElse(new Member(kakaoUser.getName(), kakaoUser.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
+        Member member = memberRepository.findByEmailAndDeletedDateIsNull(kakaoUser.getEmail()).get();
+
+        if (member == null) {
+            member = new Member(kakaoUser.getName(), kakaoUser.getEmail(), Role.NORMAL, randomNameService.generateNickName());
+            String fullUrl = kakaoUser.getProfileImage();
+            setMemberImageUrl(member, fullUrl);
+        }
+
         member.setOauthAccessToken(token);
         member.setKakaoId(kakaoUser.getKakaoId());
-//        String fullFileName = downloadFile(kakaoUser.getProfileImage());
-        String fullUrl = kakaoUser.getProfileImage();
-        setMemberImageUrl(member, fullUrl);
         memberRepository.save(member);
         return member;
     }
