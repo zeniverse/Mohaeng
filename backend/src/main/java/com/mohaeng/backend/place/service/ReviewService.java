@@ -17,13 +17,18 @@ import com.mohaeng.backend.place.repository.ReviewImageRepository;
 import com.mohaeng.backend.place.repository.ReviewRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +52,18 @@ public class ReviewService {
                 .map(m -> FindAllReviewResponse.of(m))
                 .collect(Collectors.toList());
     }
+
+
+    public Page<Review> getAllReviewByPage(Long id, int pageNumber) {
+        Place findPlace = placeRepository.findById(id)
+                .orElseThrow(() -> new PlaceNotFoundException("NOT_EXIST_PLACE"));
+
+        Pageable pageable = PageRequest.of(pageNumber, 4);
+        Page<Review> reviews = reviewRepository.findAllByPlaceId(id, pageable);
+//        List<FindAllReviewResponse> reviewResponses = reviews.map(FindAllReviewResponse::of).getContent();
+        return reviews;
+    }
+
 
     @Transactional
     public void createReview(String email, Long placeId, CreateReviewRequest createReviewRequest, List<String> fileNameList) {
@@ -113,11 +130,10 @@ public class ReviewService {
         review.getReviewImageList().clear();
 
         // Add new images
-        // Add new images
         if (fileNameList != null) {
             registerImage(fileNameList, review);
         }
-//        registerImage(fileNameList, review);
+//        registerImage(fileNameList, review); JPA 1차 캐시 문제 해결.
         entityManager.flush();
         entityManager.clear();
     }
@@ -141,5 +157,17 @@ public class ReviewService {
         // Clear JPA cache
         entityManager.flush();
         entityManager.clear();
+    }
+
+    public double getAverageRating(List<Review> reviews) {
+        return reviews.stream()
+                .mapToDouble(r -> Double.parseDouble(r.getRating()))
+                .average()
+                .orElse(0.0);
+    }
+
+    public Review getReviewById(Long reviewId) {
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewNotFoundException());
     }
 }
