@@ -2,8 +2,7 @@ import styles from "./Login.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import btnKakao from "/public/assets/btnKakao.png";
-import btnGoogle from "/public/assets/btnGoogle.png";
-import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL } from "../../pages/api/auth/OAuth";
+import { KAKAO_AUTH_URL } from "../../pages/api/auth/OAuth";
 
 export default function Login() {
   return (
@@ -22,12 +21,6 @@ export default function Login() {
                 width={352}
                 height={54}
               />
-            </button>
-          </Link>
-          <Link className={styles.link} href={GOOGLE_AUTH_URL}>
-            <button className={styles.googleBtn}>
-              <Image src={btnGoogle} alt="구글 로그인" width={54} height={54} />
-              <p className={styles.loginGoogle}>Google 로그인</p>
             </button>
           </Link>
         </div>

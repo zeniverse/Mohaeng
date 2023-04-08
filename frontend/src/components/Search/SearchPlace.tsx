@@ -10,7 +10,7 @@ import { RootState } from "@/src/store/store";
 import SearchItem from "./SearchItem";
 import Pagebar from "../Pagenation/Pagebar";
 import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
-import PlaceItem from "../Place/PlaceItem";
+// import PlaceItem from "../Place/PlaceItem";
 
 export default function SearchPlace(): JSX.Element {
   const [searchResult, setSearchResult] = useState<Keyword[]>([]);

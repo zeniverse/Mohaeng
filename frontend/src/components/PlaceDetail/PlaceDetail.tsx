@@ -46,6 +46,7 @@ const PlaceDetail = () => {
   const [bookMarked, setBookMarked] = useState(false);
   // 스테이트 저장해도 새로고침 시 날아감
   const [currentId, setCurrentId] = useState("");
+  console.log(placeId);
 
   // useEffect(() => {
   //   localStorage.setItem("id", id);
