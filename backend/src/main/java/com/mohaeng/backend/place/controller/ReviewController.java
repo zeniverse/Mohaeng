@@ -4,6 +4,7 @@ import com.mohaeng.backend.Image.AmazonS3Service;
 import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.place.dto.request.CreateReviewRequest;
+import com.mohaeng.backend.place.dto.request.UpdateReviewRequest;
 import com.mohaeng.backend.place.dto.response.FindAllReviewResponse;
 import com.mohaeng.backend.place.service.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,14 +39,34 @@ public class ReviewController {
                                          @RequestPart(value = "review") @Valid CreateReviewRequest createReviewRequest,
                                          @RequestPart(value = "multipartFile", required = false) List<MultipartFile> multipartFileList) {
         String email = getEmail(request);
-        List<String> fileNameList = amazonS3Service.uploadFile(multipartFileList);
+        List<String> fileNameList = null;
+        if (multipartFileList != null) {
+            fileNameList = amazonS3Service.uploadFile(multipartFileList);
+        }
         reviewService.createReview(email, placeId, createReviewRequest, fileNameList);
+        return ResponseEntity.ok(BaseResponse.success("ok", ""));
+    }
+
+    @PutMapping("/review/{placeId}")
+    public ResponseEntity updateReview(@PathVariable Long placeId,
+                                       @RequestPart(value = "review") @Valid UpdateReviewRequest updateReviewRequest,
+                                       @RequestPart(value = "multipartFile", required = false) List<MultipartFile> multipartFileList) {
+        List<String> fileNameList = null;
+        if (multipartFileList != null) {
+            fileNameList = amazonS3Service.uploadFile(multipartFileList);
+        }
+        reviewService.updateReview(placeId, updateReviewRequest, fileNameList);
+        return ResponseEntity.ok(BaseResponse.success("ok", ""));
+    }
+
+    @DeleteMapping("/review/{reviewId}")
+    public ResponseEntity deleteReview(@PathVariable Long reviewId) {
+        reviewService.deleteReview(reviewId);
         return ResponseEntity.ok(BaseResponse.success("ok", ""));
     }
 
     private String getEmail(HttpServletRequest httpServletRequest) {
         return tokenGenerator.parseEmailFromToken(httpServletRequest.getHeader("Access-Token"));
     }
-
 
 }

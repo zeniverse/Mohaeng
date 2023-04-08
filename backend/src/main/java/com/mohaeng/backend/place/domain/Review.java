@@ -1,11 +1,13 @@
 package com.mohaeng.backend.place.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mohaeng.backend.common.BaseTimeEntity;
 import com.mohaeng.backend.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +30,14 @@ public class Review extends BaseTimeEntity {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    private String nickname;
     private String title;
     private String content;
     private int likeCount;
-    private double rating;
+    private String rating;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime createdDate;
 
     @OneToMany(mappedBy = "review")
     private List<ReviewImage> reviewImageList = new ArrayList<>();
@@ -39,4 +45,11 @@ public class Review extends BaseTimeEntity {
     public void addReviewImage(ReviewImage reviewImage) {
         this.reviewImageList.add(reviewImage);
     }
+
+    public void update(String title, String content, String rating) {
+        this.title = title;
+        this.content = content;
+        this.rating = rating;
+    }
+
 }

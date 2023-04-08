@@ -20,15 +20,26 @@
 
 .userImg {
   margin-right: 1rem;
+  border-radius: 50%;
 }
 
 .reviewContent {
+  margin-left: 66px;
   display: flex;
   flex-direction: column;
 }
 
 .reviewTxt {
   margin-bottom: 1rem;
+}
+
+.reviewImgBox {
+  display: flex;
+  flex-direction: row;
+}
+.reviewImg {
+  padding: 4px;
+  margin-right: 0.5rem;
 }
 
 .btnGroup {

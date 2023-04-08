@@ -1,13 +1,11 @@
 export interface Review {
-  memberName: string;
-  rating: number;
-  content: string;
-  imgUrl: [];
+  data: [];
 }
 
 export type ReviewProps = {
   memberName: string;
-  rating: number;
+  memberImage: string;
+  rating: string;
   content: string;
   imgUrl: [];
 };

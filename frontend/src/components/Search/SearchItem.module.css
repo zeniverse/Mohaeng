@@ -5,7 +5,7 @@
 }
 
 .keywordItemContainer:hover {
-  color: var(--color-primary);
+  color: var(--color-text-basic);
   transition: all ease 0.3s;
   box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
   -webkit-box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
@@ -60,4 +60,35 @@
   width: 30px;
   margin-top: 1rem;
   margin-left: 50px;
+}
+
+.btn {
+  width: 30px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  --color-icon: #cfcfcf;
+}
+
+.bookmark,
+.unbookmark {
+  background-color: transparent;
+  border: none;
+  color: var(--color-border-light);
+}
+
+.unbookmark {
+  color: var(--color-border-light);
+  font-size: 30px;
+}
+
+.unbookmark:hover {
+  color: var(--color-blue);
+  scale: 105%;
+  transition: 200ms;
+}
+
+.bookmark {
+  color: var(--color-blue);
+  font-size: 28px;
 }

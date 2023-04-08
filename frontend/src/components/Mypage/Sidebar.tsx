@@ -29,9 +29,7 @@ const SidebarLink = ({ currIdx, label }: myPageState) => {
 
 const Sidebar = () => {
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
-  const imageUrl = useSelector(
-    (state: RootState) => state.profileUrl.profileUrl
-  );
+  const imageUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
 
   const links: myPageState[] = [
     { currIdx: 0, label: "회원정보" },
