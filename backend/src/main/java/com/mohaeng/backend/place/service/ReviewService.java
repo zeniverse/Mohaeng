@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -169,5 +170,15 @@ public class ReviewService {
     public Review getReviewById(Long reviewId) {
         return reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException());
+    }
+
+    public Page<Review> getAllReviewsByRating(Long placeId, int page) {
+        Pageable pageable = PageRequest.of(page, 4, Sort.by("rating").descending());
+        return reviewRepository.findAllByPlaceId(placeId, pageable);
+    }
+
+    public Page<Review> getAllReviewsByDate(Long placeId, int page) {
+        Pageable pageable = PageRequest.of(page, 4, Sort.by("createdDate").descending());
+        return reviewRepository.findAllByPlaceId(placeId, pageable);
     }
 }
