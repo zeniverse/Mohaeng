@@ -6,10 +6,12 @@ import com.mohaeng.backend.exception.badrequest.NotMatchMemberCourse;
 import com.mohaeng.backend.exception.notfound.CourseNotFoundException;
 import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
 import com.mohaeng.backend.member.domain.Member;
+import com.mohaeng.backend.member.dto.request.VisibilityRequest;
 import com.mohaeng.backend.member.dto.response.MyPageCourseDto;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -21,6 +23,7 @@ public class MyPageCourseService {
     private final CourseRepository courseRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public List<MyPageCourseDto> findAllMyCourse(String email) {
         Member member = isMember(email);
         return member.getCourseList().stream()
@@ -29,6 +32,7 @@ public class MyPageCourseService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public MyPageCourseDto findOneMyCourse(String email, long courseId) {
         Member member = isMember(email);
         Course course = isCourseId(courseId);
@@ -38,6 +42,18 @@ public class MyPageCourseService {
         }
 
         return MyPageCourseDto.of(course);
+    }
+
+    @Transactional
+    public void changeVisibility(String email, long courseId, VisibilityRequest request) {
+        Member member = isMember(email);
+        Course course = isCourseId(courseId);
+
+        if (!isMemberHasCourse(member, course)) {
+            throw new NotMatchMemberCourse();
+        }
+
+        course.changeStatus(request.getIsPublished());
     }
 
     private boolean isMemberHasCourse(Member member, Course course) {

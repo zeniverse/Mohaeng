@@ -3,6 +3,7 @@ package com.mohaeng.backend.member.controller;
 import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.dto.request.UserInfoChangeRequest;
+import com.mohaeng.backend.member.dto.request.VisibilityRequest;
 import com.mohaeng.backend.member.dto.response.MyPageCourseBookMarkDto;
 import com.mohaeng.backend.member.dto.response.MyPageCourseDto;
 import com.mohaeng.backend.member.dto.response.MyPagePlaceBookMarkDto;
@@ -91,8 +92,12 @@ public class MyPageController {
         return ResponseEntity.ok().body(BaseResponse.success("ok", data));
     }
 
-
-
+    @PutMapping("/myPage/course/{placeId}")
+    public ResponseEntity changeCourseVisibility(@PathVariable long placeId, @RequestBody VisibilityRequest visibilityRequest, HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        myPageCourseService.changeVisibility(email, placeId, visibilityRequest);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
+    }
 
     private String findEmailFromHeader(HttpServletRequest request) {
         return tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
