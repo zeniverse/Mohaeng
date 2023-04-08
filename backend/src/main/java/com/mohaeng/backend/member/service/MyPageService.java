@@ -130,6 +130,7 @@ public class MyPageService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public MyPageReviewDto getOneMyReview(String email, long reviewId) {
         Member member = isMember(email);
         Review review = isReview(reviewId);
