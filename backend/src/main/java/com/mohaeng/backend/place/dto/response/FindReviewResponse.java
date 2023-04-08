@@ -12,9 +12,8 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public class FindReviewResponse {
-    private Long id;
+    private Long reviewId;
     private String nickname;
-    private String title;
     private String content;
     private int likeCount;
     private String rating;
@@ -26,8 +25,7 @@ public class FindReviewResponse {
     public static FindReviewResponse of(Review review) {
         return new FindReviewResponse(
                 review.getId(),
-                review.getNickname(),
-                review.getTitle(),
+                review.getMember().getNickName(),
                 review.getContent(),
                 review.getLikeCount(),
                 review.getRating(),
