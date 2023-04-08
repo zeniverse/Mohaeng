@@ -2,20 +2,17 @@ import { useRouter } from "next/router";
 import cookie from "react-cookies";
 
 const withAuth = (WrappedComponent: any) => {
+  const accessToken = cookie.load("accessToken");
   return (props: any) => {
-    if (typeof window !== "undefined") {
-      const Router = useRouter();
+    if (typeof window === "undefined") return null;
 
-      const accessToken = cookie.load("accessToken");
+    const Router = useRouter();
 
-      if (!accessToken) {
-        Router.replace("/");
-        return null;
-      }
-
-      return <WrappedComponent {...props} />;
+    if (!accessToken) {
+      Router.replace("/");
+      return null;
     }
-    return null;
+    return <WrappedComponent {...props} />;
   };
 };
 
