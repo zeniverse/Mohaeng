@@ -62,7 +62,7 @@
 
 .formTxtArea {
   resize: none;
-  height: 16rem;
+  height: 12rem;
   margin-bottom: 1rem;
   padding: 1rem;
   border: 1px solid var(--color-border-light);
