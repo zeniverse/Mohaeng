@@ -102,6 +102,7 @@ public class ReviewService {
         entityManager.clear();
     }
 
+    @Transactional
     private void registerImage(List<String> filaNameList, Review review) {
         for (String fullName : filaNameList) {
             String fileName = fullName.substring(fullName.lastIndexOf("/") + 1);

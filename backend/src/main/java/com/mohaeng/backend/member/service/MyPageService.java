@@ -134,8 +134,11 @@ public class MyPageService {
     public MyPageReviewDto getOneMyReview(String email, long reviewId) {
         Member member = isMember(email);
         Review review = isReview(reviewId);
+        System.out.println("review = " + review.getPlace().getFirstImage());
+        System.out.println("review = " + review.getPlace().getName());
+        System.out.println("review = " + review.getPlace().getId());
 
-        if (isMemberHasReview(member, review)) {
+        if (!isMemberHasReview(member, review)) {
             throw new NotMatchMemberReview();
         }
 

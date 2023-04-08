@@ -18,13 +18,22 @@ public class MyPageReviewDto {
     private LocalDateTime createdDate;
 
     public static MyPageReviewDto of(Review review) {
+        String imgUrl="";
+        if (review.getReviewImageList().size() != 0) {
+            String url = review.getReviewImageList().get(0).getImageUrl();
+            String name = review.getReviewImageList().get(0).getImageName();
+            imgUrl = url + "/" + name;
+        } else {
+            imgUrl = review.getPlace().getFirstImage();
+        }
+
         return new MyPageReviewDto(
                 review.getId(),
                 review.getTitle(),
                 review.getContent(),
                 review.getLikeCount(),
                 review.getRating(),
-                review.getPlace().getFirstImage(),
+                imgUrl,
                 review.getCreatedDate()
         );
     }
