@@ -15,6 +15,7 @@ public class MyPagePlaceBookMarkDto {
     private double rating;
     private String address;
     private String content;
+    private String imgUrl;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
@@ -26,6 +27,7 @@ public class MyPagePlaceBookMarkDto {
                 m.getPlace().getRating(),
                 m.getPlace().getAddress(),
                 m.getPlace().getOverview(),
+                m.getPlace().getFirstImage(),
                 m.getCreatedDate(),
                 m.getModifiedDate()
         );

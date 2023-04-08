@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface data {
+export interface ReviewData {
   reviewId: number;
   nickname: string;
   memberImage: string;
@@ -11,7 +11,7 @@ export interface data {
 }
 
 export interface ReviewState {
-  data: data[];
+  data: ReviewData[];
   totalPages: number;
   totalElements: number;
 }
@@ -27,7 +27,7 @@ export const reviewSlice = createSlice({
   initialState,
   reducers: {
     setReview: (state, action) => {
-      state.data = action.payload.review;
+      state.data = action.payload.data;
       state.totalPages = action.payload.totalPages;
       state.totalElements = action.payload.totalElements;
     },

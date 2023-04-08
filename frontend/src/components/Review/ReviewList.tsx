@@ -7,27 +7,27 @@ import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import ReviewItem from "./ReviewItem";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { data, setReview } from "@/src/store/reducers/reviewSlice";
+import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import Pagebar from "../Pagenation/Pagebar";
 
 // 해당 여행지 총 리뷰 건수, 평균 별점 데이터 가져오기
 // 정렬 필터 (별점 순)
 // 리뷰 전체 조회
-// 이미지 개수에 따라 배열 돌리기
 
 interface Review {
-  id: number;
+  reviewId: number;
   nickname: string;
   memberImage: string;
+  rating: string;
   content: string;
-  // imgUrl: [];
-  rating: number;
+  createdDate: string;
+  imgUrl: string[];
 }
 
 export default function ReviewList() {
   const router = useRouter();
   const { placeId, name } = router.query;
-  const [reviewData, setReviewData] = useState<data[]>([]);
+  const [reviewData, setReviewData] = useState<ReviewData[]>([]);
   const [selectedValue, setSelectedValue] = useState("default");
   const dispatch = useDispatch();
   const page = useSelector((state: RootState) => state.page.page);
@@ -37,24 +37,7 @@ export default function ReviewList() {
   const currentUser = useSelector(
     (state: RootState) => state.nickName.nickName
   );
-
-  const handleClickReviewBtn = () => {
-    if (!currentUser) {
-      router.push(
-        {
-          pathname: "/review/create-review",
-          query: {
-            plcaceId: placeId,
-            name: name,
-          },
-        },
-        "review/create-review"
-      );
-    } else if (currentUser) {
-      window.alert("여행지별로 리뷰는 한 번만 작성할 수 있습니다.");
-    }
-  };
-
+  const accessToken = useSelector((state: RootState) => state.token.token);
   const handleChange = (e: { target: { value: SetStateAction<string> } }) => {
     setSelectedValue(e.target.value);
   };
@@ -72,6 +55,24 @@ export default function ReviewList() {
     };
     fetchReview();
   }, [placeId, page]);
+
+  // 리뷰 한 번만 쓰도록 (여행지별 리뷰는 한 번만 작성할 수 있습니다. || 이미 작성하신 리뷰가 있습니다.)
+  const handleClickReviewBtn = () => {
+    if (!accessToken && !currentUser) {
+      router.push("/login");
+    } else {
+      router.push(
+        {
+          pathname: `/review/create-review`,
+          query: {
+            placeId: placeId,
+            name: name,
+          },
+        },
+        `review/create-review`
+      );
+    }
+  };
 
   return (
     <>
