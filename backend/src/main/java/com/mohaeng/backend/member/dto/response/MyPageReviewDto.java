@@ -14,6 +14,7 @@ public class MyPageReviewDto {
     private String content;
     private int likeCount;
     private String rating;
+    private String imgUrl;
     private LocalDateTime createdDate;
 
     public static MyPageReviewDto of(Review review) {
@@ -23,6 +24,7 @@ public class MyPageReviewDto {
                 review.getContent(),
                 review.getLikeCount(),
                 review.getRating(),
+                review.getPlace().getFirstImage(),
                 review.getCreatedDate()
         );
     }
