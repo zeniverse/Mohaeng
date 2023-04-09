@@ -20,7 +20,7 @@ const PlaceList = () => {
           name={place.name}
           firstImage={place.firstImage}
           contentId={place.contentId}
-          isBookmark={place.isBookmark}
+          isBookmarked={place.isBookmarked}
           placeId={place.placeId}
           areaCode={areaCode}
         />

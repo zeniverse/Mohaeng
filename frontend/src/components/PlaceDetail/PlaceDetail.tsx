@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 
 // 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined?
 // 북마크 delete
@@ -30,6 +32,7 @@ interface PlaceInfo {
 const PlaceDetail = () => {
   const accessToken = cookie.load("accessToken");
   const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
   const router = useRouter();
   const { placeId, contentId } = router.query;
   const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
@@ -63,13 +66,33 @@ const PlaceDetail = () => {
   // 북마크
   const handleBookmarkClick = async () => {
     try {
-      const res = await axios.post(`/api/place/bookmark/${placeId}`, {
-        headers: {
-          "Access-Token": `${accessToken}`,
-          withCredentials: true,
-        },
-      });
-      console.log(res.data);
+      if (bookMarked === false) {
+        const res = await axios
+          .post(
+            `/api/place/bookmark/${placeId}`,
+            {},
+            {
+              headers: {
+                "Access-Token": `${accessToken}`,
+                withCredentials: true,
+              },
+            }
+          )
+          .then(() => {
+            appDispatch(getPlaceBookmark(accessToken));
+          });
+      } else {
+        const res = await axios
+          .delete(`/api/place/bookmark/${placeId}`, {
+            headers: {
+              "Access-Token": `${accessToken}`,
+              withCredentials: true,
+            },
+          })
+          .then(() => {
+            appDispatch(getPlaceBookmark(accessToken));
+          });
+      }
       setBookMarked(!bookMarked);
     } catch (error) {
       console.error(error);
@@ -80,10 +103,16 @@ const PlaceDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/place/overview/${contentId}`);
+        const res = await axios.get(`/place/overview/${contentId}`, {
+          headers: {
+            "Access-Token": `${accessToken}`,
+            withCredentials: true,
+          },
+        });
         if (res.data.data.content[0] !== {}) {
           const { content } = res.data.data;
           setPlaceInfo({ ...placeInfo, ...content[0] });
+          setBookMarked(res.data.data.isBookmarked);
         } else {
           console.log(placeInfo);
         }

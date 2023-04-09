@@ -138,10 +138,9 @@ public class CourseService {
         List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
         coursePlaceRepository.deleteAllInBatch(coursePlaces);
 
-        List<CoursePlace> updatedCoursePlaces = new ArrayList<>();
         for (Long id : req.getPlaceIds()) {
             Place place = placeRepository.findById(id).orElseThrow(PlaceNotFoundException::new);
-            updatedCoursePlaces.add(
+            coursePlaces.add(
                     CoursePlace.builder()
                             .course(course)
                             .place(place)
@@ -149,8 +148,8 @@ public class CourseService {
             );
         }
 
-        coursePlaceRepository.saveAll(updatedCoursePlaces);
-        course.addCoursePlaces(updatedCoursePlaces);
+        coursePlaceRepository.saveAll(coursePlaces);
+        course.addCoursePlaces(coursePlaces);
         course.updateCourse(req);
 
         return CourseIdRes.from(course.getId());
