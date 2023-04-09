@@ -17,12 +17,12 @@ public class CourseListDto {
     private Integer likeCount;
     private String thumbnailUrl;
     private Boolean isLiked;
-    private Boolean isBookMarked;
+    private Boolean isBookmarked;
     private List<CourseListPlaceDto> places;
 
     @Builder
     private CourseListDto(Long id, String title, String content, String courseDays,
-                          Integer likeCount, String thumbnailUrl, Boolean isLiked, Boolean isBookMarked, List<CourseListPlaceDto> places) {
+                          Integer likeCount, String thumbnailUrl, Boolean isLiked, Boolean isBookmarked, List<CourseListPlaceDto> places) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -30,7 +30,7 @@ public class CourseListDto {
         this.likeCount = likeCount;
         this.thumbnailUrl = thumbnailUrl;
         this.isLiked = isLiked;
-        this.isBookMarked = isBookMarked;
+        this.isBookmarked = isBookmarked;
         this.places = places;
     }
 
@@ -43,7 +43,7 @@ public class CourseListDto {
                 .likeCount(course.getLikeCount())
                 .thumbnailUrl(course.getThumbnailUrl())
                 .isLiked(isLiked)
-                .isBookMarked(isBookMarked)
+                .isBookmarked(isBookMarked)
                 .places(course.getCoursePlaces().stream()
                         .map(coursePlace -> CourseListPlaceDto.builder()
                                 .name(coursePlace.getPlace().getName())
