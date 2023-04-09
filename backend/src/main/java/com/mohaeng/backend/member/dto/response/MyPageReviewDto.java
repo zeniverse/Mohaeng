@@ -13,7 +13,6 @@ public class MyPageReviewDto {
     private long placeId;
     private String name;
     private String content;
-    private int likeCount;
     private String rating;
     private String imgUrl;
     private LocalDateTime createdDate;
@@ -33,7 +32,6 @@ public class MyPageReviewDto {
                 review.getPlace().getId(),
                 review.getPlace().getName(),
                 review.getContent(),
-                review.getLikeCount(),
                 review.getRating(),
                 imgUrl,
                 review.getCreatedDate()
