@@ -23,11 +23,11 @@ const MyPage: React.FC = () => {
   const router = useRouter();
 
   //TODO: 로그인 페이지 완성시 경로 '/login'으로 바꿔두기
-  // useEffect(() => {
-  //   if (!accessToken) {
-  //     router.replace("/");
-  //   }
-  // }, [accessToken]);
+  useEffect(() => {
+    if (!accessToken) {
+      router.replace("/");
+    }
+  }, [accessToken]);
 
   return (
     <div className={styles.Container}>
@@ -42,5 +42,5 @@ const MyPage: React.FC = () => {
   );
 };
 
-export default withAuth(MyPage);
-// export default MyPage;
+// export default withAuth(MyPage);
+export default MyPage;

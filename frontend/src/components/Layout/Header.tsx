@@ -23,6 +23,7 @@ import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
+import Dropdown from "../Mypage/Dropdown";
 
 type User = {
   id: number;
@@ -42,6 +43,7 @@ function Header({}: Props) {
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
   const imgUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
+  const [view, setView] = useState(false);
 
   useEffect(() => {
     const response = async () => {
@@ -133,22 +135,31 @@ function Header({}: Props) {
           </>
         ) : (
           <>
-            <Image
-              className={styles["kakao-profile-img"]}
-              src={imgUrl}
-              alt="카카오프로필"
-              width={40}
-              height={40}
-            />
-
-            <Link href="/mypage">{nickName}님</Link>
+            <ul
+              className={styles.dropdownContainer}
+              onClick={() => {
+                setView(!view);
+              }}
+            >
+              <Image
+                className={styles["kakao-profile-img"]}
+                src={imgUrl}
+                alt="카카오프로필"
+                width={40}
+                height={40}
+              />
+              반가워요, {nickName} 님! {view ? "⌃" : "⌄"}
+              {view && <Dropdown />}
+            </ul>
+            {/* 
+            <Link href="/mypage">반가워요, {nickName}님!</Link>
             <button
               id="login-btn"
               className={styles["login-btn"]}
               onClick={handleLogout}
             >
               로그아웃
-            </button>
+            </button> */}
           </>
         )}
       </div>

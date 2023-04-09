@@ -31,7 +31,7 @@ const initialState: myCourseState = {
 };
 
 export const getMyCourse = createAsyncThunk(
-  "mypage/placebookmark",
+  "mypage/myCourse",
   async (token: string) => {
     const response = await axios.get(`/api/myPage/course`, {
       headers: {
@@ -39,7 +39,7 @@ export const getMyCourse = createAsyncThunk(
       },
       withCredentials: true,
     });
-    console.log(response.data.data);
+    // console.log(response.data.data);
     return response.data.data;
   }
 );

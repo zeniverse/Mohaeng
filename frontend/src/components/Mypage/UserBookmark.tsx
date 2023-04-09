@@ -46,18 +46,8 @@ const UserBookmark = () => {
                 id={bookmark.bookMarkId}
                 name={bookmark.placeName}
                 image={bookmark.imgUrl}
-                desc={bookmark.content}
+                desc={bookmark.address}
               />
-              // <div
-              //   key={bookmark.bookMarkId}
-              //   className={styles["bookmark-item"]}
-              // >
-              //   <img src={bookmark.placeImgUrl} alt={bookmark.placeImgUrl} />
-              //   <div>
-              //     <h2>{bookmark.placeName}</h2>
-              //     <p>{bookmark.address}</p>
-              //   </div>
-              // </div>
             ))
           : courseBookmark.map((bookmark) => (
               <UserBookmarkItem
