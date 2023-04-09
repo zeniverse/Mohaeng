@@ -1,5 +1,4 @@
 import styles from "./CreateReview.module.css";
-import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -7,12 +6,6 @@ import Image from "next/image";
 import axios from "axios";
 import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
-
-interface Review {
-  title: string;
-  rating: number;
-  content: string;
-}
 
 export default function CreateReview() {
   const router = useRouter();
@@ -106,12 +99,16 @@ export default function CreateReview() {
     try {
       const accessToken = await cookie.load("accessToken");
       const response = await axios
-        .post(`/api/review/${placeId}`, formData, {
-          headers: {
-            "Access-Token": accessToken,
-            "Content-Type": "multipart/form-data",
-          },
-        })
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}`,
+          formData,
+          {
+            headers: {
+              "Access-Token": accessToken,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
         .then((response) => {
           console.log(response.data, "리뷰 작성 성공!");
           router.push(`/search?keyword=${name}`);
@@ -147,17 +144,18 @@ export default function CreateReview() {
               리뷰내용
             </label>
             <textarea
+              value={content}
               className={styles.formTxtArea}
               name="review"
               id="review"
-              placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요! (20자 이상)"
+              placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요!"
               required={true}
-              value={content}
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
 
-            <label className={styles.boldTitle} htmlFor="inputFile">
-              사진 추가하기
+            <p className={styles.boldTitle}>사진 추가하기</p>
+            <label htmlFor="inputFile">
+              <div className={styles.chooseFile}>사진 선택</div>
             </label>
             <input
               type="file"
@@ -169,6 +167,7 @@ export default function CreateReview() {
             <span className={styles.inputFileDesc}>
               * 사진은 최대 3장까지 첨부할 수 있습니다.
             </span>
+
             <div className={styles.imgContainer}>
               {previews.map((preview, index) => (
                 <div className={styles.imgBox} key={index}>
@@ -199,25 +198,3 @@ export default function CreateReview() {
     </>
   );
 }
-
-const Stars = styled.div`
-  display: flex;
-  padding-top: 5px;
-
-  & svg {
-    color: var(--color-border-semi);
-    cursor: pointer;
-  }
-
-  :hover svg {
-    color: #fcc419;
-  }
-
-  & svg:hover ~ svg {
-    color: var(--color-border-semi);
-  }
-
-  .yellowStar {
-    color: #fcc419;
-  }
-`;

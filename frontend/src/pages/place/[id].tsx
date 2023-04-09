@@ -1,14 +1,12 @@
 import PlaceDetail from "@/src/components/PlaceDetail/PlaceDetail";
 
-const PlaceId = () => {
+export default function PlaceId() {
   return (
     <>
       <PlaceDetail />
     </>
   );
-};
-
-export default PlaceId;
+}
 
 // import styles from "./PlaceDetail.module.css";
 
@@ -23,9 +21,8 @@ export default PlaceId;
 // import Bookmark from "@/src/components/Bookmark/Bookmark";
 // import PlaceDetailMap from "@/src/components/PlaceDetail/PlaceDetailMap";
 // import ReviewList from "@/src/components/Review/ReviewList";
-
-// // 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined?
-// // 북마크 delete
+// import { useRouterQuery } from "@/src/hooks/useRouterQuery";
+// import { useQueryId } from "@/src/hooks/useQueryId";
 
 // interface PlaceInfo {
 //   name: string;
@@ -39,31 +36,13 @@ export default PlaceId;
 //   review: string;
 // }
 
-// // export async function getServerSideProps({ query: { id } }) {
-// //   const res = await axios.get(`/place/overview/${id}`);
-// //   const { content } = res.data.data;
-// //   const placeInfo = content[0];
-// //   return {
-// //     props: {
-// //       id,
-// //       placeInfo,
-// //     },
-// //   };
-// // }
-
-// // export async function getServerSideProps({ query: { id } }) {
-// //   return {
-// //     props: {
-// //       id,
-// //     },
-// //   };
-// // }
-
-// const PlaceDetail = () => {
+// const PlaceId = () => {
+//   // const id = useQueryId("id");
+//   // 북마크 delete
 //   const accessToken = cookie.load("accessToken");
 //   const dispatch = useDispatch();
 //   const router = useRouter();
-//   const { id } = router.query;
+//   const { placeId, contentId } = router.query;
 //   const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
 //     name: "",
 //     areaCode: "",
@@ -76,25 +55,13 @@ export default PlaceId;
 //     review: "",
 //   });
 //   const [bookMarked, setBookMarked] = useState(false);
+//   const [isId, setIsId] = useState();
 //   // 스테이트 저장해도 새로고침 시 날아감
-//   const [currentId, setCurrentId] = useState("");
-
-//   // useEffect(() => {
-//   //   localStorage.setItem("id", id);
-//   //   const id = localStorage.getItem("id");
-//   //   if (id) {
-//   //     setCurrentId(id);
-//   //   }
-//   // }, []);
-
-//   // useEffect(() => {
-//   //   window.scrollTo(0, 0);
-//   // }, []);
 
 //   // 북마크
 //   const handleBookmarkClick = async () => {
 //     try {
-//       const res = await axios.post(`/api/place/bookmark/${id}`, {
+//       const res = await axios.post(`/api/place/bookmark/${placeId}`, {
 //         headers: {
 //           "Access-Token": `${accessToken}`,
 //           withCredentials: true,
@@ -107,11 +74,14 @@ export default PlaceId;
 //     }
 //   };
 
-//   //상세 데이터
+//   // 상세 데이터
 //   useEffect(() => {
+//     // 상세 데이터
 //     const fetchData = async () => {
 //       try {
-//         const res = await axios.get(`/place/overview/${id}`);
+//         const res = await axios.get(
+//           `${process.env.NEXT_PUBLIC_API_URL}/place/overview/${contentId}`
+//         );
 //         if (res.data.data.content[0] !== {}) {
 //           const { content } = res.data.data;
 //           setPlaceInfo({ ...placeInfo, ...content[0] });
@@ -122,8 +92,9 @@ export default PlaceId;
 //         console.error(error);
 //       }
 //     };
+
 //     fetchData();
-//   }, [id, dispatch]);
+//   }, [contentId, dispatch]);
 
 //   return (
 //     <>
@@ -172,4 +143,24 @@ export default PlaceId;
 //   );
 // };
 
-// export default PlaceDetail;
+// // export async function getServerSideProps({ query }) {
+// //   const { contentId } = query;
+
+// //   return {
+// //     props: {
+// //       contentId,
+// //     },
+// //   };
+// // }
+
+// // export async function getServerSideProps({
+// //   params: { contentId },
+// // }: {
+// //   params: { contentId: string };
+// // }) {
+// //   return {
+// //     props: {},
+// //   };
+// // }
+
+// export default PlaceId;

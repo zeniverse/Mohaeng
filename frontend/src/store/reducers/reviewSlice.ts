@@ -11,15 +11,17 @@ export interface ReviewData {
 }
 
 export interface ReviewState {
-  data: ReviewData[];
+  reviews: ReviewData[];
   totalPages: number;
   totalElements: number;
+  averageRating: number;
 }
 
 const initialState: ReviewState = {
-  data: [],
+  reviews: [],
   totalPages: 0,
   totalElements: 0,
+  averageRating: 0,
 };
 
 export const reviewSlice = createSlice({
@@ -27,9 +29,10 @@ export const reviewSlice = createSlice({
   initialState,
   reducers: {
     setReview: (state, action) => {
-      state.data = action.payload.data;
+      state.reviews = action.payload.reviews;
       state.totalPages = action.payload.totalPages;
       state.totalElements = action.payload.totalElements;
+      state.averageRating = action.payload.averageRating;
     },
   },
 });
