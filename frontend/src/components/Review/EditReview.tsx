@@ -117,7 +117,7 @@ export default function EditReview() {
 
   // * 리뷰 백엔드로 전송
   const submitReview = async () => {
-    if (star == 0) {
+    if (rating == 0) {
       alert("별점을 입력해주세요");
       return false;
     } else if (content == "") {

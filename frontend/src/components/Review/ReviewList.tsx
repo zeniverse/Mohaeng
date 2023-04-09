@@ -8,11 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import Pagebar from "../Pagenation/Pagebar";
-import { setPage } from "@/src/store/reducers/pageSlice";
-import { access } from "fs";
 
-// 정렬 필터 (별점 순)
-// 리뷰 전체 조회
+// 정렬 필터 (별점 높은 순, 최신순)
 
 interface Review {
   reviewId: number;
@@ -55,7 +52,7 @@ export default function ReviewList() {
     setSelectedValue(e.target.value);
   };
 
-  // 리뷰 조회
+  // * 리뷰 전체 조회
   useEffect(() => {
     if (page !== 0) {
       const fetchReview = async () => {
@@ -135,7 +132,7 @@ export default function ReviewList() {
           <div className={styles.reviewList}>
             {reviewData?.map((review) => (
               <ReviewItem
-                key={review.nickname}
+                key={review.reviewId}
                 reviewId={review.reviewId}
                 nickname={review.nickname}
                 memberImage={review.memberImage}

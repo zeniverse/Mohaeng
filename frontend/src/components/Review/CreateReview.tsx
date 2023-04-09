@@ -23,6 +23,12 @@ export default function CreateReview() {
   const [previews, setPreviews] = useState<string[]>([]);
   let rating = clicked.filter(Boolean).length;
 
+  // *비동기적으로 받아오는 별점 개수 업데이트 확인
+  useEffect(() => {
+    console.log(rating);
+    setStar(star);
+  }, [clicked]);
+
   // *별점 클릭
   const handleStarClick = (index: number): void => {
     let clickStates: boolean[] = [...clicked];
@@ -64,10 +70,10 @@ export default function CreateReview() {
 
   // *리뷰 백엔드로 전송
   const submitReview = async () => {
-    if (star == 0) {
+    if (rating === 0) {
       alert("별점을 입력해주세요");
       return false;
-    } else if (content == "") {
+    } else if (content === "") {
       alert("리뷰 내용을 입력해주세요");
       return false;
     }

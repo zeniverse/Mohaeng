@@ -105,7 +105,7 @@ export default function ReviewItem({
             >
               수정
             </button>
-            <button onClick={() => deleteReview()} className={styles.btn}>
+            <button onClick={handleOpenDeleteModal} className={styles.btn}>
               삭제
             </button>
           </div>
