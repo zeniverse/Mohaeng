@@ -42,13 +42,13 @@ export default function Dropdown() {
 
   return (
     <div className={styles.menu}>
-      <li>
-        <Link href="/mypage">마이페이지 </Link>
+      <li className={styles.toli}>
+        <Link href="/mypage">마이페이지</Link>
       </li>
-      <li>
-        <button id="login-btn" onClick={handleLogout}>
+      <li className={styles.boli}>
+        <p id="login-btn" onClick={handleLogout}>
           로그아웃
-        </button>
+        </p>
       </li>
     </div>
   );

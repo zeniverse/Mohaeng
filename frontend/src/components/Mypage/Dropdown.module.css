@@ -1,6 +1,5 @@
 .menu {
-  margin: 5px 0;
-  padding: 5px;
+  margin: 10px 0;
   font-size: medium;
   color: #333;
   border-radius: 12px;
@@ -8,4 +7,38 @@
   text-align: center;
   background-color: white;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  /* border: 1px solid var(--color-border-light); */
+}
+
+.menu li {
+  margin: 0.5rem 0;
+  margin-top: 0.5rem;
+  padding: 0.8rem 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+  list-style: none;
+  text-align: center;
+  /* border-bottom: 1px solid var(--color-border-light); */
+}
+
+.menu p {
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+  list-style: none;
+  text-align: center;
+  border: none;
+}
+
+.toli:hover {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  background-color: var(--color-bg-gray);
+}
+
+.boli:hover {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  background-color: var(--color-bg-gray);
 }
