@@ -11,6 +11,7 @@ import SearchItem from "./SearchItem";
 import Pagebar from "../Pagenation/Pagebar";
 import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
 import { setPage } from "@/src/store/reducers/pageSlice";
+import ListContainer from "../UI/ListContainer";
 // import PlaceItem from "../Place/PlaceItem";
 
 export default function SearchPlaceList(): JSX.Element {
@@ -60,27 +61,20 @@ export default function SearchPlaceList(): JSX.Element {
         <h3 className={styles.h3}>검색하신 결과: {keyword} </h3>
         <ul className={styles.keywordList}>
           {searchResult.length > 0 ? (
-            searchResult?.map((place) => (
-              // <PlaceItem
-              //   key={place.contentId}
-              //   name={place.name}
-              //   firstImage={place.firstImage}
-              //   areaCode={place.areaCode}
-              //   contentId={place.contentId}
-              //   placeId={place.placeId}
-              //   isBookmark={place.isBookmark}
-              // />
-              <SearchItem
-                key={place.placeId}
-                name={place.name}
-                firstImage={place.firstImage}
-                contentId={place.contentId}
-                placeId={place.placeId}
-                isBookmarked={place.isBookmarked}
-                averageRating={place.averageRating}
-                reviewTotalElements={place.reviewTotalElements}
-              />
-            ))
+            <ListContainer>
+              {searchResult?.map((place) => (
+                <SearchItem
+                  key={place.placeId}
+                  name={place.name}
+                  firstImage={place.firstImage}
+                  contentId={place.contentId}
+                  placeId={place.placeId}
+                  isBookmarked={place.isBookmarked}
+                  averageRating={place.averageRating}
+                  reviewTotalElements={place.reviewTotalElements}
+                />
+              ))}
+            </ListContainer>
           ) : (
             <div className={styles.div}>
               <p className={styles.noResult}>

@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import CourseItem from "../Course/CourseItem";
 import Pagebar from "../Pagenation/Pagebar";
+import ListContainer from "../UI/ListContainer";
 
 interface CourseList {
   id: number;
@@ -62,9 +63,9 @@ export default function SearchCourseList(): JSX.Element {
       <section className={styles.section}>
         <h3 className={styles.h3}>검색하신 결과: {keyword} </h3>
         <ul className={styles.keywordList}>
-          <div className={styles.keywordItemBox}>
-            {searchResult.length > 0 ? (
-              searchResult?.map((course) => (
+          {searchResult.length > 0 ? (
+            <ListContainer>
+              {searchResult?.map((course) => (
                 <CourseItem
                   key={course.id}
                   id={course.id.toString()}
@@ -77,15 +78,15 @@ export default function SearchCourseList(): JSX.Element {
                   like={course.like}
                   places={course.places}
                 />
-              ))
-            ) : (
-              <div className={styles.div}>
-                <p className={styles.noResult}>
-                  해당하는 검색 결과가 없습니다. 😢
-                </p>
-              </div>
-            )}
-          </div>
+              ))}
+            </ListContainer>
+          ) : (
+            <div className={styles.div}>
+              <p className={styles.noResult}>
+                해당하는 검색 결과가 없습니다. 😢
+              </p>
+            </div>
+          )}
         </ul>
         <Pagebar totalPage={totalPages} />
       </section>
