@@ -17,9 +17,6 @@ export interface formData {
   imageUrls: string[];
 }
 
-// 리뷰 아이디 필요, get 데이터 받아오고, put 요청
-// 데이터 받아서 인풋에 다시 넣기
-
 export default function EditReview() {
   const router = useRouter();
   const { placeId, reviewId, name } = router.query;
@@ -135,7 +132,7 @@ export default function EditReview() {
       return [blob, filename];
     };
 
-    // 업로드한 이미지 파일이 있으면 받아옴
+    // * 기존에 업로드한 이미지 파일이 있으면 받아옴
     if (reviewForm.imageUrls.length > 0) {
       const imageBlobs = await Promise.all(
         reviewForm.imageUrls.map((url) => getImageBlob(url))
@@ -176,7 +173,7 @@ export default function EditReview() {
     }
   };
 
-  // 뒤로 가기
+  // * 뒤로 가기
   const handleGoBack = () => {
     router.back();
   };

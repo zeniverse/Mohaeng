@@ -9,6 +9,7 @@ import { RootState } from "@/src/store/store";
 import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import Pagebar from "../Pagenation/Pagebar";
 import { setPage } from "@/src/store/reducers/pageSlice";
+import { access } from "fs";
 
 // 정렬 필터 (별점 순)
 // 리뷰 전체 조회
@@ -33,7 +34,7 @@ export default function ReviewList() {
 
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
-    (state: RootState) => state.searchPlace.totalPages
+    (state: RootState) => state.review.totalPages
   );
   const totalElements = useSelector(
     (state: RootState) => state.review.totalElements
@@ -67,17 +68,14 @@ export default function ReviewList() {
           });
           console.log(res.data.data);
           dispatch(setReview(res.data.data));
-          dispatch(setPage(res.data.data));
-          const { reviews } = res.data.data;
-          setReviewData(reviews);
-          console.log(reviews);
+          setReviewData(res.data.data.reviews);
         } catch (err) {
           console.error(err);
         }
       };
       fetchReview();
     }
-  }, [placeId]);
+  }, [page]);
 
   // ToDo: 리뷰 한 번만 쓰도록? (여행지별 리뷰는 한 번만 작성할 수 있습니다. || 이미 작성하신 리뷰가 있습니다.)
   const handleClickReviewBtn = () => {
