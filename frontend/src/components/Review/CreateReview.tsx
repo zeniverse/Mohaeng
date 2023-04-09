@@ -23,12 +23,6 @@ export default function CreateReview() {
   const [previews, setPreviews] = useState<string[]>([]);
   let rating = clicked.filter(Boolean).length;
 
-  // *비동기적으로 받아오는 별점 개수 업데이트 확인
-  useEffect(() => {
-    console.log(rating);
-    setStar(rating);
-  }, [clicked]);
-
   // *별점 클릭
   const handleStarClick = (index: number): void => {
     let clickStates: boolean[] = [...clicked];
@@ -169,7 +163,7 @@ export default function CreateReview() {
             </span>
 
             <div className={styles.imgContainer}>
-              {previews.map((preview, index) => (
+              {previews?.map((preview, index) => (
                 <div className={styles.imgBox} key={index}>
                   <Image
                     src={preview}
