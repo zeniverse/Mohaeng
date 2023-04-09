@@ -10,6 +10,7 @@ import { RootState } from "@/src/store/store";
 import SearchItem from "./SearchItem";
 import Pagebar from "../Pagenation/Pagebar";
 import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
+import { setPage } from "@/src/store/reducers/pageSlice";
 // import PlaceItem from "../Place/PlaceItem";
 
 export default function SearchPlace(): JSX.Element {
@@ -25,15 +26,19 @@ export default function SearchPlace(): JSX.Element {
   useEffect(() => {
     const fetchKeyword = async () => {
       try {
-        const res = await axios.get(`/api/place`, {
-          params: {
-            keyword: keyword,
-            page: page,
-          },
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/place`,
+          {
+            params: {
+              keyword: keyword,
+              page: page,
+            },
+            withCredentials: true,
+          }
+        );
         if (res.data.data.content !== []) {
           dispatch(setSearchPlace(res.data.data));
+          setPage(totalPages);
           const { content } = res.data.data;
           setSearchResult(content);
           console.log(content);
@@ -66,14 +71,14 @@ export default function SearchPlace(): JSX.Element {
               //   isBookmark={place.isBookmark}
               // />
               <SearchItem
-                key={place.contentId}
+                key={place.placeId}
                 name={place.name}
                 firstImage={place.firstImage}
                 contentId={place.contentId}
                 placeId={place.placeId}
-                rating={place.rating}
-                review={place.review}
-                isBookmark={place.isBookmark}
+                isBookmarked={place.isBookmarked}
+                averageRating={place.averageRating}
+                reviewTotalElements={place.reviewTotalElements}
               />
             ))
           ) : (

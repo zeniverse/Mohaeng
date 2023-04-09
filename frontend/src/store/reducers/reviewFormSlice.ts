@@ -1,21 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface formData {
-  rating: number;
+  rating: string;
   content: string;
-  multipartFile: string[];
+  imgUrl: string[];
 }
 
 export interface formDataState {
-  rating: number;
+  rating: string;
   content: string;
-  multipartFile: string;
+  imgUrl: string[];
 }
 
 const initialState: formDataState = {
-  rating: 0,
+  rating: "",
   content: "",
-  multipartFile: "",
+  imgUrl: [],
 };
 
 export const reviewFormSlice = createSlice({
@@ -25,7 +25,7 @@ export const reviewFormSlice = createSlice({
     setReviewForm: (state, action) => {
       state.rating = action.payload.rating;
       state.content = action.payload.content;
-      state.multipartFile = action.payload.multipartFile;
+      state.imgUrl = action.payload.imgUrl;
     },
   },
 });
