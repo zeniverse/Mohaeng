@@ -2,15 +2,14 @@ import styles from "./ReviewList.module.css";
 import { useRouter } from "next/router";
 import { SetStateAction, useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import ReviewItem from "./ReviewItem";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import Pagebar from "../Pagenation/Pagebar";
+import { setPage } from "@/src/store/reducers/pageSlice";
 
-// 해당 여행지 총 리뷰 건수, 평균 별점 데이터 가져오기
 // 정렬 필터 (별점 순)
 // 리뷰 전체 조회
 
@@ -25,38 +24,62 @@ interface Review {
 }
 
 export default function ReviewList() {
+  const dispatch = useDispatch();
   const router = useRouter();
-  const { placeId, name } = router.query;
+  const { placeId, name, reviewId } = router.query;
+
   const [reviewData, setReviewData] = useState<ReviewData[]>([]);
   const [selectedValue, setSelectedValue] = useState("default");
-  const dispatch = useDispatch();
+
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
     (state: RootState) => state.searchPlace.totalPages
   );
+  const totalElements = useSelector(
+    (state: RootState) => state.review.totalElements
+  );
+  const averageRating = useSelector(
+    (state: RootState) => state.review.averageRating
+  );
+
   const currentUser = useSelector(
     (state: RootState) => state.nickName.nickName
   );
   const accessToken = useSelector((state: RootState) => state.token.token);
-  const handleChange = (e: { target: { value: SetStateAction<string> } }) => {
+
+  // 정렬
+  const handleChangeOption = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
     setSelectedValue(e.target.value);
   };
 
+  // 리뷰 조회
   useEffect(() => {
-    const fetchReview = async () => {
-      try {
-        const res = await axios.get(`/api/review/${placeId}`);
-        dispatch(setReview(res.data));
-        const { data } = res.data;
-        setReviewData(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchReview();
+    if (page !== 0) {
+      const fetchReview = async () => {
+        try {
+          const res = await axios.get(`/api/review/${placeId}`, {
+            params: {
+              page: page,
+            },
+            withCredentials: true,
+          });
+          console.log(res.data.data);
+          dispatch(setReview(res.data.data));
+          dispatch(setPage(res.data.data.totalPages));
+          const { reviews } = res.data.data;
+          setReviewData(reviews);
+          console.log(reviews);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchReview();
+    }
   }, [placeId, page]);
 
-  // 리뷰 한 번만 쓰도록 (여행지별 리뷰는 한 번만 작성할 수 있습니다. || 이미 작성하신 리뷰가 있습니다.)
+  // ToDo: 리뷰 한 번만 쓰도록? (여행지별 리뷰는 한 번만 작성할 수 있습니다. || 이미 작성하신 리뷰가 있습니다.)
   const handleClickReviewBtn = () => {
     if (!accessToken && !currentUser) {
       router.push("/login");
@@ -66,6 +89,7 @@ export default function ReviewList() {
           pathname: `/review/create-review`,
           query: {
             placeId: placeId,
+            reviewId: reviewId,
             name: name,
           },
         },
@@ -89,29 +113,33 @@ export default function ReviewList() {
 
           <aside className={styles.reviewNav}>
             <div className={styles.reviewInfo}>
-              <p>총 리뷰 건수</p>
+              <p> 총 {totalElements}건의 리뷰</p>
               <span>
-                <FiveStarRating rating="4" />
+                <FiveStarRating rating={averageRating.toString()} />
               </span>
             </div>
             <select
               className={styles.select}
               value={selectedValue}
-              onChange={handleChange}
+              defaultValue="default"
+              onChange={handleChangeOption}
             >
-              <option value="default" selected>
+              <option key="default" value="default">
                 정렬 ▼
               </option>
-              {/* 내림차순 */}
-              <option value="ratingDesc">별점 높은 순</option>
-              {/* 오름차순 */}
-              <option value="ratingAsc">별점 낮은 순</option>
+              <option key="highrating" value="highrating">
+                별점 높은 순
+              </option>
+              <option key="latest" value="latest">
+                최신순
+              </option>
             </select>
           </aside>
           <div className={styles.reviewList}>
             {reviewData?.map((review) => (
               <ReviewItem
                 key={review.nickname}
+                reviewId={review.reviewId}
                 nickname={review.nickname}
                 memberImage={review.memberImage}
                 rating={review.rating}
@@ -123,7 +151,7 @@ export default function ReviewList() {
           </div>
         </main>
       </section>
-      <Pagebar totalPage={totalPages} />
+      {totalElements ? <Pagebar totalPage={totalPages} /> : ""}
     </>
   );
 }

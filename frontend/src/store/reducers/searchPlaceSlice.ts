@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface content {
+  placeId: number;
   name: string;
   firstImage: string;
   contentId: string;
-  placeId: number;
-  isBookmark: boolean;
-  rating: string;
-  review: string;
+  isBookmarked: boolean;
+  averageRating: number;
+  reviewTotalElements: number;
 }
 
 export interface SearchPlaceState {

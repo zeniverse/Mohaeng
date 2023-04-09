@@ -1,21 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { stat } from "fs";
 
 export interface formData {
-  rating: number;
+  reviewId: number;
+  nickname: string;
   content: string;
-  multipartFile: string[];
+  likeCount: number;
+  rating: string;
+  createdDate: string;
+  imageUrls: string[];
 }
 
 export interface formDataState {
-  rating: number;
+  reviewId: number;
+  nickname: string;
   content: string;
-  multipartFile: string;
+  likeCount: number;
+  rating: string;
+  createdDate: string;
+  imageUrls: string[];
 }
 
 const initialState: formDataState = {
-  rating: 0,
+  reviewId: 0,
+  nickname: "",
   content: "",
-  multipartFile: "",
+  likeCount: 0,
+  rating: "",
+  createdDate: "",
+  imageUrls: [],
 };
 
 export const reviewFormSlice = createSlice({
@@ -23,9 +36,13 @@ export const reviewFormSlice = createSlice({
   initialState,
   reducers: {
     setReviewForm: (state, action) => {
-      state.rating = action.payload.rating;
+      state.reviewId = action.payload.rating;
+      state.nickname = action.payload.nickname;
       state.content = action.payload.content;
-      state.multipartFile = action.payload.multipartFile;
+      state.likeCount = action.payload.likeCount;
+      state.rating = action.payload.rating;
+      state.createdDate = action.payload.createdDate;
+      state.imageUrls = action.payload.imageUrls;
     },
   },
 });
