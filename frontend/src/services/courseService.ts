@@ -5,7 +5,6 @@ import cookie from "react-cookies";
 
 export const getCourseListApi = async (queryParams = {}) => {
   const accessToken = await cookie.load("accessToken");
-  console.log(queryParams);
   return axios.get(ApiConfig.course, {
     params: queryParams,
     headers: {

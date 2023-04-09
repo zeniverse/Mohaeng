@@ -8,7 +8,7 @@ import {
   ICourseOriginForm,
   ICourseSubmitForm,
 } from "../../interfaces/Course.type";
-import CourseSlice from "./CourseSlice";
+import CourseListSlice from "./CourseListSlice";
 
 interface CourseState {
   error?: string;
@@ -27,7 +27,7 @@ export const initialState: CourseState = {
     thumbnailUrl: "",
     content: "",
     places: [],
-    isBookMarked: false,
+    isBookmarked: false,
     isLiked: false,
     likeCount: 0,
   },

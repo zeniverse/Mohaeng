@@ -8,10 +8,13 @@ export interface ICourse {
   region: string;
   thumbnailUrl: string;
   content: string;
-  places: placesName[];
   likeCount: number;
-  isBookMarked: boolean;
+  isBookmarked: boolean;
   isLiked: boolean;
+}
+
+export interface ICoursePlaceName extends ICourse {
+  places: placesName[];
 }
 export interface placesName {
   name: string;
@@ -40,7 +43,7 @@ export interface ICourseForm {
   thumbnailUrl: string;
   content: string;
   likeCount: number;
-  isBookMarked: boolean;
+  isBookmarked: boolean;
   isLiked: boolean;
 }
 export interface ICourseOriginForm extends ICourseForm {

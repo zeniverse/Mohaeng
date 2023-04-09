@@ -19,7 +19,7 @@ export type CourseListProps = {
   likeCount: number;
   courseDays: string;
   thumbnailUrl: string;
-  isBookMarked: boolean;
+  isBookmarked: boolean;
   isLiked: boolean;
   places: placesName[];
 };
@@ -32,13 +32,18 @@ export interface RoughMapTitle {
 export interface CourseDetailType {
   courseId: number;
   title: string;
+  startDate: string;
+  endDate: string;
   isPublished: boolean;
-  likeCount: number | string;
   courseDays: string;
   region: string;
   content: string;
+  likeCount: number;
   createdDate: string;
-  places: CourseDetailPlaces[];
+  isBookmarked: boolean;
+  isLiked: boolean;
+  nickname: string;
+  places?: any;
 }
 
 export interface CourseDetailPlaces {

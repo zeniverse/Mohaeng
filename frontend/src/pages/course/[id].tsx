@@ -6,16 +6,23 @@ import styles from "./courseDetail.module.css";
 import CourseDetailNav from "@/src/components/CourseDetail/CourseDetailNav";
 import CourseDetailContent from "@/src/components/CourseDetail/CourseDetailContent";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
+import axios from "axios";
+import cookie from "react-cookies";
 
 const initialData = {
   courseId: 0,
   title: "",
+  nickname: "",
   isPublished: true,
-  likeCount: "",
+  likeCount: 0,
+  startDate: "",
   courseDays: "",
   region: "",
+  endDate: "",
   content: "",
   createdDate: "",
+  isBookmarked: false,
+  isLiked: false,
   places: [],
 };
 
@@ -42,18 +49,24 @@ export default function CourseDetail() {
   //   return `${Math.floor(years)}년 전`;
   // }, []);
 
-  const [courseDetail, setcourseDetail] =
+  const [courseDetail, setCourseDetail] =
     useState<CourseDetailType>(initialData);
+
   const {
-    courseId,
-    title,
-    likeCount,
-    isPublished,
-    courseDays,
-    region,
     content,
+    courseDays,
+    courseId,
     createdDate,
+    endDate,
+    isBookmarked,
+    isLiked,
+    isPublished,
+    likeCount,
+    nickname,
     places,
+    region,
+    startDate,
+    title,
   }: CourseDetailType = courseDetail;
   const [formattedDate, setFormattedDate] = useState("");
   // const [timeAgoDate, setTimeAgoDate] = useState("");
@@ -62,12 +75,24 @@ export default function CourseDetail() {
 
   useEffect(() => {
     const fetchCourseData = async (id: number) => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/course/${id}`
-      );
-      const courseData = await response.json();
-      console.log(courseData);
-      setcourseDetail(courseData.data);
+      const accessToken = await cookie.load("accessToken");
+
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/course/${id}`,
+          {
+            headers: {
+              "Cache-Control": "no-cache",
+              "Access-Token": accessToken,
+              withCredentials: true,
+            },
+          }
+        );
+        console.log(response.data);
+        setCourseDetail(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     if (id) {
@@ -116,7 +141,12 @@ export default function CourseDetail() {
             <span className={styles.dateinfo}>{formattedDate}</span>
           </div>
         </div>
-        <CourseDetailNav likeCount={likeCount} places={courseDetail.places} />
+        <CourseDetailNav
+          likeCount={likeCount}
+          places={courseDetail.places}
+          courseId={courseId}
+          isBookmarked={isBookmarked}
+        />
         <CourseDetailContent
           mapData={courseDetail.places}
           places={places}

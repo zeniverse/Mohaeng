@@ -10,7 +10,7 @@ import IsLikeState from "../UI/IsLikeState";
 import Link from "next/link";
 import TagItem from "../UI/TagItem";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-import { toggleBookmarkAction } from "@/src/store/reducers/CourseSlice";
+import { toggleBookmarkAction } from "@/src/store/reducers/CourseListSlice";
 
 const CourseItem = ({
   id,
@@ -19,7 +19,7 @@ const CourseItem = ({
   likeCount,
   courseDays,
   thumbnailUrl,
-  isBookMarked,
+  isBookmarked,
   isLiked,
   places,
 }: CourseListProps) => {
@@ -68,8 +68,8 @@ const CourseItem = ({
       </Link>
       <div className={styles["item-nav-container"]}>
         <div className={styles["item-nav"]} onClick={() => bookmarkHandler(id)}>
-          {/* TODO: CSS 손보기 */}
-          {isBookMarked ? (
+          {/* TODO: CSS 손보기 컴포넌트 통일 */}
+          {isBookmarked ? (
             <BsBookmarkFill className={styles.bookmark} />
           ) : (
             <BsBookmark className={styles.unbookmark} />
