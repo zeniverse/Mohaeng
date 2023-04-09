@@ -56,25 +56,27 @@ export default function ReviewList() {
 
   // 리뷰 조회
   useEffect(() => {
-    const fetchReview = async () => {
-      try {
-        const res = await axios.get(`/api/review/${placeId}`, {
-          params: {
-            page: page,
-          },
-          withCredentials: true,
-        });
-        console.log(res.data.data);
-        dispatch(setReview(res.data.data));
-        dispatch(setPage(res.data.data.totalPages));
-        const { reviews } = res.data.data;
-        setReviewData(reviews);
-        console.log(reviews);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchReview();
+    if (page !== 0) {
+      const fetchReview = async () => {
+        try {
+          const res = await axios.get(`/api/review/${placeId}`, {
+            params: {
+              page: page,
+            },
+            withCredentials: true,
+          });
+          console.log(res.data.data);
+          dispatch(setReview(res.data.data));
+          dispatch(setPage(res.data.data.totalPages));
+          const { reviews } = res.data.data;
+          setReviewData(reviews);
+          console.log(reviews);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchReview();
+    }
   }, [placeId, page]);
 
   // ToDo: 리뷰 한 번만 쓰도록? (여행지별 리뷰는 한 번만 작성할 수 있습니다. || 이미 작성하신 리뷰가 있습니다.)
@@ -119,15 +121,16 @@ export default function ReviewList() {
             <select
               className={styles.select}
               value={selectedValue}
+              defaultValue="default"
               onChange={handleChangeOption}
             >
-              <option value="default" selected>
+              <option key="default" value="default">
                 정렬 ▼
               </option>
-              <option key="ratingDesc" value="ratingDesc">
+              <option key="highrating" value="highrating">
                 별점 높은 순
               </option>
-              <option key="ratingNewest" value="ratingNewest">
+              <option key="latest" value="latest">
                 최신순
               </option>
             </select>
@@ -148,7 +151,7 @@ export default function ReviewList() {
           </div>
         </main>
       </section>
-      <Pagebar totalPage={totalPages} />
+      {totalElements ? <Pagebar totalPage={totalPages} /> : ""}
     </>
   );
 }
