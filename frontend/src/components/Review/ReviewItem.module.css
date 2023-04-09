@@ -1,7 +1,7 @@
 .reviewBox {
   margin-bottom: 1rem;
   border-radius: 12px;
-  padding: 24px;
+  padding: 30px 24px;
   border: 1px solid var(--color-border-light);
   background-color: var(--color-bg-white);
 }
