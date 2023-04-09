@@ -107,3 +107,17 @@
 .roughmapBtn {
   position: relative;
 }
+
+.unbookmark {
+  color: var(--color-icon);
+}
+
+.unbookmark:hover {
+  color: var(--color-blue);
+  scale: 105%;
+  transition: 200ms;
+}
+
+.bookmark {
+  color: var(--color-blue);
+}

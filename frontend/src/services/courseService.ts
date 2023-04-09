@@ -3,12 +3,13 @@ import { ICourse, ICourseSubmitForm } from "../interfaces/Course.type";
 import ApiConfig from "./ApiConfig";
 import cookie from "react-cookies";
 
-const accessToken = cookie.load("accessToken");
-
 export const getCourseListApi = async (queryParams = {}) => {
+  const accessToken = await cookie.load("accessToken");
+  console.log(queryParams);
   return axios.get(ApiConfig.course, {
     params: queryParams,
     headers: {
+      "Cache-Control": "no-cache",
       "Access-Token": accessToken,
       withCredentials: true,
     },
@@ -16,6 +17,7 @@ export const getCourseListApi = async (queryParams = {}) => {
 };
 
 export const createCourseApi = async (data: ICourseSubmitForm) => {
+  const accessToken = await cookie.load("accessToken");
   return await axios.post(ApiConfig.course, data, {
     headers: {
       "Access-Token": accessToken,
@@ -27,6 +29,7 @@ export const toggleBookmarkApi = async (
   courseId: number,
   method: "POST" | "DELETE"
 ) => {
+  const accessToken = await cookie.load("accessToken");
   try {
     const config = {
       method: method,

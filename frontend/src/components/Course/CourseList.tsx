@@ -20,10 +20,10 @@ const CourseList = () => {
     dispatch(setPage(page));
     dispatch(
       getCourseListAction({
-        region: region !== "전체보기" ? region : null,
+        ...(region !== "전체보기" ? { region } : {}),
         page,
-        keyword,
-        sort: sort ? sort : null,
+        ...(keyword ? { keyword } : {}),
+        ...(sort ? { sort } : {}),
       })
     );
   }, [dispatch, region, page, keyword, sort]);

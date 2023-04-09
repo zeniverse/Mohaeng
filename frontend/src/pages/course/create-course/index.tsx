@@ -39,16 +39,10 @@ export default function index() {
 
   const handleCourseSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const { places, ...rest } = course; // places 프로퍼티 분리
-    const extractedPlaceIds = places.map((place) => place.placeId);
-    const submitData = {
-      ...rest,
-      thumbnailUrl: places[0].imgUrl,
-      placeIds: extractedPlaceIds,
-    };
-    dispatch(createCourseAction(submitData));
+    dispatch(createCourseAction(course));
     dispatch(resetFormValue());
     dispatch(resetFilter());
+
     // as를 전달하여 페이지가 새로 고쳐지고 데이터가 업데이트 됨.
     router.push("/course", "/course");
   };

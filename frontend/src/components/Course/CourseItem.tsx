@@ -48,13 +48,16 @@ const CourseItem = ({
         <div className={styles["item-info-container"]}>
           <div className={styles["item-image"]}>
             <div className={styles["item-image-box"]}></div>
-            <Image
-              src={thumbnailUrl}
-              alt={title}
-              width={700}
-              height={700}
-              priority
-            />
+            {thumbnailUrl && (
+              <Image
+                src={thumbnailUrl}
+                alt={title}
+                width={700}
+                height={700}
+                priority
+              />
+            )}
+
             <IsLikeState courseLike={likeCount} />
           </div>
           <div className={styles["item-info-text"]}>
@@ -67,7 +70,11 @@ const CourseItem = ({
       <div className={styles["item-nav-container"]}>
         <div className={styles["item-nav"]} onClick={() => bookmarkHandler(id)}>
           {/* TODO: CSS 손보기 */}
-          {isBookMarked ? <BsBookmarkFill /> : <BsBookmark />}
+          {isBookMarked ? (
+            <BsBookmarkFill className={styles.bookmark} />
+          ) : (
+            <BsBookmark className={styles.unbookmark} />
+          )}
         </div>
         <div className={`${styles["item-nav"]} ${styles.center}`}>
           <BiShareAlt />

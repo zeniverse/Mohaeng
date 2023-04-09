@@ -27,13 +27,25 @@ export const initialState: CourseState = {
     thumbnailUrl: "",
     content: "",
     places: [],
+    isBookMarked: false,
+    isLiked: false,
+    likeCount: 0,
   },
 };
 
 export const createCourseAction = createAsyncThunk(
   "course/createUserAction",
-  async (formData: ICourseSubmitForm) => {
-    const response = await createCourseApi(formData);
+  async (formData: ICourseOriginForm) => {
+    const { places, ...rest } = formData;
+    const validPlace = places.find((place) => place.imgUrl.trim() !== "");
+    const thumbnailUrl = validPlace?.imgUrl ?? "";
+    const extractedPlaceIds = places.map((place) => place.placeId);
+    const validData = {
+      ...rest,
+      placeIds: extractedPlaceIds,
+      thumbnailUrl: thumbnailUrl,
+    };
+    const response = await createCourseApi(validData);
     const resData = await response.data.data;
     return { formData, resData };
   }
