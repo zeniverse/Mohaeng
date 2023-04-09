@@ -1,5 +1,7 @@
 package com.mohaeng.backend.place.dto;
 
+import com.mohaeng.backend.place.domain.Place;
+import com.mohaeng.backend.place.service.PlaceService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,4 +18,21 @@ public class PlaceDetailsDto {
     private String mapX;
     private String mapY;
     private String overview;
+
+    public static PlaceDetailsDto from(Place place, PlaceService placeService){
+        String firstImage = place.getFirstImage();
+        if (firstImage == null || firstImage.isEmpty()) {
+            firstImage = placeService.getFirstImage();
+        }
+        return PlaceDetailsDto.builder()
+                .placeId(place.getId())
+                .name(place.getName())
+                .areaCode(place.getAreaCode())
+                .firstImage(firstImage)
+                .contentId(place.getContentId())
+                .mapX(place.getMapX())
+                .mapY(place.getMapY())
+                .overview(place.getOverview())
+                .build();
+    }
 }
