@@ -144,12 +144,12 @@ export default function CreateReview() {
               리뷰내용
             </label>
             <textarea
+              value={content}
               className={styles.formTxtArea}
               name="review"
               id="review"
-              placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요! (20자 이상)"
+              placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요!"
               required={true}
-              value={content}
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
 

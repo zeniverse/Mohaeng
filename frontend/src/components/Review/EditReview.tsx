@@ -6,18 +6,28 @@ import Image from "next/image";
 import axios from "axios";
 import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
+import { setReviewForm } from "@/src/store/reducers/reviewFormSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/src/store/store";
 
-interface ReviewForm {
-  rating: number;
+export interface formData {
+  reviewId: number;
+  nickname: string;
   content: string;
-  imgUrl: string[];
+  likeCount: number;
+  rating: string;
+  createdDate: string;
+  imageUrls: string[];
 }
+
 // 리뷰 아이디 필요, get 데이터 받아오고, put 요청
 // 데이터 받아서 인풋에 다시 넣기
 
-export default function CreateReview() {
+export default function EditReview() {
+  const dispatch = useDispatch();
   const router = useRouter();
   const { placeId, reviewId, name } = router.query;
+
   const [clicked, setClicked] = useState<boolean[]>([
     false,
     false,
@@ -29,9 +39,40 @@ export default function CreateReview() {
   const [star, setStar] = useState<number>();
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+
+  const [reviewForm, setReviewForm] = useState<formData>({
+    reviewId: 0,
+    nickname: "",
+    content: "",
+    likeCount: 0,
+    rating: "",
+    createdDate: "",
+    imageUrls: [],
+  });
+
+  const accessToken = cookie.load("accessToken");
   let rating = clicked.filter(Boolean).length;
 
-  console.log(reviewId);
+  // * 리뷰데이터 받아오기
+  useEffect(() => {
+    const fetchReviewDetail = async () => {
+      try {
+        const res = await axios.get(`/api/review/detail/${reviewId}`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+        });
+        console.log(res.data.data);
+        const { data } = res.data.data;
+        setReviewForm({
+          ...res.data.data,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchReviewDetail();
+  }, [reviewId]);
 
   // *비동기적으로 받아오는 별점 개수 업데이트 확인
   useEffect(() => {
@@ -104,7 +145,6 @@ export default function CreateReview() {
     );
     // 리뷰아이디 필요, put
     try {
-      const accessToken = await cookie.load("accessToken");
       const response = await axios
         .put(`/api/review/${placeId}`, formData, {
           headers: {
@@ -130,7 +170,7 @@ export default function CreateReview() {
   return (
     <>
       <section className={styles.registerReviewContainer}>
-        <h2 className={styles.h2}>리뷰 작성</h2>
+        <h2 className={styles.h2}>리뷰 수정</h2>
         <article className={styles.registerReview}>
           <p className={styles.boldTitle}>선택한 여행지</p>
           <h3 className={styles.reviewTitle}>{name}</h3>
@@ -146,12 +186,12 @@ export default function CreateReview() {
               리뷰내용
             </label>
             <textarea
+              defaultValue={"안녕하세요"}
               className={styles.formTxtArea}
               name="review"
               id="review"
-              placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요! (20자 이상)"
+              placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요!"
               required={true}
-              //   value={content} 받아온 리뷰데이터 받기
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
 
