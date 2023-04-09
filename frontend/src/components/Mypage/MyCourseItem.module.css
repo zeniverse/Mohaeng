@@ -1,4 +1,4 @@
-.bookmark-container {
+.myCourse-container {
   background-color: #f3f3f3;
   padding: 2rem;
   border-radius: 10px;
@@ -7,7 +7,7 @@
   align-items: center;
   height: 100%;
 }
-.bookmark-item {
+.myCourse-item {
   display: flex;
   align-items: center;
   width: 800px;
@@ -15,23 +15,23 @@
   margin-bottom: 1rem;
 }
 
-.bookmark-item img {
+.img {
   width: 200px;
   height: 200px;
   object-fit: cover;
 }
 
-.bookmark-item div {
+.myCourse-item div {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.bookmark-item h2 {
+.myCourse-item h2 {
   margin: 0;
   font-size: 1.5rem;
 }
 
-.bookmark-item p {
-  margin: 0;
+.myCourse-item p {
+  margin: 0.2rem 0;
 }

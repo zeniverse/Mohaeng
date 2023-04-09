@@ -16,6 +16,8 @@ import searchCourseReducer from "./reducers/searchCourseSlice";
 import courseBookmarkReducer from "./reducers/CourseBoomarkSlice";
 import placeBookmarkReducer from "./reducers/PlaceBookmarkSlice";
 import reviewFormReducer from "./reducers/reviewFormSlice";
+import reviewReducer from "./reducers/reviewSlice";
+import myCourseReducer from "./reducers/myCourseSlice";
 
 const store = configureStore({
   reducer: {
@@ -36,6 +38,8 @@ const store = configureStore({
     courseBookmark: courseBookmarkReducer,
     placeBookmark: placeBookmarkReducer,
     reviewForm: reviewFormReducer,
+    review: reviewReducer,
+    myCourse: myCourseReducer,
   },
 });
 

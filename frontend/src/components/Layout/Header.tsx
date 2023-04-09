@@ -21,6 +21,9 @@ import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 // import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
+import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
+import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
+import Dropdown from "../Mypage/Dropdown";
 
 type User = {
   id: number;
@@ -36,9 +39,11 @@ function Header({}: Props) {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const router = useRouter();
+  const userid = useSelector((state: RootState) => state.id.id);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
   const imgUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
+  const [view, setView] = useState(false);
 
   useEffect(() => {
     const response = async () => {
@@ -55,8 +60,9 @@ function Header({}: Props) {
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
         dispatch(setImgUrl(imgUrl));
-        // appDispatch(getCourseBookmark(accessToken));
+        appDispatch(getCourseBookmark(accessToken));
         appDispatch(getPlaceBookmark(accessToken));
+        appDispatch(getMyCourse(accessToken));
         setUser(nickName);
       }
     };
@@ -129,22 +135,31 @@ function Header({}: Props) {
           </>
         ) : (
           <>
-            <Image
-              className={styles["kakao-profile-img"]}
-              src={imgUrl}
-              alt="카카오프로필"
-              width={40}
-              height={40}
-            />
-
-            <Link href="/mypage">{nickName}님</Link>
+            <ul
+              className={styles.dropdownContainer}
+              onClick={() => {
+                setView(!view);
+              }}
+            >
+              <Image
+                className={styles["kakao-profile-img"]}
+                src={imgUrl}
+                alt="카카오프로필"
+                width={45}
+                height={45}
+              />
+              반가워요, {nickName} 님! {view ? "⌃" : "⌄"}
+              {view && <Dropdown />}
+            </ul>
+            {/* 
+            <Link href="/mypage">반가워요, {nickName}님!</Link>
             <button
               id="login-btn"
               className={styles["login-btn"]}
               onClick={handleLogout}
             >
               로그아웃
-            </button>
+            </button> */}
           </>
         )}
       </div>

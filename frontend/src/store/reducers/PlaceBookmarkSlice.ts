@@ -3,12 +3,12 @@ import axios from "axios";
 
 export interface bookmarkPlace {
   bookMarkId: number;
-  categoryId: number;
   placeId: number;
   placeName: string;
   rating: number;
   address: string;
-  placeImgUrl: string;
+  content: string;
+  imgUrl: string;
   createdDate: string;
   modifiedDate: string;
 }

@@ -62,9 +62,6 @@ dependencies {
     //MockMultipartFile
     implementation 'org.springframework:spring-test'
 
-
-
-
 }
 
 tasks.named('test') {
@@ -77,3 +74,4 @@ tasks.named('test') {
 //    !project.hasProperty('test')
 
 //}
+

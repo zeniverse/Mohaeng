@@ -24,7 +24,6 @@ public class LoginController {
     private final MemberService memberService;
     private final TokenGenerator tokenGenerator;
 
-
     @GetMapping("/oauth/token")
     public Token getToken(@RequestParam("code") String code) throws IOException {
         String accessToken = memberService.getAccessToken(code);// 카카오 AccessToken
@@ -33,13 +32,6 @@ public class LoginController {
         return token;
     }
 
-    /**
-     * 토큰 재발급
-     *
-     * @param request
-     * @param response
-     * @return
-     */
     @GetMapping("/oauth/token/refresh")
     public Token refreshAuth(HttpServletRequest request, HttpServletResponse response) {
         String token = request.getHeader("Refresh-token");
@@ -53,14 +45,10 @@ public class LoginController {
         throw new IllegalArgumentException("NotExistRefreshToken");
     }
 
-    // TODO: 이미지 byteArray이 아닌 다른 방법
     @GetMapping("/loginInfo")
     public ResponseEntity loginInfoController(HttpServletRequest request) throws IOException {
         String userEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
         Member findMember = memberService.findByEmail(userEmail);
-//        InputStream inputStream = new FileInputStream(findMember.getImageURL() + "/" + findMember.getImageName());
-//        byte[] imageByteArray = inputStream.readAllBytes();
-//        inputStream.close();
         MemberLoginDto loginInfo = memberService.getLoginInfo(findMember);
         return ResponseEntity.ok().body(BaseResponse.success("ok", loginInfo));
     }
