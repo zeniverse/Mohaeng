@@ -5,9 +5,11 @@ import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.domain.QPlace;
+import com.mohaeng.backend.place.domain.Review;
 import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
 import com.mohaeng.backend.place.dto.PlaceDetailsDto;
+import com.mohaeng.backend.place.dto.PlaceRatingDto;
 import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
 import com.mohaeng.backend.place.exception.PlaceNotFoundException;
 import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
@@ -239,5 +241,17 @@ public class PlaceService {
 
         PlaceDetailsResponse response = new PlaceDetailsResponse(placeDetailsDtos, isBookmark);
         return response;
+    }
+
+    public PlaceRatingDto getPlaceRating(Long placeId) {
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid place id: " + placeId));
+        List<Review> reviews = place.getReviewList();
+        double averageRating = reviews.stream()
+                .mapToDouble(review -> Double.parseDouble(review.getRating()))
+                .average()
+                .orElse(0);
+        long reviewTotalElements = reviews.size();
+        return new PlaceRatingDto(averageRating, reviewTotalElements);
     }
 }

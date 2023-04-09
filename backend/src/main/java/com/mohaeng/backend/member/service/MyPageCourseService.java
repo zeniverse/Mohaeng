@@ -71,7 +71,7 @@ public class MyPageCourseService {
     }
 
     private Member isMember(String email) {
-        return memberRepository.findByEmailAndDeletedDateIsNull(email)
+        return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberNotFoundException());
     }
 }

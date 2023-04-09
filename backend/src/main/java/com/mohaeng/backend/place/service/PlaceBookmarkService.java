@@ -1,6 +1,5 @@
 package com.mohaeng.backend.place.service;
 
-import com.mohaeng.backend.course.dto.response.CourseBookmarkRes;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.PlaceBookmark;
@@ -74,7 +73,7 @@ public class PlaceBookmarkService {
 
 
     private Member isMember(String memberEmail){
-        return memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(
+        return memberRepository.findByEmail(memberEmail).orElseThrow(
                 // TODO: Exception 처리
                 () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
         );

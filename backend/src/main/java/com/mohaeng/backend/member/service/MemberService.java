@@ -28,8 +28,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import static io.micrometer.common.util.StringUtils.isEmpty;
-
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -50,7 +48,7 @@ public class MemberService {
 
 
     public Member findByEmail(String email) {
-        return memberRepository.findByEmailAndDeletedDateIsNull(email)
+        return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("INVALID_USER"));
     }
 
@@ -118,7 +116,8 @@ public class MemberService {
 
     public Member saveMember(String token) throws IOException {
         KakaoUserDto kakaoUser = findProfile(token);
-        Member member = memberRepository.findByEmailAndDeletedDateIsNull(kakaoUser.getEmail()).get();
+        Member member = memberRepository.findByEmail(kakaoUser.getEmail()).
+                orElse(null);
 
         if (member == null) {
             member = new Member(kakaoUser.getName(), kakaoUser.getEmail(), Role.NORMAL, randomNameService.generateNickName());

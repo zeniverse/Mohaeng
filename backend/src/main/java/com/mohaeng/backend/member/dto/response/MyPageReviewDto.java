@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MyPageReviewDto {
     private long reviewId;
+    private long placeId;
     private String title;
     private String content;
     private int likeCount;
@@ -18,13 +19,23 @@ public class MyPageReviewDto {
     private LocalDateTime createdDate;
 
     public static MyPageReviewDto of(Review review) {
+        String imgUrl="";
+        if (review.getReviewImageList().size() != 0) {
+            String url = review.getReviewImageList().get(0).getImageUrl();
+            String name = review.getReviewImageList().get(0).getImageName();
+            imgUrl = url + "/" + name;
+        } else {
+            imgUrl = review.getPlace().getFirstImage();
+        }
+
         return new MyPageReviewDto(
                 review.getId(),
+                review.getPlace().getId(),
                 review.getTitle(),
                 review.getContent(),
                 review.getLikeCount(),
                 review.getRating(),
-                review.getPlace().getFirstImage(),
+                imgUrl,
                 review.getCreatedDate()
         );
     }

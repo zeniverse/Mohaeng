@@ -8,7 +8,7 @@ import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
-import com.mohaeng.backend.place.dto.PlaceDetailsDto;
+import com.mohaeng.backend.place.dto.PlaceRatingDto;
 import com.mohaeng.backend.place.dto.PlaceSearchDto;
 import com.mohaeng.backend.place.dto.response.FindAllPlacesResponse;
 import com.mohaeng.backend.place.dto.response.FindSearchPlacesResponse;
@@ -36,8 +36,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Objects.isNull;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -57,16 +55,12 @@ public class PlaceController {
         return new ResponseEntity<>(places, HttpStatus.OK);
     }
 
-
     @GetMapping("/place/{address}")
     public ResponseEntity<List<Place>> getPlacesByAddress(@PathVariable String address) {
         List<Place> places = placeService.getPlacesByAddress(address);
         log.info("search places.size:{} ", places.size());
-//        return ResponseEntity.ok().body(BaseResponse.success("OK",res));
         return new ResponseEntity<>(places, HttpStatus.OK);
     }
-
-
 
     @GetMapping("/api/place/{contentId}")
     public ResponseEntity<PlaceDTO> getPlace(@PathVariable String contentId) throws IOException, ParserConfigurationException, SAXException {
@@ -78,21 +72,12 @@ public class PlaceController {
         return ResponseEntity.ok(dto);
     }
 
-
-//    @GetMapping("/place/overview/{placeName}")
-//    public ResponseEntity<List<String>> getPlaceOverview(@PathVariable String placeName) throws IOException, ParserConfigurationException, SAXException {
-//        List<String> overview = placeService.getPlaceOverview(placeName);
-//        log.info("overview:{}", overview);
-//        return ResponseEntity.ok(overview);
-//    }
-
     @GetMapping("/place/overview/{contentId}")
     public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String contentId,
                                                                              HttpServletRequest request) throws IOException, ParserConfigurationException, SAXException {
         PlaceDetailsResponse response = placeService.getPlaceDetailsByContentId(contentId, isAccessMember(request));
         return ResponseEntity.ok().body(BaseResponse.success("OK",response));
     }
-
 
     @GetMapping("/api/places")
     public Page<Place> getPlaces(@RequestParam(defaultValue = "0") int page) {
@@ -123,7 +108,8 @@ public class PlaceController {
             if(member != null){
                 isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, place);
             }
-            PlaceSearchDto dto = PlaceSearchDto.from(place, isBookmark);
+            PlaceRatingDto rating = placeService.getPlaceRating(place.getId());
+            PlaceSearchDto dto = PlaceSearchDto.from(place, isBookmark, rating.getAverageRating(), rating.getReviewTotalElements());
             result.add(dto);
         }
         FindSearchPlacesResponse response = new FindSearchPlacesResponse(result, places.getTotalPages(), places.getTotalElements());
@@ -163,12 +149,12 @@ public class PlaceController {
     private Member isAccessMember(HttpServletRequest request){
         if (request.getHeader("Access-Token") == null){
             return null;
-        }else{
-            return memberRepository.findByEmailAndDeletedDateIsNull(tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token")))
+        }
+        else{
+            return memberRepository.findByEmail(tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token")))
                     .orElseThrow(MemberNotFoundException::new);
         }
     }
-
 }
 
 
