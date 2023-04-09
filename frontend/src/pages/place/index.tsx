@@ -18,6 +18,7 @@ export default function Place() {
     (state: RootState) => state.place.totalPages
   );
   const accessToken = cookie.load("accessToken");
+  dispatch(setPage(1));
 
   useEffect(() => {
     dispatch(setPage(1));

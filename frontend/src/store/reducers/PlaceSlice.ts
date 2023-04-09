@@ -6,7 +6,9 @@ export interface content {
   firstImage: string;
   placeId: number;
   contentId: string;
-  isBookmark: boolean;
+  rating: string;
+  review: string;
+  isBookmarked: boolean;
 }
 
 export interface placeState {
