@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class MyPagePlaceBookMarkDto {
     private Long bookMarkId;
     private Long placeId;
+    private String contendId;
     private String placeName;
     private double rating;
     private String address;
@@ -23,6 +24,7 @@ public class MyPagePlaceBookMarkDto {
         return new MyPagePlaceBookMarkDto(
                 m.getId(),
                 m.getPlace().getId(),
+                m.getPlace().getContentId(),
                 m.getPlace().getName(),
                 m.getPlace().getRating(),
                 m.getPlace().getAddress(),
