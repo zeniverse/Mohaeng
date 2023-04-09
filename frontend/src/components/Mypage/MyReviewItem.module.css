@@ -1,4 +1,4 @@
-.myCourse-container {
+.myReview-container {
   background-color: #f3f3f3;
   padding: 2rem;
   border-radius: 10px;
@@ -7,7 +7,7 @@
   align-items: center;
   height: 100%;
 }
-.myCourse-item {
+.myReview-item {
   display: flex;
   align-items: center;
   width: 800px;
@@ -21,17 +21,17 @@
   object-fit: cover;
 }
 
-.myCourse-item div {
+.myReview-item div {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.myCourse-item h2 {
+.myReview-item h2 {
   margin: 0;
   font-size: 1.5rem;
 }
 
-.myCourse-item p {
+.myReview-item p {
   margin: 0.2rem 0;
 }

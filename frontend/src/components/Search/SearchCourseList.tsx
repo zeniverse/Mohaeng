@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import CourseItem from "../Course/CourseItem";
 import Pagebar from "../Pagenation/Pagebar";
+import ListContainer from "../UI/ListContainer";
 
 interface CourseList {
   id: number;
@@ -19,7 +20,7 @@ interface CourseList {
   bookMark: true;
 }
 
-export default function SearchCourse(): JSX.Element {
+export default function SearchCourseList(): JSX.Element {
   const router = useRouter();
   const { keyword } = router.query;
   const [searchResult, setSearchResult] = useState<CourseList[]>([]);
@@ -31,13 +32,16 @@ export default function SearchCourse(): JSX.Element {
   useEffect(() => {
     const fetchKeyword = async () => {
       try {
-        const res = await axios.get(`/api/course`, {
-          params: {
-            page: page,
-            keyword: keyword,
-          },
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/course`,
+          {
+            params: {
+              page: page,
+              keyword: keyword,
+            },
+            withCredentials: true,
+          }
+        );
         if (res.data.data.content !== []) {
           console.log(res.data.data);
           const { courseList } = res.data.data;
@@ -57,23 +61,25 @@ export default function SearchCourse(): JSX.Element {
   return (
     <>
       <section className={styles.section}>
-        <h3 className={styles.h2}>검색하신 결과: {keyword} </h3>
+        <h3 className={styles.h3}>검색하신 결과: {keyword} </h3>
         <ul className={styles.keywordList}>
           {searchResult.length > 0 ? (
-            searchResult?.map((course) => (
-              <CourseItem
-                key={course.id}
-                id={course.id.toString()}
-                title={course.title}
-                content={course.content}
-                likeCount={course.likeCount}
-                thumbnailUrl={course.thumbnailUrl}
-                courseDays={course.courseDays}
-                bookMark={course.bookMark}
-                like={course.like}
-                places={course.places}
-              />
-            ))
+            <ListContainer>
+              {searchResult?.map((course) => (
+                <CourseItem
+                  key={course.id}
+                  id={course.id.toString()}
+                  title={course.title}
+                  content={course.content}
+                  likeCount={course.likeCount}
+                  thumbnailUrl={course.thumbnailUrl}
+                  courseDays={course.courseDays}
+                  bookMark={course.bookMark}
+                  like={course.like}
+                  places={course.places}
+                />
+              ))}
+            </ListContainer>
           ) : (
             <div className={styles.div}>
               <p className={styles.noResult}>

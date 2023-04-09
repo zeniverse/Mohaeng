@@ -11,6 +11,8 @@ import Link from "next/link";
 import TagItem from "../UI/TagItem";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { toggleBookmarkAction } from "@/src/store/reducers/CourseListSlice";
+import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
+import cookie from "react-cookies";
 
 const CourseItem = ({
   id,
@@ -25,7 +27,7 @@ const CourseItem = ({
 }: CourseListProps) => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
   const dispatch = useAppDispatch();
-
+  const accessToken = cookie.load("accessToken");
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
     setIsRoughMapOpen((prev) => !prev);
@@ -34,7 +36,9 @@ const CourseItem = ({
     setIsRoughMapOpen(false);
   };
   const bookmarkHandler = (id: number) => {
-    dispatch(toggleBookmarkAction(id));
+    dispatch(toggleBookmarkAction(id)).then(() => {
+      dispatch(getCourseBookmark(accessToken));
+    });
   };
 
   return (

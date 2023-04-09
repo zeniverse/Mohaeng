@@ -16,6 +16,8 @@ import { kakaoPlaces } from "@/src/interfaces/Course";
 import CourseOrderList from "@/src/components/CourseDetail/CourseOrderList";
 import { useRouter } from "next/router";
 import { resetFilter } from "@/src/store/reducers/FilterSlice";
+import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
+import cookie from "react-cookies";
 
 export default function index() {
   const router = useRouter();
@@ -23,6 +25,7 @@ export default function index() {
   const { course } = useAppSelector(
     (state) => state.courseForm ?? initialState
   );
+  const accessToken = cookie.load("accessToken");
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -39,12 +42,13 @@ export default function index() {
 
   const handleCourseSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(createCourseAction(course));
-    dispatch(resetFormValue());
-    dispatch(resetFilter());
-
-    // as를 전달하여 페이지가 새로 고쳐지고 데이터가 업데이트 됨.
-    router.push("/course", "/course");
+    dispatch(createCourseAction(course)).then(() => {
+      dispatch(getMyCourse(accessToken));
+      dispatch(resetFormValue());
+      dispatch(resetFilter());
+      // as를 전달하여 페이지가 새로 고쳐지고 데이터가 업데이트 됨.
+      router.push("/course", "/course");
+    });
   };
 
   const handleCourseCancel = () => {
