@@ -1,20 +1,20 @@
 export interface Keyword {
   placeId: number;
-  areaCode: string;
   name: string;
   firstImage: string;
   contentId: string;
-  isBookmark: boolean;
-  rating: string;
-  review: string;
+  isBookmarked: boolean;
+  averageRating: number;
+  reviewTotalElements: number;
 }
 
 export type KeywordProps = {
   placeId: number;
+  areaCode: string;
   name: string;
   firstImage: string;
   contentId: string;
-  isBookmark: boolean;
-  rating: number;
-  review: string;
+  isBookmarked: boolean;
+  averageRating: number;
+  reviewTotalElements: number;
 };

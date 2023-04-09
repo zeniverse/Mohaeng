@@ -1,18 +1,19 @@
 import styles from "./ReviewItem.module.css";
-import { FaRegThumbsUp } from "react-icons/fa";
+import cookie from "react-cookies";
 import Image from "next/image";
-import user from "../../../public/assets/user.png";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { useRouter } from "next/router";
 import { openModal } from "@/src/store/reducers/modalSlice";
+import axios from "axios";
 
 // 별점, 아이디, 작성일, 리뷰내용, 이미지
 // 유저일 경우 수정 삭제 버튼
 
 type ReviewProps = {
+  reviewId: number;
   nickname: string;
   memberImage: string;
   content: string;
@@ -22,6 +23,7 @@ type ReviewProps = {
 };
 
 export default function ReviewItem({
+  reviewId,
   nickname,
   memberImage,
   rating,
@@ -37,7 +39,7 @@ export default function ReviewItem({
   );
   const dispatch = useDispatch();
   // setUser(currentUser);
-
+  console.log(reviewId);
   const isUser = nickname === currentUser;
 
   const handleOpenDeleteModal = () => {
@@ -45,8 +47,25 @@ export default function ReviewItem({
       openModal({
         modalType: "DeleteReviewModal",
         isOpen: true,
+        reviewId: reviewId,
       })
     );
+  };
+
+  const deleteReview = async () => {
+    try {
+      const accessToken = await cookie.load("accessToken");
+      const response = await axios.delete(`/api/review/detail/${reviewId}`, {
+        headers: {
+          "Access-Token": accessToken,
+        },
+      });
+      console.log(response.status);
+      console.log(response.data);
+      router.push(`/search?keyword=${name}`);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -76,6 +95,7 @@ export default function ReviewItem({
                     pathname: "/review/edit-review",
                     query: {
                       plcaceId: placeId,
+                      reviewId: reviewId,
                       name: name,
                     },
                   },
@@ -86,10 +106,7 @@ export default function ReviewItem({
             >
               수정
             </button>
-            <button
-              onClick={() => handleOpenDeleteModal()}
-              className={styles.btn}
-            >
+            <button onClick={() => deleteReview()} className={styles.btn}>
               삭제
             </button>
           </div>

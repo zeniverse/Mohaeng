@@ -24,6 +24,7 @@
   padding: 1rem;
   background-color: var(--color-bg-white);
   border: 1px solid var(--color-border-light);
+  border-radius: 12px;
 }
 
 .boldTitle {
@@ -66,15 +67,33 @@
   margin-bottom: 1rem;
   padding: 1rem;
   border: 1px solid var(--color-border-light);
+  border-radius: 12px;
   font-size: 16px;
 }
 
-.imageForm {
+.inputFileBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.chooseFile {
+  width: 8rem;
   margin-bottom: 1rem;
-  padding: 1rem;
+  padding: 12px;
+  border-radius: 12px;
   border: 1px solid var(--color-border-light);
   background-color: var(--color-bg-white);
   cursor: pointer;
+  text-align: center;
+}
+
+.chooseFile:hover {
+  background: var(--color-border-light);
+  color: #fff;
+}
+
+.imageForm {
+  display: none;
 }
 
 .inputFileDesc {
