@@ -32,11 +32,8 @@ const initialState: myCourseState = {
 
 export const getMyCourse = createAsyncThunk(
   "mypage/placebookmark",
-  async ({ userid, token }: { userid: number; token: string }) => {
+  async (token: string) => {
     const response = await axios.get(`/api/myPage/course`, {
-      data: {
-        userId: userid,
-      },
       headers: {
         "Access-Token": token,
       },

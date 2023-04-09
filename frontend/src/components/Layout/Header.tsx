@@ -60,7 +60,7 @@ function Header({}: Props) {
         dispatch(setImgUrl(imgUrl));
         appDispatch(getCourseBookmark(accessToken));
         appDispatch(getPlaceBookmark(accessToken));
-        appDispatch(getMyCourse({ userid, accessToken }));
+        appDispatch(getMyCourse(accessToken));
         setUser(nickName);
       }
     };
