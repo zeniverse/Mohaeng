@@ -22,14 +22,6 @@ public class CourseBookmarkController {
     private final CourseBookmarkService courseBookmarkService;
     private final TokenGenerator tokenGenerator;
 
-    @GetMapping("/{courseId}")
-    public ResponseEntity isExistsCourseBookmark(@PathVariable Long courseId,
-                                              HttpServletRequest request){
-        String memberEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
-        boolean isExists = courseBookmarkService.isExistCourseBookmark(courseId, memberEmail);
-        return ResponseEntity.ok().body(BaseResponse.success("OK", isExists));
-    }
-
     @PostMapping("/{courseId}")
     public ResponseEntity addCourseBookmark(@PathVariable Long courseId, HttpServletRequest request){
         String memberEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));

@@ -21,6 +21,7 @@ import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -136,7 +137,10 @@ public class CourseService {
 
         // 2. 기존에 존재하던 CoursePlaces 삭제
         List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
-        coursePlaceRepository.deleteAllInBatch(coursePlaces);
+        for (CoursePlace coursePlace : coursePlaces) {
+            coursePlace.updateDeletedDate();
+        }
+        coursePlaces.clear();
 
         for (Long id : req.getPlaceIds()) {
             Place place = placeRepository.findById(id).orElseThrow(PlaceNotFoundException::new);
@@ -170,53 +174,32 @@ public class CourseService {
 
 
     public CourseListRes getCourseList(CourseSearchDto courseSearchDto, Pageable pageable, String memberEmail) {
-        // 1.로그인 유무 화인
+        // 1. 로그인 유무 확인
         Member member = isLogin(memberEmail);
-
-        // 2. 검색 조건으로 검색 결과 조회
-        Page<Course> courses = courseRepository.findAllCourseWithKeyword(courseSearchDto, pageable);
-
-        // 3. 검색 결과 CourseListDto 타입으로 변경
-        List<CourseListDto> courseList = new ArrayList<>();
-        for (Course course : courses) {
-            boolean isLike = false;
-            boolean isBookmark = false;
-            if(member != null){
-                isLike = courseLikesRepository.existsCourseLikesByMemberAndCourse(member, course);
-                isBookmark = courseBookmarkRepository.existsCourseBookmarkByMemberAndCourse(member, course);
-            }
-            CourseListDto dto = CourseListDto.from(course, isLike, isBookmark);
-            courseList.add(dto);
+        Long memberId = 0L;
+        if (member != null){
+            memberId = member.getId();
         }
 
-//        List<CourseListDto> courseList = courses.stream()
-//                .map(course -> CourseListDto.from(course))
-//                .collect(Collectors.toList());
-//
-        return CourseListRes.from(courseList, courses.getTotalElements(), courses.getTotalPages());
+        // 2. 코스 조회 결과 불러오기기
+        Page<CourseListDto> results = courseRepository.findAllCourseWithBookmarkAndLikes(courseSearchDto, pageable, memberId);
+
+        return CourseListRes.from(results.getContent(), results.getTotalElements(), results.getTotalPages());
     }
 
 
     public List<MainCourseListDto> getMainCourse(String memberEmail) {
-        // 1.로그인 유무 화인
+        // 1. 로그인 유무 확인
         Member member = isLogin(memberEmail);
-
-        // 2. 코스 조회 결과 불러오기기
-        List<Course> courseList = courseRepository.findTop10ByCourseStatusOrderByLikeCountDesc(CourseStatus.PUBLIC);
-
-        List<MainCourseListDto> MainCourseListDtoList = new ArrayList<>();
-        for (Course course : courseList) {
-            boolean isLike = false;
-            boolean isBookmark = false;
-            if(member != null){
-                isLike = courseLikesRepository.existsCourseLikesByMemberAndCourse(member, course);
-                isBookmark = courseBookmarkRepository.existsCourseBookmarkByMemberAndCourse(member, course);
-            }
-            MainCourseListDto dto = MainCourseListDto.from(course, isLike, isBookmark);
-            MainCourseListDtoList.add(dto);
+        Long memberId = 0L;
+        if (member != null){
+            memberId = member.getId();
         }
 
-        return MainCourseListDtoList;
+        // 2. 코스 조회 결과 불러오기기
+        List<MainCourseListDto> results = courseRepository.findTop10Course(memberId);
+
+        return results;
     }
 
 
