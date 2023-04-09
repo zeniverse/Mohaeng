@@ -40,6 +40,7 @@ export const createCourseAction = createAsyncThunk(
     const validPlace = places.find((place) => place.imgUrl.trim() !== "");
     const thumbnailUrl = validPlace?.imgUrl ?? "";
     const extractedPlaceIds = places.map((place) => place.placeId);
+
     const validData = {
       ...rest,
       placeIds: extractedPlaceIds,

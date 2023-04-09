@@ -57,7 +57,6 @@ const CourseItem = ({
                 priority
               />
             )}
-
             <IsLikeState courseLike={likeCount} />
           </div>
           <div className={styles["item-info-text"]}>

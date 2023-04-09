@@ -3,7 +3,7 @@ import {
   toggleBookmarkApi,
 } from "@/src/services/courseService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CreatedCourse, ICourse } from "../../interfaces/Course.type";
+import { ICourse } from "../../interfaces/Course.type";
 import { RootState } from "../store";
 import { createCourseAction } from "./CourseFormSlice";
 

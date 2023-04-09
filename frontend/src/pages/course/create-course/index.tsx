@@ -62,9 +62,7 @@ export default function index() {
       {course?.places?.length > 0 && (
         <div className={styles.info}>
           <KakaoMap mapData={course.places} />
-          <div className={styles.list}>
-            <CourseOrderList places={course?.places} mode={"write"} />
-          </div>
+          <CourseOrderList places={course?.places} mode={"write"} />
         </div>
       )}
       <div className={styles["button-wrapper"]}>

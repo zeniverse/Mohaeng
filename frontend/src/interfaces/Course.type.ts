@@ -64,15 +64,3 @@ export interface IPlacesForm {
   rating: string;
   address?: string;
 }
-
-export interface CreatedCourse {
-  id: number;
-  title: string;
-  startDate?: string;
-  endDate?: string;
-  isPublished: boolean;
-  courseDays: string;
-  region: string;
-  thumbnailUrl: string;
-  content: string;
-}
