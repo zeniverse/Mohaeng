@@ -2,20 +2,18 @@ import styles from "./PlaceDetail.module.css";
 
 import Image from "next/image";
 import ReviewList from "../Review/ReviewList";
-import Bookmark from "../Bookmark/Bookmark";
 import PlaceDetailMap from "./PlaceDetailMap";
 
 import axios from "axios";
 import cookie from "react-cookies";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import FiveStarRating from "../FiveStarRating/FiveStarRating";
+import { useDispatch } from "react-redux";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
+import PlaceBookmark from "../Bookmark/PlaceBookmark";
 
-// 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined?
-// 북마크 delete
+// 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined
 
 interface PlaceInfo {
   name: string;
@@ -48,8 +46,6 @@ const PlaceDetail = () => {
   });
 
   const [bookMarked, setBookMarked] = useState(false);
-  // 스테이트 저장해도 새로고침 시 날아감
-  const [currentId, setCurrentId] = useState("");
 
   // useEffect(() => {
   //   localStorage.setItem("id", id);
@@ -63,7 +59,7 @@ const PlaceDetail = () => {
   //   window.scrollTo(0, 0);
   // }, []);
 
-  // 북마크
+  // * 북마크
   const handleBookmarkClick = async () => {
     try {
       if (bookMarked === false) {
@@ -99,7 +95,7 @@ const PlaceDetail = () => {
     }
   };
 
-  // 상세 데이터
+  // * 상세 데이터
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -138,7 +134,10 @@ const PlaceDetail = () => {
           </div>
           <div className={styles.bookMarkBox}>
             <p className={styles.bookMarkText}>북마크에 추가</p>
-            <Bookmark bookMarked={bookMarked} onToggle={handleBookmarkClick} />
+            <PlaceBookmark
+              bookMarked={bookMarked}
+              onToggle={handleBookmarkClick}
+            />
           </div>
         </div>
         <div className={styles.detailContent}>

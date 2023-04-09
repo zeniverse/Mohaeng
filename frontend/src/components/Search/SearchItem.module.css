@@ -1,5 +1,5 @@
 .keywordItemContainer {
-  width: 292px;
+  width: 280px;
   border: 2px solid var(--color-border-light);
   border-radius: 16px;
 }
@@ -59,7 +59,7 @@
 .keywordBookmark {
   width: 30px;
   margin-top: 1rem;
-  margin-left: 50px;
+  margin-left: 30px;
 }
 
 .btn {
