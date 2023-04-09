@@ -32,12 +32,28 @@ const nextConfig = {
         destination: "https://localhost:8080/api/course",
       },
       {
-        source: "/api/place",
-        destination: "https://localhost:8080/api/place",
+        source: "/api/course/:id",
+        destination: "https://localhost:8080/api/course/:id",
       },
       {
-        source: "/place/:id",
+        source: "/api/place/:slug*",
+        destination: "http://localhost:3000/api/place/:slug*",
+      },
+      {
+        source: "/place/overview/:id",
         destination: "https://localhost:8080/place/overview/:id",
+      },
+      {
+        source: "/places/:slug*",
+        destination: "http://localhost:8080/places?areaCode=:slug*",
+      },
+      {
+        source: "/oauth/token",
+        destination: "https://localhost:8080/oauth/token",
+      },
+      {
+        source: "/loginInfo",
+        destination: "https://localhost:8080/loginInfo",
       },
     ];
   },

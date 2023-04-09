@@ -1,5 +1,4 @@
 import styles from "./CreateReview.module.css";
-import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -8,18 +7,17 @@ import axios from "axios";
 import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
 
-// 리뷰 아이디 get 정보 받아오기
-// input 기본 value로 데이터 넣기
-
-interface Review {
-  title: string;
+interface ReviewForm {
   rating: number;
   content: string;
+  imgUrl: string[];
 }
+// 리뷰 아이디 필요, get 데이터 받아오고, put 요청
+// 데이터 받아서 인풋에 다시 넣기
 
-export default function EditReview() {
+export default function CreateReview() {
   const router = useRouter();
-  const { placeId, contentId, name } = router.query;
+  const { placeId, reviewId, name } = router.query;
   const [clicked, setClicked] = useState<boolean[]>([
     false,
     false,
@@ -32,6 +30,8 @@ export default function EditReview() {
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   let rating = clicked.filter(Boolean).length;
+
+  console.log(reviewId);
 
   // *비동기적으로 받아오는 별점 개수 업데이트 확인
   useEffect(() => {
@@ -48,6 +48,7 @@ export default function EditReview() {
     setClicked(clickStates);
   };
 
+  // * 이미지 미리보기
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newImages = [...images];
     const newPreviews = [...previews];
@@ -88,42 +89,36 @@ export default function EditReview() {
     }
     const formData = new FormData();
     images.forEach((image) => {
-      formData.append("multipartFile", image);
+      if (image instanceof File && image.size > 0) {
+        formData.append("multipartFile", image);
+      }
     });
-    // imgUrl
-    let review = [
-      {
-        title: "테스트",
-        rating: rating,
-        content: content,
-      },
-    ];
-    // formData.append(
-    //   "review",
-    //   new Blob([JSON.stringify(review)], { type: "application/json" })
-    // );
-    formData.append("review", JSON.stringify(review));
-    // formData.append("review", JSON.stringify(review));
-    // formData.append("rating", JSON.stringify(rating.toString()));
-    // formData.append("content", JSON.stringify(content));
 
+    let review = {
+      rating: rating,
+      content: content,
+    };
+    formData.append(
+      "review",
+      new Blob([JSON.stringify(review)], { type: "application/json" })
+    );
+    // 리뷰아이디 필요, put
     try {
       const accessToken = await cookie.load("accessToken");
       const response = await axios
-        .post(`/api/review/${placeId}`, formData, {
+        .put(`/api/review/${placeId}`, formData, {
           headers: {
             "Access-Token": accessToken,
             "Content-Type": "multipart/form-data",
           },
         })
         .then((response) => {
-          console.log(response.data, "리뷰 작성 성공!");
+          console.log(response.data, "리뷰 수정 성공!");
           router.push(`/search?keyword=${name}`);
         });
     } catch (error) {
       router.push(`/search?keyword=${name}`);
-      console.error(error);
-      console.log("리뷰 작성 실패ㅠ");
+      console.log(error, "리뷰 수정 실패ㅠ");
     }
   };
 
@@ -155,14 +150,14 @@ export default function EditReview() {
               name="review"
               id="review"
               placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요! (20자 이상)"
-              minLength={20}
               required={true}
-              value={content}
+              //   value={content} 받아온 리뷰데이터 받기
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
 
-            <label className={styles.boldTitle} htmlFor="inputFile">
-              사진 추가하기
+            <p className={styles.boldTitle}>사진 추가하기</p>
+            <label htmlFor="inputFile">
+              <div className={styles.chooseFile}>사진 선택</div>
             </label>
             <input
               type="file"
@@ -174,7 +169,9 @@ export default function EditReview() {
             <span className={styles.inputFileDesc}>
               * 사진은 최대 3장까지 첨부할 수 있습니다.
             </span>
+
             <div className={styles.imgContainer}>
+              {/* 스테이트 만들어서 받아온 리뷰데이터로 돌려서 넣으면 가능할까?  */}
               {previews.map((preview, index) => (
                 <div className={styles.imgBox} key={index}>
                   <Image
@@ -192,7 +189,7 @@ export default function EditReview() {
             </div>
             <div className={styles.btnGroup}>
               <button className={styles.postBtn} onClick={submitReview}>
-                등록
+                수정
               </button>
               <button className={styles.cancelBtn} onClick={handleGoBack}>
                 취소
