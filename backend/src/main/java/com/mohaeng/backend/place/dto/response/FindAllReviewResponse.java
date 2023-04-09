@@ -19,7 +19,6 @@ public class FindAllReviewResponse {
     private String nickname;
     private String memberImage;
     private String rating;
-    private int likeCount;
     private String content;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -34,7 +33,6 @@ public class FindAllReviewResponse {
                 review.getMember().getNickName(),
                 review.getMember().getImageURL() + "/" + review.getMember().getImageName(),
                 review.getRating(),
-                review.getLikeCount(),
                 review.getContent(),
                 review.getCreatedDate(),
         getAllImageName(review));
