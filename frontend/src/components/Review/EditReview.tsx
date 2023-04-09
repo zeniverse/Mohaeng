@@ -40,7 +40,7 @@ export default function EditReview() {
   const accessToken = cookie.load("accessToken");
   let rating = clicked.filter(Boolean).length;
 
-  // * 수정한 별점 보여주기
+  // * 수정 전 별점 보여주기
   useEffect(() => {
     setClicked(Array(5).fill(false).fill(true, 0, parseInt(reviewForm.rating)));
   }, [reviewForm.rating]);
@@ -132,7 +132,7 @@ export default function EditReview() {
       return [blob, filename];
     };
 
-    // * 기존에 업로드한 이미지 파일이 있으면 받아옴
+    // * 기존에 업로드한 이미지 파일이 있으면 받아서 다시 폼데이터로
     if (reviewForm.imageUrls.length > 0) {
       const imageBlobs = await Promise.all(
         reviewForm.imageUrls.map((url) => getImageBlob(url))
@@ -141,20 +141,22 @@ export default function EditReview() {
         formData.append("multipartFile", blob, filename);
       });
     }
-
     images.forEach((image) => {
       if (image instanceof File && image.size > 0) {
         formData.append("multipartFile", image);
       }
     });
+
     let review = {
       rating: rating,
       content: content,
     };
+
     formData.append(
       "review",
       new Blob([JSON.stringify(review)], { type: "application/json" })
     );
+
     try {
       const response = await axios
         .put(`/api/review/detail/${reviewId}`, formData, {

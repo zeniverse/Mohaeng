@@ -52,17 +52,48 @@ export default function ReviewList() {
     setSelectedValue(e.target.value);
   };
 
+  // * 정렬별 데이터 조회
+  useEffect(() => {
+    async function fetchSelect() {
+      try {
+        let url = "";
+        if (selectedValue === "highrating") {
+          url = `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}/rating`;
+        } else if (selectedValue === "latest") {
+          url = `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}/date`;
+        }
+
+        const res = await axios.get(url, {
+          params: {
+            page: page,
+          },
+          withCredentials: true,
+        });
+        if (res.data && res.data.data && res.data.data.reviews) {
+          dispatch(setReview(res.data.data));
+          setReviewData(res.data.data.reviews);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchSelect();
+  }, [selectedValue, placeId, page]);
+
   // * 리뷰 전체 조회
   useEffect(() => {
     if (page !== 0) {
       const fetchReview = async () => {
         try {
-          const res = await axios.get(`/api/review/${placeId}`, {
-            params: {
-              page: page,
-            },
-            withCredentials: true,
-          });
+          const res = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}`,
+            {
+              params: {
+                page: page,
+              },
+              withCredentials: true,
+            }
+          );
           console.log(res.data.data);
           dispatch(setReview(res.data.data));
           setReviewData(res.data.data.reviews);
