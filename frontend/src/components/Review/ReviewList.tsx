@@ -8,10 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import Pagebar from "../Pagenation/Pagebar";
-import { setPage } from "@/src/store/reducers/pageSlice";
 
-// 정렬 필터 (별점 순)
-// 리뷰 전체 조회
+// 정렬 필터 (별점 높은 순, 최신순)
 
 interface Review {
   reviewId: number;
@@ -33,7 +31,7 @@ export default function ReviewList() {
 
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
-    (state: RootState) => state.searchPlace.totalPages
+    (state: RootState) => state.review.totalPages
   );
   const totalElements = useSelector(
     (state: RootState) => state.review.totalElements
@@ -54,30 +52,58 @@ export default function ReviewList() {
     setSelectedValue(e.target.value);
   };
 
-  // 리뷰 조회
+  // * 정렬별 데이터 조회
+  useEffect(() => {
+    async function fetchSelect() {
+      try {
+        let url = "";
+        if (selectedValue === "highrating") {
+          url = `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}/rating`;
+        } else if (selectedValue === "latest") {
+          url = `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}/date`;
+        }
+
+        const res = await axios.get(url, {
+          params: {
+            page: page,
+          },
+          withCredentials: true,
+        });
+        if (res.data && res.data.data && res.data.data.reviews) {
+          dispatch(setReview(res.data.data));
+          setReviewData(res.data.data.reviews);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchSelect();
+  }, [selectedValue, placeId, page]);
+
+  // * 리뷰 전체 조회
   useEffect(() => {
     if (page !== 0) {
       const fetchReview = async () => {
         try {
-          const res = await axios.get(`/api/review/${placeId}`, {
-            params: {
-              page: page,
-            },
-            withCredentials: true,
-          });
+          const res = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}`,
+            {
+              params: {
+                page: page,
+              },
+              withCredentials: true,
+            }
+          );
           console.log(res.data.data);
           dispatch(setReview(res.data.data));
-          dispatch(setPage(res.data.data.totalPages));
-          const { reviews } = res.data.data;
-          setReviewData(reviews);
-          console.log(reviews);
+          setReviewData(res.data.data.reviews);
         } catch (err) {
           console.error(err);
         }
       };
       fetchReview();
     }
-  }, [placeId, page]);
+  }, [page]);
 
   // ToDo: 리뷰 한 번만 쓰도록? (여행지별 리뷰는 한 번만 작성할 수 있습니다. || 이미 작성하신 리뷰가 있습니다.)
   const handleClickReviewBtn = () => {
@@ -121,7 +147,6 @@ export default function ReviewList() {
             <select
               className={styles.select}
               value={selectedValue}
-              defaultValue="default"
               onChange={handleChangeOption}
             >
               <option key="default" value="default">
@@ -138,7 +163,7 @@ export default function ReviewList() {
           <div className={styles.reviewList}>
             {reviewData?.map((review) => (
               <ReviewItem
-                key={review.nickname}
+                key={review.reviewId}
                 reviewId={review.reviewId}
                 nickname={review.nickname}
                 memberImage={review.memberImage}

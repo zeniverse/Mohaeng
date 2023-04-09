@@ -1,0 +1,14 @@
+.topBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: var(--color-primary);
+}
+
+.topArrow {
+  font-size: 30px;
+}

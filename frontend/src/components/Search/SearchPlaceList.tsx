@@ -13,7 +13,7 @@ import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
 import { setPage } from "@/src/store/reducers/pageSlice";
 // import PlaceItem from "../Place/PlaceItem";
 
-export default function SearchPlace(): JSX.Element {
+export default function SearchPlaceList(): JSX.Element {
   const [searchResult, setSearchResult] = useState<Keyword[]>([]);
   const router = useRouter();
   const { keyword } = router.query;
@@ -57,7 +57,7 @@ export default function SearchPlace(): JSX.Element {
   return (
     <>
       <section className={styles.section}>
-        <h3 className={styles.h2}>검색하신 결과: {keyword} </h3>
+        <h3 className={styles.h3}>검색하신 결과: {keyword} </h3>
         <ul className={styles.keywordList}>
           {searchResult.length > 0 ? (
             searchResult?.map((place) => (

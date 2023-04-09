@@ -1,5 +1,5 @@
 .section {
-  width: 80rem;
+  width: 100%;
   margin: 1rem;
   display: flex;
   flex-direction: column;
@@ -18,8 +18,14 @@
   list-style: none;
 }
 
-.h2 {
+.h3 {
   margin-left: 4rem;
+}
+
+.keywordItemBox {
+  position: relative;
+  width: 290px;
+  height: 285px;
 }
 
 .div {
