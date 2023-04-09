@@ -1,3 +1,4 @@
+import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import styles from "./UserBookmarkItem.module.css";
 
 export interface bookmarkState {
@@ -5,6 +6,8 @@ export interface bookmarkState {
   image: string;
   name: string;
   desc: string;
+  rating: number;
+  isRating: boolean;
 }
 
 const UserBookmarkItem = (prop: bookmarkState) => {
@@ -14,6 +17,11 @@ const UserBookmarkItem = (prop: bookmarkState) => {
       <div>
         <h2>{prop.name}</h2>
         <p>{prop.desc}</p>
+        {prop.isRating === true ? (
+          <p>
+            <FiveStarRating rating={prop.rating.toString()} />
+          </p>
+        ) : null}
       </div>
     </div>
   );

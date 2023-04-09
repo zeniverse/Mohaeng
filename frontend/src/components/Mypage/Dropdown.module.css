@@ -1,5 +1,7 @@
 .menu {
+  width: 200px;
   margin: 10px 0;
+  margin-left: 1rem;
   font-size: medium;
   color: #333;
   border-radius: 12px;
@@ -41,4 +43,14 @@
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
   background-color: var(--color-bg-gray);
+}
+
+.mypage {
+  font-size: 25px;
+  margin-right: 1rem;
+}
+
+.logout {
+  font-size: 25px;
+  margin-right: 1.25rem;
 }

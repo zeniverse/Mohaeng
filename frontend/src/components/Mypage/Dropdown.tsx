@@ -12,7 +12,8 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import useDetectClose from "@/src/hooks/useDetectClose";
-
+import { FaUserCircle } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
 type User = {
   id: number;
   nickName: string;
@@ -43,10 +44,14 @@ export default function Dropdown() {
   return (
     <div className={styles.menu}>
       <li className={styles.toli}>
-        <Link href="/mypage">마이페이지</Link>
+        <Link href="/mypage">
+          <FaUserCircle className={styles.mypage} />
+          마이페이지
+        </Link>
       </li>
       <li className={styles.boli}>
         <p id="login-btn" onClick={handleLogout}>
+          <MdLogout className={styles.logout} />
           로그아웃
         </p>
       </li>

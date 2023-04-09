@@ -145,8 +145,8 @@ function Header({}: Props) {
                 className={styles["kakao-profile-img"]}
                 src={imgUrl}
                 alt="카카오프로필"
-                width={40}
-                height={40}
+                width={45}
+                height={45}
               />
               반가워요, {nickName} 님! {view ? "⌃" : "⌄"}
               {view && <Dropdown />}

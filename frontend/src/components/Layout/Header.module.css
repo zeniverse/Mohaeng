@@ -119,10 +119,10 @@
 }
 
 .dropdownContainer {
-  width: 250px;
+  width: 300px;
   margin-right: 1rem;
   position: absolute;
-  top: 20px;
+  top: 10px;
   right: 0;
   z-index: 1;
   padding: 10px;

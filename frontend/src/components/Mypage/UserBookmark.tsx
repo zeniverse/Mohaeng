@@ -47,6 +47,8 @@ const UserBookmark = () => {
                 name={bookmark.placeName}
                 image={bookmark.imgUrl}
                 desc={bookmark.address}
+                rating={bookmark.rating}
+                isRating={true}
               />
             ))
           : courseBookmark.map((bookmark) => (
@@ -55,6 +57,8 @@ const UserBookmark = () => {
                 name={bookmark.courseTitle}
                 image={bookmark.courseStatus}
                 desc={bookmark.region}
+                rating={0}
+                isRating={false}
               />
             ))}
       </div>

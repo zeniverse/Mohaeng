@@ -14,6 +14,7 @@ import Sidebar from "@/src/components/Mypage/Sidebar";
 import { useRouter } from "next/router";
 import cookie from "react-cookies";
 import withAuth from "../withAuth";
+import MyCourse from "@/src/components/Mypage/MyCourse";
 
 const MyPage: React.FC = () => {
   const currIdx = useSelector((state: RootState) => state.mypage.currIdx);
@@ -35,7 +36,14 @@ const MyPage: React.FC = () => {
       <div className={styles.contentWrapper}>
         <h1 className={styles["Title"]}>{label}</h1>
         <div className={styles.itemWrapper}>
-          {{ 0: <UserInfo />, 1: <UserBookmark />, 4: <UserEdit /> }[currIdx]}
+          {
+            {
+              0: <UserInfo />,
+              1: <UserBookmark />,
+              2: <MyCourse />,
+              4: <UserEdit />,
+            }[currIdx]
+          }
         </div>
       </div>
     </div>
