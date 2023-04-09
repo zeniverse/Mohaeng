@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class MyPageReviewDto {
     private long reviewId;
     private long placeId;
+    private String contendId;
     private String name;
     private String content;
     private String rating;
@@ -30,6 +31,7 @@ public class MyPageReviewDto {
         return new MyPageReviewDto(
                 review.getId(),
                 review.getPlace().getId(),
+                review.getPlace().getContentId(),
                 review.getPlace().getName(),
                 review.getContent(),
                 review.getRating(),
