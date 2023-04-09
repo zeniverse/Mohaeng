@@ -15,7 +15,6 @@ public class FindReviewResponse {
     private Long reviewId;
     private String nickname;
     private String content;
-    private int likeCount;
     private String rating;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -27,7 +26,6 @@ public class FindReviewResponse {
                 review.getId(),
                 review.getMember().getNickName(),
                 review.getContent(),
-                review.getLikeCount(),
                 review.getRating(),
                 review.getCreatedDate(),
                 review.getReviewImageList().stream()

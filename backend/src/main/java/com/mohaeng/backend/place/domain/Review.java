@@ -33,7 +33,6 @@ public class Review extends BaseTimeEntity {
     private String nickname;
     private String title;
     private String content;
-    private int likeCount;
     private String rating;
     private int totalPages;
     private long totalElements;
