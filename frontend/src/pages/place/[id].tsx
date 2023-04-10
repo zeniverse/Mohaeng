@@ -11,7 +11,7 @@ import PlaceBookmark from "@/src/components/Bookmark/PlaceBookmark";
 import PlaceDetailMap from "@/src/components/PlaceDetail/PlaceDetailMap";
 import ReviewList from "@/src/components/Review/ReviewList";
 
-// 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined
+//ToDo: 새로고침 이슈
 
 interface PlaceInfo {
   name: string;

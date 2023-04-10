@@ -18,7 +18,7 @@ interface CourseList {
   courseDays: string;
   likeCount: number;
   thumbnailUrl: string;
-  places: [];
+  places: string;
   isLiked: false;
   isBookmarked: true;
 }
@@ -84,7 +84,7 @@ export default function SearchCourseList(): JSX.Element {
         <ul className={styles.keywordList}>
           {courseList.length > 0 ? (
             <ListContainer>
-              {searchResult?.map((course) => (
+              {courseList?.map((course) => (
                 <CourseItem
                   key={course.courseId}
                   courseId={course.courseId}

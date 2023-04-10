@@ -27,7 +27,7 @@ export default function ReviewList() {
   const { placeId, name, reviewId } = router.query;
 
   const [reviewData, setReviewData] = useState<ReviewData[]>([]);
-  const [selectedValue, setSelectedValue] = useState("default");
+  const [selectedValue, setSelectedValue] = useState("latest");
 
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
@@ -149,9 +149,6 @@ export default function ReviewList() {
               value={selectedValue}
               onChange={handleChangeOption}
             >
-              <option key="default" value="default">
-                정렬 ▼
-              </option>
               <option key="highrating" value="highrating">
                 별점 높은 순
               </option>
