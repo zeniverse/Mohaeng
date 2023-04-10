@@ -20,40 +20,48 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/:path*",
-        destination: "http://localhost:8080/:path*",
+        source: "/login/:path",
+        destination: "http://localhost:8080/login/:path",
       },
       {
-        source: "/api/course/placeSearch",
-        destination: "https://localhost:8080/api/course/placeSearch",
+        source: "/loginInfo/:path",
+        destination: "http://localhost:8080/loginInfo/:path",
       },
       {
-        source: "/api/course",
-        destination: "https://localhost:8080/api/course",
+        source: "/oauth/token/:path",
+        destination: "http://localhost:8080/oauth/token/:path",
       },
       {
-        source: "/api/course/:id",
-        destination: "https://localhost:8080/api/course/:id",
+        source: "/places/:path",
+        destination: "http://localhost:8080/places/:path",
       },
       {
-        source: "/api/place/:slug*",
-        destination: "http://localhost:3000/api/place/:slug*",
+        source: "/api/myPage/course/:path",
+        destination: "http://localhost:8080/api/myPage/course/:path",
+      },
+      {
+        source: "/api/myPage/place/bookMark/:path",
+        destination: "http://localhost:8080/api/myPage/place/bookMark/:path",
+      },
+      {
+        source: "/api/myPage/place/bookMark",
+        destination: "http://localhost:8080/api/myPage/place/bookMark",
+      },
+      {
+        source: "api/place/overview/:id",
+        destination: "http://localhost:8080/api/place/overview/:id",
       },
       {
         source: "/place/overview/:id",
-        destination: "https://localhost:8080/place/overview/:id",
+        destination: "http://localhost:8080/place/overview/:id",
       },
       {
-        source: "/places/:slug*",
-        destination: "http://localhost:8080/places?areaCode=:slug*",
+        source: "/api/place/overview/:path",
+        destination: "http://localhost:8080/api/place/overview/:path",
       },
       {
-        source: "/oauth/token",
-        destination: "https://localhost:8080/oauth/token",
-      },
-      {
-        source: "/loginInfo",
-        destination: "https://localhost:8080/loginInfo",
+        source: "/api/review/:path",
+        destination: "http://localhost:8080/api/review/:path",
       },
     ];
   },

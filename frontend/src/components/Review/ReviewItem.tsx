@@ -54,11 +54,14 @@ export default function ReviewItem({
   const deleteReview = async () => {
     try {
       const accessToken = await cookie.load("accessToken");
-      const response = await axios.delete(`/api/review/detail/${reviewId}`, {
-        headers: {
-          "Access-Token": accessToken,
-        },
-      });
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/review/detail/${reviewId}`,
+        {
+          headers: {
+            "Access-Token": accessToken,
+          },
+        }
+      );
       console.log(response.status);
       console.log(response.data);
       router.push(`/search?keyword=${name}`);
