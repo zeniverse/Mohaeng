@@ -6,11 +6,14 @@ import Image from "next/image";
 import axios from "axios";
 import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
+<<<<<<< HEAD
 import { setReviewForm } from "@/src/store/reducers/reviewFormSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+=======
+>>>>>>> 08b9825498b621465cd87ee636a48a717683d599
 
 export interface formData {
   reviewId: number;
@@ -22,22 +25,16 @@ export interface formData {
   imageUrls: string[];
 }
 
-// 리뷰 아이디 필요, get 데이터 받아오고, put 요청
-// 데이터 받아서 인풋에 다시 넣기
-
 export default function EditReview() {
+<<<<<<< HEAD
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
+=======
+>>>>>>> 08b9825498b621465cd87ee636a48a717683d599
   const router = useRouter();
   const { placeId, reviewId, name } = router.query;
 
-  const [clicked, setClicked] = useState<boolean[]>([
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const [clicked, setClicked] = useState<boolean[]>(Array(5).fill(false));
   const [content, setContent] = useState<string>("");
   const [star, setStar] = useState<number>();
   const [images, setImages] = useState<File[]>([]);
@@ -56,6 +53,11 @@ export default function EditReview() {
   const accessToken = cookie.load("accessToken");
   let rating = clicked.filter(Boolean).length;
 
+  // * 수정 전 별점 보여주기
+  useEffect(() => {
+    setClicked(Array(5).fill(false).fill(true, 0, parseInt(reviewForm.rating)));
+  }, [reviewForm.rating]);
+
   // * 리뷰데이터 받아오기
   useEffect(() => {
     const fetchReviewDetail = async () => {
@@ -66,7 +68,6 @@ export default function EditReview() {
           },
         });
         console.log(res.data.data);
-        const { data } = res.data.data;
         setReviewForm({
           ...res.data.data,
         });
@@ -77,13 +78,7 @@ export default function EditReview() {
     fetchReviewDetail();
   }, [reviewId]);
 
-  // *비동기적으로 받아오는 별점 개수 업데이트 확인
-  useEffect(() => {
-    console.log(rating);
-    setStar(rating);
-  }, [clicked]);
-
-  // *별점 클릭
+  // * 별점 클릭
   const handleStarClick = (index: number): void => {
     let clickStates: boolean[] = [...clicked];
     for (let i = 0; i < 5; i++) {
@@ -92,7 +87,7 @@ export default function EditReview() {
     setClicked(clickStates);
   };
 
-  // * 이미지 미리보기
+  // * 이미지 미리보기(3장 제한)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newImages = [...images];
     const newPreviews = [...previews];
@@ -113,6 +108,7 @@ export default function EditReview() {
     setImages(newImages);
   };
 
+  // * 이미지 미리보기 삭제
   const handleDeletePreview = (index: number) => {
     const newImages = [...images];
     const newPreviews = [...previews];
@@ -122,16 +118,42 @@ export default function EditReview() {
     setPreviews(newPreviews);
   };
 
-  // *리뷰 백엔드로 전송
+  // * 받아온 데이터 이미지 삭제
+  const handleDeleteImage = (index: number) => {
+    const newImageUrls = [...reviewForm.imageUrls];
+    newImageUrls.splice(index, 1);
+    setReviewForm({
+      ...reviewForm,
+      imageUrls: newImageUrls,
+    });
+  };
+
+  // * 리뷰 백엔드로 전송
   const submitReview = async () => {
-    if (star == 0) {
+    if (rating == 0) {
       alert("별점을 입력해주세요");
       return false;
     } else if (content == "") {
-      alert("리뷰 내용을 입력해주세요");
+      alert("리뷰 내용을 수정해주세요");
       return false;
     }
     const formData = new FormData();
+    const getImageBlob = async (url: string): Promise<[Blob, string]> => {
+      const filename = url.substring(url.lastIndexOf("/") + 1);
+      const res = await fetch(url);
+      const blob = await res.blob();
+      return [blob, filename];
+    };
+
+    // * 기존에 업로드한 이미지 파일이 있으면 받아서 다시 폼데이터로
+    if (reviewForm.imageUrls.length > 0) {
+      const imageBlobs = await Promise.all(
+        reviewForm.imageUrls.map((url) => getImageBlob(url))
+      );
+      imageBlobs.forEach(([blob, filename]) => {
+        formData.append("multipartFile", blob, filename);
+      });
+    }
     images.forEach((image) => {
       if (image instanceof File && image.size > 0) {
         formData.append("multipartFile", image);
@@ -142,14 +164,15 @@ export default function EditReview() {
       rating: rating,
       content: content,
     };
+
     formData.append(
       "review",
       new Blob([JSON.stringify(review)], { type: "application/json" })
     );
-    // 리뷰아이디 필요, put
+
     try {
       const response = await axios
-        .put(`/api/review/${placeId}`, formData, {
+        .put(`/api/review/detail/${reviewId}`, formData, {
           headers: {
             "Access-Token": accessToken,
             "Content-Type": "multipart/form-data",
@@ -166,7 +189,7 @@ export default function EditReview() {
     }
   };
 
-  // 뒤로 가기
+  // * 뒤로 가기
   const handleGoBack = () => {
     router.back();
   };
@@ -190,7 +213,7 @@ export default function EditReview() {
               리뷰내용
             </label>
             <textarea
-              defaultValue={"안녕하세요"}
+              defaultValue={reviewForm.content}
               className={styles.formTxtArea}
               name="review"
               id="review"
@@ -215,8 +238,7 @@ export default function EditReview() {
             </span>
 
             <div className={styles.imgContainer}>
-              {/* 스테이트 만들어서 받아온 리뷰데이터로 돌려서 넣으면 가능할까?  */}
-              {previews.map((preview, index) => (
+              {previews?.map((preview, index) => (
                 <div className={styles.imgBox} key={index}>
                   <Image
                     src={preview}
@@ -227,6 +249,20 @@ export default function EditReview() {
                   <IoMdClose
                     className={styles.deleteImg}
                     onClick={() => handleDeletePreview(index)}
+                  />
+                </div>
+              ))}
+              {reviewForm.imageUrls?.map((preview, index) => (
+                <div className={styles.imgBox} key={index}>
+                  <Image
+                    src={preview}
+                    width={200}
+                    height={200}
+                    alt={`${preview}-${index}`}
+                  />
+                  <IoMdClose
+                    className={styles.deleteImg}
+                    onClick={() => handleDeleteImage(index)}
                   />
                 </div>
               ))}

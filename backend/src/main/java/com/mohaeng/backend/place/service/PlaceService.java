@@ -1,12 +1,10 @@
 package com.mohaeng.backend.place.service;
 
-import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
+import com.mohaeng.backend.Image.AmazonS3Service;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
-import com.mohaeng.backend.place.domain.QPlace;
 import com.mohaeng.backend.place.domain.Review;
-import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
 import com.mohaeng.backend.place.dto.PlaceDetailsDto;
 import com.mohaeng.backend.place.dto.PlaceRatingDto;
@@ -14,18 +12,17 @@ import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
 import com.mohaeng.backend.place.exception.PlaceNotFoundException;
 import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
+import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -41,11 +38,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static java.util.Objects.isNull;
 
 @Service
 @Slf4j
@@ -55,21 +51,40 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
     private final PlaceBookmarkRepository placeBookmarkRepository;
     private final MemberRepository memberRepository;
+    private final AmazonS3Service amazonS3Service;
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    //    private static final String API_KEY = "dpTiMvKcFS8NVB1nRTahfmZTMala0uVdt7qu81eNIxznRol2OcYVskpBXHGIfAEIQf1eY2b%2FjMA4uu5ztw8heg%3D%3D";
-//    private static final String API_KEY = "YDqng1hgvEKmXZVWZANhmv%2BKe1qPepQj%2BIxBkqBQTUyLG3XCiAXQtMzCMbNppL8OnNL8sPqvbxybFGIxrRpPnA%3D%3D"; // 승구님 키
-    private static final String API_KEY = "LEZGPi1UafewX40Vl5Yx8J4xwPliJNjaGSVMR8tOLVC7BTWBJMiQLb2gl12QNctUovP3VVtG6qPnrWteZGePOQ%3D%3D"; // 지혜님 키
-//    private static final String API_KEY = "DZSCfwbqP6kQHPDOAlDjWAhu63OBBX4BjGKHVNB2ocF6YW6Xpd6Do1IhFCg%2B1TfYiqZFngr57pUk3Tvs%2FYUukw%3D%3D"; // 지혜님 키
+    @Value("${API_KEY}")
+    private String API_KEY;
+    private String fileUrl;
 
-    private static final String BASE_URL = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=" + API_KEY + "&pageNo=1&numOfRows=12100&MobileApp=AppTest&_type=xml&MobileOS=ETC&arrange=A&contentTypeId=12";
-    private static final String BASE_URL2 = "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=" + API_KEY + "&MobileOS=ETC&MobileApp=AppTest&_type=xml&contentId=&contentTypeId=12&&overviewYN=Y";
+    private String getBaseUrl() {
+        return "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=" + API_KEY + "&pageNo=1&numOfRows=12100&MobileApp=AppTest&_type=xml&MobileOS=ETC&arrange=A&contentTypeId=12";
+    }
+
+    private String getBaseUrl2() {
+        return "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=" + API_KEY + "&MobileOS=ETC&MobileApp=AppTest&_type=xml&contentId=&contentTypeId=12&&overviewYN=Y";
+    }
+
+    public void savePlace() throws IOException {
+        // 1. 리소스 폴더에 있는 파일을 읽어들인다
+        Resource resource = new ClassPathResource("initImage/everytrip.png");
+        InputStream inputStream = resource.getInputStream();
+        MultipartFile file = new MockMultipartFile("everytrip.png", "everytrip.png", "image/png", inputStream);
+
+        // 2. 파일을 S3에 저장한다
+        List<String> fileUrls = amazonS3Service.uploadFile(Collections.singletonList(file));
+
+        // 3. 저장 후 url을 리턴받는다
+        fileUrl = fileUrls.get(0);
+    }
+
 
     //    @Scheduled(cron = "0 0 5 * * ?") #TODO
     public List<Place> getPlaces() throws IOException, ParserConfigurationException, SAXException {
-        Document doc = getXmlDocument(BASE_URL);
+        Document doc = getXmlDocument(getBaseUrl());
         List<Place> places = new ArrayList<>();
         NodeList nodeList = doc.getElementsByTagName("item");
         for (int i = 0; i < nodeList.getLength(); i++) {
@@ -88,9 +103,9 @@ public class PlaceService {
                 String contentId = element.getElementsByTagName("contentid").item(0).getTextContent();
 //                String overview = "";
 //                String overview = getOverview(contentid);
-//                if (firstImage == null || firstImage.isEmpty()) {
-//                    firstImage = "http://drive.google.com/uc?export=view&id=1ic2_89fYMLjZMCN0BoEirSEai_FarJvP";
-//                }
+                if (firstImage == null || firstImage.isEmpty()) {
+                    firstImage = fileUrl;
+                }
 
                 if (address == null || address.isEmpty()) {
                     address = addr2;
@@ -106,7 +121,7 @@ public class PlaceService {
     }
 
     private String getOverview(String contentId) {
-        String urlStr = BASE_URL2.replace("contentId=", "contentId=" + contentId);
+        String urlStr = getBaseUrl2().replace("contentId=", "contentId=" + contentId);
         Document doc;
         NodeList nodeList;
         String overviewText = "";
@@ -253,5 +268,9 @@ public class PlaceService {
                 .orElse(0);
         long reviewTotalElements = reviews.size();
         return new PlaceRatingDto(averageRating, reviewTotalElements);
+    }
+
+    public String getFirstImage() {
+        return fileUrl;
     }
 }

@@ -65,6 +65,10 @@ public class ReviewService {
         return reviews;
     }
 
+    public List<Review> getAllReviews(Long id) {
+        return reviewRepository.findAllByPlaceId(id);
+    }
+
 
     @Transactional
     public void createReview(String email, Long placeId, CreateReviewRequest createReviewRequest, List<String> fileNameList) {

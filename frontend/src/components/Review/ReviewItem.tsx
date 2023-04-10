@@ -39,7 +39,6 @@ export default function ReviewItem({
   );
   const dispatch = useDispatch();
   // setUser(currentUser);
-  console.log(reviewId);
   const isUser = nickname === currentUser;
 
   const handleOpenDeleteModal = () => {

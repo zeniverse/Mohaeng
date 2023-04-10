@@ -3,13 +3,15 @@ package com.mohaeng.backend.course.controller;
 import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.course.dto.CourseSearchDto;
 import com.mohaeng.backend.course.dto.MainCourseListDto;
-import com.mohaeng.backend.course.dto.request.*;
-import com.mohaeng.backend.course.dto.response.*;
-import com.mohaeng.backend.course.dto.CourseListDto;
+import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
+import com.mohaeng.backend.course.dto.request.CourseReq;
+import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
+import com.mohaeng.backend.course.dto.response.CourseIdRes;
+import com.mohaeng.backend.course.dto.response.CourseListRes;
+import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
+import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.service.CourseService;
-import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
-import com.mohaeng.backend.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +20,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin(origins = "", allowedHeaders = "")
 @RestController
