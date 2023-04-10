@@ -89,7 +89,7 @@ export default function KakaoMap({ mapData }: PositionsProps) {
 
   return (
     <>
-      <div id="map" style={{ aspectRatio: 15 / 9 }} />
+      <div id="map" style={{ flexBasis: "62%" }} />
       <p id="result" />
     </>
   );

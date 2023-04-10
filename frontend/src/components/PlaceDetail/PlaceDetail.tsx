@@ -47,25 +47,13 @@ const PlaceDetail = () => {
 
   const [bookMarked, setBookMarked] = useState(false);
 
-  // useEffect(() => {
-  //   localStorage.setItem("id", id);
-  //   const id = localStorage.getItem("id");
-  //   if (id) {
-  //     setCurrentId(id);
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, []);
-
   // * 북마크
   const handleBookmarkClick = async () => {
     try {
       if (bookMarked === false) {
         const res = await axios
           .post(
-            `/api/place/bookmark/${placeId}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
             {},
             {
               headers: {
@@ -79,12 +67,15 @@ const PlaceDetail = () => {
           });
       } else {
         const res = await axios
-          .delete(`/api/place/bookmark/${placeId}`, {
-            headers: {
-              "Access-Token": `${accessToken}`,
-              withCredentials: true,
-            },
-          })
+          .delete(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
+            {
+              headers: {
+                "Access-Token": `${accessToken}`,
+                withCredentials: true,
+              },
+            }
+          )
           .then(() => {
             appDispatch(getPlaceBookmark(accessToken));
           });
@@ -99,12 +90,15 @@ const PlaceDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/place/overview/${contentId}`, {
-          headers: {
-            "Access-Token": `${accessToken}`,
-            withCredentials: true,
-          },
-        });
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/place/overview/${contentId}`,
+          {
+            headers: {
+              "Access-Token": `${accessToken}`,
+              withCredentials: true,
+            },
+          }
+        );
         if (res.data.data.content[0] !== {}) {
           const { content } = res.data.data;
           setPlaceInfo({ ...placeInfo, ...content[0] });

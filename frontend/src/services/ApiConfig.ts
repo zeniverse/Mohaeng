@@ -1,8 +1,9 @@
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-const ApiConfig = {
+const CourseApiConfig = {
   course: `${baseUrl}/api/course`,
-  Cbookmark: `${baseUrl}/api/course/bookmark`,
+  bookmark: `${baseUrl}/api/course/bookmark`,
+  like: `${baseUrl}/api/course/likes`,
 };
 
-export default ApiConfig;
+export default CourseApiConfig;

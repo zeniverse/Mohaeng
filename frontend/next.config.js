@@ -23,38 +23,29 @@ const nextConfig = {
         source: "/:path*",
         destination: "http://localhost:8080/:path*",
       },
+
+      // 코스 상세를 보려면 위 코드는 주석 처리하고 아래 코드는 주석을 풀어주세요.
+      /** 
       {
-        source: "/api/course/placeSearch",
-        destination: "https://localhost:8080/api/course/placeSearch",
+        source: "/login/:path*",
+        destination: "http://localhost:8080/login/:path*",
       },
       {
-        source: "/api/course",
-        destination: "https://localhost:8080/api/course",
-      },
-      {
-        source: "/api/course/:id",
-        destination: "https://localhost:8080/api/course/:id",
-      },
-      {
-        source: "/api/place/:slug*",
-        destination: "http://localhost:3000/api/place/:slug*",
-      },
-      {
-        source: "/place/overview/:id",
-        destination: "https://localhost:8080/place/overview/:id",
-      },
-      {
-        source: "/places/:slug*",
-        destination: "http://localhost:8080/places?areaCode=:slug*",
-      },
-      {
-        source: "/oauth/token",
-        destination: "https://localhost:8080/oauth/token",
+        source: "/loginInfo/:path*",
+        destination: "http://localhost:8080/loginInfo/:path*",
       },
       {
         source: "/loginInfo",
-        destination: "https://localhost:8080/loginInfo",
+        destination: "http://localhost:8080/loginInfo",
       },
+      {
+        source: "/oauth/token/:path*",
+        destination: "http://localhost:8080/oauth/token/:path*",
+      },
+      {
+        source: "/api/course/:id",
+        destination: "http://localhost:8080/api/course/:id",
+      },*/
     ];
   },
 };
