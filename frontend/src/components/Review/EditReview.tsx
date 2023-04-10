@@ -6,14 +6,6 @@ import Image from "next/image";
 import axios from "axios";
 import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
-<<<<<<< HEAD
-import { setReviewForm } from "@/src/store/reducers/reviewFormSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/src/store/store";
-import { getMyReview } from "@/src/store/reducers/myReviewSlice";
-import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-=======
->>>>>>> 08b9825498b621465cd87ee636a48a717683d599
 
 export interface formData {
   reviewId: number;
@@ -26,11 +18,6 @@ export interface formData {
 }
 
 export default function EditReview() {
-<<<<<<< HEAD
-  const dispatch = useDispatch();
-  const appDispatch = useAppDispatch();
-=======
->>>>>>> 08b9825498b621465cd87ee636a48a717683d599
   const router = useRouter();
   const { placeId, reviewId, name } = router.query;
 
