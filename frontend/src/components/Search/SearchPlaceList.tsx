@@ -29,6 +29,12 @@ export default function SearchPlaceList(): JSX.Element {
   useEffect(() => {
     const fetchKeyword = async () => {
       try {
+        const headers: { [key: string]: string } = {};
+        if (accessToken) {
+          headers["Access-Token"] = accessToken;
+          headers.withCredentials = "true";
+        }
+
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/place`,
           {
@@ -36,10 +42,7 @@ export default function SearchPlaceList(): JSX.Element {
               keyword: keyword,
               page: page,
             },
-            headers: {
-              "Access-Token": `${accessToken}`,
-              withCredentials: true,
-            },
+            headers: headers,
           }
         );
         if (res.data.data.content !== []) {
@@ -58,7 +61,7 @@ export default function SearchPlaceList(): JSX.Element {
     if (keyword) {
       fetchKeyword();
     }
-  }, [keyword, page]);
+  }, [keyword, page, accessToken]);
 
   return (
     <>

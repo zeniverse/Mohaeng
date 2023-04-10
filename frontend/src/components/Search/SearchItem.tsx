@@ -113,12 +113,14 @@ export default function SearchItem({
           ) : (
             <BsBookmark onClick={addBookmark} className={styles.unbookmark} />
           )}
-          {/* <PlaceBookmark
-            bookMarked={bookMarked}
-            onToggle={handleBookmarkClick}
-          /> */}
         </div>
       </div>
     </li>
   );
+}
+{
+  /* <PlaceBookmark
+  bookMarked={bookMarked}
+  onToggle={handleBookmarkClick}
+/> */
 }

@@ -1,7 +1,5 @@
 import styles from "./PlaceDetail.module.css";
-
 import Image from "next/image";
-
 import axios from "axios";
 import cookie from "react-cookies";
 import { useEffect, useState } from "react";
@@ -12,8 +10,6 @@ import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import PlaceBookmark from "@/src/components/Bookmark/PlaceBookmark";
 import PlaceDetailMap from "@/src/components/PlaceDetail/PlaceDetailMap";
 import ReviewList from "@/src/components/Review/ReviewList";
-import { useRouterQuery } from "@/src/hooks/useRouterQuery";
-import { CANCELLED } from "dns";
 
 // 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined
 
@@ -92,14 +88,14 @@ export default function PlaceId() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const headers: { [key: string]: string } = {};
+        if (accessToken) {
+          headers["Access-Token"] = accessToken;
+          headers.withCredentials = "true";
+        }
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/place/overview/${contentId}`,
-          {
-            headers: {
-              "Access-Token": `${accessToken}`,
-              withCredentials: true,
-            },
-          }
+          { headers }
         );
         if (res.data.data.content[0] !== {}) {
           const { content } = res.data.data;
@@ -115,7 +111,7 @@ export default function PlaceId() {
       }
     };
     fetchData();
-  }, [placeId]);
+  }, [accessToken, contentId]);
 
   return (
     <>
@@ -125,11 +121,17 @@ export default function PlaceId() {
             <h2 className={styles.h2}>{placeInfo.name}</h2>
           </div>
           <div className={styles.bookMarkBox}>
-            <p className={styles.bookMarkText}>북마크에 추가</p>
-            <PlaceBookmark
-              bookMarked={bookMarked}
-              onToggle={handleBookmarkClick}
-            />
+            {accessToken ? (
+              <>
+                <p className={styles.bookMarkText}>북마크에 추가</p>
+                <PlaceBookmark
+                  bookMarked={bookMarked}
+                  onToggle={handleBookmarkClick}
+                />
+              </>
+            ) : (
+              ""
+            )}
           </div>
         </div>
         <div className={styles.detailContent}>
