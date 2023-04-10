@@ -63,6 +63,10 @@ const nextConfig = {
         source: "/api/review/:path",
         destination: "http://localhost:8080/api/review/:path",
       },
+      {
+        source: "/api/review/detail/:path",
+        destination: "http://localhost:8080/api/review/datail/:path",
+      },
     ];
   },
 };

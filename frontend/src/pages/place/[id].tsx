@@ -92,7 +92,7 @@ export default function PlaceId() {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/place/overview/${placeId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/place/overview/${contentId}`,
           {
             headers: {
               "Access-Token": `${accessToken}`,
