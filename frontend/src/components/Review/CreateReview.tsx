@@ -41,7 +41,7 @@ export default function CreateReview() {
     setClicked(clickStates);
   };
 
-  // * 이미지 미리보기
+  // * 이미지 미리보기 (3장 제한)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newImages = [...images];
     const newPreviews = [...previews];
@@ -119,8 +119,7 @@ export default function CreateReview() {
         });
     } catch (error) {
       router.push(`/search?keyword=${name}`);
-      console.error(error);
-      console.log("리뷰 작성 실패ㅠ");
+      console.log(error, "리뷰 작성 실패ㅠ");
     }
   };
 

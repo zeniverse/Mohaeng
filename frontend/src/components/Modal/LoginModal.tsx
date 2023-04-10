@@ -48,21 +48,6 @@ const KakaoBtn = styled.button`
   cursor: pointer;
 `;
 
-// const GoogleBtn = styled.button`
-//   width: 352px;
-//   color: white;
-//   display: flex;
-//   align-items: center;
-//   border: 0;
-//   border-radius: 6px;
-//   background-color: #4285f4;
-//   border: none;
-//   font-weight: 500;
-//   font-size: 16px;
-//   padding: 1px;
-//   cursor: pointer;
-// `;
-
 const CloseBtn = styled.button`
   position: absolute;
   top: 18px;
