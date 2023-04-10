@@ -87,15 +87,14 @@ public class PlaceController {
 
     @GetMapping("/api/place")
     public ResponseEntity<BaseResponse<FindSearchPlacesResponse>> search(
-            @RequestParam String keyword, @RequestParam(required = false) String address,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "12") int size,
-            HttpServletRequest request) {
+        @RequestParam String keyword, @RequestParam(required = false) String address,
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "12") int size,
+        HttpServletRequest request) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
-
         Member member = isAccessMember(request);
-        Page<Place> places = null;
+        Page<Place> places;
         if (address == null || address.isEmpty()) {
             places = placeRepository.findByNameContaining(keyword, pageable);
         } else {
@@ -122,9 +121,10 @@ public class PlaceController {
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "12") int size,
         HttpServletRequest request) {
+
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Place> places = null;
         Member member = isAccessMember(request);
+        Page<Place> places;
 
         if ("all".equals(areaCode)) {
             places = placeRepository.findAll(pageable);
@@ -138,7 +138,8 @@ public class PlaceController {
             if(member != null){
                 isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, place);
             }
-            FindAllPlacesDto dto = FindAllPlacesDto.from(place, isBookmark);
+            PlaceRatingDto rating = placeService.getPlaceRating(place.getId());
+            FindAllPlacesDto dto = FindAllPlacesDto.from(place, isBookmark, rating.getAverageRating(), rating.getReviewTotalElements());
             result.add(dto);
         }
 
