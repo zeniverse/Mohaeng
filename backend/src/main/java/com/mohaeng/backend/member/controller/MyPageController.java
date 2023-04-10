@@ -1,6 +1,7 @@
 package com.mohaeng.backend.member.controller;
 
 import com.mohaeng.backend.common.BaseResponse;
+import com.mohaeng.backend.course.service.CourseService;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.dto.request.UserInfoChangeRequest;
 import com.mohaeng.backend.member.dto.request.VisibilityRequest;
@@ -33,6 +34,7 @@ public class MyPageController {
     private final MyPageService myPageService;
     private final MyPageCourseService myPageCourseService;
     private final TokenGenerator tokenGenerator;
+    private final CourseService courseService;
 
     @GetMapping("/myPage/course/bookMark")
     public ResponseEntity getAllBookMarkedCourse(HttpServletRequest request) {
@@ -93,7 +95,7 @@ public class MyPageController {
         return ResponseEntity.ok().body(BaseResponse.success("ok", data));
     }
 
-    @PutMapping("/myPage/course/{courseId}")
+    @PutMapping("/myPage/course/visibility/{courseId}")
     public ResponseEntity changeCourseVisibility(@PathVariable long courseId, @RequestBody VisibilityRequest visibilityRequest, HttpServletRequest request) {
         String email = findEmailFromHeader(request);
         myPageCourseService.changeVisibility(email, courseId, visibilityRequest);

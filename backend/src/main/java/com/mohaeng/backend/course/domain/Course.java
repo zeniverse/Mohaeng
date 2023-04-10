@@ -125,4 +125,7 @@ public class Course extends BaseTimeEntity {
         return status ? CourseStatus.PUBLIC : CourseStatus.PRIVATE;
     }
 
+    public void changeCourseStatus(CourseStatus courseStatus) {
+        this.courseStatus = courseStatus;
+    }
 }

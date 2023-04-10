@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import { useClickOutside } from "@/src/hooks/useClickOutSide";
 
 const RoughMap = ({ RoughMapData, onClose }: RoughMapTitle) => {
+  const placesArray = RoughMapData.split(",");
   const boxRef = useRef<HTMLOListElement>(null);
   useClickOutside(boxRef, onClose);
   const handleClick = (e: React.MouseEvent<HTMLOListElement>): void => {
@@ -15,10 +16,10 @@ const RoughMap = ({ RoughMapData, onClose }: RoughMapTitle) => {
       ref={boxRef}
       className={styles["roughmap-container"]}
     >
-      {RoughMapData.map((data, idx) => (
+      {placesArray.map((data, idx) => (
         <li className={styles.listitem} key={idx}>
           <div className={styles.circle}></div>
-          <span className={styles.title}>{data.name}</span>
+          <span className={styles.title}>{data}</span>
         </li>
       ))}
     </ol>
