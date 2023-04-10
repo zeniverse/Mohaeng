@@ -23,6 +23,8 @@ const PlaceList = () => {
           isBookmarked={place.isBookmarked}
           placeId={place.placeId}
           areaCode={areaCode}
+          rating={place.rating}
+          review={place.review}
         />
       ))}
     </ListContainer>

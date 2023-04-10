@@ -26,3 +26,31 @@
 .bookmark-item p {
   margin: 0;
 }
+
+.keywordBookmark {
+  width: 30px;
+  margin-top: 10px;
+  margin-left: 500px;
+}
+
+.bookmark,
+.unbookmark {
+  background-color: transparent;
+  border: none;
+}
+
+.unbookmark {
+  color: var(--color-primary);
+  font-size: 30px;
+}
+
+.unbookmark:hover {
+  color: var(--color-primary);
+  scale: 105%;
+  transition: 200ms;
+}
+
+.bookmark {
+  color: var(--color-primary);
+  font-size: 30px;
+}

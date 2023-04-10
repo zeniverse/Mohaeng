@@ -9,6 +9,8 @@ import ReviewRating from "./ReviewRating";
 import { setReviewForm } from "@/src/store/reducers/reviewFormSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
+import { getMyReview } from "@/src/store/reducers/myReviewSlice";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 
 export interface formData {
   reviewId: number;
@@ -25,6 +27,7 @@ export interface formData {
 
 export default function EditReview() {
   const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
   const router = useRouter();
   const { placeId, reviewId, name } = router.query;
 
@@ -154,6 +157,7 @@ export default function EditReview() {
         })
         .then((response) => {
           console.log(response.data, "리뷰 수정 성공!");
+          appDispatch(getMyReview(accessToken));
           router.push(`/search?keyword=${name}`);
         });
     } catch (error) {

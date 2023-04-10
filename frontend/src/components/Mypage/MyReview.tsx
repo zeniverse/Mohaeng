@@ -5,21 +5,22 @@ import { RootState } from "@/src/store/store";
 import MyReviewItem from "./MyReviewItem";
 
 const MyReview = () => {
-  const myCourse = useSelector((state: RootState) => state.myCourse.data);
+  const myReview = useSelector((state: RootState) => state.myReview.data);
 
   return (
     <>
       <div className={styles.tabContainer}></div>
-      <div className={styles["bookmark-container"]}>
-        {myCourse.map((course) => (
-          <MyCourseItem
-            courseId={course.courseId}
-            imgUrl={course.imgUrl}
-            title={course.title}
-            likeCount={course.likeCount}
-            createdDate={course.createdDate}
-            content={course.content}
-            courseDays={course.courseDays}
+      <div className={styles["review-container"]}>
+        {myReview.map((review) => (
+          <MyReviewItem
+            reviewId={review.reviewId}
+            placeId={review.placeId}
+            imgUrl={review.imgUrl}
+            title={review.title}
+            likeCount={review.likeCount}
+            createdDate={review.createdDate}
+            content={review.content}
+            rating={review.rating}
           />
         ))}
       </div>
