@@ -81,6 +81,7 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
               checked={isPublished}
               onChange={onChange}
               className={styles.input}
+              required
             />
           </div>
         </label>
@@ -93,6 +94,7 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
               value={title}
               onChange={onChange}
               placeholder={"제목을 작성해주세요"}
+              required
             />
           </label>
         </div>
@@ -106,6 +108,7 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
               name="startDate"
               value={startDate}
               onChange={onChange}
+              required
             />
           </label>
         </div>
@@ -117,6 +120,7 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
               name="endDate"
               value={endDate}
               onChange={onChange}
+              required
             />
           </label>
         </div>

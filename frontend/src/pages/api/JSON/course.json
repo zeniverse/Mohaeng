@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "courseId": 1,
     "title": "부산 바다 여행 코스",
     "likeCount": 152,
     "nickname": "user nickname1",
@@ -37,7 +37,7 @@
     ]
   },
   {
-    "id": 2,
+    "courseId": 2,
     "title": "거제와 통영의 절경 속으로",
     "likeCount": 110,
     "nickname": "user nickname1",
@@ -68,7 +68,7 @@
     ]
   },
   {
-    "id": 3,
+    "courseId": 3,
     "title": "바람따라 길따라",
     "likeCount": 29,
     "nickname": "user nickname1",
@@ -105,7 +105,7 @@
     ]
   },
   {
-    "id": 4,
+    "courseId": 4,
     "title": "하동 쌍계사 하동십리 벚꽃길",
     "likeCount": 15,
     "nickname": "user nickname1",
@@ -143,7 +143,7 @@
     ]
   },
   {
-    "id": 5,
+    "courseId": 5,
     "title": "경남 사천여행, 남쪽 바다를 즐기는 겨울여행 코스",
     "likeCount": 58,
     "nickname": "user nickname1",
@@ -181,7 +181,7 @@
     ]
   },
   {
-    "id": 6,
+    "courseId": 6,
     "title": "제주 사계해안도로, 바다와 산의 하모니에 홀릭하다!",
     "likeCount": 250,
     "nickname": "user nickname1",
