@@ -5,14 +5,14 @@ import Image from "next/image";
 import cookie from "react-cookies";
 import { useRouter } from "next/router";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
-import { content, setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
+import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
-import PlaceBookmark from "../Bookmark/PlaceBookmark";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
+import { KeywordProps } from "@/src/interfaces/Keyword";
 
 export default function SearchItem({
   name,
@@ -22,7 +22,8 @@ export default function SearchItem({
   contentId,
   averageRating,
   reviewTotalElements,
-}: content) {
+  onBookmarkUpdate,
+}: KeywordProps) {
   const router = useRouter();
   const { keyword } = router.query;
   const dispatch = useDispatch();
@@ -31,45 +32,72 @@ export default function SearchItem({
   const page = useSelector((state: RootState) => state.page.page);
   const [bookmarked, setBookmarked] = useState(isBookmarked);
 
-  const addBookmark = async () => {
-    try {
-      const res = await axios.post(
-        `/api/place/bookmark/${placeId}`,
+  const addBookmark = () => {
+    const response = async () => {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
         {},
         {
           headers: {
-            "Access-Token": `${accessToken}`,
-            withCredentials: true,
+            "Access-Token": accessToken,
           },
+          withCredentials: true,
         }
       );
-      dispatch(setSearchPlace(res.data.data));
-      appDispatch(getPlaceBookmark(accessToken));
-      setBookmarked(true);
-    } catch (error) {
-      console.error(error);
-    }
+    };
+    response().then(async () => {
+      await axios
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/api/place`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          params: {
+            keyword: keyword,
+            page: page,
+          },
+          withCredentials: true,
+        })
+        .then((res) => dispatch(setSearchPlace(res.data.data)))
+        .then(() => {
+          appDispatch(getPlaceBookmark(accessToken));
+          setBookmarked(!isBookmarked);
+          onBookmarkUpdate(placeId, true);
+        });
+    });
   };
 
   const delBookmark = async () => {
-    try {
-      const res = await axios.delete(`/api/place/bookmark/${placeId}`, {
-        headers: {
-          "Access-Token": `${accessToken}`,
+    const response = async () => {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
+        {
+          headers: {
+            "Access-Token": accessToken,
+          },
           withCredentials: true,
-        },
-      });
-      dispatch(setSearchPlace(res.data.data));
-      appDispatch(getPlaceBookmark(accessToken));
-      setBookmarked(false);
-    } catch (error) {
-      console.error(error);
-    }
+        }
+      );
+    };
+    response().then(async () => {
+      await axios
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/api/place`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          params: {
+            keyword: keyword,
+            page: page,
+          },
+          withCredentials: true,
+        })
+        .then((res) => dispatch(setSearchPlace(res.data.data)))
+        .then(() => {
+          appDispatch(getPlaceBookmark(accessToken));
+          setBookmarked(!isBookmarked);
+          onBookmarkUpdate(placeId, false);
+        });
+    });
   };
-
-  useEffect(() => {
-    setBookmarked(isBookmarked);
-  }, [isBookmarked]);
 
   return (
     <li className={styles.keywordItemContainer} key={contentId}>
@@ -114,10 +142,4 @@ export default function SearchItem({
       </div>
     </li>
   );
-}
-{
-  /* <PlaceBookmark
-  bookMarked={bookMarked}
-  onToggle={handleBookmarkClick}
-/> */
 }

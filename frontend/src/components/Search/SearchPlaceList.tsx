@@ -10,36 +10,71 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import SearchItem from "./SearchItem";
 import Pagebar from "../Pagenation/Pagebar";
-import {
-  getPlaceListAction,
-  setSearchPlace,
-} from "@/src/store/reducers/searchPlaceSlice";
+import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
 import { setPage } from "@/src/store/reducers/pageSlice";
 import ListContainer from "../UI/ListContainer";
-import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-// import PlaceItem from "../Place/PlaceItem";
 
 export default function SearchPlaceList(): JSX.Element {
-  const { content, totalElements, totalPages } = useAppSelector(
-    (state) => state.searchPlace
-  );
-  const { keyword } = useAppSelector((state) => state.filter);
   const [searchResult, setSearchResult] = useState<Keyword[]>([]);
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const page = useAppSelector((state) => state.page.page);
-
+  const { keyword } = router.query;
+  const dispatch = useDispatch();
+  const page = useSelector((state: RootState) => state.page.page);
+  const totalPages: number = useSelector(
+    (state: RootState) => state.searchPlace.totalPages
+  );
   const accessToken = cookie.load("accessToken");
 
+  const handleBookmarkUpdate = (placeId: number, isBookmarked: boolean) => {
+    setSearchResult((prevResult) => {
+      return prevResult.map((place) => {
+        if (place.placeId === placeId) {
+          return {
+            ...place,
+            isBookmarked,
+          };
+        } else {
+          return place;
+        }
+      });
+    });
+  };
+
   useEffect(() => {
-    dispatch(setPage(page));
-    dispatch(
-      getPlaceListAction({
-        ...(keyword ? { keyword } : {}),
-        page,
-      })
-    );
-  }, [dispatch, keyword, page]);
+    const fetchKeyword = async () => {
+      try {
+        const headers: { [key: string]: string } = {};
+        if (accessToken) {
+          headers["Access-Token"] = accessToken;
+          headers.withCredentials = "true";
+        }
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/place`,
+          {
+            params: {
+              keyword: keyword,
+              page: page,
+            },
+            headers: headers,
+          }
+        );
+        if (res.data.data.content !== []) {
+          dispatch(setSearchPlace(res.data.data));
+          setPage(totalPages);
+          const { content } = res.data.data;
+          setSearchResult(content);
+          console.log(content);
+        } else {
+          console.log(res.data);
+        }
+      } catch (error) {
+        console.log("Error", error);
+      }
+    };
+    if (keyword) {
+      fetchKeyword();
+    }
+  }, [keyword, page, accessToken]);
 
   return (
     <>
@@ -58,6 +93,7 @@ export default function SearchPlaceList(): JSX.Element {
                   isBookmarked={place.isBookmarked}
                   averageRating={place.averageRating}
                   reviewTotalElements={place.reviewTotalElements}
+                  onBookmarkUpdate={handleBookmarkUpdate}
                 />
               ))}
             </ListContainer>

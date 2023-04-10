@@ -51,7 +51,7 @@ export default function PlaceId() {
       if (bookMarked === false) {
         const res = await axios
           .post(
-            `/api/place/bookmark/${placeId}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
             {},
             {
               headers: {
