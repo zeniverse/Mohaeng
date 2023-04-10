@@ -26,7 +26,7 @@ public class Course extends BaseTimeEntity {
     @Column(name = "course_id")
     private Long id;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "course")
     @ToString.Exclude
     private List<CoursePlace> coursePlaces = new ArrayList<>();
 

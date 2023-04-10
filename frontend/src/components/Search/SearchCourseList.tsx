@@ -9,15 +9,15 @@ import Pagebar from "../Pagenation/Pagebar";
 import ListContainer from "../UI/ListContainer";
 
 interface CourseList {
-  id: number;
+  courseId: number;
   title: string;
   content: string;
   courseDays: string;
   likeCount: number;
   thumbnailUrl: string;
   places: [];
-  like: false;
-  bookMark: true;
+  isLiked: false;
+  isBookmarked: true;
 }
 
 export default function SearchCourseList(): JSX.Element {
@@ -32,16 +32,13 @@ export default function SearchCourseList(): JSX.Element {
   useEffect(() => {
     const fetchKeyword = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/course`,
-          {
-            params: {
-              page: page,
-              keyword: keyword,
-            },
-            withCredentials: true,
-          }
-        );
+        const res = await axios.get(`/api/course`, {
+          params: {
+            page: page,
+            keyword: keyword,
+          },
+          withCredentials: true,
+        });
         if (res.data.data.content !== []) {
           console.log(res.data.data);
           const { courseList } = res.data.data;
@@ -67,14 +64,14 @@ export default function SearchCourseList(): JSX.Element {
             <ListContainer>
               {searchResult?.map((course) => (
                 <CourseItem
-                  key={course.id}
-                  id={course.id}
+                  key={course.courseId}
+                  courseId={course.courseId}
                   title={course.title}
                   content={course.content}
                   likeCount={course.likeCount}
                   thumbnailUrl={course.thumbnailUrl}
                   courseDays={course.courseDays}
-                  isBookMarked={course.isBookMarked}
+                  isBookmarked={course.isBookmarked}
                   isLiked={course.isLiked}
                   places={course.places}
                 />

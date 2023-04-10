@@ -1,17 +1,16 @@
-import { CourseProps } from "@/src/interfaces/Course";
 import Image from "next/image";
 import IsLikeState from "../UI/IsLikeState";
 import styles from "./CourseCard.module.css";
 
 const CourseCard = ({
-  id,
+  courseId,
   courseTitle,
   courseDesc,
   courseLike,
   courseList,
   courseDays,
   thumbnailUrl,
-}: CourseProps) => {
+}: any) => {
   return (
     <div className={styles["course-card-container"]}>
       <div className={styles["course-image-container"]}>

@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,8 @@ import java.util.Date;
 
 @Service
 public class TokenGenerator {
-    private String secretKey = "SECRETKEYFORMOHAENGPROJECTWECANDOSECRETKEYTHISISKEY";
+    @Value("${jwt.token.key}")
+    private String secretKey;
     private Key key;
     // 임시값
     private final long ACCESS_PERIOD = 100000000L;

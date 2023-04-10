@@ -42,19 +42,12 @@ export default function index() {
 
   const handleCourseSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const { places, ...rest } = course; // places 프로퍼티 분리
-    const extractedPlaceIds = places.map((place) => place.placeId);
-    const submitData = {
-      ...rest,
-      thumbnailUrl: places[0].imgUrl,
-      placeIds: extractedPlaceIds,
-    };
-    dispatch(createCourseAction(submitData)).then(() => {
+    dispatch(createCourseAction(course)).then(() => {
       dispatch(getMyCourse(accessToken));
       dispatch(resetFormValue());
       dispatch(resetFilter());
       // as를 전달하여 페이지가 새로 고쳐지고 데이터가 업데이트 됨.
-      router.push("/course", "/course");
+      router.push("/course");
     });
   };
 
@@ -73,9 +66,7 @@ export default function index() {
       {course?.places?.length > 0 && (
         <div className={styles.info}>
           <KakaoMap mapData={course.places} />
-          <div className={styles.list}>
-            <CourseOrderList places={course?.places} mode={"write"} />
-          </div>
+          <CourseOrderList places={course?.places} mode={"write"} />
         </div>
       )}
       <div className={styles["button-wrapper"]}>
