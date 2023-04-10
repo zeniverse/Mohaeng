@@ -115,8 +115,7 @@ export default function CreateReview() {
         });
     } catch (error) {
       router.push(`/search?keyword=${name}`);
-      console.error(error);
-      console.log("리뷰 작성 실패ㅠ");
+      console.log(error, "리뷰 작성 실패ㅠ");
     }
   };
 

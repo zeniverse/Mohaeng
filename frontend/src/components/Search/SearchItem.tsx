@@ -36,7 +36,7 @@ export default function SearchItem({
       if (bookMarked === false) {
         const res = await axios
           .post(
-            `/api/place/bookmark/${placeId}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
             {},
             {
               headers: {
@@ -50,12 +50,15 @@ export default function SearchItem({
           });
       } else {
         const res = await axios
-          .delete(`/api/place/bookmark/${placeId}`, {
-            headers: {
-              "Access-Token": `${accessToken}`,
-              withCredentials: true,
-            },
-          })
+          .delete(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
+            {
+              headers: {
+                "Access-Token": `${accessToken}`,
+                withCredentials: true,
+              },
+            }
+          )
           .then(() => {
             appDispatch(getPlaceBookmark(accessToken));
           });

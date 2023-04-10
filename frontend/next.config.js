@@ -20,40 +20,16 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/:path*",
-        destination: "http://localhost:8080/:path*",
+        source: "/login/:path",
+        destination: "http://localhost:8080/login/:path",
       },
       {
-        source: "/api/course/placeSearch",
-        destination: "https://localhost:8080/api/course/placeSearch",
+        source: "/loginInfo/:path",
+        destination: "http://localhost:8080/loginInfo/:path",
       },
       {
-        source: "/api/course",
-        destination: "https://localhost:8080/api/course",
-      },
-      {
-        source: "/api/course/:id",
-        destination: "https://localhost:8080/api/course/:id",
-      },
-      {
-        source: "/api/place/:slug*",
-        destination: "http://localhost:3000/api/place/:slug*",
-      },
-      {
-        source: "/place/overview/:id",
-        destination: "https://localhost:8080/place/overview/:id",
-      },
-      {
-        source: "/places/:slug*",
-        destination: "http://localhost:8080/places?areaCode=:slug*",
-      },
-      {
-        source: "/oauth/token",
-        destination: "https://localhost:8080/oauth/token",
-      },
-      {
-        source: "/loginInfo",
-        destination: "https://localhost:8080/loginInfo",
+        source: "/oauth/token/:path",
+        destination: "http://localhost:8080/oauth/token/:path",
       },
     ];
   },
