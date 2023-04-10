@@ -34,8 +34,8 @@ const CourseList = () => {
         <ListContainer>
           {courseList.map((course) => (
             <CourseItem
-              key={course.id}
-              id={course.id}
+              key={course.courseId}
+              courseId={course.courseId}
               title={course.title}
               content={course.content}
               likeCount={course.likeCount}

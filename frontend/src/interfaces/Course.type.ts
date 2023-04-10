@@ -1,5 +1,5 @@
 export interface ICourse {
-  id: number;
+  courseId: number;
   title: string;
   startDate: string;
   endDate: string;
@@ -14,7 +14,7 @@ export interface ICourse {
 }
 
 export interface ICoursePlaceName extends ICourse {
-  places: placesName[];
+  places: string;
 }
 export interface placesName {
   name: string;

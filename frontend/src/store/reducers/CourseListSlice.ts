@@ -41,7 +41,7 @@ export const listBookmarkToggleAction = createAsyncThunk(
   async (courseId: number, { getState }) => {
     const courseState = (await getState()) as RootState;
     const courseList = courseState.course.courseList;
-    const course = courseList.find((course) => course.id === courseId);
+    const course = courseList.find((course) => course.courseId === courseId);
     const isBookmarked = course ? course.isBookmarked : false;
     if (isBookmarked) {
       await toggleBookmarkApi(courseId, "DELETE");
@@ -59,7 +59,7 @@ export const listLikeToggleAction = createAsyncThunk(
   async (courseId: number, { getState }) => {
     const courseState = (await getState()) as RootState;
     const courseList = courseState.course.courseList;
-    const course = courseList.find((course) => course.id === courseId);
+    const course = courseList.find((course) => course.courseId === courseId);
     const isLiked = course ? course.isLiked : false;
     let resData: ToggleLikeApiResponse;
     if (isLiked) {
@@ -85,9 +85,10 @@ export const CourseListSlice = createSlice({
     builder.addCase(createCourseAction.fulfilled, (state, action) => {
       // state.createUserFormStatus = ApiStatus.success;
       const { formData, resData } = action.payload;
-      const placeNames = formData.places.map((place) => ({ name: place.name }));
+      const placeNames = formData.places.map((place) => place.name).join(",");
+      console.log(placeNames);
       const createdCourse: ICoursePlaceName = {
-        id: parseInt(resData.courseId),
+        courseId: parseInt(resData.courseId),
         ...formData,
         places: placeNames,
       };
@@ -104,7 +105,7 @@ export const CourseListSlice = createSlice({
     builder.addCase(listBookmarkToggleAction.pending, (state) => {});
     builder.addCase(listBookmarkToggleAction.fulfilled, (state, action) => {
       const courseId = action.payload;
-      const course = state.courseList.find((c) => c.id === courseId);
+      const course = state.courseList.find((c) => c.courseId === courseId);
       if (course) {
         course.isBookmarked = !course.isBookmarked;
       }
@@ -113,7 +114,7 @@ export const CourseListSlice = createSlice({
     builder.addCase(listLikeToggleAction.pending, (state) => {});
     builder.addCase(listLikeToggleAction.fulfilled, (state, action) => {
       const { courseId, totalLikes } = action.payload;
-      const course = state.courseList.find((c) => c.id === courseId);
+      const course = state.courseList.find((c) => c.courseId === courseId);
       if (course) {
         course.isLiked = !course.isLiked;
         course.likeCount = totalLikes;

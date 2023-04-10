@@ -55,7 +55,7 @@ export const detailBookmarkToggleAction = createAsyncThunk(
       console.log("상세 북마크 제거");
     } else {
       await toggleBookmarkApi(courseId, "POST");
-      console.log("상세 북마크 제거");
+      console.log("상세 북마크 추가");
     }
     return courseId;
   }

@@ -25,7 +25,7 @@ import { useRouter } from "next/router";
 import IsLikeState from "../UI/IsLikeState";
 
 const CourseItem = ({
-  id,
+  courseId,
   title,
   content,
   likeCount,
@@ -58,12 +58,12 @@ const CourseItem = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
-    dispatch(listLikeToggleAction(id));
+    dispatch(listLikeToggleAction(courseId));
   };
   const router = useRouter();
 
   const handleLinkClick = () => {
-    router.push(`/course/${id}`, `/course/${id}`);
+    router.push(`/course/${courseId}`);
   };
 
   return (
@@ -95,7 +95,10 @@ const CourseItem = ({
         </div>
       </div>
       <div className={styles["item-nav-container"]}>
-        <div className={styles["item-nav"]} onClick={() => bookmarkHandler(id)}>
+        <div
+          className={styles["item-nav"]}
+          onClick={() => bookmarkHandler(courseId)}
+        >
           {/* TODO: CSS 손보기 컴포넌트 통일 */}
           {isBookmarked ? (
             <BsBookmarkFill className={styles.bookmark} />

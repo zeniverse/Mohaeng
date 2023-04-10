@@ -43,6 +43,8 @@ export default function CourseDetail() {
     setFormattedDate(FormattedDate);
   }, [createdDate]);
 
+  const placeNames = places?.map((place) => place.name).join(",");
+
   return (
     <>
       <div className={styles["course-id-container"]}>
@@ -60,7 +62,7 @@ export default function CourseDetail() {
         </div>
         <CourseDetailNav
           likeCount={likeCount}
-          places={places}
+          places={placeNames}
           courseId={courseId}
           isBookmarked={isBookmarked}
         />

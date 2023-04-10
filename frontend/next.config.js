@@ -32,36 +32,37 @@ const nextConfig = {
         destination: "http://localhost:8080/oauth/token/:path*",
       },
       {
-        source: "/places/:path*",
-        destination: "http://localhost:8080/places/:path*",
+        source: "/api/course/:id",
+        destination: "http://localhost:8080/api/course/:id",
       },
       {
-        source: "/api/myPage/course/:path*",
-        destination: "http://localhost:8080/api/myPage/course/:path*",
+        source: "/api/myPage/course/bookMark",
+        destination: "http://localhost:8080/api/myPage/course/bookMark",
       },
       {
         source: "/api/myPage/place/bookMark/:path*",
         destination: "http://localhost:8080/api/myPage/place/bookMark/:path*",
       },
       {
-        source: "/api/myPage/place/bookMark",
-        destination: "http://localhost:8080/api/myPage/place/bookMark",
+        source: "/api/myPage/course",
+        destination: "http://localhost:8080/api/myPage/course",
       },
       {
-        source: "/api/place/overview/:id",
-        destination: "http://localhost:8080/api/place/overview/:id",
+        source: "/api/myPage/course/:path*",
+        destination: "http://localhost:8080/api/myPage/course:path*",
       },
       {
-        source: "/place/overview/:id",
-        destination: "http://localhost:8080/place/overview/:id",
+        source: "/places/:path*",
+        destination: "http://localhost:8080/places/:path*",
+      },
+
+      {
+        source: "/overview/:path*",
+        destination: "http://localhost:8080/overview/:path*",
       },
       {
-        source: "/api/place/overview/:path*",
-        destination: "http://localhost:8080/api/place/overview/:path*",
-      },
-      {
-        source: "/api/review/:path*",
-        destination: "http://localhost:8080/api/review/:path*",
+        source: "/overview/:id",
+        destination: "http://localhost:8080/overview/:id",
       },
     ];
   },

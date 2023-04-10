@@ -1,7 +1,7 @@
 import { placesName } from "./Course.type";
 
 export interface CourseList {
-  id?: number;
+  courseId?: number;
   title: string;
   likeCount: number;
   courseDays?: string;
@@ -9,11 +9,11 @@ export interface CourseList {
   thumbnailUrl: string;
   isPublished?: boolean;
   content?: string;
-  places?: placesName[];
+  places?: string;
 }
 
 export type CourseListProps = {
-  id: number;
+  courseId: number;
   title: string;
   content: string;
   likeCount: number;
@@ -21,11 +21,11 @@ export type CourseListProps = {
   thumbnailUrl: string;
   isBookmarked: boolean;
   isLiked: boolean;
-  places: placesName[];
+  places: string;
 };
 
 export interface RoughMapTitle {
-  RoughMapData: placesName[];
+  RoughMapData: string;
   onClose: any;
 }
 
@@ -69,3 +69,13 @@ export interface PositionsProps {
 }
 
 export interface formatPositions {}
+
+export interface Course {
+  courseId: number;
+  title: string;
+  content: string;
+  thumbnailUrl: string;
+  courseDays: string;
+  likeCount: number;
+  places: any;
+}
