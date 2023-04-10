@@ -3,9 +3,15 @@ import { BiMapAlt, BiShareAlt, BiBookmarkPlus } from "react-icons/bi";
 import { BsFillHeartFill } from "react-icons/bs";
 import { useState } from "react";
 import RoughMap from "../Course/RoughMap";
-import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
+import {
+  BsBookmark,
+  BsBookmarkFill,
+  BsMapFill,
+  BsMap,
+  BsShare,
+} from "react-icons/bs";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-import { toggleBookmarkAction } from "@/src/store/reducers/CourseListSlice";
+import { detailBookmarkToggleAction } from "@/src/store/reducers/CourseDetailSlice";
 
 const CourseDetailNav = ({
   likeCount,
@@ -28,7 +34,7 @@ const CourseDetailNav = ({
   };
 
   const bookmarkHandler = (id: number) => {
-    dispatch(toggleBookmarkAction(id));
+    dispatch(detailBookmarkToggleAction(id));
   };
   return (
     <div className={styles["title-nav"]}>
@@ -43,7 +49,14 @@ const CourseDetailNav = ({
           className={`${styles["item-nav"]} ${styles.roughmapBtn}`}
           onClick={toggleRoughMapHandler}
         >
-          <BiMapAlt className={styles.roughmapIcon} />
+          {isRoughMapOpen ? (
+            <BsMapFill
+              className={styles["map-icon"]}
+              color="var(--color-blue)"
+            />
+          ) : (
+            <BsMap className={styles["map-icon"]} />
+          )}
           {isRoughMapOpen && (
             <RoughMap RoughMapData={places} onClose={onClose} />
           )}

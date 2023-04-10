@@ -67,3 +67,29 @@ export interface IPlacesForm {
   rating: string;
   address?: string;
 }
+
+export interface ICourseDetail {
+  courseId: number;
+  title: string;
+  content: string;
+  nickname: string;
+  likeCount: number;
+  courseDays: string;
+  createdDate: string;
+  startDate: string;
+  endDate: string;
+  region: string;
+  isBookmarked: boolean;
+  isLiked: boolean;
+  isPublished: boolean;
+  places: IPlaces[];
+}
+
+export interface IPlaces {
+  placeId: number;
+  name: string;
+  address: string;
+  imgUrl: string;
+  mapX: string;
+  mapY: string;
+}

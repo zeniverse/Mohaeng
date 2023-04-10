@@ -18,6 +18,7 @@ import placeBookmarkReducer from "./reducers/PlaceBookmarkSlice";
 import reviewFormReducer from "./reducers/reviewFormSlice";
 import reviewReducer from "./reducers/reviewSlice";
 import myCourseReducer from "./reducers/myCourseSlice";
+import CourseDetailSlice from "./reducers/CourseDetailSlice";
 
 const store = configureStore({
   reducer: {
@@ -40,6 +41,7 @@ const store = configureStore({
     reviewForm: reviewFormReducer,
     review: reviewReducer,
     myCourse: myCourseReducer,
+    courseDetail: CourseDetailSlice,
   },
 });
 

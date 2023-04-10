@@ -30,7 +30,7 @@ const CourseList = () => {
 
   return (
     <>
-      {courseList.length > 0 ? (
+      {courseList?.length > 0 ? (
         <ListContainer>
           {courseList.map((course) => (
             <CourseItem

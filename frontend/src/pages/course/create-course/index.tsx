@@ -47,7 +47,7 @@ export default function index() {
       dispatch(resetFormValue());
       dispatch(resetFilter());
       // as를 전달하여 페이지가 새로 고쳐지고 데이터가 업데이트 됨.
-      router.push("/course", "/course");
+      router.push("/course");
     });
   };
 

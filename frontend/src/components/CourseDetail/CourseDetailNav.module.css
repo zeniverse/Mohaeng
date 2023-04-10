@@ -24,3 +24,8 @@
 .item-nav {
   cursor: pointer;
 }
+.map-icon:hover {
+  color: var(--color-blue);
+  scale: 107%;
+  transition: 200ms;
+}

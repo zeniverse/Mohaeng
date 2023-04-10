@@ -2,6 +2,7 @@ import { CourseDetailType } from "@/src/interfaces/Course";
 import {
   getCourseListApi,
   toggleBookmarkApi,
+  toggleLikeApi,
 } from "@/src/services/courseService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ICoursePlaceName } from "../../interfaces/Course.type";
@@ -15,7 +16,12 @@ interface CourseState {
   totalPages?: number;
 }
 
-export const initialState: CourseState = {
+export interface ToggleLikeApiResponse {
+  courseId: number;
+  totalLikes: number;
+}
+
+const initialState: CourseState = {
   courseList: [],
 };
 export const getCourseListAction = createAsyncThunk(
@@ -23,7 +29,6 @@ export const getCourseListAction = createAsyncThunk(
   async (queryParams: any, { rejectWithValue }) => {
     try {
       const response = await getCourseListApi(queryParams);
-      console.log(response);
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -31,8 +36,8 @@ export const getCourseListAction = createAsyncThunk(
   }
 );
 
-export const toggleBookmarkAction = createAsyncThunk(
-  "course/toggleBookmark",
+export const listBookmarkToggleAction = createAsyncThunk(
+  "course/listToggleBookmark",
   async (courseId: number, { getState }) => {
     const courseState = (await getState()) as RootState;
     const courseList = courseState.course.courseList;
@@ -40,12 +45,31 @@ export const toggleBookmarkAction = createAsyncThunk(
     const isBookmarked = course ? course.isBookmarked : false;
     if (isBookmarked) {
       await toggleBookmarkApi(courseId, "DELETE");
-      console.log("북마크 제거");
+      console.log("목록 북마크 제거");
     } else {
       await toggleBookmarkApi(courseId, "POST");
-      console.log("북마크 추가");
+      console.log("목록 북마크 추가");
     }
     return courseId;
+  }
+);
+
+export const listLikeToggleAction = createAsyncThunk(
+  "course/listToggleLike",
+  async (courseId: number, { getState }) => {
+    const courseState = (await getState()) as RootState;
+    const courseList = courseState.course.courseList;
+    const course = courseList.find((course) => course.id === courseId);
+    const isLiked = course ? course.isLiked : false;
+    let resData: ToggleLikeApiResponse;
+    if (isLiked) {
+      resData = await toggleLikeApi(courseId, "DELETE");
+      console.log("목록 좋아요 해제");
+    } else {
+      resData = await toggleLikeApi(courseId, "POST");
+      console.log("목록 좋아요 추가");
+    }
+    return resData;
   }
 );
 
@@ -77,15 +101,25 @@ export const CourseListSlice = createSlice({
       state.totalPages = totalPages;
     });
     builder.addCase(getCourseListAction.rejected, (state) => {});
-    builder.addCase(toggleBookmarkAction.pending, (state) => {});
-    builder.addCase(toggleBookmarkAction.fulfilled, (state, action) => {
+    builder.addCase(listBookmarkToggleAction.pending, (state) => {});
+    builder.addCase(listBookmarkToggleAction.fulfilled, (state, action) => {
       const courseId = action.payload;
       const course = state.courseList.find((c) => c.id === courseId);
       if (course) {
         course.isBookmarked = !course.isBookmarked;
       }
     });
-    builder.addCase(toggleBookmarkAction.rejected, (state) => {});
+    builder.addCase(listBookmarkToggleAction.rejected, (state) => {});
+    builder.addCase(listLikeToggleAction.pending, (state) => {});
+    builder.addCase(listLikeToggleAction.fulfilled, (state, action) => {
+      const { courseId, totalLikes } = action.payload;
+      const course = state.courseList.find((c) => c.id === courseId);
+      if (course) {
+        course.isLiked = !course.isLiked;
+        course.likeCount = totalLikes;
+      }
+    });
+    builder.addCase(listLikeToggleAction.rejected, (state) => {});
   },
 });
 

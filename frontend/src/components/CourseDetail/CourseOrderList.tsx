@@ -15,13 +15,17 @@ const CourseOrderList = ({ places, mode }: any) => {
         {places.map((place: any, idx: any) => (
           <li className={styles["course-item"]} key={place.placeId}>
             <p className={styles["order-number"]}>{idx + 1}</p>
-            <Image
-              src={place.imgUrl}
-              alt={place.name}
-              width={126}
-              height={110}
-              priority
-            />
+            {place.imgUrl ? (
+              <Image
+                src={place.imgUrl}
+                alt={place.name}
+                width={130}
+                height={110}
+                priority
+              />
+            ) : (
+              <p>이미지 준비 중</p>
+            )}
             <div className={styles["item-content"]}>
               <div className={styles["item-content-text"]}>
                 <p className={styles.name}>{place.name}</p>
