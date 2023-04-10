@@ -43,6 +43,7 @@ public class Place {
     private String address;
     private String areaCode;
     private String sigunguCode;
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String firstImage;
     private String firstImage2;
     private String mapX;
@@ -50,6 +51,7 @@ public class Place {
     private String contentId;
     private String overview;
     private double rating;
+    private String fileUrl;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
@@ -118,6 +120,10 @@ public class Place {
         this.overview = overview;
         this.rating = rating;
         this.member = member;
+    }
+
+    public Place(String fileUrl) {
+        this.fileUrl = fileUrl;
     }
 
     public void addReview(Review review) {

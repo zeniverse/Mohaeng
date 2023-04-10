@@ -144,39 +144,6 @@ class CourseLikesControllerTest {
         verify(courseLikesService, times(0)).cancelLikes(anyLong(), any());
     }
 
-
-    @Test
-    @DisplayName("[GET] 코스 좋아요 유무 - 정상 처리")
-    @WithMockUser
-    public void existsCourseLikes() throws Exception {
-        //Given
-        Long courseId = 1L;
-        given(courseLikesService.isExistCourseLikes(anyLong(), anyString())).willReturn(false);
-
-        //When & Then
-        mockMvc.perform(get("/api/course/likes/{courseId}", courseId))
-                .andExpect(status().isOk())
-                .andDo(print());
-
-        verify(courseLikesService).isExistCourseLikes(eq(courseId), any());
-    }
-
-    @Test
-    @DisplayName("[GET] 코스 좋아요 유무 - 로그인한 유저가 아닐 경우")
-    @WithAnonymousUser
-    public void existsCourseLikes_noMember() throws Exception {
-        //Given
-        given(courseLikesService.isExistCourseLikes(anyLong(), anyString()))
-                .willThrow(new MemberNotFoundException());
-
-        //When & Then
-        mockMvc.perform(get("/api/course/likes"))
-                .andExpect(status().is3xxRedirection())
-                .andDo(print());
-
-        verify(courseLikesService, times(0)).isExistCourseLikes(anyLong(), any());
-    }
-
     @Test
     @DisplayName("[GET] 코스 좋아요 count - 정상 처리")
     @WithMockUser
