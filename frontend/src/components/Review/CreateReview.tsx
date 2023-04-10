@@ -38,7 +38,7 @@ export default function CreateReview() {
     setClicked(clickStates);
   };
 
-  // * 이미지 미리보기
+  // * 이미지 미리보기 (3장 제한)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newImages = [...images];
     const newPreviews = [...previews];

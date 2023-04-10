@@ -49,12 +49,15 @@ function Header({}: Props) {
     const response = async () => {
       console.log("ACcess = " + accessToken);
       if (accessToken) {
-        const userRes = await axios.get(`/loginInfo`, {
-          headers: {
-            "Access-Token": accessToken,
-          },
-          withCredentials: true,
-        });
+        const userRes = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/loginInfo`,
+          {
+            headers: {
+              "Access-Token": accessToken,
+            },
+            withCredentials: true,
+          }
+        );
         const { id, nickName, email, imgUrl } = userRes.data.data;
         dispatch(setId(id));
         dispatch(setEmail(email));
