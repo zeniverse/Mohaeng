@@ -40,6 +40,7 @@ export default function ReviewItem({
   const dispatch = useDispatch();
   // setUser(currentUser);
   const isUser = nickname === currentUser;
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleOpenDeleteModal = () => {
     dispatch(
@@ -70,6 +71,11 @@ export default function ReviewItem({
     }
   };
 
+  const toggleExpand = () => {
+    // 토글 버튼 핸들러 함수 구현
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <article className={styles.reviewBox}>
       <div className={styles.reviewer}>
@@ -84,7 +90,7 @@ export default function ReviewItem({
           <div className={styles.rating}>
             <FiveStarRating rating={rating.toString()} />
           </div>
-          <p className={styles.review}>
+          <p className={styles.reviewerId}>
             {nickname} | {createdDate}
           </p>
         </div>
@@ -117,19 +123,53 @@ export default function ReviewItem({
         )}
       </div>
       <div className={styles.reviewContent}>
-        <p className={styles.reviewTxt}>{content}</p>
-        <div className={styles.reviewImgBox}>
-          {imgUrl?.map((imgUrl, index) => (
-            <div className={styles.reviewImg} key={index}>
-              <Image
-                src={imgUrl}
-                width={200}
-                height={180}
-                alt={`img-${index}`}
-              />
+        {content.length && imgUrl?.length > 0 ? (
+          isExpanded ? (
+            <div className={styles.reviewItem}>
+              <p className={styles.reviewTxt}>{content}</p>
+              <div className={styles.reviewImgBox}>
+                {imgUrl.map((imgUrl, index) => (
+                  <div className={styles.reviewImg} key={index}>
+                    <Image
+                      src={imgUrl}
+                      width={200}
+                      height={180}
+                      alt={`img-${index}`}
+                    />
+                  </div>
+                ))}
+              </div>
+              <button onClick={toggleExpand} className={styles.showMoreBtn}>
+                접기
+              </button>
             </div>
-          ))}
-        </div>
+          ) : (
+            <div>
+              <p className={styles.reviewTxt}>{content.substring(0, 50)}...</p>
+              <button onClick={toggleExpand} className={styles.showMoreBtn}>
+                더 보기
+              </button>
+            </div>
+          )
+        ) : (
+          <div className={styles.reviewItem}>
+            <p className={styles.reviewTxt}>{content}</p>
+            {imgUrl?.length > 0 && (
+              <div className={styles.reviewImgBox}>
+                {imgUrl.map((imgUrl, index) => (
+                  <div className={styles.reviewImg} key={index}>
+                    <Image
+                      src={imgUrl}
+                      width={200}
+                      height={180}
+                      alt={`img-${index}`}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </article>
   );

@@ -13,6 +13,7 @@ import PlaceBookmark from "@/src/components/Bookmark/PlaceBookmark";
 import PlaceDetailMap from "@/src/components/PlaceDetail/PlaceDetailMap";
 import ReviewList from "@/src/components/Review/ReviewList";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
+import { CANCELLED } from "dns";
 
 // 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined
 
@@ -104,6 +105,8 @@ export default function PlaceId() {
           const { content } = res.data.data;
           setPlaceInfo({ ...placeInfo, ...content[0] });
           setBookMarked(res.data.data.isBookmarked);
+          console.log(res.data.data);
+          console.log(res.data.data.isBookmarked);
         } else {
           console.log(placeInfo);
         }

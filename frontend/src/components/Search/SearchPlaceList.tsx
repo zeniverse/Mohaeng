@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import axios from "axios";
+import cookie from "react-cookies";
 import { Keyword } from "@/src/interfaces/Keyword";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
@@ -23,6 +24,7 @@ export default function SearchPlaceList(): JSX.Element {
   const totalPages: number = useSelector(
     (state: RootState) => state.searchPlace.totalPages
   );
+  const accessToken = cookie.load("accessToken");
 
   useEffect(() => {
     const fetchKeyword = async () => {
@@ -34,7 +36,10 @@ export default function SearchPlaceList(): JSX.Element {
               keyword: keyword,
               page: page,
             },
-            withCredentials: true,
+            headers: {
+              "Access-Token": `${accessToken}`,
+              withCredentials: true,
+            },
           }
         );
         if (res.data.data.content !== []) {

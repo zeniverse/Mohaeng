@@ -30,6 +30,10 @@
   flex-direction: column;
 }
 
+.reviewItem {
+  width: 850px;
+}
+
 .reviewTxt {
   margin-bottom: 1rem;
 }
@@ -60,6 +64,17 @@
 .btn:hover {
   color: var(--color-text-basic);
 }
+
+.showMoreBtn {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.showMoreBtn:hover {
+  color: var(--color-primary);
+}
+
 .likeBtn {
   width: 60px;
   height: 30px;

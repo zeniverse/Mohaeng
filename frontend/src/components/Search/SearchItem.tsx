@@ -5,14 +5,14 @@ import Image from "next/image";
 import cookie from "react-cookies";
 import { useRouter } from "next/router";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
-import { content } from "@/src/store/reducers/searchPlaceSlice";
+import { content, setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { useState } from "react";
-import Bookmark from "../Bookmark/PlaceBookmark";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import PlaceBookmark from "../Bookmark/PlaceBookmark";
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 
 export default function SearchItem({
   name,
@@ -29,45 +29,50 @@ export default function SearchItem({
   const appDispatch = useAppDispatch();
   const accessToken = cookie.load("accessToken");
   const page = useSelector((state: RootState) => state.page.page);
-  const [bookMarked, setBookMarked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(isBookmarked);
 
-  const handleBookmarkClick = async () => {
+  const addBookmark = async () => {
     try {
-      if (bookMarked === false) {
-        const res = await axios
-          .post(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
-            {},
-            {
-              headers: {
-                "Access-Token": `${accessToken}`,
-                withCredentials: true,
-              },
-            }
-          )
-          .then(() => {
-            appDispatch(getPlaceBookmark(accessToken));
-          });
-      } else {
-        const res = await axios
-          .delete(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
-            {
-              headers: {
-                "Access-Token": `${accessToken}`,
-                withCredentials: true,
-              },
-            }
-          )
-          .then(() => {
-            appDispatch(getPlaceBookmark(accessToken));
-          });
-      }
-      setBookMarked(!bookMarked);
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
+        {},
+        {
+          headers: {
+            "Access-Token": `${accessToken}`,
+            withCredentials: true,
+          },
+        }
+      );
+      dispatch(setSearchPlace(res.data.data));
+      appDispatch(getPlaceBookmark(accessToken));
+      setBookmarked(true);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const delBookmark = async () => {
+    try {
+      const res = await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
+        {
+          headers: {
+            "Access-Token": `${accessToken}`,
+            withCredentials: true,
+          },
+        }
+      );
+      dispatch(setSearchPlace(res.data.data));
+      appDispatch(getPlaceBookmark(accessToken));
+      setBookmarked(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    setBookmarked(isBookmarked);
+  }, [isBookmarked]);
 
   return (
     <li className={styles.keywordItemContainer} key={contentId}>
@@ -103,10 +108,15 @@ export default function SearchItem({
           <p className={styles.review}>{reviewTotalElements}건의 리뷰</p>
         </div>
         <div className={styles.keywordBookmark}>
-          <PlaceBookmark
+          {isBookmarked === true ? (
+            <BsBookmarkFill onClick={delBookmark} className={styles.bookmark} />
+          ) : (
+            <BsBookmark onClick={addBookmark} className={styles.unbookmark} />
+          )}
+          {/* <PlaceBookmark
             bookMarked={bookMarked}
             onToggle={handleBookmarkClick}
-          />
+          /> */}
         </div>
       </div>
     </li>
