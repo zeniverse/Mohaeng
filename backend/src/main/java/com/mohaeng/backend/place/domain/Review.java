@@ -33,13 +33,14 @@ public class Review extends BaseTimeEntity {
     private String nickname;
     private String title;
     private String content;
-    private int likeCount;
     private String rating;
+    private int totalPages;
+    private long totalElements;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdDate;
 
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
     private List<ReviewImage> reviewImageList = new ArrayList<>();
 
     public void addReviewImage(ReviewImage reviewImage) {

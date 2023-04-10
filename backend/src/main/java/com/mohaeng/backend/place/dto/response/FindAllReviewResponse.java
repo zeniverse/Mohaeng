@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mohaeng.backend.place.domain.Review;
 import com.mohaeng.backend.place.domain.ReviewImage;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -11,24 +12,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
+@Builder
 public class FindAllReviewResponse {
+
+    private Long reviewId;
     private String nickname;
     private String memberImage;
     private String rating;
-    private int likeCount;
     private String content;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdDate;
     private List<String> imgUrl = new ArrayList<>();
 
+
+    @Builder
     public static FindAllReviewResponse of(Review review) {
         return new FindAllReviewResponse(
+                review.getId(),
                 review.getMember().getNickName(),
                 review.getMember().getImageURL() + "/" + review.getMember().getImageName(),
                 review.getRating(),
-                review.getLikeCount(),
                 review.getContent(),
                 review.getCreatedDate(),
         getAllImageName(review));

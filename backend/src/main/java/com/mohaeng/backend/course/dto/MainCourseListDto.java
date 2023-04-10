@@ -9,28 +9,28 @@ import java.util.stream.Collectors;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MainCourseListDto {
-    private Long id;
+    private Long courseId;
     private String title;
     private String content;
     private String thumbnailUrl;
     private int likeCount;
-    private Boolean isLiked;
     private Boolean isBookmarked;
+    private Boolean isLiked;
 
     @Builder
-    private MainCourseListDto(Long id, String title, String content, String thumbnailUrl, int likeCount, Boolean isLiked, Boolean isBookmarked) {
-        this.id = id;
+    public MainCourseListDto(Long courseId, String title, String content, String thumbnailUrl, int likeCount, Boolean isBookmarked, Boolean isLiked) {
+        this.courseId = courseId;
         this.title = title;
         this.content = content;
         this.thumbnailUrl = thumbnailUrl;
         this.likeCount = likeCount;
-        this.isLiked = isLiked;
         this.isBookmarked = isBookmarked;
+        this.isLiked = isLiked;
     }
 
     public static MainCourseListDto from(Course course, Boolean isLiked, Boolean isBookmarked){
         return MainCourseListDto.builder()
-                .id(course.getId())
+                .courseId(course.getId())
                 .title(course.getTitle())
                 .content(course.getContent())
                 .likeCount(course.getLikeCount())

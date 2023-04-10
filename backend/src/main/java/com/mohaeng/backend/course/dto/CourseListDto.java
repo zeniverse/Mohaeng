@@ -10,45 +10,27 @@ import java.util.stream.Collectors;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CourseListDto {
-    private Long id;
+    private Long courseId;
     private String title;
     private String content;
     private String courseDays;
     private Integer likeCount;
     private String thumbnailUrl;
+    private Boolean isBookmarked;
     private Boolean isLiked;
-    private Boolean isBookMarked;
-    private List<CourseListPlaceDto> places;
+    private String places;
 
     @Builder
-    private CourseListDto(Long id, String title, String content, String courseDays,
-                          Integer likeCount, String thumbnailUrl, Boolean isLiked, Boolean isBookMarked, List<CourseListPlaceDto> places) {
-        this.id = id;
+    public CourseListDto(Long courseId, String title, String content, String courseDays,
+                          Integer likeCount, String thumbnailUrl, Boolean isBookmarked, Boolean isLiked, String places) {
+        this.courseId = courseId;
         this.title = title;
         this.content = content;
         this.courseDays = courseDays;
         this.likeCount = likeCount;
         this.thumbnailUrl = thumbnailUrl;
+        this.isBookmarked = isBookmarked;
         this.isLiked = isLiked;
-        this.isBookMarked = isBookMarked;
         this.places = places;
-    }
-
-    public static CourseListDto from(Course course, Boolean isLiked, Boolean isBookMarked){
-        return CourseListDto.builder()
-                .id(course.getId())
-                .title(course.getTitle())
-                .content(course.getContent())
-                .courseDays(course.getCourseDays())
-                .likeCount(course.getLikeCount())
-                .thumbnailUrl(course.getThumbnailUrl())
-                .isLiked(isLiked)
-                .isBookMarked(isBookMarked)
-                .places(course.getCoursePlaces().stream()
-                        .map(coursePlace -> CourseListPlaceDto.builder()
-                                .name(coursePlace.getPlace().getName())
-                                .build()).collect(Collectors.toList()))
-                .build();
-
     }
 }

@@ -26,7 +26,7 @@ public class Course extends BaseTimeEntity {
     @Column(name = "course_id")
     private Long id;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "course")
     @ToString.Exclude
     private List<CoursePlace> coursePlaces = new ArrayList<>();
 
@@ -121,7 +121,7 @@ public class Course extends BaseTimeEntity {
     }
 
     /** 코스 공개 비공개 여부 확인 후 Enum 타입으로 변환 **/
-    private static CourseStatus changeStatus(Boolean status){
+    public static CourseStatus changeStatus(Boolean status){
         return status ? CourseStatus.PUBLIC : CourseStatus.PRIVATE;
     }
 

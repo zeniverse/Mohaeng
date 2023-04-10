@@ -3,10 +3,14 @@ package com.mohaeng.backend.member.controller;
 import com.mohaeng.backend.common.BaseResponse;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.dto.request.UserInfoChangeRequest;
+import com.mohaeng.backend.member.dto.request.VisibilityRequest;
 import com.mohaeng.backend.member.dto.response.MyPageCourseBookMarkDto;
+import com.mohaeng.backend.member.dto.response.MyPageCourseDto;
 import com.mohaeng.backend.member.dto.response.MyPagePlaceBookMarkDto;
+import com.mohaeng.backend.member.dto.response.MyPageReviewDto;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.service.MemberService;
+import com.mohaeng.backend.member.service.MyPageCourseService;
 import com.mohaeng.backend.member.service.MyPageService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +31,7 @@ import java.util.List;
 public class MyPageController {
     private final MemberService memberService;
     private final MyPageService myPageService;
+    private final MyPageCourseService myPageCourseService;
     private final TokenGenerator tokenGenerator;
 
     @GetMapping("/myPage/course/bookMark")
@@ -73,6 +78,43 @@ public class MyPageController {
         MyPagePlaceBookMarkDto data = myPageService.findOneBookMarkedPlace(email, placeBookMarkId);
         return ResponseEntity.ok().body(BaseResponse.success("ok", data));
     }
+
+    @GetMapping("/myPage/course")
+    public ResponseEntity getAllMyCourse(HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        List<MyPageCourseDto> data = myPageCourseService.findAllMyCourse(email);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", data));
+    }
+
+    @GetMapping("/myPage/course/{courseId}")
+    public ResponseEntity getOneMyCourse(@PathVariable long courseId, HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        MyPageCourseDto data = myPageCourseService.findOneMyCourse(email, courseId);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", data));
+    }
+
+    @PutMapping("/myPage/course/{courseId}")
+    public ResponseEntity changeCourseVisibility(@PathVariable long courseId, @RequestBody VisibilityRequest visibilityRequest, HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        myPageCourseService.changeVisibility(email, courseId, visibilityRequest);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
+    }
+
+    @GetMapping("/myPage/myReview")
+    public ResponseEntity getMyReview(HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        List<MyPageReviewDto> data = myPageService.getAllMyReview(email);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", data));
+    }
+
+    @GetMapping("/myPage/myReview/{reviewId}")
+    public ResponseEntity getMyReview(@PathVariable long reviewId , HttpServletRequest request) {
+        String email = findEmailFromHeader(request);
+        MyPageReviewDto data = myPageService.getOneMyReview(email, reviewId);
+        return ResponseEntity.ok().body(BaseResponse.success("ok", data));
+    }
+
+
 
     private String findEmailFromHeader(HttpServletRequest request) {
         return tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));

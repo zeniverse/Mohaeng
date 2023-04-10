@@ -30,14 +30,6 @@ public class CourseLikesController {
         return ResponseEntity.ok().body(BaseResponse.success("OK", courseLikesRes));
     }
 
-    @GetMapping("/{courseId}")
-    public ResponseEntity isExistsCourseLikes(@PathVariable Long courseId,
-                                              HttpServletRequest request){
-        String memberEmail = tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token"));
-        boolean isExists = courseLikesService.isExistCourseLikes(courseId, memberEmail);
-        return ResponseEntity.ok().body(BaseResponse.success("OK", isExists));
-    }
-
     @PostMapping("/{courseId}")
     public ResponseEntity addCourseLikes(@PathVariable Long courseId,
                                          HttpServletRequest request){

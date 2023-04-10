@@ -39,7 +39,7 @@ const MODAL_COMPONENTS: ModalComponent[] = [
     component: <DeleteMemberModal />,
   },
   {
-    type: MODAL_TYPES.DeleteMemberModal,
+    type: MODAL_TYPES.DeleteReviewModal,
     component: <DeleteReviewModal />,
   },
 ];
@@ -70,7 +70,7 @@ const Container = styled.div`
   align-items: center;
   position: fixed;
   inset: 0;
-  z-index: 2;
+  z-index: 3;
 `;
 const Overlay = styled.div`
   position: fixed;

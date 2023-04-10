@@ -25,10 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
-
-import static io.micrometer.common.util.StringUtils.isEmpty;
 
 @Service
 @RequiredArgsConstructor
@@ -39,18 +36,20 @@ public class MemberService {
 
     private final AmazonS3Service amazonS3Service;
 
-    private final String CLIENT_ID = "d7c41513380cc7e5cbbfce173bf86002";
-    private final String REDIRECT_URL = "http://localhost:3000/login/kakao";
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    private String CLIENT_ID;
+    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    private String REDIRECT_URL;
 
-    private final String GET_ACCESS_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
-    private final String GET_PROFILE_URL = "https://kapi.kakao.com/v2/user/me";
+    @Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
+    private String GET_ACCESS_TOKEN_URL;
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+    @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
+    private String GET_PROFILE_URL;
 
 
     public Member findByEmail(String email) {
-        return memberRepository.findByEmailAndDeletedDateIsNull(email)
+        return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("INVALID_USER"));
     }
 
@@ -118,27 +117,19 @@ public class MemberService {
 
     public Member saveMember(String token) throws IOException {
         KakaoUserDto kakaoUser = findProfile(token);
-        Member member = memberRepository.findByEmailAndDeletedDateIsNull(kakaoUser.getEmail())
-                .orElse(new Member(kakaoUser.getName(), kakaoUser.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
+        Member member = memberRepository.findByEmail(kakaoUser.getEmail()).
+                orElse(null);
+
+        if (member == null) {
+            member = new Member(kakaoUser.getName(), kakaoUser.getEmail(), Role.NORMAL, randomNameService.generateNickName());
+            String fullUrl = kakaoUser.getProfileImage();
+            setMemberImageUrl(member, fullUrl);
+        }
+
         member.setOauthAccessToken(token);
         member.setKakaoId(kakaoUser.getKakaoId());
-//        String fullFileName = downloadFile(kakaoUser.getProfileImage());
-        String fullUrl = kakaoUser.getProfileImage();
-        setMemberImageUrl(member, fullUrl);
         memberRepository.save(member);
         return member;
-    }
-
-    private String downloadFile(String url) throws IOException {
-        // URL 객체 생성
-        URL fileUrl = new URL(url);
-
-        // 파일 이름 추출
-        String fileName = url.substring(url.lastIndexOf("/") + 1);
-        String urlName = url.substring(url.lastIndexOf("/"));
-
-
-        return null;
     }
 
     public Token createToken(Member member) {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import SearchCourse from "./SearchCourse";
-import SearchPlace from "./SearchPlace";
+import SearchCourseList from "./SearchCourseList";
+import SearchPlaceList from "./SearchPlaceList";
 import styles from "./SearchTab.module.css";
 
 export default function SearchTab() {
@@ -38,8 +38,8 @@ export default function SearchTab() {
           코스
         </li>
       </ul>
-      {activeTab === "여행지" && <SearchPlace />}
-      {activeTab === "코스" && <SearchCourse />}
+      {activeTab === "여행지" && <SearchPlaceList />}
+      {activeTab === "코스" && <SearchCourseList />}
     </>
   );
 }

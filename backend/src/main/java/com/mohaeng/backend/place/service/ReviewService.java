@@ -16,15 +16,20 @@ import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.repository.ReviewImageRepository;
 import com.mohaeng.backend.place.repository.ReviewRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,11 +54,27 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
+
+    public Page<Review> getAllReviewByPage(Long id, int page) {
+        Place findPlace = placeRepository.findById(id)
+                .orElseThrow(() -> new PlaceNotFoundException("NOT_EXIST_PLACE"));
+
+        Pageable pageable = PageRequest.of(page - 1, 4);
+        Page<Review> reviews = reviewRepository.findAllByPlaceId(id, pageable);
+//        List<FindAllReviewResponse> reviewResponses = reviews.map(FindAllReviewResponse::of).getContent();
+        return reviews;
+    }
+
+    public List<Review> getAllReviews(Long id) {
+        return reviewRepository.findAllByPlaceId(id);
+    }
+
+
     @Transactional
     public void createReview(String email, Long placeId, CreateReviewRequest createReviewRequest, List<String> fileNameList) {
         Place findPlace = placeRepository.findById(placeId)
                 .orElseThrow(() -> new PlaceNotFoundException("NOT_EXIST_PLACE"));
-        Member findMember = memberRepository.findByEmailAndDeletedDateIsNull(email)
+        Member findMember = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberNotFoundException());
 
         LocalDateTime createdDate = createReviewRequest.getCreatedDate();
@@ -85,6 +106,7 @@ public class ReviewService {
         entityManager.clear();
     }
 
+    @Transactional
     private void registerImage(List<String> filaNameList, Review review) {
         for (String fullName : filaNameList) {
             String fileName = fullName.substring(fullName.lastIndexOf("/") + 1);
@@ -114,11 +136,10 @@ public class ReviewService {
         review.getReviewImageList().clear();
 
         // Add new images
-        // Add new images
         if (fileNameList != null) {
             registerImage(fileNameList, review);
         }
-//        registerImage(fileNameList, review);
+//        registerImage(fileNameList, review); JPA 1차 캐시 문제 해결.
         entityManager.flush();
         entityManager.clear();
     }
@@ -142,5 +163,27 @@ public class ReviewService {
         // Clear JPA cache
         entityManager.flush();
         entityManager.clear();
+    }
+
+    public double getAverageRating(List<Review> reviews) {
+        return reviews.stream()
+                .mapToDouble(r -> Double.parseDouble(r.getRating()))
+                .average()
+                .orElse(0.0);
+    }
+
+    public Review getReviewById(Long reviewId) {
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewNotFoundException());
+    }
+
+    public Page<Review> getAllReviewsByRating(Long placeId, int page) {
+        Pageable pageable = PageRequest.of(page - 1 , 4, Sort.by("rating").descending());
+        return reviewRepository.findAllByPlaceId(placeId, pageable);
+    }
+
+    public Page<Review> getAllReviewsByDate(Long placeId, int page) {
+        Pageable pageable = PageRequest.of(page - 1, 4, Sort.by("createdDate").descending());
+        return reviewRepository.findAllByPlaceId(placeId, pageable);
     }
 }

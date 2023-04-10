@@ -13,8 +13,10 @@ public class MyPageCourseBookMarkDto {
     private Long bookMarkId;
     private Long courseId;
     private String courseTitle;
+    private String courseDays;
     private String region;
     private String content;
+    private String imgUrl;
     private CourseStatus courseStatus;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
@@ -24,8 +26,10 @@ public class MyPageCourseBookMarkDto {
                 courseBookmark.getId(),
                 courseBookmark.getCourse().getId(),
                 courseBookmark.getCourse().getTitle(),
+                courseBookmark.getCourse().getCourseDays(),
                 courseBookmark.getCourse().getRegion(),
                 courseBookmark.getCourse().getContent(),
+                courseBookmark.getCourse().getThumbnailUrl(),
                 courseBookmark.getCourse().getCourseStatus(),
                 courseBookmark.getCreatedDate(),
                 courseBookmark.getModifiedDate());

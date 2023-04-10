@@ -134,36 +134,4 @@ class CourseBookmarkControllerTest {
         verify(courseBookmarkService, times(0)).cancelBookmark(anyLong(), any());
     }
 
-    @Test
-    @DisplayName("[GET] 코스 북마크 유무 - 정상 처리")
-    @WithMockUser
-    public void existsCourseBookmark() throws Exception {
-        //Given
-        Long courseId = 1L;
-        given(courseBookmarkService.isExistCourseBookmark(anyLong(), anyString())).willReturn(false);
-
-        //When & Then
-        mockMvc.perform(get("/api/course/bookmark/{courseId}", courseId))
-                .andExpect(status().isOk())
-                .andDo(print());
-
-        verify(courseBookmarkService).isExistCourseBookmark(eq(courseId), any());
-    }
-
-    @Test
-    @DisplayName("[GET] 코스 북마크 유무 - 로그인한 유저가 아닐 경우")
-    @WithAnonymousUser
-    public void existsCourseBookmark_noMember() throws Exception {
-        //Given
-        given(courseBookmarkService.isExistCourseBookmark(anyLong(), anyString()))
-                .willThrow(new MemberNotFoundException());
-
-        //When & Then
-        mockMvc.perform(get("/api/course/bookmark/"))
-                .andExpect(status().is3xxRedirection())
-                .andDo(print());
-
-        verify(courseBookmarkService, times(0)).isExistCourseBookmark(anyLong(), any());
-    }
-
 }

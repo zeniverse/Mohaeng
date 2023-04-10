@@ -26,15 +26,8 @@ public class PlaceInitializer {
     public void init() throws IOException, ParserConfigurationException, SAXException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
+        placeService.savePlace();
         List<Place> places = placeService.getPlaces(); // 최초생성
-//        List<Place> places = new ArrayList<>(); // overview update
-//        List<Place> updatePlaces = placeRepository.findAll();
-//        for (Place place : updatePlaces) {
-//            if (place.getOverview().isEmpty()) {
-//                updateOverview(place.getContentid());
-//                places.add(place);
-//            }
-//        }
         stopWatch.stop();
         long totalTimeMillis = stopWatch.getTotalTimeMillis();
         System.out.println("total time : " + totalTimeMillis);

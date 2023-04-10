@@ -1,6 +1,6 @@
 .placeDetail {
   width: 70rem;
-  margin: 2rem 8rem 2rem;
+  margin: 3rem 8rem 2rem;
   padding: 2rem 3rem;
   background-color: var(--color-bg-lightgray);
   border-radius: 12px;
@@ -12,7 +12,7 @@
 .detailHeader {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .moveToReview:hover {
@@ -21,7 +21,6 @@
 
 .h2 {
   font-size: 2rem;
-  margin-bottom: 1rem;
 }
 
 .rating,
