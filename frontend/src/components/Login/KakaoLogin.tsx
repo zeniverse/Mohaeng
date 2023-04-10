@@ -22,9 +22,12 @@ const KakaoLogin = () => {
     const kakaoCode = async () => {
       try {
         // 코드 전송
-        const response = await axios.get(`/oauth/token?code=${code}`, {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/oauth/token?code=${code}`,
+          {
+            withCredentials: true,
+          }
+        );
         const { accessToken } = response.data;
         const { refreshToken } = response.data;
         cookie.save("accessToken", accessToken, {

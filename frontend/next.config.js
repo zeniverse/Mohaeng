@@ -20,8 +20,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/login/:path*",
-        destination: "http://localhost:8080/login/:path*",
+        source: "/:path*",
+        destination: "http://localhost:8080/:path*",
       },
       {
         source: "/loginInfo/:path*",
@@ -33,36 +33,27 @@ const nextConfig = {
       },
       {
         source: "/api/course/:id",
-        destination: "http://localhost:8080/api/course/:id",
+        destination: "https://localhost:8080/api/course/:id",
       },
       {
-        source: "/api/myPage/course/bookMark",
-        destination: "http://localhost:8080/api/myPage/course/bookMark",
+        source: "/api/place/:slug*",
+        destination: "http://localhost:3000/api/place/:slug*",
       },
       {
-        source: "/api/myPage/place/bookMark/:path*",
-        destination: "http://localhost:8080/api/myPage/place/bookMark/:path*",
+        source: "/place/overview/:id",
+        destination: "http://localhost:8080/place/overview/:id",
       },
       {
-        source: "/api/myPage/course",
-        destination: "http://localhost:8080/api/myPage/course",
+        source: "/api/place/overview/:path",
+        destination: "http://localhost:8080/api/place/overview/:path",
       },
       {
-        source: "/api/myPage/course/:path*",
-        destination: "http://localhost:8080/api/myPage/course:path*",
+        source: "/api/review/:path",
+        destination: "http://localhost:8080/api/review/:path",
       },
       {
-        source: "/places/:path*",
-        destination: "http://localhost:8080/places/:path*",
-      },
-
-      {
-        source: "/overview/:path*",
-        destination: "http://localhost:8080/overview/:path*",
-      },
-      {
-        source: "/overview/:id",
-        destination: "http://localhost:8080/overview/:id",
+        source: "/loginInfo",
+        destination: "https://localhost:8080/loginInfo",
       },
     ];
   },

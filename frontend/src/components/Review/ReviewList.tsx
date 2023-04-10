@@ -180,14 +180,3 @@ export default function ReviewList() {
     </>
   );
 }
-
-// 좋아요순 정렬
-// function compareLikes(a, b) {
-//   return b.likeCount - a.likeCount;
-// }
-
-// // 데이터 받아오는 코드
-
-// data.sort(compareLikes);
-
-// // 좋아요 순으로 정렬된 데이터 사용하는 코드
