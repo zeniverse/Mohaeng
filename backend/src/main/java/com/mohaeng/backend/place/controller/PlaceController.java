@@ -77,7 +77,7 @@ public class PlaceController {
         return ResponseEntity.ok().body(BaseResponse.success("OK",response));
     }
 
-    @GetMapping("/places")
+    @GetMapping("/home/places")
     public Page<Place> getPlaces(@RequestParam(defaultValue = "0") int page) {
         Pageable pageable = PageRequest.of(page, 4, Sort.by("id").ascending());
         return placeRepository.findAll(pageable);
