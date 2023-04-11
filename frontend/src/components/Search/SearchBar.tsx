@@ -1,6 +1,7 @@
 import { BsSearch } from "react-icons/bs";
+import { IoMdClose } from "react-icons/io";
 import styles from "./SearchBar.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { setKeyword } from "@/src/store/reducers/FilterSlice";
@@ -30,9 +31,16 @@ export default function SearchBar() {
     setSearchValue(event.target.value);
   };
 
+  const handleClearInput = () => {
+    setSearchValue("");
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit} className={styles["search-bar"]}>
+        <button className={styles["search-icon"]}>
+          <BsSearch />
+        </button>
         <input
           onChange={handleInputChange}
           className={styles["search-input"]}
@@ -40,9 +48,15 @@ export default function SearchBar() {
           placeholder="어디 가고 싶으세요?"
           value={searchValue}
         />
-        <button className={styles["search-icon"]}>
-          <BsSearch />
-        </button>
+        {searchValue && (
+          <button
+            type="button"
+            onClick={handleClearInput}
+            className={styles["clear-icon"]}
+          >
+            <IoMdClose />
+          </button>
+        )}
       </form>
     </>
   );

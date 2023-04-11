@@ -105,7 +105,9 @@ export default function SearchPlaceList(): JSX.Element {
             </div>
           )}
         </ul>
-        <Pagebar totalPage={totalPages} />
+        {totalPages !== 0 && totalPages ? (
+          <Pagebar totalPage={totalPages} />
+        ) : null}
       </section>
     </>
   );
