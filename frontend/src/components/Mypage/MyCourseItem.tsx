@@ -42,15 +42,19 @@ const MyCourseItem = (myCourse: MyCourseItemProps) => {
       ? `${styles["toggle-switch-text"]} ${styles.publish}`
       : `${styles["toggle-switch-text"]} ${styles.private}`;
 
-  const onChange = (num: string) => {
+  const clickToggle = () => {
     var ispublish: boolean = true;
 
-    console.log(num);
+    if (myCourse.courseStatus === "PUBLIC") {
+      ispublish = false;
+    } else {
+      ispublish = true;
+    }
 
     const response = async () => {
       if (accessToken) {
         await axios.put(
-          `/api/myPage/course/${myCourse.courseId}`,
+          `/api/myPage/course/visibility/${myCourse.courseId}`,
           { isPublished: ispublish },
           {
             headers: {
@@ -61,9 +65,9 @@ const MyCourseItem = (myCourse: MyCourseItemProps) => {
       }
     };
 
-    // response().then(() => {
-    //   appDispatch(getMyCourse(accessToken));
-    // });
+    response().then(() => {
+      appDispatch(getMyCourse(accessToken));
+    });
   };
 
   return (
@@ -81,21 +85,9 @@ const MyCourseItem = (myCourse: MyCourseItemProps) => {
         />
       </Link>
       <div>
-        <label htmlFor="isPublished" className={styles["publish-label"]}>
-          <span className={textclassName}>
-            {myCourse.courseStatus === "PUBLIC" ? "공개" : "비공개"}
-          </span>
-          <div className={toggleSwitchclassName}>
-            <input
-              id="isPublished"
-              type="checkbox"
-              name="isPublished"
-              checked={myCourse.courseStatus === "PUBLIC"}
-              onChange={() => onChange(myCourse.courseId.toString())}
-              className={styles.input}
-            />
-          </div>
-        </label>
+        <button onClick={clickToggle}>
+          {myCourse.courseStatus === "PUBLIC" ? <p>공개</p> : <p>비공개</p>}
+        </button>
         <h2>{myCourse.title}</h2>
         <p>{getFormattedDate(new Date(myCourse.createdDate))}</p>
         <p>{myCourse.content}</p>
