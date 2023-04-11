@@ -1,6 +1,12 @@
 "use client";
 import Link from "next/link";
 import styles from "./MyCourseItem.module.css";
+import { useState } from "react";
+import IsLikeState from "../UI/IsLikeState";
+import cookie from "react-cookies";
+import axios from "axios";
+import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 
 export interface MyCourseItemProps {
   courseId: number;
@@ -10,9 +16,60 @@ export interface MyCourseItemProps {
   createdDate: string;
   content: string;
   courseDays: string;
+  courseStatus: string;
 }
 
 const MyCourseItem = (myCourse: MyCourseItemProps) => {
+  const getFormattedDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    return `${year}-${month < 10 ? "0" + month : month}-${
+      day < 10 ? "0" + day : day
+    }`;
+  };
+  const accessToken = cookie.load("accessToken");
+
+  const appDispatch = useAppDispatch();
+
+  const toggleSwitchclassName =
+    myCourse.courseStatus === "PUBLIC"
+      ? `${styles["toggle-switch"]} ${styles.publish}`
+      : `${styles["toggle-switch"]} ${styles.private}`;
+  const textclassName =
+    myCourse.courseStatus === "PUBLIC"
+      ? `${styles["toggle-switch-text"]} ${styles.publish}`
+      : `${styles["toggle-switch-text"]} ${styles.private}`;
+
+  const clickToggle = () => {
+    var ispublish: boolean = true;
+
+    if (myCourse.courseStatus === "PUBLIC") {
+      ispublish = false;
+    } else {
+      ispublish = true;
+    }
+
+    const response = async () => {
+      if (accessToken) {
+        await axios.put(
+          `/api/myPage/course/visibility/${myCourse.courseId}`,
+          { isPublished: ispublish },
+          {
+            headers: {
+              "Access-Token": accessToken,
+            },
+          }
+        );
+      }
+    };
+
+    response().then(() => {
+      appDispatch(getMyCourse(accessToken));
+    });
+  };
+
   return (
     <div key={myCourse.courseId} className={styles["myCourse-item"]}>
       <Link
@@ -28,10 +85,15 @@ const MyCourseItem = (myCourse: MyCourseItemProps) => {
         />
       </Link>
       <div>
+        <button onClick={clickToggle}>
+          {myCourse.courseStatus === "PUBLIC" ? <p>공개</p> : <p>비공개</p>}
+        </button>
         <h2>{myCourse.title}</h2>
-        <p>{myCourse.createdDate}</p>
+        <p>{getFormattedDate(new Date(myCourse.createdDate))}</p>
         <p>{myCourse.content}</p>
-        <p>{myCourse.likeCount}</p>
+        <p className={styles.liked}>
+          ❤<p className={styles.likedCount}>{myCourse.likeCount}</p>
+        </p>
       </div>
     </div>
   );

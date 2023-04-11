@@ -48,17 +48,23 @@ const UserBookmark = () => {
                 image={bookmark.imgUrl}
                 desc={bookmark.address}
                 rating={bookmark.rating}
+                realId={bookmark.placeId}
                 isRating={true}
+                isPlace={true}
+                createdDate="123"
               />
             ))
           : courseBookmark.map((bookmark) => (
               <UserBookmarkItem
                 id={bookmark.bookMarkId}
                 name={bookmark.courseTitle}
-                image={bookmark.courseStatus}
-                desc={bookmark.region}
+                image={bookmark.imgUrl}
+                desc={bookmark.createdDate}
                 rating={0}
+                realId={bookmark.courseId}
                 isRating={false}
+                isPlace={false}
+                createdDate={bookmark.content}
               />
             ))}
       </div>

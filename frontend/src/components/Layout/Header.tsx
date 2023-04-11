@@ -24,6 +24,7 @@ import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
 import Dropdown from "../Mypage/Dropdown";
+import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 
 type User = {
   id: number;
@@ -63,6 +64,7 @@ function Header({}: Props) {
         appDispatch(getCourseBookmark(accessToken));
         appDispatch(getPlaceBookmark(accessToken));
         appDispatch(getMyCourse(accessToken));
+        appDispatch(getMyReview(accessToken));
         setUser(nickName);
       }
     };

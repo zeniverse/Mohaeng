@@ -171,6 +171,7 @@ export default function EditReview() {
         )
         .then((response) => {
           console.log(response.data, "리뷰 수정 성공!");
+          appDispatch(getMyReview(accessToken));
           router.push(`/search?keyword=${name}`);
         });
     } catch (error) {
