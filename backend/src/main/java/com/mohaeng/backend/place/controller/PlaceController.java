@@ -6,16 +6,16 @@ import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
+import com.mohaeng.backend.place.domain.Review;
 import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
 import com.mohaeng.backend.place.dto.PlaceRatingDto;
 import com.mohaeng.backend.place.dto.PlaceSearchDto;
-import com.mohaeng.backend.place.dto.response.FindAllPlacesResponse;
-import com.mohaeng.backend.place.dto.response.FindSearchPlacesResponse;
-import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
+import com.mohaeng.backend.place.dto.response.*;
 import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.service.PlaceService;
+import com.mohaeng.backend.place.service.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +45,7 @@ public class PlaceController {
     private final MemberRepository memberRepository;
     private final TokenGenerator tokenGenerator;
     private final PlaceBookmarkRepository placeBookmarkRepository;
+    private final ReviewService reviewService;
 
     @GetMapping("/place/all")
     public ResponseEntity<List<Place>> getPlaces() {
@@ -106,7 +107,7 @@ public class PlaceController {
                 isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, place);
             }
             PlaceRatingDto rating = placeService.getPlaceRating(place.getId());
-            PlaceSearchDto dto = PlaceSearchDto.from(place, isBookmark, rating.getAverageRating(), rating.getReviewTotalElements());
+            PlaceSearchDto dto = PlaceSearchDto.from(place, isBookmark, Math.round(rating.getAverageRating() * 100) / 100.0, rating.getReviewTotalElements());
             result.add(dto);
         }
         FindSearchPlacesResponse response = new FindSearchPlacesResponse(result, places.getTotalPages(), places.getTotalElements());
@@ -137,12 +138,22 @@ public class PlaceController {
                 isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, place);
             }
             PlaceRatingDto rating = placeService.getPlaceRating(place.getId());
-            FindAllPlacesDto dto = FindAllPlacesDto.from(place, isBookmark, rating.getAverageRating(), rating.getReviewTotalElements());
+            FindAllPlacesDto dto = FindAllPlacesDto.from(place, isBookmark, Math.round(rating.getAverageRating() * 100) / 100.0, rating.getReviewTotalElements());
             result.add(dto);
         }
 
         FindAllPlacesResponse response = new FindAllPlacesResponse(result, places.getTotalPages(), places.getTotalElements());
         return ResponseEntity.ok().body(BaseResponse.success("OK", response));
+    }
+
+    @GetMapping("/main")
+    public ResponseEntity getPlaceReviewsByRatingTop10(
+            @RequestParam(defaultValue = "1") int page) {
+        Page<Review> reviews = reviewService.getAllReviewsByRatingTop10(page);
+        List<FindAllReviewResponse> data = reviews.map(FindAllReviewResponse::of).getContent();
+        double averageRating = Math.round(reviewService.getAverageRating(reviewService.getAllReviews()) * 100.0) / 100.0;
+        FindSearchReviewsResponse response = new FindSearchReviewsResponse(data, reviews.getTotalPages(), reviews.getTotalElements(), averageRating);
+        return ResponseEntity.ok(BaseResponse.success("ok", response));
     }
 
     private Member isAccessMember(HttpServletRequest request){
