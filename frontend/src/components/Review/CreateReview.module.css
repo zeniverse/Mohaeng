@@ -163,7 +163,6 @@
   background-color: var(--color-icon);
 }
 
-/* For screens smaller than 768px */
 @media screen and (max-width: 768px) {
   .registerReviewContainer {
     margin: 2rem;

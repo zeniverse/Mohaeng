@@ -1,5 +1,6 @@
 .keywordItemContainer {
-  width: 280px;
+  width: 100%;
+  max-width: 280px;
   border: 2px solid var(--color-border-light);
   border-radius: 16px;
 }
@@ -92,9 +93,16 @@
   font-size: 28px;
 }
 
-/* @media (max-width: 768px) {
+/* For screens smaller than 768px (mobile devices) */
+@media (max-width: 768px) {
   .keywordItemContainer {
-    height: auto;
+    width: 100%;
+  }
+
+  .img {
+    width: 100%;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
   }
 
   .keywordInfo {
@@ -102,22 +110,21 @@
     align-items: center;
   }
 
-  .img {
-    width: 100%;
-  }
-
   .title {
     width: 100%;
     text-align: center;
+    margin-top: 8px;
+    font-size: small;
+    font-weight: 500;
+  }
+
+  .review {
+    font-size: x-small;
+    margin-top: 4px;
   }
 
   .keywordBookmark {
-    margin-left: 0;
+    margin: 0 auto;
     margin-top: 0.5rem;
   }
-
-  .bookmark,
-  .unbookmark {
-    font-size: 24px;
-  }
-} */
+}
