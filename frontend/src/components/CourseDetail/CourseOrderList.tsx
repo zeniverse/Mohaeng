@@ -10,42 +10,48 @@ const CourseOrderList = ({ places, mode }: any) => {
     dispatch(removePlace(placeId));
   };
   return (
-    <ol className={styles["course-List"]}>
-      {places.map((place: any, idx: any) => (
-        <li className={styles["course-item"]} key={place.placeId}>
-          <span className={styles["order-number"]}>{idx + 1}</span>
-          <Image
-            src={place.imgUrl}
-            alt={place.name}
-            width={126}
-            height={110}
-            priority
-          />
-          <div className={styles["item-content"]}>
-            <div className={styles["item-content-text"]}>
-              <span className={styles.name}>{place.name}</span>
-              <span className={styles.address}>주소: {place.address}</span>
-            </div>
-            <button
-              className={styles.button}
-              onClick={() => console.log("자세히보기")}
-            >
-              자세히 보기
-            </button>
-          </div>
-          {mode === "write" && (
-            <div className={styles["remove-btn-wrapper"]}>
-              <div
-                className={styles["remove-btn"]}
-                onClick={() => handleRemovePlace(place.placeId)}
-              >
-                <AiOutlineMinus />
+    <div className={styles["course-orderlist-container"]}>
+      <ol className={styles["course-list"]}>
+        {places.map((place: any, idx: any) => (
+          <li className={styles["course-item"]} key={place.placeId}>
+            <p className={styles["order-number"]}>{idx + 1}</p>
+            {place.imgUrl ? (
+              <Image
+                src={place.imgUrl}
+                alt={place.name}
+                width={130}
+                height={110}
+                priority
+              />
+            ) : (
+              <p>이미지 준비 중</p>
+            )}
+            <div className={styles["item-content"]}>
+              <div className={styles["item-content-text"]}>
+                <p className={styles.name}>{place.name}</p>
+                <p className={styles.address}>주소: {place.address}</p>
               </div>
+              <button
+                className={styles.button}
+                onClick={() => console.log("자세히보기")}
+              >
+                자세히 보기
+              </button>
             </div>
-          )}
-        </li>
-      ))}
-    </ol>
+            {mode === "write" && (
+              <div className={styles["remove-btn-wrapper"]}>
+                <div
+                  className={styles["remove-btn"]}
+                  onClick={() => handleRemovePlace(place.placeId)}
+                >
+                  <AiOutlineMinus />
+                </div>
+              </div>
+            )}
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 };
 

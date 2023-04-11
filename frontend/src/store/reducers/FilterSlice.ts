@@ -15,8 +15,8 @@ interface IFilter {
 
 const initialFilterState: IFilter = {
   area: { region: "전체보기", areaCode: "all" },
-  sort: null,
-  keyword: null,
+  sort: "",
+  keyword: "",
 };
 
 export const FilterSlice = createSlice({
@@ -29,8 +29,8 @@ export const FilterSlice = createSlice({
     },
     resetFilter: (state) => {
       state.area = { region: "전체보기", areaCode: "all" };
-      state.sort = null;
-      state.keyword = null;
+      state.sort = "";
+      state.keyword = "";
     },
     setSort: (state, action: PayloadAction<string>) => {
       state.sort = action.payload;

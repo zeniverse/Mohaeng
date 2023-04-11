@@ -1,14 +1,14 @@
 import axios from "axios";
 import { ICourse, ICourseSubmitForm } from "../interfaces/Course.type";
-import ApiConfig from "./ApiConfig";
+import CourseApiConfig from "./ApiConfig";
 import cookie from "react-cookies";
 
-const accessToken = cookie.load("accessToken");
-
 export const getCourseListApi = async (queryParams = {}) => {
-  return axios.get(ApiConfig.course, {
+  const accessToken = await cookie.load("accessToken");
+  return axios.get(CourseApiConfig.course, {
     params: queryParams,
     headers: {
+      "Cache-Control": "no-cache",
       "Access-Token": accessToken,
       withCredentials: true,
     },
@@ -16,7 +16,8 @@ export const getCourseListApi = async (queryParams = {}) => {
 };
 
 export const createCourseApi = async (data: ICourseSubmitForm) => {
-  return await axios.post(ApiConfig.course, data, {
+  const accessToken = await cookie.load("accessToken");
+  return await axios.post(CourseApiConfig.course, data, {
     headers: {
       "Access-Token": accessToken,
       withCredentials: true,
@@ -27,6 +28,7 @@ export const toggleBookmarkApi = async (
   courseId: number,
   method: "POST" | "DELETE"
 ) => {
+  const accessToken = await cookie.load("accessToken");
   try {
     const config = {
       method: method,
@@ -36,8 +38,32 @@ export const toggleBookmarkApi = async (
         withCredentials: true,
       },
     };
-    const response = await axios(`${ApiConfig.Cbookmark}/${courseId}`, config);
+    const response = await axios(
+      `${CourseApiConfig.bookmark}/${courseId}`,
+      config
+    );
     return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const toggleLikeApi = async (
+  courseId: number,
+  method: "POST" | "DELETE"
+) => {
+  const accessToken = await cookie.load("accessToken");
+  try {
+    const config = {
+      method: method,
+      data: {},
+      headers: {
+        "Access-Token": accessToken,
+        withCredentials: true,
+      },
+    };
+    const response = await axios(`${CourseApiConfig.like}/${courseId}`, config);
+    return response.data.data;
   } catch (error) {
     console.log(error);
   }

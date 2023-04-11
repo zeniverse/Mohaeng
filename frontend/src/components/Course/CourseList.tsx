@@ -3,7 +3,7 @@ import styles from "./CourseList.module.css";
 import React, { useEffect, useState } from "react";
 import CourseItem from "./CourseItem";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import { getCourseListAction } from "@/src/store/reducers/CourseSlice";
+import { getCourseListAction } from "@/src/store/reducers/CourseListSlice";
 import { setPage } from "@/src/store/reducers/pageSlice";
 import Pagebar from "../Pagenation/Pagebar";
 import ListContainer from "../UI/ListContainer";
@@ -20,28 +20,28 @@ const CourseList = () => {
     dispatch(setPage(page));
     dispatch(
       getCourseListAction({
-        region: region !== "전체보기" ? region : null,
+        ...(region !== "전체보기" ? { region } : {}),
         page,
-        keyword,
-        sort: sort ? sort : null,
+        ...(keyword ? { keyword } : {}),
+        ...(sort ? { sort } : {}),
       })
     );
   }, [dispatch, region, page, keyword, sort]);
 
   return (
     <>
-      {courseList.length > 0 ? (
+      {courseList?.length > 0 ? (
         <ListContainer>
           {courseList.map((course) => (
             <CourseItem
-              key={course.id}
-              id={course.id}
+              key={course.courseId}
+              courseId={course.courseId}
               title={course.title}
               content={course.content}
               likeCount={course.likeCount}
               thumbnailUrl={course.thumbnailUrl}
               courseDays={course.courseDays}
-              isBookMarked={course.isBookMarked}
+              isBookmarked={course.isBookmarked}
               isLiked={course.isLiked}
               places={course.places}
             />

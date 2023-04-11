@@ -1,5 +1,5 @@
 export interface ICourse {
-  id: number;
+  courseId: number;
   title: string;
   startDate: string;
   endDate: string;
@@ -9,9 +9,12 @@ export interface ICourse {
   thumbnailUrl: string;
   content: string;
   likeCount: number;
-  places: placesName[];
-  isBookMarked: boolean;
+  isBookmarked: boolean;
   isLiked: boolean;
+}
+
+export interface ICoursePlaceName extends ICourse {
+  places: string;
 }
 export interface placesName {
   name: string;
@@ -32,13 +35,16 @@ export interface ICourseState {
 
 export interface ICourseForm {
   title: string;
-  startDate?: string;
-  endDate?: string;
+  startDate: string;
+  endDate: string;
   isPublished: boolean;
   courseDays: string;
   region: string;
   thumbnailUrl: string;
   content: string;
+  likeCount: number;
+  isBookmarked: boolean;
+  isLiked: boolean;
 }
 export interface ICourseOriginForm extends ICourseForm {
   places: IPlacesForm[];
@@ -60,4 +66,30 @@ export interface IPlacesForm {
   imgUrl: string;
   rating: string;
   address?: string;
+}
+
+export interface ICourseDetail {
+  courseId: number;
+  title: string;
+  content: string;
+  nickname: string;
+  likeCount: number;
+  courseDays: string;
+  createdDate: string;
+  startDate: string;
+  endDate: string;
+  region: string;
+  isBookmarked: boolean;
+  isLiked: boolean;
+  isPublished: boolean;
+  places: IPlaces[];
+}
+
+export interface IPlaces {
+  placeId: number;
+  name: string;
+  address: string;
+  imgUrl: string;
+  mapX: string;
+  mapY: string;
 }

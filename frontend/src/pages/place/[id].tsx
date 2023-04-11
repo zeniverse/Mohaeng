@@ -91,15 +91,12 @@ export default function PlaceId() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/place/overview/${contentId}`,
-          {
-            headers: {
-              "Access-Token": `${accessToken}`,
-              withCredentials: true,
-            },
-          }
-        );
+        const res = await axios.get(`/place/overview/${contentId}`, {
+          headers: {
+            "Access-Token": `${accessToken}`,
+            withCredentials: true,
+          },
+        });
         if (res.data.data.content[0] !== {}) {
           const { content } = res.data.data;
           setPlaceInfo({ ...placeInfo, ...content[0] });
