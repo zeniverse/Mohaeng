@@ -131,13 +131,25 @@ export default function SearchItem({
           <FiveStarRating rating={averageRating.toString()} />
           <p className={styles.review}>{reviewTotalElements}건의 리뷰</p>
         </div>
-        <div className={styles.keywordBookmark}>
+        {accessToken && (
+          <div className={styles.keywordBookmark}>
+            {isBookmarked === true ? (
+              <BsBookmarkFill
+                onClick={delBookmark}
+                className={styles.bookmark}
+              />
+            ) : (
+              <BsBookmark onClick={addBookmark} className={styles.unbookmark} />
+            )}
+          </div>
+        )}
+        {/* <div className={styles.keywordBookmark}>
           {isBookmarked === true ? (
             <BsBookmarkFill onClick={delBookmark} className={styles.bookmark} />
           ) : (
             <BsBookmark onClick={addBookmark} className={styles.unbookmark} />
           )}
-        </div>
+        </div> */}
       </div>
     </li>
   );
