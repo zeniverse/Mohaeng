@@ -12,8 +12,6 @@ import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
 import com.mohaeng.backend.place.exception.PlaceNotFoundException;
 import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -239,6 +237,7 @@ public class PlaceService {
                 .mapToDouble(review -> Double.parseDouble(review.getRating()))
                 .average()
                 .orElse(0);
+        averageRating = Math.round(averageRating * 100.0) / 100.0;
         long reviewTotalElements = reviews.size();
         return new PlaceRatingDto(averageRating, reviewTotalElements);
     }
