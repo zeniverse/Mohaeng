@@ -24,7 +24,7 @@ export default function Place() {
     dispatch(setPage(1));
     const response = async () => {
       await axios
-        .get(`/places`, {
+        .get(`/api/places`, {
           headers: {
             "Access-Token": accessToken,
           },
@@ -43,7 +43,7 @@ export default function Place() {
     console.log("AreaCode is " + areaCode);
     const response = async () => {
       await axios
-        .get(`/places`, {
+        .get(`/api/places`, {
           headers: {
             "Access-Token": accessToken,
           },

@@ -111,16 +111,12 @@ export default function CreateReview() {
     try {
       const accessToken = await cookie.load("accessToken");
       const response = await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}`,
-          formData,
-          {
-            headers: {
-              "Access-Token": accessToken,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
+        .post(`/api/review/${placeId}`, formData, {
+          headers: {
+            "Access-Token": accessToken,
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then((response) => {
           console.log(response.data, "리뷰 작성 성공!");
           router.push(`/search?keyword=${name}`);

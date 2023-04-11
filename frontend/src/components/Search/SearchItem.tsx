@@ -12,7 +12,6 @@ import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { KeywordProps } from "@/src/interfaces/Keyword";
-import { handleClientScriptLoad } from "next/script";
 
 export default function SearchItem({
   name,
@@ -35,7 +34,7 @@ export default function SearchItem({
   const addBookmark = () => {
     const response = async () => {
       await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
+        `/api/place/bookmark/${placeId}`,
         {},
         {
           headers: {
@@ -47,7 +46,7 @@ export default function SearchItem({
     };
     response().then(async () => {
       await axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/api/place`, {
+        .get(`/api/place`, {
           headers: {
             "Access-Token": accessToken,
           },
@@ -68,19 +67,16 @@ export default function SearchItem({
 
   const delBookmark = async () => {
     const response = async () => {
-      await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
-        {
-          headers: {
-            "Access-Token": accessToken,
-          },
-          withCredentials: true,
-        }
-      );
+      await axios.delete(`/api/place/bookmark/${placeId}`, {
+        headers: {
+          "Access-Token": accessToken,
+        },
+        withCredentials: true,
+      });
     };
     response().then(async () => {
       await axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/api/place`, {
+        .get(`/api/place`, {
           headers: {
             "Access-Token": accessToken,
           },

@@ -19,13 +19,11 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      {
-        source: "/:path*",
-        destination: "http://localhost:8080/:path*",
-      },
-
+      // {
+      //   source: "/:path*",
+      //   destination: "http://localhost:8080/:path*",
+      // },
       // 코스 상세를 보려면 위 코드는 주석 처리하고 아래 코드는 주석을 풀어주세요.
-
       {
         source: "/login/:path*",
         destination: "http://localhost:8080/login/:path*",
@@ -47,12 +45,32 @@ const nextConfig = {
         destination: "http://localhost:8080/api/course/:id",
       },
       {
+        source: "/api/places/:path*",
+        destination: "http://localhost:8080/api/places/:path*",
+      },
+      {
+        source: "/api/place/:path*",
+        destination: "http://localhost:8080/api/place/:path*",
+      },
+      {
+        source: "/api/place/overview/:path*",
+        destination: "http://localhost:8080/api/place/overview/:path*",
+      },
+      {
         source: "/api/review/:path*",
         destination: "http://localhost:8080/api/review/:path*",
       },
       {
         source: "/api/review/detail/:path*",
         destination: "http://localhost:8080/api/review/detail/:path*",
+      },
+      {
+        source: "/api/review/:placeId/date",
+        destination: "http://localhost:8080/api/review/:placeId/date",
+      },
+      {
+        source: "/api/review/:placeId/rating",
+        destination: "http://localhost:8080/api/review/:placeId/rating",
       },
     ];
   },

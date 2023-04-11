@@ -159,16 +159,12 @@ export default function EditReview() {
 
     try {
       const response = await axios
-        .put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/review/detail/${reviewId}`,
-          formData,
-          {
-            headers: {
-              "Access-Token": accessToken,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
+        .put(`/api/review/detail/${reviewId}`, formData, {
+          headers: {
+            "Access-Token": accessToken,
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then((response) => {
           console.log(response.data, "리뷰 수정 성공!");
           router.push(`/search?keyword=${name}`);

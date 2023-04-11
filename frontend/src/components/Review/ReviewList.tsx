@@ -46,9 +46,9 @@ export default function ReviewList() {
       try {
         let url = "";
         if (selectedValue === "highrating") {
-          url = `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}/rating`;
+          url = `/api/review/${placeId}/rating`;
         } else if (selectedValue === "latest") {
-          url = `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}/date`;
+          url = `/api/review/${placeId}/date`;
         }
 
         const res = await axios.get(url, {
@@ -73,15 +73,12 @@ export default function ReviewList() {
     if (page !== 0) {
       const fetchReview = async () => {
         try {
-          const res = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}`,
-            {
-              params: {
-                page: page,
-              },
-              withCredentials: true,
-            }
-          );
+          const res = await axios.get(`/api/review/${placeId}/rating`, {
+            params: {
+              page: page,
+            },
+            withCredentials: true,
+          });
           console.log(res.data.data);
           dispatch(setReview(res.data.data));
           setReviewData(res.data.data.reviews);

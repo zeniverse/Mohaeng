@@ -63,7 +63,7 @@ export default function PlaceId() {
       if (bookMarked === false) {
         const res = await axios
           .post(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
+            `/api/place/bookmark/${placeId}`,
             {},
             {
               headers: {
@@ -77,15 +77,12 @@ export default function PlaceId() {
           });
       } else {
         const res = await axios
-          .delete(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
-            {
-              headers: {
-                "Access-Token": `${accessToken}`,
-                withCredentials: true,
-              },
-            }
-          )
+          .delete(`/api/place/bookmark/${placeId}`, {
+            headers: {
+              "Access-Token": `${accessToken}`,
+              withCredentials: true,
+            },
+          })
           .then(() => {
             appDispatch(getPlaceBookmark(accessToken));
           });
@@ -105,10 +102,9 @@ export default function PlaceId() {
           headers["Access-Token"] = accessToken;
           headers.withCredentials = "true";
         }
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/place/overview/${contentId}`,
-          { headers }
-        );
+        const res = await axios.get(`/api/place/overview/${contentId}`, {
+          headers,
+        });
         if (res.data.data.content[0] !== {}) {
           const { content } = res.data.data;
           setPlaceInfo({ ...placeInfo, ...content[0] });

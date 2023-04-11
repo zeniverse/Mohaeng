@@ -48,25 +48,19 @@ export default function SearchPlaceList(): JSX.Element {
           headers["Access-Token"] = accessToken;
           headers.withCredentials = "true";
         }
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/place`,
-          {
-            params: {
-              keyword: keyword,
-              page: page,
-            },
-            headers: headers,
-          }
-        );
-        if (res.data.data.content !== []) {
-          dispatch(setSearchPlace(res.data.data));
-          setPage(totalPages);
-          const { content } = res.data.data;
-          setSearchResult(content);
-          console.log(content);
-        } else {
-          console.log(res.data);
-        }
+        const res = await axios.get(`/api/place`, {
+          params: {
+            keyword: keyword,
+            page: page,
+          },
+          headers: headers,
+        });
+
+        dispatch(setSearchPlace(res.data.data));
+        setPage(totalPages);
+        const { content } = res.data.data;
+        setSearchResult(content);
+        console.log(content);
       } catch (error) {
         console.log("Error", error);
       }
