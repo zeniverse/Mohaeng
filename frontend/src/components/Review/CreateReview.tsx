@@ -23,6 +23,18 @@ export default function CreateReview() {
   const [previews, setPreviews] = useState<string[]>([]);
   let rating = clicked.filter(Boolean).length;
 
+  // * 새로고침 방지
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   // *비동기적으로 받아오는 별점 개수 업데이트 확인
   useEffect(() => {
     console.log(rating);
@@ -121,7 +133,12 @@ export default function CreateReview() {
 
   // 뒤로 가기
   const handleGoBack = () => {
-    router.back();
+    const confirmed = window.confirm(
+      "작성 중인 내용이 있습니다. 페이지를 떠나시겠습니까?"
+    );
+    if (confirmed) {
+      router.back();
+    }
   };
 
   return (

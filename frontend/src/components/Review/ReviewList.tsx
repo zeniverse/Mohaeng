@@ -9,18 +9,6 @@ import { RootState } from "@/src/store/store";
 import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import Pagebar from "../Pagenation/Pagebar";
 
-// 정렬 필터 (별점 높은 순, 최신순)
-
-interface Review {
-  reviewId: number;
-  nickname: string;
-  memberImage: string;
-  rating: string;
-  content: string;
-  createdDate: string;
-  imgUrl: string[];
-}
-
 export default function ReviewList() {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -105,7 +93,6 @@ export default function ReviewList() {
     }
   }, [page]);
 
-  // ToDo: 리뷰 한 번만 쓰도록? (여행지별 리뷰는 한 번만 작성할 수 있습니다. || 이미 작성하신 리뷰가 있습니다.)
   const handleClickReviewBtn = () => {
     if (!accessToken && !currentUser) {
       router.push("/login");
@@ -119,7 +106,7 @@ export default function ReviewList() {
             name: name,
           },
         },
-        `review/create-review`
+        `/review/create-review`
       );
     }
   };

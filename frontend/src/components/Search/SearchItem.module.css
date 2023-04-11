@@ -38,6 +38,7 @@
 .keywordDesc {
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .title {
@@ -60,6 +61,7 @@
   width: 30px;
   margin-top: 1rem;
   margin-left: 28px;
+  cursor: pointer;
 }
 
 .btn {

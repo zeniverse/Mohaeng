@@ -45,6 +45,18 @@ export default function PlaceId() {
 
   const [bookMarked, setBookMarked] = useState(false);
 
+  // 새로고침 방지
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   // * 북마크
   const handleBookmarkClick = async () => {
     try {

@@ -12,6 +12,7 @@ import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { KeywordProps } from "@/src/interfaces/Keyword";
+import { handleClientScriptLoad } from "next/script";
 
 export default function SearchItem({
   name,
@@ -98,24 +99,23 @@ export default function SearchItem({
     });
   };
 
+  const handleClickBtn = () => {
+    router.push(
+      {
+        pathname: `/place/[id]`,
+        query: {
+          contentId: contentId,
+          placeId: placeId,
+          name: name,
+        },
+      },
+      `place/${contentId}`
+    );
+  };
+
   return (
     <li className={styles.keywordItemContainer} key={contentId}>
-      <div
-        className={styles.keywordItem}
-        onClick={() =>
-          router.push(
-            {
-              pathname: `/place/[id]`,
-              query: {
-                contentId: contentId,
-                placeId: placeId,
-                name: name,
-              },
-            },
-            `place/${contentId}`
-          )
-        }
-      >
+      <div className={styles.keywordItem} onClick={handleClickBtn}>
         <Image
           className={styles.img}
           src={firstImage}
@@ -126,7 +126,7 @@ export default function SearchItem({
         />
       </div>
       <div className={styles.keywordInfo}>
-        <div className={styles.keywordDesc}>
+        <div className={styles.keywordDesc} onClick={handleClickBtn}>
           <p className={styles.title}>{name}</p>
           <FiveStarRating rating={averageRating.toString()} />
           <p className={styles.review}>{reviewTotalElements}건의 리뷰</p>
@@ -143,13 +143,6 @@ export default function SearchItem({
             )}
           </div>
         )}
-        {/* <div className={styles.keywordBookmark}>
-          {isBookmarked === true ? (
-            <BsBookmarkFill onClick={delBookmark} className={styles.bookmark} />
-          ) : (
-            <BsBookmark onClick={addBookmark} className={styles.unbookmark} />
-          )}
-        </div> */}
       </div>
     </li>
   );
