@@ -8,9 +8,9 @@
 .keywordItemContainer:hover {
   color: var(--color-text-basic);
   transition: all ease 0.3s;
-  box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
-  -webkit-box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
-  -moz-box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
+  box-shadow: 7px 4px 14px -5px var(--color-border-light);
+  -webkit-box-shadow: 7px 4px 14px -5px var(--color-border-light);
+  -moz-box-shadow: 7px 4px 14px -5px var(--color-border-light);
 }
 
 .keywordItem {
@@ -60,7 +60,7 @@
 .keywordBookmark {
   width: 30px;
   margin-top: 1rem;
-  margin-left: 28px;
+  margin-left: 36px;
   cursor: pointer;
 }
 

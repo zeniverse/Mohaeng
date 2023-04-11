@@ -112,14 +112,16 @@ export default function SearchItem({
   return (
     <li className={styles.keywordItemContainer} key={contentId}>
       <div className={styles.keywordItem} onClick={handleClickBtn}>
-        <Image
-          className={styles.img}
-          src={firstImage}
-          alt={name}
-          width={276}
-          height={200}
-          priority
-        />
+        {firstImage && (
+          <Image
+            className={styles.img}
+            src={firstImage}
+            alt={name}
+            width={276}
+            height={200}
+            priority
+          />
+        )}
       </div>
       <div className={styles.keywordInfo}>
         <div className={styles.keywordDesc} onClick={handleClickBtn}>
