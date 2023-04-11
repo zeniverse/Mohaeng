@@ -3,6 +3,10 @@ import Link from "next/link";
 import styles from "./MyCourseItem.module.css";
 import { useState } from "react";
 import IsLikeState from "../UI/IsLikeState";
+import cookie from "react-cookies";
+import axios from "axios";
+import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 
 export interface MyCourseItemProps {
   courseId: number;
@@ -25,6 +29,9 @@ const MyCourseItem = (myCourse: MyCourseItemProps) => {
       day < 10 ? "0" + day : day
     }`;
   };
+  const accessToken = cookie.load("accessToken");
+
+  const appDispatch = useAppDispatch();
 
   const toggleSwitchclassName =
     myCourse.courseStatus === "PUBLIC"
@@ -35,8 +42,28 @@ const MyCourseItem = (myCourse: MyCourseItemProps) => {
       ? `${styles["toggle-switch-text"]} ${styles.publish}`
       : `${styles["toggle-switch-text"]} ${styles.private}`;
 
-  const onChange = () => {
-    console.log("A");
+  const onChange = (num: string) => {
+    var ispublish: boolean = true;
+
+    console.log(num);
+
+    const response = async () => {
+      if (accessToken) {
+        await axios.put(
+          `/api/myPage/course/${myCourse.courseId}`,
+          { isPublished: ispublish },
+          {
+            headers: {
+              "Access-Token": accessToken,
+            },
+          }
+        );
+      }
+    };
+
+    // response().then(() => {
+    //   appDispatch(getMyCourse(accessToken));
+    // });
   };
 
   return (
@@ -64,7 +91,7 @@ const MyCourseItem = (myCourse: MyCourseItemProps) => {
               type="checkbox"
               name="isPublished"
               checked={myCourse.courseStatus === "PUBLIC"}
-              onChange={onChange}
+              onChange={() => onChange(myCourse.courseId.toString())}
               className={styles.input}
             />
           </div>

@@ -17,6 +17,7 @@ export interface bookmarkState {
   realId: number;
   isRating: boolean;
   isPlace: boolean;
+  createdDate: string;
 }
 
 const UserBookmarkItem = (prop: bookmarkState) => {
@@ -64,7 +65,9 @@ const UserBookmarkItem = (prop: bookmarkState) => {
           <p>
             <FiveStarRating rating={prop.rating.toString()} />
           </p>
-        ) : null}
+        ) : (
+          <p>{prop.createdDate}</p>
+        )}
       </div>
     </div>
   );

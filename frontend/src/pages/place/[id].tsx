@@ -91,7 +91,7 @@ export default function PlaceId() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/place/overview/${contentId}`, {
+        const res = await axios.get(`/api/place/overview/${contentId}`, {
           headers: {
             "Access-Token": `${accessToken}`,
             withCredentials: true,
