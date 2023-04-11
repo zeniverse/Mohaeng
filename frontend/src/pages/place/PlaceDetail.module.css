@@ -1,5 +1,6 @@
 .placeDetail {
-  width: 70rem;
+  width: 100%;
+  max-width: 70rem;
   margin: 2rem 8rem 2rem;
   padding: 2rem 3rem;
   background-color: var(--color-bg-lightgray);

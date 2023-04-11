@@ -1,5 +1,6 @@
 .registerReviewContainer {
-  width: 70rem;
+  width: 100%;
+  max-width: 70rem;
   margin: 2rem 8rem;
   --color-icon: #cfcfcf;
 }
@@ -160,4 +161,75 @@
   justify-content: center;
   align-items: center;
   background-color: var(--color-icon);
+}
+
+/* For screens smaller than 768px */
+@media screen and (max-width: 768px) {
+  .registerReviewContainer {
+    margin: 2rem;
+  }
+  .h2 {
+    font-size: 1.5rem;
+  }
+  .registerReview {
+    padding: 1rem;
+  }
+  .reviewTitle {
+    margin-bottom: 1rem;
+  }
+  .ratingBox {
+    margin-bottom: 1rem;
+  }
+  .ratingDesc {
+    margin-left: 0;
+  }
+  .formTxtArea {
+    height: 8rem;
+  }
+  .imgContainer {
+    flex-wrap: wrap;
+  }
+  .imgBox {
+    margin: 0.5rem;
+  }
+  .postBtn,
+  .cancelBtn {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+}
+
+/* For screens between 768px and 1024px */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .registerReviewContainer {
+    margin: 2rem;
+  }
+  .h2 {
+    font-size: 1.8rem;
+  }
+  .registerReview {
+    padding: 1.5rem;
+  }
+  .ratingBox {
+    margin-bottom: 1.5rem;
+  }
+  .ratingDesc {
+    margin-left: 0.5rem;
+  }
+  .formTxtArea {
+    height: 10rem;
+  }
+  .imgContainer {
+    flex-wrap: wrap;
+  }
+  .imgBox {
+    margin: 1rem;
+  }
+  .postBtn,
+  .cancelBtn {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
 }
