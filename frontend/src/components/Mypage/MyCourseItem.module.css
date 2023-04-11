@@ -38,7 +38,17 @@
 .myCourse-item p {
   margin: 0.2rem 0;
 }
+.liked {
+  font-size: large;
+  color: red;
+  display: flex;
+  gap: 3px;
+}
 
+.likedCount {
+  font-size: small;
+  color: black;
+}
 /* TOGGLE SWITCH BUTTON */
 .publish-label {
   margin-left: 28rem;

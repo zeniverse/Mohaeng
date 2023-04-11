@@ -17,7 +17,7 @@ const PlaceItem = ({
   firstImage,
   areaCode,
   placeId,
-  rating,
+  averageRating,
   review,
   isBookmarked,
   contentId,
@@ -43,7 +43,7 @@ const PlaceItem = ({
     };
     response().then(async () => {
       await axios
-        .get(`/places`, {
+        .get(`/api/places`, {
           headers: {
             "Access-Token": accessToken,
           },
@@ -71,7 +71,7 @@ const PlaceItem = ({
     };
     response().then(async () => {
       await axios
-        .get(`/places`, {
+        .get(`/api/places`, {
           headers: {
             "Access-Token": accessToken,
           },
@@ -115,7 +115,7 @@ const PlaceItem = ({
         <div className={styles.keywordInfo}>
           <div className={styles.keywordDesc}>
             <p className={styles.title}>{name}</p>
-            <FiveStarRating rating={rating} />
+            <FiveStarRating rating={averageRating.toString()} />
             <p className={styles.review}>{review}건의 리뷰</p>
           </div>
           <div className={styles.keywordBookmark}>

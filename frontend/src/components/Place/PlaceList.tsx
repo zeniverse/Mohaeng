@@ -23,7 +23,7 @@ const PlaceList = () => {
           isBookmarked={place.isBookmarked}
           placeId={place.placeId}
           areaCode={areaCode}
-          rating={place.rating}
+          averageRating={place.averageRating}
           review={place.review}
         />
       ))}

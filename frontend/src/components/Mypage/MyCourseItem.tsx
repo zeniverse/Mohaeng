@@ -2,6 +2,7 @@
 import Link from "next/link";
 import styles from "./MyCourseItem.module.css";
 import { useState } from "react";
+import IsLikeState from "../UI/IsLikeState";
 
 export interface MyCourseItemProps {
   courseId: number;
@@ -71,7 +72,9 @@ const MyCourseItem = (myCourse: MyCourseItemProps) => {
         <h2>{myCourse.title}</h2>
         <p>{getFormattedDate(new Date(myCourse.createdDate))}</p>
         <p>{myCourse.content}</p>
-        <p>{myCourse.likeCount}</p>
+        <p className={styles.liked}>
+          ❤<p className={styles.likedCount}>{myCourse.likeCount}</p>
+        </p>
       </div>
     </div>
   );
