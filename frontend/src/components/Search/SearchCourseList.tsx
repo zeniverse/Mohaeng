@@ -25,42 +25,7 @@ interface CourseList {
 
 export default function SearchCourseList(): JSX.Element {
   const router = useRouter();
-  // const { keyword } = router.query;
   const [searchResult, setSearchResult] = useState<CourseList[]>([]);
-  // const page = useSelector((state: RootState) => state.page.page);
-  // const totalPages: number = useSelector(
-  //   (state: RootState) => state.searchCourse.totalPages
-  // );
-
-  // useEffect(() => {
-  //   const fetchKeyword = async () => {
-  //     try {
-  //       const res = await axios.get(
-  //         `${process.env.NEXT_PUBLIC_API_URL}/api/course`,
-  //         {
-  //           params: {
-  //             page: page,
-  //             keyword: keyword,
-  //           },
-  //           withCredentials: true,
-  //         }
-  //       );
-  //       if (res.data.data.content !== []) {
-  //         console.log(res.data.data);
-  //         const { courseList } = res.data.data;
-  //         setSearchResult(courseList);
-  //       } else {
-  //         console.log(res.data.data.content);
-  //       }
-  //     } catch (error) {
-  //       console.log("Error", error);
-  //     }
-  //   };
-  //   if (keyword) {
-  //     fetchKeyword();
-  //   }
-  // }, [keyword]);
-
   const { courseList, totalElements, totalPages } = useAppSelector(
     (state) => state.course
   );
