@@ -1,5 +1,4 @@
 import styles from "./SearchItem.module.css";
-
 import axios from "axios";
 import Image from "next/image";
 import cookie from "react-cookies";
@@ -101,7 +100,7 @@ export default function SearchItem({
 
   return (
     <li className={styles.keywordItemContainer} key={contentId}>
-      <button
+      <div
         className={styles.keywordItem}
         onClick={() =>
           router.push(
@@ -125,7 +124,7 @@ export default function SearchItem({
           height={200}
           priority
         />
-      </button>
+      </div>
       <div className={styles.keywordInfo}>
         <div className={styles.keywordDesc}>
           <p className={styles.title}>{name}</p>
