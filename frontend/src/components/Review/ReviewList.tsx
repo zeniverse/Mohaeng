@@ -8,12 +8,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import Pagebar from "../Pagenation/Pagebar";
+import { useRouterQuery } from "@/src/hooks/useRouterQuery";
+
+type ReviewListProps = {
+  placeId: number;
+  placeName: string;
+};
 
 export default function ReviewList() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { placeId, name, reviewId } = router.query;
-
   const [reviewData, setReviewData] = useState<ReviewData[]>([]);
   const [selectedValue, setSelectedValue] = useState("latest");
 
@@ -32,6 +37,18 @@ export default function ReviewList() {
     (state: RootState) => state.nickName.nickName
   );
   const accessToken = useSelector((state: RootState) => state.token.token);
+
+  // * 새로고침 방지
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   // 정렬
   const handleChangeOption = (e: {
@@ -57,7 +74,7 @@ export default function ReviewList() {
           },
           withCredentials: true,
         });
-        if (res.data && res.data.data && res.data.data.reviews) {
+        if (res.data.data && res.data.data.reviews) {
           dispatch(setReview(res.data.data));
           setReviewData(res.data.data.reviews);
         }
@@ -73,7 +90,7 @@ export default function ReviewList() {
     if (page !== 0) {
       const fetchReview = async () => {
         try {
-          const res = await axios.get(`/api/review/${placeId}/rating`, {
+          const res = await axios.get(`/api/review/${placeId}/date`, {
             params: {
               page: page,
             },
