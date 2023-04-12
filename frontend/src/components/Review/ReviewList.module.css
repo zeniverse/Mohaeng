@@ -74,10 +74,10 @@
   border: 3px solid var(--color-border-light);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 920px) {
   .reviewSection {
     width: auto;
-    margin: 2rem 2rem;
+    margin: 2rem 1rem;
   }
 
   .reviewContainer {
