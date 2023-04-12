@@ -51,7 +51,7 @@ export default function PlaceDetail() {
     }
   }
 
-  // 새로고침 방지
+  // * 새로고침 방지
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();

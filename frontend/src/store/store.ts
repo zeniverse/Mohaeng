@@ -19,6 +19,7 @@ import reviewDetailReducer from "./reducers/reviewDetailSlice";
 import reviewReducer from "./reducers/reviewSlice";
 import myCourseReducer from "./reducers/myCourseSlice";
 import CourseDetailSlice from "./reducers/CourseDetailSlice";
+import myReviewReducer from "./reducers/myReviewSlice";
 
 const store = configureStore({
   reducer: {
@@ -42,6 +43,7 @@ const store = configureStore({
     review: reviewReducer,
     myCourse: myCourseReducer,
     courseDetail: CourseDetailSlice,
+    myReview: myReviewReducer,
   },
 });
 

@@ -6,9 +6,12 @@ import Image from "next/image";
 import axios from "axios";
 import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 
 export default function CreateReview() {
   const router = useRouter();
+  const appDispatch = useAppDispatch();
   const { placeId, contentId, name } = router.query;
   const [clicked, setClicked] = useState<boolean[]>([
     false,
@@ -116,6 +119,7 @@ export default function CreateReview() {
         })
         .then((response) => {
           console.log(response.data, "리뷰 작성 성공!");
+          appDispatch(getMyReview(accessToken));
           router.push(`/search?keyword=${name}`);
         });
     } catch (error) {

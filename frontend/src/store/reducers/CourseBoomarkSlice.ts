@@ -7,6 +7,7 @@ export interface bookmarkCourse {
   courseTitle: string;
   region: string;
   content: string;
+  imgUrl: string;
   courseStatus: string;
   createdDate: string;
   modifiedDate: string;

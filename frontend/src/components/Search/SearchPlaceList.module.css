@@ -11,7 +11,6 @@
   flex-direction: row;
   width: 100%;
   display: grid;
-  margin-left: 2rem;
   padding: 1.6rem 1.6rem;
   grid-template-columns: repeat(4, 1fr);
   row-gap: 2rem;

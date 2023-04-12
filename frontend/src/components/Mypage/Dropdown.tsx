@@ -14,6 +14,8 @@ import { useDispatch } from "react-redux";
 import useDetectClose from "@/src/hooks/useDetectClose";
 import { FaUserCircle } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
+import { resetFilter } from "@/src/store/reducers/FilterSlice";
+import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 type User = {
   id: number;
   nickName: string;
@@ -41,10 +43,21 @@ export default function Dropdown() {
     window.alert("로그아웃되었습니다!");
   };
 
+  const ResetStatus = () => {
+    dispatch(resetFilter());
+
+    const currComponent: myPageState = {
+      currIdx: 0,
+      label: "회원정보",
+    };
+
+    dispatch(setCurrIdx(currComponent));
+  };
+
   return (
     <div className={styles.menu}>
       <li className={styles.toli}>
-        <Link href="/mypage">
+        <Link href="/mypage" onClick={ResetStatus}>
           <FaUserCircle className={styles.mypage} />
           마이페이지
         </Link>

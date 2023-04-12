@@ -7,8 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
 public class FindAllPlacesDto {
 
     private static PlaceService placeService;
@@ -18,13 +18,15 @@ public class FindAllPlacesDto {
     private String firstImage;
     private String contentId;
     private Boolean isBookmarked;
+    private double averageRating;
+    private long review;
 
-    public static FindAllPlacesDto from(Place place, Boolean isBookmarked){
+    public static FindAllPlacesDto from(Place place, Boolean isBookmarked, double averageRating, long review){
         String firstImage = place.getFirstImage();
         if (firstImage == null || firstImage.isEmpty()) {
             firstImage = placeService.getFirstImage();
         }
-        return new FindAllPlacesDto(place.getId(), place.getName(), place.getAreaCode(), firstImage, place.getContentId(), isBookmarked);
+        return new FindAllPlacesDto(place.getId(), place.getName(), place.getAreaCode(), firstImage, place.getContentId(), isBookmarked, averageRating, review);
     }
 }
 

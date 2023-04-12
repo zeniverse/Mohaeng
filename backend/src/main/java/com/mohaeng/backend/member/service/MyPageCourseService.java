@@ -45,7 +45,7 @@ public class MyPageCourseService {
     }
 
     @Transactional
-    public void changeVisibility(String email, long courseId, VisibilityRequest request) {
+    public void changeVisibility(String email, long courseId, VisibilityRequest visibilityRequest) {
         Member member = isMember(email);
         Course course = isCourseId(courseId);
 
@@ -53,7 +53,8 @@ public class MyPageCourseService {
             throw new NotMatchMemberCourse();
         }
 
-        course.changeStatus(request.getIsPublished());
+        course.changeCourseStatus(course.changeStatus(visibilityRequest.getIsPublished()));
+        courseRepository.save(course);
     }
 
     private boolean isMemberHasCourse(Member member, Course course) {

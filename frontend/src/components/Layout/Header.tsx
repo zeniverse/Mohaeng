@@ -24,6 +24,7 @@ import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
 import Dropdown from "../Mypage/Dropdown";
+import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 
 type User = {
   id: number;
@@ -45,6 +46,7 @@ function Header({}: Props) {
   const imgUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
   const [view, setView] = useState(false);
 
+  // * 로그인 정보 조회
   useEffect(() => {
     const response = async () => {
       console.log("ACcess = " + accessToken);
@@ -63,12 +65,14 @@ function Header({}: Props) {
         appDispatch(getCourseBookmark(accessToken));
         appDispatch(getPlaceBookmark(accessToken));
         appDispatch(getMyCourse(accessToken));
+        appDispatch(getMyReview(accessToken));
         setUser(nickName);
       }
     };
     response();
   }, [accessToken]);
 
+  // * 로그인 모달
   const handleOpenLoginModal = () => {
     dispatch(
       openModal({
@@ -78,16 +82,17 @@ function Header({}: Props) {
     );
   };
 
-  const handleLogout = () => {
-    cookie.remove("accessToken", { path: "/" });
-    dispatch(setToken(""));
-    dispatch(setNickname(""));
-    dispatch(setEmail(""));
-    dispatch(setImgUrl(""));
-    dispatch(setId(0));
-    setUser([]);
-    router.replace("/");
-  };
+  // * 로그아웃
+  // const handleLogout = () => {
+  //   cookie.remove("accessToken", { path: "/" });
+  //   dispatch(setToken(""));
+  //   dispatch(setNickname(""));
+  //   dispatch(setEmail(""));
+  //   dispatch(setImgUrl(""));
+  //   dispatch(setId(0));
+  //   setUser([]);
+  //   router.replace("/");
+  // };
 
   const ResetStatus = () => {
     dispatch(resetFilter());
