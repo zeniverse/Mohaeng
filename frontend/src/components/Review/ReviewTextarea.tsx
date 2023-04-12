@@ -1,14 +1,14 @@
 import { ChangeEvent } from "react";
-import styles from "./CreateTextarea.module.css";
+import styles from "./CreateReview.module.css";
 
-interface CreateTextareaProps {
+interface ReviewTextareaProps {
   value: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 }
-export default function CreateTextarea({
+export default function ReviewTextarea({
   value,
   onChange,
-}: CreateTextareaProps) {
+}: ReviewTextareaProps) {
   return (
     <>
       <label htmlFor="review" className={styles.boldTitle}>

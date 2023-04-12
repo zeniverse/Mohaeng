@@ -8,7 +8,7 @@ import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
-import CreateTextarea from "./CreateTextarea";
+import ReviewTextArea from "./ReviewTextarea";
 
 export default function CreateReview() {
   const router = useRouter();
@@ -154,7 +154,7 @@ export default function CreateReview() {
           </div>
 
           <div id="review" className={styles.form}>
-            <CreateTextarea
+            <ReviewTextArea
               value={content}
               onChange={(e) => setContent(e.target.value)}
             />
