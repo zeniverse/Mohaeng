@@ -1,0 +1,28 @@
+.section {
+  width: 100%;
+  margin: 1rem;
+  /* display: flex;
+  flex-direction: column; */
+}
+
+.keywordList {
+  margin-left: 1rem;
+  padding: 1.6rem 1.6rem;
+}
+
+.h3 {
+  margin-left: 4rem;
+  margin-bottom: 1rem;
+}
+
+.div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 2rem;
+}
+
+.review {
+  font-size: 0.9rem;
+  text-align: left;
+}

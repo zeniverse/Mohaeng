@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { stat } from "fs";
 
-export interface formData {
+export interface ReviewDetail {
   reviewId: number;
   nickname: string;
   content: string;
@@ -11,7 +10,7 @@ export interface formData {
   imageUrls: string[];
 }
 
-export interface formDataState {
+export interface ReviewDetailState {
   reviewId: number;
   nickname: string;
   content: string;
@@ -21,7 +20,7 @@ export interface formDataState {
   imageUrls: string[];
 }
 
-const initialState: formDataState = {
+const initialState: ReviewDetailState = {
   reviewId: 0,
   nickname: "",
   content: "",
@@ -31,11 +30,11 @@ const initialState: formDataState = {
   imageUrls: [],
 };
 
-export const reviewFormSlice = createSlice({
-  name: "reviewForm",
+export const reviewDetailSlice = createSlice({
+  name: "reviewDetail",
   initialState,
   reducers: {
-    setReviewForm: (state, action) => {
+    setReviewDetail: (state, action) => {
       state.reviewId = action.payload.rating;
       state.nickname = action.payload.nickname;
       state.content = action.payload.content;
@@ -47,5 +46,5 @@ export const reviewFormSlice = createSlice({
   },
 });
 
-export const { setReviewForm } = reviewFormSlice.actions;
-export default reviewFormSlice.reducer;
+export const { setReviewDetail } = reviewDetailSlice.actions;
+export default reviewDetailSlice.reducer;

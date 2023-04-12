@@ -46,6 +46,7 @@ function Header({}: Props) {
   const imgUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
   const [view, setView] = useState(false);
 
+  // * 로그인 정보 조회
   useEffect(() => {
     const response = async () => {
       console.log("ACcess = " + accessToken);
@@ -71,6 +72,7 @@ function Header({}: Props) {
     response();
   }, [accessToken]);
 
+  // * 로그인 모달
   const handleOpenLoginModal = () => {
     dispatch(
       openModal({
@@ -80,17 +82,17 @@ function Header({}: Props) {
     );
   };
 
-  const handleLogout = () => {
-    cookie.remove("accessToken", { path: "/" });
-    dispatch(setToken(""));
-    dispatch(setNickname(""));
-    dispatch(setEmail(""));
-    dispatch(setImgUrl(""));
-    dispatch(setId(0));
-    setUser([]);
-    router.replace("/");
-    window.alert("로그아웃되었습니다!");
-  };
+  // * 로그아웃
+  // const handleLogout = () => {
+  //   cookie.remove("accessToken", { path: "/" });
+  //   dispatch(setToken(""));
+  //   dispatch(setNickname(""));
+  //   dispatch(setEmail(""));
+  //   dispatch(setImgUrl(""));
+  //   dispatch(setId(0));
+  //   setUser([]);
+  //   router.replace("/");
+  // };
 
   const ResetStatus = () => {
     dispatch(resetFilter());
