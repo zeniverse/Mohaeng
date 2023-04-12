@@ -31,6 +31,14 @@ export default function SearchItem({
   const page = useSelector((state: RootState) => state.page.page);
   const [bookmarked, setBookmarked] = useState(isBookmarked);
 
+  function handleClickBookmark() {
+    if (!accessToken) {
+      router.push("/login");
+    } else {
+      isBookmarked === true ? delBookmark() : addBookmark();
+    }
+  }
+
   const addBookmark = () => {
     const response = async () => {
       await axios.post(
@@ -129,18 +137,20 @@ export default function SearchItem({
           <FiveStarRating rating={averageRating.toString()} />
           <p className={styles.review}>{reviewTotalElements}건의 리뷰</p>
         </div>
-        {accessToken && (
-          <div className={styles.keywordBookmark}>
-            {isBookmarked === true ? (
-              <BsBookmarkFill
-                onClick={delBookmark}
-                className={styles.bookmark}
-              />
-            ) : (
-              <BsBookmark onClick={addBookmark} className={styles.unbookmark} />
-            )}
-          </div>
-        )}
+
+        <div className={styles.keywordBookmark}>
+          {isBookmarked === true ? (
+            <BsBookmarkFill
+              onClick={handleClickBookmark}
+              className={styles.bookmark}
+            />
+          ) : (
+            <BsBookmark
+              onClick={handleClickBookmark}
+              className={styles.unbookmark}
+            />
+          )}
+        </div>
       </div>
     </li>
   );
