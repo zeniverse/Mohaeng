@@ -9,10 +9,12 @@ import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import PlaceBookmark from "@/src/components/Bookmark/PlaceBookmark";
 import PlaceDetailMap from "@/src/components/PlaceDetail/PlaceDetailMap";
 import ReviewList from "@/src/components/Review/ReviewList";
+import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 
 //ToDo: 새로고침 이슈
 
 interface PlaceInfo {
+  placeId: number;
   name: string;
   areaCode: string;
   firstImage: string;
@@ -29,7 +31,11 @@ export default function PlaceDetail() {
   const appDispatch = useAppDispatch();
   const router = useRouter();
   const { placeId, contentId } = router.query;
+  const id = useRouterQuery("id");
+  console.log(id);
+
   const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
+    placeId: 0,
     name: "",
     areaCode: "",
     firstImage: "",
@@ -50,18 +56,6 @@ export default function PlaceDetail() {
       handleBookmarkClick();
     }
   }
-
-  // * 새로고침 방지
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = "";
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
 
   // * 북마크
   const handleBookmarkClick = async () => {
@@ -108,15 +102,14 @@ export default function PlaceDetail() {
           headers["Access-Token"] = accessToken;
           headers.withCredentials = "true";
         }
-        const res = await axios.get(`/api/place/overview/${contentId}`, {
+        const res = await axios.get(`/api/place/overview/${id}`, {
           headers,
         });
         if (res.data.data.content[0] !== {}) {
           const { content } = res.data.data;
           setPlaceInfo({ ...placeInfo, ...content[0] });
           setBookMarked(res.data.data.isBookmarked);
-          console.log(res.data.data);
-          console.log(res.data.data.isBookmarked);
+          console.log(content);
         } else {
           console.log(placeInfo);
         }
@@ -124,8 +117,11 @@ export default function PlaceDetail() {
         console.error(error);
       }
     };
-    fetchData();
-  }, [accessToken, contentId]);
+
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
 
   return (
     <>

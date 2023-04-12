@@ -8,6 +8,7 @@ import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
+import CreateTextarea from "./CreateTextarea";
 
 export default function CreateReview() {
   const router = useRouter();
@@ -153,18 +154,10 @@ export default function CreateReview() {
           </div>
 
           <div id="review" className={styles.form}>
-            <label htmlFor="review" className={styles.boldTitle}>
-              리뷰내용
-            </label>
-            <textarea
+            <CreateTextarea
               value={content}
-              className={styles.formTxtArea}
-              name="review"
-              id="review"
-              placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요!"
-              required={true}
               onChange={(e) => setContent(e.target.value)}
-            ></textarea>
+            />
 
             <p className={styles.boldTitle}>사진 추가하기</p>
             <label htmlFor="inputFile">
