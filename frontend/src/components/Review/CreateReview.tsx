@@ -104,9 +104,6 @@ export default function CreateReview() {
       "review",
       new Blob([JSON.stringify(review)], { type: "application/json" })
     );
-    // 성공!!!!
-    // formData.append("rating", JSON.stringify(rating.toString()));
-    // formData.append("content", JSON.stringify(content));
 
     try {
       const accessToken = await cookie.load("accessToken");

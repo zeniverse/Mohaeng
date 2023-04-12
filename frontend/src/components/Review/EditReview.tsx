@@ -177,7 +177,12 @@ export default function EditReview() {
 
   // * 뒤로 가기
   const handleGoBack = () => {
-    router.back();
+    const confirmed = window.confirm(
+      "작성 중인 내용이 있습니다. 페이지를 떠나시겠습니까?"
+    );
+    if (confirmed) {
+      router.back();
+    }
   };
 
   return (

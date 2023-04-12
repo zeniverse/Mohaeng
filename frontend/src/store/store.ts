@@ -15,7 +15,7 @@ import searchPlaceReducer from "./reducers/searchPlaceSlice";
 import searchCourseReducer from "./reducers/searchCourseSlice";
 import courseBookmarkReducer from "./reducers/CourseBoomarkSlice";
 import placeBookmarkReducer from "./reducers/PlaceBookmarkSlice";
-import reviewFormReducer from "./reducers/reviewFormSlice";
+import reviewDetailReducer from "./reducers/reviewDetailSlice";
 import reviewReducer from "./reducers/reviewSlice";
 import myCourseReducer from "./reducers/myCourseSlice";
 import CourseDetailSlice from "./reducers/CourseDetailSlice";
@@ -38,7 +38,7 @@ const store = configureStore({
     searchCourse: searchCourseReducer,
     courseBookmark: courseBookmarkReducer,
     placeBookmark: placeBookmarkReducer,
-    reviewForm: reviewFormReducer,
+    reviewDetail: reviewDetailReducer,
     review: reviewReducer,
     myCourse: myCourseReducer,
     courseDetail: CourseDetailSlice,

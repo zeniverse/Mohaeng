@@ -72,7 +72,6 @@ export default function ReviewItem({
   };
 
   const toggleExpand = () => {
-    // 토글 버튼 핸들러 함수 구현
     setIsExpanded(!isExpanded);
   };
 
@@ -114,7 +113,7 @@ export default function ReviewItem({
             >
               수정
             </button>
-            <button onClick={handleOpenDeleteModal} className={styles.btn}>
+            <button onClick={deleteReview} className={styles.btn}>
               삭제
             </button>
           </div>
