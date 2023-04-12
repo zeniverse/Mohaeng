@@ -99,14 +99,14 @@ export default function ReviewItem({
               onClick={() =>
                 router.push(
                   {
-                    pathname: "/review/edit-review",
+                    pathname: `/review/edit-review`,
                     query: {
                       plcaceId: placeId,
                       reviewId: reviewId,
                       name: name,
                     },
                   },
-                  "review/edit-review"
+                  `/review/edit-review`
                 )
               }
               className={styles.btn}
