@@ -51,7 +51,7 @@
   color: var(--color-text-basic);
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 920px) {
   .search-bar {
     width: 100%;
   }
