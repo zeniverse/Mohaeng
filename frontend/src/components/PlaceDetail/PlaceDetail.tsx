@@ -1,19 +1,16 @@
 import styles from "./PlaceDetail.module.css";
-
 import Image from "next/image";
-import ReviewList from "../Review/ReviewList";
-import PlaceDetailMap from "./PlaceDetailMap";
-
 import axios from "axios";
 import cookie from "react-cookies";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
-import PlaceBookmark from "../Bookmark/PlaceBookmark";
+import PlaceBookmark from "@/src/components/Bookmark/PlaceBookmark";
+import PlaceDetailMap from "@/src/components/PlaceDetail/PlaceDetailMap";
+import ReviewList from "@/src/components/Review/ReviewList";
 
-// 새로고침 유지 안되는 이유? 1. rewrites? 2. 라우터 초기값 설정 undefined
+//ToDo: 새로고침 이슈
 
 interface PlaceInfo {
   name: string;
@@ -27,9 +24,8 @@ interface PlaceInfo {
   review: string;
 }
 
-const PlaceDetail = () => {
+export default function PlaceDetail() {
   const accessToken = cookie.load("accessToken");
-  const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const router = useRouter();
   const { placeId, contentId } = router.query;
@@ -47,13 +43,33 @@ const PlaceDetail = () => {
 
   const [bookMarked, setBookMarked] = useState(false);
 
+  function handleCheckBookmark() {
+    if (!accessToken) {
+      router.push("/login");
+    } else {
+      handleBookmarkClick();
+    }
+  }
+
+  // 새로고침 방지
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   // * 북마크
   const handleBookmarkClick = async () => {
     try {
       if (bookMarked === false) {
         const res = await axios
           .post(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
+            `/api/place/bookmark/${placeId}`,
             {},
             {
               headers: {
@@ -67,15 +83,12 @@ const PlaceDetail = () => {
           });
       } else {
         const res = await axios
-          .delete(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/place/bookmark/${placeId}`,
-            {
-              headers: {
-                "Access-Token": `${accessToken}`,
-                withCredentials: true,
-              },
-            }
-          )
+          .delete(`/api/place/bookmark/${placeId}`, {
+            headers: {
+              "Access-Token": `${accessToken}`,
+              withCredentials: true,
+            },
+          })
           .then(() => {
             appDispatch(getPlaceBookmark(accessToken));
           });
@@ -90,16 +103,20 @@ const PlaceDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/place/overview/${contentId}`, {
-          headers: {
-            "Access-Token": `${accessToken}`,
-            withCredentials: true,
-          },
+        const headers: { [key: string]: string } = {};
+        if (accessToken) {
+          headers["Access-Token"] = accessToken;
+          headers.withCredentials = "true";
+        }
+        const res = await axios.get(`/api/place/overview/${contentId}`, {
+          headers,
         });
         if (res.data.data.content[0] !== {}) {
           const { content } = res.data.data;
           setPlaceInfo({ ...placeInfo, ...content[0] });
           setBookMarked(res.data.data.isBookmarked);
+          console.log(res.data.data);
+          console.log(res.data.data.isBookmarked);
         } else {
           console.log(placeInfo);
         }
@@ -108,7 +125,7 @@ const PlaceDetail = () => {
       }
     };
     fetchData();
-  }, [contentId, dispatch]);
+  }, [accessToken, contentId]);
 
   return (
     <>
@@ -116,18 +133,12 @@ const PlaceDetail = () => {
         <div className={styles.detailHeader}>
           <div className={styles.headerTitle}>
             <h2 className={styles.h2}>{placeInfo.name}</h2>
-            {/* <a className={styles.moveToReview} href="#review">
-              <div className={styles.rating}>
-                별점 <FiveStarRating rating={placeInfo.rating} />
-              </div>
-              <p className={styles.review}>{placeInfo.review}건의 리뷰</p>
-            </a> */}
           </div>
           <div className={styles.bookMarkBox}>
             <p className={styles.bookMarkText}>북마크에 추가</p>
             <PlaceBookmark
               bookMarked={bookMarked}
-              onToggle={handleBookmarkClick}
+              onToggle={handleCheckBookmark}
             />
           </div>
         </div>
@@ -158,6 +169,4 @@ const PlaceDetail = () => {
       </div>
     </>
   );
-};
-
-export default PlaceDetail;
+}

@@ -87,7 +87,6 @@ function Header({}: Props) {
     dispatch(setId(0));
     setUser([]);
     router.replace("/");
-    window.alert("로그아웃되었습니다!");
   };
 
   const ResetStatus = () => {
