@@ -6,6 +6,8 @@ import Image from "next/image";
 import axios from "axios";
 import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 
 export interface formData {
   reviewId: number;
@@ -19,6 +21,7 @@ export interface formData {
 
 export default function EditReview() {
   const router = useRouter();
+  const appDispatch = useAppDispatch();
   const { placeId, reviewId, name } = router.query;
 
   const [clicked, setClicked] = useState<boolean[]>(Array(5).fill(false));
@@ -26,7 +29,6 @@ export default function EditReview() {
   const [star, setStar] = useState<number>();
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
-
   const [reviewForm, setReviewForm] = useState<formData>({
     reviewId: 0,
     nickname: "",
@@ -39,6 +41,18 @@ export default function EditReview() {
 
   const accessToken = cookie.load("accessToken");
   let rating = clicked.filter(Boolean).length;
+
+  // * 새로고침 방지
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   // * 수정 전 별점 보여주기
   useEffect(() => {
@@ -159,16 +173,12 @@ export default function EditReview() {
 
     try {
       const response = await axios
-        .put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/review/detail/${reviewId}`,
-          formData,
-          {
-            headers: {
-              "Access-Token": accessToken,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
+        .put(`/api/review/detail/${reviewId}`, formData, {
+          headers: {
+            "Access-Token": accessToken,
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then((response) => {
           console.log(response.data, "리뷰 수정 성공!");
           appDispatch(getMyReview(accessToken));
@@ -182,7 +192,12 @@ export default function EditReview() {
 
   // * 뒤로 가기
   const handleGoBack = () => {
-    router.back();
+    const confirmed = window.confirm(
+      "작성 중인 내용이 있습니다. 페이지를 떠나시겠습니까?"
+    );
+    if (confirmed) {
+      router.back();
+    }
   };
 
   return (

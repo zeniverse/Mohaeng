@@ -1,9 +1,10 @@
-import styles from "./SearchList.module.css";
+import styles from "./SearchPlaceList.module.css";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import axios from "axios";
+import cookie from "react-cookies";
 import { Keyword } from "@/src/interfaces/Keyword";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
@@ -12,7 +13,6 @@ import Pagebar from "../Pagenation/Pagebar";
 import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
 import { setPage } from "@/src/store/reducers/pageSlice";
 import ListContainer from "../UI/ListContainer";
-// import PlaceItem from "../Place/PlaceItem";
 
 export default function SearchPlaceList(): JSX.Element {
   const [searchResult, setSearchResult] = useState<Keyword[]>([]);
@@ -23,29 +23,44 @@ export default function SearchPlaceList(): JSX.Element {
   const totalPages: number = useSelector(
     (state: RootState) => state.searchPlace.totalPages
   );
+  const accessToken = cookie.load("accessToken");
+
+  const handleBookmarkUpdate = (placeId: number, isBookmarked: boolean) => {
+    setSearchResult((prevResult) => {
+      return prevResult.map((place) => {
+        if (place.placeId === placeId) {
+          return {
+            ...place,
+            isBookmarked,
+          };
+        } else {
+          return place;
+        }
+      });
+    });
+  };
 
   useEffect(() => {
     const fetchKeyword = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/place`,
-          {
-            params: {
-              keyword: keyword,
-              page: page,
-            },
-            withCredentials: true,
-          }
-        );
-        if (res.data.data.content !== []) {
-          dispatch(setSearchPlace(res.data.data));
-          setPage(totalPages);
-          const { content } = res.data.data;
-          setSearchResult(content);
-          console.log(content);
-        } else {
-          console.log(res.data);
+        const headers: { [key: string]: string } = {};
+        if (accessToken) {
+          headers["Access-Token"] = accessToken;
+          headers.withCredentials = "true";
         }
+        const res = await axios.get(`/api/place`, {
+          params: {
+            keyword: keyword,
+            page: page,
+          },
+          headers: headers,
+        });
+
+        dispatch(setSearchPlace(res.data.data));
+        setPage(totalPages);
+        const { content } = res.data.data;
+        setSearchResult(content);
+        console.log(content);
       } catch (error) {
         console.log("Error", error);
       }
@@ -53,7 +68,7 @@ export default function SearchPlaceList(): JSX.Element {
     if (keyword) {
       fetchKeyword();
     }
-  }, [keyword, page]);
+  }, [keyword, page, accessToken]);
 
   return (
     <>
@@ -72,6 +87,7 @@ export default function SearchPlaceList(): JSX.Element {
                   isBookmarked={place.isBookmarked}
                   averageRating={place.averageRating}
                   reviewTotalElements={place.reviewTotalElements}
+                  onBookmarkUpdate={handleBookmarkUpdate}
                 />
               ))}
             </ListContainer>
@@ -83,7 +99,9 @@ export default function SearchPlaceList(): JSX.Element {
             </div>
           )}
         </ul>
-        <Pagebar totalPage={totalPages} />
+        {totalPages !== 0 && totalPages ? (
+          <Pagebar totalPage={totalPages} />
+        ) : null}
       </section>
     </>
   );
