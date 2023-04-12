@@ -1,3 +1,4 @@
+import Link from "next/link";
 import axios from "axios";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import styles from "./UserBookmarkItem.module.css";
@@ -54,7 +55,14 @@ const UserBookmarkItem = (prop: bookmarkState) => {
 
   return (
     <div key={prop.id} className={styles["bookmark-item"]}>
-      <img src={prop.image} alt={prop.image} />
+      <Link
+        href={{
+          pathname: "/place/[id]",
+          query: { id: prop.id },
+        }}
+      >
+        <img src={prop.image} alt={prop.image} />
+      </Link>
       <div>
         <div className={styles.keywordBookmark}>
           <BsBookmarkFill className={styles.bookmark} onClick={delBookmark} />
