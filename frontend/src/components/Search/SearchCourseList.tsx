@@ -1,9 +1,5 @@
-import styles from "./SearchList.module.css";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import { RootState } from "@/src/store/store";
+import styles from "./SearchCourseList.module.css";
+import { useEffect } from "react";
 import CourseItem from "../Course/CourseItem";
 import Pagebar from "../Pagenation/Pagebar";
 import ListContainer from "../UI/ListContainer";
@@ -24,8 +20,6 @@ interface CourseList {
 }
 
 export default function SearchCourseList(): JSX.Element {
-  const router = useRouter();
-  const [searchResult, setSearchResult] = useState<CourseList[]>([]);
   const { courseList, totalElements, totalPages } = useAppSelector(
     (state) => state.course
   );

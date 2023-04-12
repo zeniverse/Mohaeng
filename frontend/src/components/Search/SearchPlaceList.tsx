@@ -1,4 +1,4 @@
-import styles from "./SearchList.module.css";
+import styles from "./SearchPlaceList.module.css";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";

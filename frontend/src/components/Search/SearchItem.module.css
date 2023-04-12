@@ -1,6 +1,7 @@
 .keywordItemContainer {
   width: 100%;
   max-width: 280px;
+
   border: 2px solid var(--color-border-light);
   border-radius: 16px;
 }
@@ -95,8 +96,7 @@
   font-size: 28px;
 }
 
-/* For screens smaller than 768px (mobile devices) */
-@media (max-width: 768px) {
+@media (max-width: 920px) {
   .keywordItemContainer {
     width: 100%;
   }
