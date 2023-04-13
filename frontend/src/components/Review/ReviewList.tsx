@@ -20,8 +20,8 @@ export default function ReviewList() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { placeId, name, reviewId } = router.query;
-  const id = useRouterQuery("placeId");
-  console.log(id);
+  // const id = useRouterQuery("placeId");
+  // console.log(id);
   const [reviewData, setReviewData] = useState<ReviewData[]>([]);
   const [selectedValue, setSelectedValue] = useState("highrating");
 
@@ -87,9 +87,9 @@ export default function ReviewList() {
   useEffect(() => {
     const fetchReview = async () => {
       try {
-        const id = localStorage.getItem("placeId");
-        console.log(id);
-        const res = await axios.get(`/api/review/${id}/rating`, {
+        // const id = localStorage.getItem("placeId");
+        // console.log(id);
+        const res = await axios.get(`/api/review/${placeId}/rating`, {
           params: {
             page: page,
           },
