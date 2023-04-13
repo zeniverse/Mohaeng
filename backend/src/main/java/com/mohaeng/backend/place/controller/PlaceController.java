@@ -63,7 +63,7 @@ public class PlaceController {
 
     @GetMapping("/place/{contentId}")
     public ResponseEntity<PlaceDTO> getPlace(@PathVariable String contentId) throws IOException, ParserConfigurationException, SAXException {
-        Place place = placeService.getPlace(contentId);
+        Place place = placeService.getPlaceByContentId(contentId);
         if (place == null) {
             return ResponseEntity.notFound().build();
         }
