@@ -1,5 +1,7 @@
 .keywordItemContainer {
-  width: 280px;
+  width: 100%;
+  max-width: 280px;
+
   border: 2px solid var(--color-border-light);
   border-radius: 16px;
 }
@@ -7,13 +9,12 @@
 .keywordItemContainer:hover {
   color: var(--color-text-basic);
   transition: all ease 0.3s;
-  box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
-  -webkit-box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
-  -moz-box-shadow: 7px 4px 14px -5px rgba(153, 217, 217, 0.75);
+  box-shadow: 7px 4px 14px -5px var(--color-border-light);
+  -webkit-box-shadow: 7px 4px 14px -5px var(--color-border-light);
+  -moz-box-shadow: 7px 4px 14px -5px var(--color-border-light);
 }
 
 .keywordItem {
-  /* margin: 10px; */
   background-color: transparent;
   border: none;
   text-decoration: none;
@@ -38,6 +39,7 @@
 .keywordDesc {
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .title {
@@ -59,7 +61,8 @@
 .keywordBookmark {
   width: 30px;
   margin-top: 1rem;
-  margin-left: 30px;
+  margin-left: 36px;
+  cursor: pointer;
 }
 
 .btn {
@@ -91,4 +94,39 @@
 .bookmark {
   color: var(--color-blue);
   font-size: 28px;
+}
+
+@media (max-width: 920px) {
+  .keywordItemContainer {
+    width: 100%;
+  }
+
+  .img {
+    width: 100%;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+
+  .keywordInfo {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .title {
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+    font-size: small;
+    font-weight: 500;
+  }
+
+  .review {
+    font-size: x-small;
+    margin-top: 4px;
+  }
+
+  .keywordBookmark {
+    margin: 0 auto;
+    margin-top: 0.5rem;
+  }
 }

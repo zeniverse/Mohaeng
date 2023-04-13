@@ -8,26 +8,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import Pagebar from "../Pagenation/Pagebar";
+import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 
-// 정렬 필터 (별점 높은 순, 최신순)
-
-interface Review {
-  reviewId: number;
-  nickname: string;
-  memberImage: string;
-  rating: string;
-  content: string;
-  createdDate: string;
-  imgUrl: string[];
-}
+type ReviewListProps = {
+  placeId: number;
+  placeName: string;
+};
 
 export default function ReviewList() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { placeId, name, reviewId } = router.query;
-
   const [reviewData, setReviewData] = useState<ReviewData[]>([]);
-  const [selectedValue, setSelectedValue] = useState("default");
+  const [selectedValue, setSelectedValue] = useState("latest");
 
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
@@ -45,6 +38,18 @@ export default function ReviewList() {
   );
   const accessToken = useSelector((state: RootState) => state.token.token);
 
+  // * 새로고침 방지
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   // 정렬
   const handleChangeOption = (e: {
     target: { value: SetStateAction<string> };
@@ -58,9 +63,9 @@ export default function ReviewList() {
       try {
         let url = "";
         if (selectedValue === "highrating") {
-          url = `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}/rating`;
+          url = `/api/review/${placeId}/rating`;
         } else if (selectedValue === "latest") {
-          url = `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}/date`;
+          url = `/api/review/${placeId}/date`;
         }
 
         const res = await axios.get(url, {
@@ -69,7 +74,7 @@ export default function ReviewList() {
           },
           withCredentials: true,
         });
-        if (res.data && res.data.data && res.data.data.reviews) {
+        if (res.data.data && res.data.data.reviews) {
           dispatch(setReview(res.data.data));
           setReviewData(res.data.data.reviews);
         }
@@ -85,15 +90,12 @@ export default function ReviewList() {
     if (page !== 0) {
       const fetchReview = async () => {
         try {
-          const res = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}`,
-            {
-              params: {
-                page: page,
-              },
-              withCredentials: true,
-            }
-          );
+          const res = await axios.get(`/api/review/${placeId}/date`, {
+            params: {
+              page: page,
+            },
+            withCredentials: true,
+          });
           console.log(res.data.data);
           dispatch(setReview(res.data.data));
           setReviewData(res.data.data.reviews);
@@ -105,7 +107,6 @@ export default function ReviewList() {
     }
   }, [page]);
 
-  // ToDo: 리뷰 한 번만 쓰도록? (여행지별 리뷰는 한 번만 작성할 수 있습니다. || 이미 작성하신 리뷰가 있습니다.)
   const handleClickReviewBtn = () => {
     if (!accessToken && !currentUser) {
       router.push("/login");
@@ -119,7 +120,7 @@ export default function ReviewList() {
             name: name,
           },
         },
-        `review/create-review`
+        `/review/create-review`
       );
     }
   };
@@ -149,9 +150,6 @@ export default function ReviewList() {
               value={selectedValue}
               onChange={handleChangeOption}
             >
-              <option key="default" value="default">
-                정렬 ▼
-              </option>
               <option key="highrating" value="highrating">
                 별점 높은 순
               </option>

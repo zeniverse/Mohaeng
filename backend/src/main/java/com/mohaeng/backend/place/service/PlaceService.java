@@ -12,8 +12,6 @@ import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
 import com.mohaeng.backend.place.exception.PlaceNotFoundException;
 import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,9 +50,6 @@ public class PlaceService {
     private final PlaceBookmarkRepository placeBookmarkRepository;
     private final MemberRepository memberRepository;
     private final AmazonS3Service amazonS3Service;
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Value("${API_KEY}")
     private String API_KEY;
@@ -147,21 +142,6 @@ public class PlaceService {
         return overviewText;
     }
 
-//    @Transactional
-//    public void updateOverview(String contentid) {
-//        String overview = getOverview(contentid);
-//        // Update database using JDBC and DataSource
-//        try (Connection conn = dataSource.getConnection()) {
-//            String sql = "UPDATE Place SET overview = ? WHERE contentid = ?";
-//            PreparedStatement pstmt = conn.prepareStatement(sql);
-//            pstmt.setString(1, overview);
-//            pstmt.setString(2, contentid);
-//            pstmt.executeUpdate();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     private Document getXmlDocument(String urlStr) throws IOException, ParserConfigurationException, SAXException {
         URL url = new URL(urlStr);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -227,15 +207,6 @@ public class PlaceService {
         return overviews;
     }
 
-    public List<Place> filterPlaces(List<Place> places, String areaCode) {
-        if ("ALL".equals(areaCode)) {
-            return places;
-        }
-        return places.stream()
-                .filter(place -> place.getAreaCode().equals(areaCode))
-                .collect(Collectors.toList());
-    }
-
     public PlaceDetailsResponse getPlaceDetailsByContentId(String contentId, Member member) throws IOException, ParserConfigurationException, SAXException {
         Place currentPlace = null;
         Boolean isBookmark = false;
@@ -266,6 +237,7 @@ public class PlaceService {
                 .mapToDouble(review -> Double.parseDouble(review.getRating()))
                 .average()
                 .orElse(0);
+        averageRating = Math.round(averageRating * 100.0) / 100.0;
         long reviewTotalElements = reviews.size();
         return new PlaceRatingDto(averageRating, reviewTotalElements);
     }

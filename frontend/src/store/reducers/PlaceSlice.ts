@@ -6,7 +6,7 @@ export interface content {
   firstImage: string;
   placeId: number;
   contentId: string;
-  rating: string;
+  averageRating: number;
   review: string;
   isBookmarked: boolean;
 }

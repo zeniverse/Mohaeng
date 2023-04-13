@@ -22,6 +22,7 @@ const MyCourse = () => {
             createdDate={course.createdDate}
             content={course.content}
             courseDays={course.courseDays}
+            courseStatus={course.courseStatus}
           />
         ))}
       </div>

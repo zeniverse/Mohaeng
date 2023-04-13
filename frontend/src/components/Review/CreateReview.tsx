@@ -6,9 +6,13 @@ import Image from "next/image";
 import axios from "axios";
 import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { getMyReview } from "@/src/store/reducers/myReviewSlice";
+import ReviewTextArea from "./ReviewTextarea";
 
 export default function CreateReview() {
   const router = useRouter();
+  const appDispatch = useAppDispatch();
   const { placeId, contentId, name } = router.query;
   const [clicked, setClicked] = useState<boolean[]>([
     false,
@@ -22,6 +26,18 @@ export default function CreateReview() {
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   let rating = clicked.filter(Boolean).length;
+
+  // * 새로고침 방지
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   // *비동기적으로 받아오는 별점 개수 업데이트 확인
   useEffect(() => {
@@ -92,25 +108,19 @@ export default function CreateReview() {
       "review",
       new Blob([JSON.stringify(review)], { type: "application/json" })
     );
-    // 성공!!!!
-    // formData.append("rating", JSON.stringify(rating.toString()));
-    // formData.append("content", JSON.stringify(content));
 
     try {
       const accessToken = await cookie.load("accessToken");
       const response = await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/review/${placeId}`,
-          formData,
-          {
-            headers: {
-              "Access-Token": accessToken,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
+        .post(`/api/review/${placeId}`, formData, {
+          headers: {
+            "Access-Token": accessToken,
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then((response) => {
           console.log(response.data, "리뷰 작성 성공!");
+          appDispatch(getMyReview(accessToken));
           router.push(`/search?keyword=${name}`);
         });
     } catch (error) {
@@ -121,7 +131,12 @@ export default function CreateReview() {
 
   // 뒤로 가기
   const handleGoBack = () => {
-    router.back();
+    const confirmed = window.confirm(
+      "작성 중인 내용이 있습니다. 페이지를 떠나시겠습니까?"
+    );
+    if (confirmed) {
+      router.back();
+    }
   };
 
   return (
@@ -139,18 +154,10 @@ export default function CreateReview() {
           </div>
 
           <div id="review" className={styles.form}>
-            <label htmlFor="review" className={styles.boldTitle}>
-              리뷰내용
-            </label>
-            <textarea
+            <ReviewTextArea
               value={content}
-              className={styles.formTxtArea}
-              name="review"
-              id="review"
-              placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요!"
-              required={true}
               onChange={(e) => setContent(e.target.value)}
-            ></textarea>
+            />
 
             <p className={styles.boldTitle}>사진 추가하기</p>
             <label htmlFor="inputFile">

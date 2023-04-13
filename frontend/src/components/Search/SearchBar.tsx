@@ -1,39 +1,62 @@
 import { BsSearch } from "react-icons/bs";
+import { IoMdClose } from "react-icons/io";
 import styles from "./SearchBar.module.css";
-import styled from "styled-components";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { setKeyword } from "@/src/store/reducers/FilterSlice";
 
 export default function SearchBar() {
   const router = useRouter();
-  const [keyword, setKeyword] = useState("");
+  const dispatch = useAppDispatch();
+  const [searchValue, setSearchValue] = useState("");
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    router.push(
-      {
-        pathname: `/search?keyword=${keyword}`,
-        query: {
-          keyword: keyword,
+    if (searchValue) {
+      dispatch(setKeyword(searchValue));
+      router.push(
+        {
+          pathname: `/search`,
+          query: {
+            keyword: searchValue,
+          },
         },
-      },
-      `/search?keyword=${keyword}`
-    );
+        `/search?keyword=${searchValue}`
+      );
+    }
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
+
+  const handleClearInput = () => {
+    setSearchValue("");
   };
 
   return (
     <>
       <form onSubmit={handleSubmit} className={styles["search-bar"]}>
-        <input
-          onChange={(e) => setKeyword(e.target.value)}
-          className={styles["search-input"]}
-          type="text"
-          placeholder="어디 가고 싶으세요?"
-          value={keyword}
-        />
         <button className={styles["search-icon"]}>
           <BsSearch />
         </button>
+        <input
+          onChange={handleInputChange}
+          className={styles["search-input"]}
+          type="text"
+          placeholder="어디 가고 싶으세요?"
+          value={searchValue}
+        />
+        {searchValue && (
+          <button
+            type="button"
+            onClick={handleClearInput}
+            className={styles["clear-icon"]}
+          >
+            <IoMdClose />
+          </button>
+        )}
       </form>
     </>
   );

@@ -27,9 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,9 +63,14 @@ public class ReviewService {
         return reviews;
     }
 
-    public List<Review> getAllReviews(Long id) {
+    public List<Review> getAllReviewById(Long id) {
         return reviewRepository.findAllByPlaceId(id);
     }
+
+    public List<Review> getAllReviews() {
+        return reviewRepository.findAll();
+    }
+
 
 
     @Transactional
@@ -180,6 +183,11 @@ public class ReviewService {
     public Page<Review> getAllReviewsByRating(Long placeId, int page) {
         Pageable pageable = PageRequest.of(page - 1 , 4, Sort.by("rating").descending());
         return reviewRepository.findAllByPlaceId(placeId, pageable);
+    }
+
+    public Page<Review> getAllReviewsByRatingTop10(int page) {
+        Pageable pageable = PageRequest.of(page - 1 , 10, Sort.by("rating").descending());
+        return reviewRepository.findAll(pageable);
     }
 
     public Page<Review> getAllReviewsByDate(Long placeId, int page) {

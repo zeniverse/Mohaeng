@@ -36,7 +36,7 @@ public class ReviewController {
                                          @RequestParam(defaultValue = "1") int page) {
         Page<Review> reviews = reviewService.getAllReviewByPage(placeId, page);
         List<FindAllReviewResponse> data = reviews.map(FindAllReviewResponse::of).getContent();
-        double averageRating = reviewService.getAverageRating(reviewService.getAllReviews(placeId));
+        double averageRating = Math.round(reviewService.getAverageRating(reviewService.getAllReviewById(placeId)) * 100 ) / 100.0;
         FindSearchReviewsResponse response = new FindSearchReviewsResponse(data, reviews.getTotalPages(), reviews.getTotalElements(), averageRating);
         return ResponseEntity.ok(BaseResponse.success("ok", response));
     }
@@ -88,7 +88,7 @@ public class ReviewController {
                                                   @RequestParam(defaultValue = "1") int page) {
         Page<Review> reviews = reviewService.getAllReviewsByRating(placeId, page);
         List<FindAllReviewResponse> data = reviews.map(FindAllReviewResponse::of).getContent();
-        double averageRating = reviewService.getAverageRating(reviewService.getAllReviews(placeId));
+        double averageRating = Math.round(reviewService.getAverageRating(reviewService.getAllReviewById(placeId)) * 100) / 100.0;
         FindSearchReviewsResponse response = new FindSearchReviewsResponse(data, reviews.getTotalPages(), reviews.getTotalElements(), averageRating);
         return ResponseEntity.ok(BaseResponse.success("ok", response));
     }
@@ -98,7 +98,7 @@ public class ReviewController {
                                                 @RequestParam(defaultValue = "1") int page) {
         Page<Review> reviews = reviewService.getAllReviewsByDate(placeId, page);
         List<FindAllReviewResponse> data = reviews.map(FindAllReviewResponse::of).getContent();
-        double averageRating = reviewService.getAverageRating(reviews.getContent());
+        double averageRating = Math.round(reviewService.getAverageRating(reviews.getContent()) * 100) / 100.0;
         FindSearchReviewsResponse response = new FindSearchReviewsResponse(data, reviews.getTotalPages(), reviews.getTotalElements(), averageRating);
         return ResponseEntity.ok(BaseResponse.success("ok", response));
     }

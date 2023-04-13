@@ -6,15 +6,16 @@ export interface Keyword {
   isBookmarked: boolean;
   averageRating: number;
   reviewTotalElements: number;
+  onBookmarkUpdate: (placeId: number, isBookmarked: boolean) => void;
 }
 
 export type KeywordProps = {
   placeId: number;
-  areaCode: string;
   name: string;
   firstImage: string;
   contentId: string;
   isBookmarked: boolean;
   averageRating: number;
   reviewTotalElements: number;
+  onBookmarkUpdate: (placeId: number, isBookmarked: boolean) => void;
 };

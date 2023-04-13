@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import cookie from "react-cookies";
 import withAuth from "../withAuth";
 import MyCourse from "@/src/components/Mypage/MyCourse";
+import MyReview from "@/src/components/Mypage/MyReview";
 
 const MyPage: React.FC = () => {
   const currIdx = useSelector((state: RootState) => state.mypage.currIdx);
@@ -26,7 +27,7 @@ const MyPage: React.FC = () => {
   //TODO: 로그인 페이지 완성시 경로 '/login'으로 바꿔두기
   useEffect(() => {
     if (!accessToken) {
-      router.replace("/");
+      router.replace("/login");
     }
   }, [accessToken]);
 
@@ -41,6 +42,7 @@ const MyPage: React.FC = () => {
               0: <UserInfo />,
               1: <UserBookmark />,
               2: <MyCourse />,
+              3: <MyReview />,
               4: <UserEdit />,
             }[currIdx]
           }

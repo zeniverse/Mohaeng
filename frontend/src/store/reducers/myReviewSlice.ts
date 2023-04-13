@@ -1,41 +1,29 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface myPlaceData {
+interface myReviewData {
+  reviewId: number;
   placeId: number;
-  imagUrl: string;
   title: string;
-  address: string;
   content: string;
-  rating: number;
-}
-
-export interface myCourseData {
-  courseId: number;
-  title: string;
-  imgUrl: string;
   likeCount: number;
-  content: string;
-  courseDays: string;
-  startDate: string;
-  endDate: string;
+  rating: string;
+  imgUrl: string;
   createdDate: string;
-  courseStatus: string;
-  data: myPlaceData[];
 }
 
-export interface myCourseState {
-  data: myCourseData[];
+export interface myReviewState {
+  data: myReviewData[];
 }
 
-const initialState: myCourseState = {
+const initialState: myReviewState = {
   data: [],
 };
 
-export const getMyCourse = createAsyncThunk(
-  "mypage/myCourse",
+export const getMyReview = createAsyncThunk(
+  "mypage/myReview",
   async (token: string) => {
-    const response = await axios.get(`/api/myPage/course`, {
+    const response = await axios.get(`/api/myPage/myReview`, {
       headers: {
         "Access-Token": token,
       },
@@ -46,22 +34,22 @@ export const getMyCourse = createAsyncThunk(
   }
 );
 
-export const myCourseSlice = createSlice({
-  name: "myCourse",
+export const myReviewSlice = createSlice({
+  name: "myReview",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getMyCourse.pending, (state) => {
+    builder.addCase(getMyReview.pending, (state) => {
       // state.createUserFormStatus = ApiStatus.loading;
     });
-    builder.addCase(getMyCourse.fulfilled, (state, action) => {
+    builder.addCase(getMyReview.fulfilled, (state, action) => {
       // state.createUserFormStatus = ApiStatus.success;
       state.data = action.payload;
     });
-    builder.addCase(getMyCourse.rejected, (state) => {
+    builder.addCase(getMyReview.rejected, (state) => {
       // state.createUserFormStatus = ApiStatus.error;
     });
   },
 });
 
-export default myCourseSlice.reducer;
+export default myReviewSlice.reducer;

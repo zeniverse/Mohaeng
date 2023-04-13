@@ -6,16 +6,16 @@ import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
+import com.mohaeng.backend.place.domain.Review;
 import com.mohaeng.backend.place.dto.FindAllPlacesDto;
 import com.mohaeng.backend.place.dto.PlaceDTO;
 import com.mohaeng.backend.place.dto.PlaceRatingDto;
 import com.mohaeng.backend.place.dto.PlaceSearchDto;
-import com.mohaeng.backend.place.dto.response.FindAllPlacesResponse;
-import com.mohaeng.backend.place.dto.response.FindSearchPlacesResponse;
-import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
+import com.mohaeng.backend.place.dto.response.*;
 import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.service.PlaceService;
+import com.mohaeng.backend.place.service.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -40,6 +37,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api")
 public class PlaceController {
 
     private final PlaceService placeService;
@@ -47,8 +45,9 @@ public class PlaceController {
     private final MemberRepository memberRepository;
     private final TokenGenerator tokenGenerator;
     private final PlaceBookmarkRepository placeBookmarkRepository;
+    private final ReviewService reviewService;
 
-    @GetMapping("/api/place/all")
+    @GetMapping("/place/all")
     public ResponseEntity<List<Place>> getPlaces() {
         List<Place> places = placeService.getPlacesAll();
         log.info("getPlaces.size:{}", places.size());
@@ -62,7 +61,7 @@ public class PlaceController {
         return new ResponseEntity<>(places, HttpStatus.OK);
     }
 
-    @GetMapping("/api/place/{contentId}")
+    @GetMapping("/place/{contentId}")
     public ResponseEntity<PlaceDTO> getPlace(@PathVariable String contentId) throws IOException, ParserConfigurationException, SAXException {
         Place place = placeService.getPlace(contentId);
         if (place == null) {
@@ -79,23 +78,22 @@ public class PlaceController {
         return ResponseEntity.ok().body(BaseResponse.success("OK",response));
     }
 
-    @GetMapping("/api/places")
+    @GetMapping("/home/places")
     public Page<Place> getPlaces(@RequestParam(defaultValue = "0") int page) {
         Pageable pageable = PageRequest.of(page, 4, Sort.by("id").ascending());
         return placeRepository.findAll(pageable);
     }
 
-    @GetMapping("/api/place")
+    @GetMapping("/place")
     public ResponseEntity<BaseResponse<FindSearchPlacesResponse>> search(
-            @RequestParam String keyword, @RequestParam(required = false) String address,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "12") int size,
-            HttpServletRequest request) {
+        @RequestParam String keyword, @RequestParam(required = false) String address,
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "12") int size,
+        HttpServletRequest request) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
-
         Member member = isAccessMember(request);
-        Page<Place> places = null;
+        Page<Place> places;
         if (address == null || address.isEmpty()) {
             places = placeRepository.findByNameContaining(keyword, pageable);
         } else {
@@ -109,7 +107,7 @@ public class PlaceController {
                 isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, place);
             }
             PlaceRatingDto rating = placeService.getPlaceRating(place.getId());
-            PlaceSearchDto dto = PlaceSearchDto.from(place, isBookmark, rating.getAverageRating(), rating.getReviewTotalElements());
+            PlaceSearchDto dto = PlaceSearchDto.from(place, isBookmark, Math.round(rating.getAverageRating() * 100) / 100.0, rating.getReviewTotalElements());
             result.add(dto);
         }
         FindSearchPlacesResponse response = new FindSearchPlacesResponse(result, places.getTotalPages(), places.getTotalElements());
@@ -122,9 +120,10 @@ public class PlaceController {
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "12") int size,
         HttpServletRequest request) {
+
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Place> places = null;
         Member member = isAccessMember(request);
+        Page<Place> places;
 
         if ("all".equals(areaCode)) {
             places = placeRepository.findAll(pageable);
@@ -138,12 +137,23 @@ public class PlaceController {
             if(member != null){
                 isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, place);
             }
-            FindAllPlacesDto dto = FindAllPlacesDto.from(place, isBookmark);
+            PlaceRatingDto rating = placeService.getPlaceRating(place.getId());
+            FindAllPlacesDto dto = FindAllPlacesDto.from(place, isBookmark, Math.round(rating.getAverageRating() * 100) / 100.0, rating.getReviewTotalElements());
             result.add(dto);
         }
 
         FindAllPlacesResponse response = new FindAllPlacesResponse(result, places.getTotalPages(), places.getTotalElements());
         return ResponseEntity.ok().body(BaseResponse.success("OK", response));
+    }
+
+    @GetMapping("/main")
+    public ResponseEntity getPlaceReviewsByRatingTop10(
+            @RequestParam(defaultValue = "1") int page) {
+        Page<Review> reviews = reviewService.getAllReviewsByRatingTop10(page);
+        List<FindAllReviewResponse> data = reviews.map(FindAllReviewResponse::of).getContent();
+        double averageRating = Math.round(reviewService.getAverageRating(reviewService.getAllReviews()) * 100.0) / 100.0;
+        FindSearchReviewsResponse response = new FindSearchReviewsResponse(data, reviews.getTotalPages(), reviews.getTotalElements(), averageRating);
+        return ResponseEntity.ok(BaseResponse.success("ok", response));
     }
 
     private Member isAccessMember(HttpServletRequest request){
