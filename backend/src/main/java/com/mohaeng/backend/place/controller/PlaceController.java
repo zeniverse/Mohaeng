@@ -7,10 +7,7 @@ import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.domain.Review;
-import com.mohaeng.backend.place.dto.FindAllPlacesDto;
-import com.mohaeng.backend.place.dto.PlaceDTO;
-import com.mohaeng.backend.place.dto.PlaceRatingDto;
-import com.mohaeng.backend.place.dto.PlaceSearchDto;
+import com.mohaeng.backend.place.dto.*;
 import com.mohaeng.backend.place.dto.response.*;
 import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
@@ -32,6 +29,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -147,12 +145,12 @@ public class PlaceController {
     }
 
     @GetMapping("/place/main")
-    public ResponseEntity getPlaceReviewsByRatingTop10(
-            @RequestParam(defaultValue = "1") int page) {
-        Page<Review> reviews = reviewService.getAllReviewsByRatingTop10(page);
-        List<FindAllReviewResponse> data = reviews.map(FindAllReviewResponse::of).getContent();
-        double averageRating = Math.round(reviewService.getAverageRating(reviewService.getAllReviews()) * 100.0) / 100.0;
-        FindSearchReviewsResponse response = new FindSearchReviewsResponse(data, reviews.getTotalPages(), reviews.getTotalElements(), averageRating);
+    public ResponseEntity getPlaceReviewsByRatingTop10() {
+        List<Review> reviews = reviewService.getAllReviewsByRatingTop10();
+        List<MainPageDto> content = reviews.stream()
+                .map(review -> MainPageDto.Of(review.getPlace(), review, placeService))
+                .collect(Collectors.toList());
+        MainPageResponse response = MainPageResponse.from(content);
         return ResponseEntity.ok(BaseResponse.success("ok", response));
     }
 
