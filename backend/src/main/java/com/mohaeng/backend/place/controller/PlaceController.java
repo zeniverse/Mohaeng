@@ -63,7 +63,7 @@ public class PlaceController {
 
     @GetMapping("/place/{contentId}")
     public ResponseEntity<PlaceDTO> getPlace(@PathVariable String contentId) throws IOException, ParserConfigurationException, SAXException {
-        Place place = placeService.getPlace(contentId);
+        Place place = placeService.getPlaceByContentId(contentId);
         if (place == null) {
             return ResponseEntity.notFound().build();
         }
@@ -146,7 +146,7 @@ public class PlaceController {
         return ResponseEntity.ok().body(BaseResponse.success("OK", response));
     }
 
-    @GetMapping("/main")
+    @GetMapping("/place/main")
     public ResponseEntity getPlaceReviewsByRatingTop10(
             @RequestParam(defaultValue = "1") int page) {
         Page<Review> reviews = reviewService.getAllReviewsByRatingTop10(page);

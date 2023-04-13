@@ -26,7 +26,7 @@ public class PlaceInitializer {
     public void init() throws IOException, ParserConfigurationException, SAXException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        placeService.savePlace();
+        placeService.saveInitImage();
         List<Place> places = placeService.getPlaces(); // 최초생성
         stopWatch.stop();
         long totalTimeMillis = stopWatch.getTotalTimeMillis();
