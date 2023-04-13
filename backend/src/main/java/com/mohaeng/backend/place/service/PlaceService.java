@@ -50,6 +50,7 @@ public class PlaceService {
     private final PlaceBookmarkRepository placeBookmarkRepository;
     private final MemberRepository memberRepository;
     private final AmazonS3Service amazonS3Service;
+    private final ReviewService reviewService;
 
     @Value("${API_KEY}")
     private String API_KEY;
@@ -244,5 +245,10 @@ public class PlaceService {
 
     public String getFirstImage() {
         return fileUrl;
+    }
+
+    public double getAverageRatingForPlace(Long placeId) {
+        List<Review> placeReviews = reviewService.getAllReviewById(placeId);
+        return Math.round(reviewService.getAverageRating(placeReviews) * 100.0) / 100.0;
     }
 }
