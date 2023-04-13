@@ -9,6 +9,7 @@ import { RootState } from "@/src/store/store";
 import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import Pagebar from "../Pagenation/Pagebar";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
+import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 
 type ReviewListProps = {
   placeId: number;
@@ -19,8 +20,10 @@ export default function ReviewList() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { placeId, name, reviewId } = router.query;
+  const id = useRouterQuery("placeId");
+  console.log(id);
   const [reviewData, setReviewData] = useState<ReviewData[]>([]);
-  const [selectedValue, setSelectedValue] = useState("latest");
+  const [selectedValue, setSelectedValue] = useState("highrating");
 
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
@@ -39,16 +42,7 @@ export default function ReviewList() {
   const accessToken = useSelector((state: RootState) => state.token.token);
 
   // * 새로고침 방지
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = "";
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
+  usePreventRefresh();
 
   // 정렬
   const handleChangeOption = (e: {
@@ -77,35 +71,41 @@ export default function ReviewList() {
         if (res.data.data && res.data.data.reviews) {
           dispatch(setReview(res.data.data));
           setReviewData(res.data.data.reviews);
+          // localStorage.setItem(
+          //   "reviewData",
+          //   JSON.stringify(res.data.data.reviews)
+          // );
         }
       } catch (error) {
         console.error(error);
       }
     }
     fetchSelect();
-  }, [selectedValue, placeId, page]);
+  }, [selectedValue, page, placeId]);
 
   // * 리뷰 전체 조회
   useEffect(() => {
-    if (page !== 0) {
-      const fetchReview = async () => {
-        try {
-          const res = await axios.get(`/api/review/${placeId}/date`, {
-            params: {
-              page: page,
-            },
-            withCredentials: true,
-          });
-          console.log(res.data.data);
-          dispatch(setReview(res.data.data));
-          setReviewData(res.data.data.reviews);
-        } catch (err) {
-          console.error(err);
-        }
-      };
+    const fetchReview = async () => {
+      try {
+        const id = localStorage.getItem("placeId");
+        console.log(id);
+        const res = await axios.get(`/api/review/${id}/rating`, {
+          params: {
+            page: page,
+          },
+          withCredentials: true,
+        });
+        console.log(res.data.data);
+        dispatch(setReview(res.data.data));
+        setReviewData(res.data.data.reviews);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    if (placeId) {
       fetchReview();
     }
-  }, [page]);
+  }, [page, placeId]);
 
   const handleClickReviewBtn = () => {
     if (!accessToken && !currentUser) {
@@ -174,7 +174,9 @@ export default function ReviewList() {
           </div>
         </main>
       </section>
-      {totalElements ? <Pagebar totalPage={totalPages} /> : ""}
+      {totalPages !== 0 && totalPages ? (
+        <Pagebar totalPage={totalPages} />
+      ) : null}
     </>
   );
 }

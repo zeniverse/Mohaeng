@@ -9,6 +9,7 @@ import ReviewRating from "./ReviewRating";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import ReviewTextArea from "./ReviewTextarea";
+import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 
 export default function CreateReview() {
   const router = useRouter();
@@ -28,16 +29,7 @@ export default function CreateReview() {
   let rating = clicked.filter(Boolean).length;
 
   // * 새로고침 방지
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = "";
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
+  usePreventRefresh();
 
   // *비동기적으로 받아오는 별점 개수 업데이트 확인
   useEffect(() => {
