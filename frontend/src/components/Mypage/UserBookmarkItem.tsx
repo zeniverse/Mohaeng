@@ -19,6 +19,7 @@ export interface bookmarkState {
   isRating: boolean;
   isPlace: boolean;
   createdDate: string;
+  contentId: string;
 }
 
 const UserBookmarkItem = (prop: bookmarkState) => {
@@ -55,14 +56,26 @@ const UserBookmarkItem = (prop: bookmarkState) => {
 
   return (
     <div key={prop.id} className={styles["bookmark-item"]}>
-      <Link
-        href={{
-          pathname: "/place/[id]",
-          query: { id: prop.id },
-        }}
-      >
-        <img src={prop.image} alt={prop.image} />
-      </Link>
+      {prop.isPlace === true ? (
+        <Link
+          href={{
+            pathname: "/place/[id]",
+            query: { id: prop.contentId },
+          }}
+        >
+          <img src={prop.image} alt={prop.image} />
+        </Link>
+      ) : (
+        <Link
+          href={{
+            pathname: "/course/[id]",
+            query: { id: prop.realId },
+          }}
+        >
+          <img src={prop.image} alt={prop.image} />
+        </Link>
+      )}
+
       <div>
         <div className={styles.keywordBookmark}>
           <BsBookmarkFill className={styles.bookmark} onClick={delBookmark} />

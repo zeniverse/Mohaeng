@@ -4,6 +4,7 @@ import axios from "axios";
 export interface bookmarkPlace {
   bookMarkId: number;
   placeId: number;
+  contendId: string;
   placeName: string;
   rating: number;
   address: string;

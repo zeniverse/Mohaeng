@@ -40,7 +40,7 @@ const MODAL_COMPONENTS: ModalComponent[] = [
   },
   {
     type: MODAL_TYPES.DeleteReviewModal,
-    component: <DeleteReviewModal />,
+    // component: <DeleteReviewModal />,
   },
 ];
 

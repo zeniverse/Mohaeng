@@ -21,6 +21,7 @@ const MyReview = () => {
             createdDate={review.createdDate}
             content={review.content}
             rating={review.rating}
+            contentId={review.contendId}
           />
         ))}
       </div>
