@@ -4,26 +4,37 @@ import React, { useEffect, useState } from "react";
 
 import { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-
+import cookie from "react-cookies";
 import PlaceCard from "@/src/components/Main/PlaceCard";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import { Place } from "@/src/interfaces/Place";
+import axios from "axios";
 
 const PlaceCardSlider = () => {
-  const [placeData, setPlaceData] = useState<Place[]>([]);
+  const [topTenPlace, setTopTenPlace] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
-      const res = await fetch("/api/placeMock");
-      const data = await res.json();
-      // if (getPlaceData && getPlaceData.length > 5) {
-      //   let slicedData = getPlaceData.slice(0, 5);
-      //   return setPlaceData(slicedData);
-      // }
-      setPlaceData(data);
-    }
+    const fetchData = async () => {
+      const accessToken = await cookie.load("accessToken");
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/course/main`,
+          {
+            headers: {
+              "Access-Token": accessToken,
+              withCredentials: true,
+            },
+          }
+        );
+        console.log(response);
+        setTopTenPlace(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     fetchData();
   }, []);
 
@@ -37,7 +48,7 @@ const PlaceCardSlider = () => {
       // onSwiper={(swiper) => console.log(swiper)}
       // onSlideChange={() => console.log("slide change")}
     >
-      {placeData?.map((place, idx) => (
+      {/* {topTenPlace?.map((place, idx) => (
         <SwiperSlide key={idx}>
           <PlaceCard
             key={place.id}
@@ -48,7 +59,7 @@ const PlaceCardSlider = () => {
             placeRating={place.rating}
           />
         </SwiperSlide>
-      ))}
+      ))} */}
     </Swiper>
   );
 };
