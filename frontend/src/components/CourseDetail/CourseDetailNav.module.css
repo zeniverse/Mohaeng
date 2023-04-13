@@ -45,6 +45,11 @@
   color: var(--color-blue);
 }
 
+.dateinfo {
+  font-size: 0.8rem;
+  color: var(--color-text-semi);
+}
+
 .heart {
   font-size: 1.7rem;
   color: var(--color-red);

@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { getCourseDetailAction } from "@/src/store/reducers/CourseDetailSlice";
 
 export default function CourseDetail() {
-  const [formattedDate, setFormattedDate] = useState("");
   const courseDetail = useAppSelector((state) => state.courseDetail.course);
   const {
     courseId,
@@ -28,21 +27,6 @@ export default function CourseDetail() {
     }
   }, [id]);
 
-  const getFomattedDate = useCallback((date: Date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    return `${year}-${month < 10 ? "0" + month : month}-${
-      day < 10 ? "0" + day : day
-    }`;
-  }, []);
-
-  useEffect(() => {
-    const FormattedDate = getFomattedDate(new Date(createdDate));
-    setFormattedDate(FormattedDate);
-  }, [createdDate]);
-
   const placeNames = places?.map((place) => place.name).join(",");
 
   return (
@@ -57,15 +41,9 @@ export default function CourseDetail() {
           </h1>
           <div className={styles["title-info"]}>
             <span className={styles.userinfo}>유저 정보</span>
-            <span className={styles.dateinfo}>{formattedDate}</span>
           </div>
         </div>
-        <CourseDetailNav
-          likeCount={likeCount}
-          places={placeNames}
-          courseId={courseId}
-          isBookmarked={isBookmarked}
-        />
+        <CourseDetailNav />
         <CourseDetailContent
           mapData={places}
           places={places}

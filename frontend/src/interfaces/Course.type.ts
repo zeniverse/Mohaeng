@@ -1,3 +1,5 @@
+import { Interface } from "readline";
+
 export interface ICourse {
   courseId: number;
   title: string;
@@ -92,4 +94,14 @@ export interface IPlaces {
   imgUrl: string;
   mapX: string;
   mapY: string;
+}
+
+export interface IRecommandCourse {
+  courseId: number;
+  title: string;
+  content: string;
+  thumbnailUrl: string;
+  likeCount: number;
+  isBookmarked: boolean;
+  isLiked: boolean;
 }
