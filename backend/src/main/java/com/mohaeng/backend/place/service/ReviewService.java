@@ -17,17 +17,16 @@ import com.mohaeng.backend.place.repository.ReviewImageRepository;
 import com.mohaeng.backend.place.repository.ReviewRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -185,9 +184,19 @@ public class ReviewService {
         return reviewRepository.findAllByPlaceId(placeId, pageable);
     }
 
-    public Page<Review> getAllReviewsByRatingTop10(int page) {
-        Pageable pageable = PageRequest.of(page - 1 , 10, Sort.by("rating").descending());
-        return reviewRepository.findAll(pageable);
+    public List<Review> getAllReviewsByRatingTop10() {
+        List<Place> places = placeRepository.findTop10ByAvgRating();
+        List<Review> reviews = places.stream()
+                .map(place -> place.getReviewList().stream().max(Comparator.comparing(Review::getRating)).orElse(null))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        if (reviews.isEmpty()) {
+            places = placeRepository.findTop10WithoutReviews();
+            reviews = places.stream()
+                    .map(place -> new Review(place, "0"))
+                    .collect(Collectors.toList());
+        }
+        return reviews;
     }
 
     public Page<Review> getAllReviewsByDate(Long placeId, int page) {
