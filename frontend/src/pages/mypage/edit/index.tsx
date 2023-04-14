@@ -14,9 +14,7 @@ const MyPage: React.FC = () => {
   const id = useSelector((state: RootState) => state.id.id);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const email = useSelector((state: RootState) => state.email.email);
-  const imageUrl = useSelector(
-    (state: RootState) => state.profileUrl.profileUrl
-  );
+  const imageUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
 
   const [editName, setEditName] = useState("");
 

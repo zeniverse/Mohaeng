@@ -3,6 +3,9 @@ const { type } = require("os");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   fallback: true,
+  reactStrictMode: false,
+  swcMinify: true,
+  output: "standalone",
   images: {
     domains: [
       "tong.visitkorea.or.kr",
