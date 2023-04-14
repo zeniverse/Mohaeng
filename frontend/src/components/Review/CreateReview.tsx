@@ -28,7 +28,7 @@ export default function CreateReview() {
   const [previews, setPreviews] = useState<string[]>([]);
   let rating = clicked.filter(Boolean).length;
 
-  // * 새로고침 방지
+  // * 새로고침, 뒤로가기 방지
   usePreventRefresh();
 
   // *비동기적으로 받아오는 별점 개수 업데이트 확인
