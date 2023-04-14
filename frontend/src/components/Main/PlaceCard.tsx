@@ -5,7 +5,13 @@ import Image from "next/image";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 
 const PlaceCard = (props: PlaceProps) => {
-  const { id, placeImg, placeDesc, placeTitle, placeRating } = props;
+  const {
+    id,
+    placeImg,
+    // placeDesc,
+    placeTitle,
+    placeRating,
+  } = props;
   return (
     <div className={styles["place-card-container"]}>
       <div className={styles["place-image-container"]}>
@@ -23,7 +29,7 @@ const PlaceCard = (props: PlaceProps) => {
           <h3>{placeTitle}</h3>
         </div>
         <div className={styles["place-card-desc"]}>
-          <p>{placeDesc}</p>
+          {/* <p>{placeDesc}</p> */}
         </div>
       </div>
     </div>

@@ -105,7 +105,17 @@ export default function PlaceDetail() {
         const res = await axios.get(`/api/place/overview/${id}`, {
           headers,
         });
-        if (res.data.data.content[0] !== {}) {
+
+        //FIX:해당 구문 이렇게 변경해두었습니다! 보시고 문제 있으시면 새롬님이 수정해주세요!
+        // if (res.data.data.content[0] !== {}) {
+        //   const { content } = res.data.data;
+        //   setPlaceInfo({ ...placeInfo, ...content[0] });
+        //   setBookMarked(res.data.data.isBookmarked);
+        //   console.log(content);
+        // } else {
+        //   console.log(placeInfo);
+        // }
+        if (Object.keys(res.data.data.content[0]).length > 0) {
           const { content } = res.data.data;
           setPlaceInfo({ ...placeInfo, ...content[0] });
           setBookMarked(res.data.data.isBookmarked);
