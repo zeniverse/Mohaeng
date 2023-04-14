@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import Pagebar from "../Pagenation/Pagebar";
-import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 
 type ReviewListProps = {
@@ -20,8 +19,6 @@ export default function ReviewList() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { placeId, name, reviewId } = router.query;
-  // const id = useRouterQuery("placeId");
-  // console.log(id);
   const [reviewData, setReviewData] = useState<ReviewData[]>([]);
   const [selectedValue, setSelectedValue] = useState("highrating");
 
@@ -71,10 +68,6 @@ export default function ReviewList() {
         if (res.data.data && res.data.data.reviews) {
           dispatch(setReview(res.data.data));
           setReviewData(res.data.data.reviews);
-          // localStorage.setItem(
-          //   "reviewData",
-          //   JSON.stringify(res.data.data.reviews)
-          // );
         }
       } catch (error) {
         console.error(error);
@@ -87,8 +80,6 @@ export default function ReviewList() {
   useEffect(() => {
     const fetchReview = async () => {
       try {
-        // const id = localStorage.getItem("placeId");
-        // console.log(id);
         const res = await axios.get(`/api/review/${placeId}/rating`, {
           params: {
             page: page,
