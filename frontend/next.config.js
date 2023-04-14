@@ -74,6 +74,10 @@ const nextConfig = {
         source: "/api/review/:placeId/rating",
         destination: "http://localhost:8080/api/review/:placeId/rating",
       },
+      {
+        source: "/api/myPage/:path*",
+        destination: "http://localhost:8080/api/myPage/:path*",
+      },
     ];
   },
 };

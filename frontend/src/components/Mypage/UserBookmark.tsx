@@ -52,6 +52,7 @@ const UserBookmark = () => {
                 isRating={true}
                 isPlace={true}
                 createdDate="123"
+                contentId={bookmark.contendId}
               />
             ))
           : courseBookmark.map((bookmark) => (
@@ -65,6 +66,7 @@ const UserBookmark = () => {
                 isRating={false}
                 isPlace={false}
                 createdDate={bookmark.content}
+                contentId=""
               />
             ))}
       </div>
