@@ -1,14 +1,11 @@
-import {
-  createCourseApi,
-  getCourseListApi,
-} from "@/src/services/courseService";
+import { ICourseEditParam } from "./../../interfaces/Course.type";
+import { createCourseApi, editCourseApi } from "@/src/services/courseService";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   ICourseForm,
   ICourseOriginForm,
   ICourseSubmitForm,
 } from "../../interfaces/Course.type";
-import CourseListSlice from "./CourseListSlice";
 
 interface CourseState {
   error?: string;
@@ -19,13 +16,13 @@ interface CourseState {
 export const initialState: CourseState = {
   course: {
     title: "",
+    content: "",
+    courseDays: "",
     startDate: "",
     endDate: "",
-    isPublished: true,
-    courseDays: "",
     region: "",
+    isPublished: true,
     thumbnailUrl: "",
-    content: "",
     places: [],
     isBookmarked: false,
     isLiked: false,
@@ -46,9 +43,29 @@ export const createCourseAction = createAsyncThunk(
       placeIds: extractedPlaceIds,
       thumbnailUrl: thumbnailUrl,
     };
+
     const response = await createCourseApi(validData);
     const resData = await response.data.data;
     return { formData, resData };
+  }
+);
+
+export const editCourseAction = createAsyncThunk(
+  "course/editCourseAction",
+  async (formData: ICourseEditParam) => {
+    const { courseId, course } = formData;
+    const { places, ...rest } = course;
+    const validPlace = places.find((place) => place.imgUrl.trim() !== "");
+    const thumbnailUrl = validPlace?.imgUrl ?? "";
+    const extractedPlaceIds = places.map((place) => place.placeId);
+
+    const validData = {
+      ...rest,
+      placeIds: extractedPlaceIds,
+      thumbnailUrl: thumbnailUrl,
+    };
+    const response = await editCourseApi(courseId, validData);
+    return formData;
   }
 );
 
@@ -63,6 +80,7 @@ export const CourseFormSlice = createSlice({
         value: string | boolean;
       }>
     ) => {
+      ``;
       const { name, value } = action.payload;
       state.course = {
         ...state.course,
@@ -82,6 +100,9 @@ export const CourseFormSlice = createSlice({
       const data = action.payload;
       state.course.places.push(data);
     },
+    addFormValue: (state, action) => {
+      state.course = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(createCourseAction.pending, (state) => {
@@ -96,6 +117,11 @@ export const CourseFormSlice = createSlice({
   },
 });
 
-export const { setFormValue, resetFormValue, addPlaceObject, removePlace } =
-  CourseFormSlice.actions;
+export const {
+  setFormValue,
+  resetFormValue,
+  addPlaceObject,
+  removePlace,
+  addFormValue,
+} = CourseFormSlice.actions;
 export default CourseFormSlice.reducer;

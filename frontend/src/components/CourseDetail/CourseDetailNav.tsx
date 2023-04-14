@@ -1,5 +1,5 @@
 import styles from "./CourseDetailNav.module.css";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import RoughMap from "../Course/RoughMap";
 import {
   BsBookmark,
@@ -18,9 +18,12 @@ import {
 
 const CourseDetailNav = () => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
+  const [formattedDate, setFormattedDate] = useState("");
+
   const dispatch = useAppDispatch();
   const course = useAppSelector((state) => state.courseDetail.course);
-  const { likeCount, places, courseId, isBookmarked, isLiked } = course;
+  const { likeCount, places, courseId, isBookmarked, isLiked, createdDate } =
+    course;
 
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
@@ -38,6 +41,21 @@ const CourseDetailNav = () => {
     dispatch(detailLikeToggleAction(courseId));
   };
 
+  const getFomattedDate = useCallback((date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    return `${year}-${month < 10 ? "0" + month : month}-${
+      day < 10 ? "0" + day : day
+    }`;
+  }, []);
+
+  useEffect(() => {
+    const FormattedDate = getFomattedDate(new Date(createdDate));
+    setFormattedDate(FormattedDate);
+  }, [createdDate]);
+
   const RoughMapData = places?.map((place) => place.name).join(", ");
 
   return (
@@ -53,6 +71,7 @@ const CourseDetailNav = () => {
         </span>
       </div>
       <div className={styles["title-nav-right"]}>
+        <span className={styles.dateinfo}>{formattedDate}</span>
         <div
           className={`${styles["item-nav"]} ${styles.roughmapBtn}`}
           onClick={toggleRoughMapHandler}

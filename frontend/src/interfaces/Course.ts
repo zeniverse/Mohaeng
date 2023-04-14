@@ -18,7 +18,7 @@ export type CourseListProps = {
   content: string;
   likeCount: number;
   courseDays: string;
-  thumbnailUrl: string;
+  thumbnailUrl?: string;
   isBookmarked: boolean;
   isLiked: boolean;
   places: string;

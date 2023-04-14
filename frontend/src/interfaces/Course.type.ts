@@ -1,3 +1,5 @@
+import { Interface } from "readline";
+
 export interface ICourse {
   courseId: number;
   title: string;
@@ -6,7 +8,7 @@ export interface ICourse {
   isPublished: boolean;
   courseDays: string;
   region: string;
-  thumbnailUrl: string;
+  thumbnailUrl?: string;
   content: string;
   likeCount: number;
   isBookmarked: boolean;
@@ -40,7 +42,7 @@ export interface ICourseForm {
   isPublished: boolean;
   courseDays: string;
   region: string;
-  thumbnailUrl: string;
+  thumbnailUrl?: string;
   content: string;
   likeCount: number;
   isBookmarked: boolean;
@@ -48,6 +50,11 @@ export interface ICourseForm {
 }
 export interface ICourseOriginForm extends ICourseForm {
   places: IPlacesForm[];
+}
+
+export interface ICourseEditParam {
+  courseId: number;
+  course: ICourseOriginForm;
 }
 
 export interface ICourseSubmitForm extends ICourseForm {
@@ -92,4 +99,14 @@ export interface IPlaces {
   imgUrl: string;
   mapX: string;
   mapY: string;
+}
+
+export interface IRecommandCourse {
+  courseId: number;
+  title: string;
+  content: string;
+  thumbnailUrl: string;
+  likeCount: number;
+  isBookmarked: boolean;
+  isLiked: boolean;
 }

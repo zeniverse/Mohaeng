@@ -6,9 +6,11 @@ import CourseDetailContent from "@/src/components/CourseDetail/CourseDetailConte
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { getCourseDetailAction } from "@/src/store/reducers/CourseDetailSlice";
+import { removeCourseAction } from "@/src/store/reducers/CourseListSlice";
+import { useRouter } from "next/router";
+import { addFormValue } from "@/src/store/reducers/CourseFormSlice";
 
 export default function CourseDetail() {
-  const [formattedDate, setFormattedDate] = useState("");
   const courseDetail = useAppSelector((state) => state.courseDetail.course);
   const {
     courseId,
@@ -18,9 +20,12 @@ export default function CourseDetail() {
     createdDate,
     isBookmarked,
     places,
+    nickname,
   } = courseDetail;
+  const { nickName } = useAppSelector((state) => state.nickName);
   const dispatch = useAppDispatch();
   const id = useRouterQuery("id");
+  const router = useRouter();
 
   useEffect(() => {
     if (id) {
@@ -28,22 +33,35 @@ export default function CourseDetail() {
     }
   }, [id]);
 
-  const getFomattedDate = useCallback((date: Date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
+  const handleRemoveCourse = () => {
+    if (confirm(`${title} 코스를 정말 삭제하시겠습니까?`)) {
+      if (id) {
+        dispatch(removeCourseAction(id));
+        router.push("/course");
+      }
+    }
+  };
 
-    return `${year}-${month < 10 ? "0" + month : month}-${
-      day < 10 ? "0" + day : day
-    }`;
-  }, []);
+  const handleEditCourse = () => {
+    const CourseFormValue = {
+      title: courseDetail.title,
+      content: courseDetail.content,
+      courseDays: courseDetail.courseDays,
+      startDate: courseDetail.startDate,
+      endDate: courseDetail.endDate,
+      region: courseDetail.region,
+      isPublished: courseDetail.isPublished,
+      isBookmarked: courseDetail.isBookmarked,
+      isLiked: courseDetail.isLiked,
+      places: courseDetail.places,
+    };
 
-  useEffect(() => {
-    const FormattedDate = getFomattedDate(new Date(createdDate));
-    setFormattedDate(FormattedDate);
-  }, [createdDate]);
-
-  const placeNames = places?.map((place) => place.name).join(",");
+    dispatch(addFormValue(CourseFormValue));
+    router.push({
+      pathname: "/course/edit-course",
+      query: { courseId: courseId },
+    });
+  };
 
   return (
     <>
@@ -57,15 +75,25 @@ export default function CourseDetail() {
           </h1>
           <div className={styles["title-info"]}>
             <span className={styles.userinfo}>유저 정보</span>
-            <span className={styles.dateinfo}>{formattedDate}</span>
+            {nickName === nickname ? (
+              <div className={styles["btn-wrapper"]}>
+                <button
+                  className={`${styles["remove-btn"]} ${styles.btn}`}
+                  onClick={handleRemoveCourse}
+                >
+                  삭제
+                </button>
+                <button
+                  className={`${styles["edit-btn"]} ${styles.btn}`}
+                  onClick={handleEditCourse}
+                >
+                  수정
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
-        {/* <CourseDetailNav
-          likeCount={likeCount}
-          places={placeNames}
-          courseId={courseId}
-          isBookmarked={isBookmarked}
-        /> */}
+        <CourseDetailNav />
         <CourseDetailContent
           mapData={places}
           places={places}
