@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import IsLikeState from "../UI/IsLikeState";
 import styles from "./CourseCard.module.css";
 
@@ -10,8 +11,14 @@ const CourseCard = ({
   likeCount,
   isLiked,
 }: any) => {
+  const router = useRouter();
+
+  const handleCourseCard = () => {
+    router.push(`/course/${courseId}`);
+  };
+
   return (
-    <div className={styles["course-card-container"]}>
+    <div className={styles["course-card-container"]} onClick={handleCourseCard}>
       <div className={styles["course-image-container"]}>
         <Image
           src={thumbnailUrl}
