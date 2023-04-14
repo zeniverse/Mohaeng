@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { getCourseDetailAction } from "@/src/store/reducers/CourseDetailSlice";
 import { removeCourseAction } from "@/src/store/reducers/CourseListSlice";
 import { useRouter } from "next/router";
+import { addFormValue } from "@/src/store/reducers/CourseFormSlice";
 
 export default function CourseDetail() {
   const courseDetail = useAppSelector((state) => state.courseDetail.course);
@@ -41,9 +42,37 @@ export default function CourseDetail() {
     }
   };
 
-  const handleEditCourse = () => {};
+  // title: "",
+  // content: "",
+  // courseDays: "",
+  // startDate: "",
+  // endDate: "",
+  // region: "",
+  // isPublished: true,
+  // isBookmarked: false,
+  // isLiked: true,
+  // places: [],
 
-  const placeNames = places?.map((place) => place.name).join(",");
+  const handleEditCourse = () => {
+    const CourseFormValue = {
+      title: courseDetail.title,
+      content: courseDetail.content,
+      courseDays: courseDetail.courseDays,
+      startDate: courseDetail.startDate,
+      endDate: courseDetail.endDate,
+      region: courseDetail.region,
+      isPublished: courseDetail.isPublished,
+      isBookmarked: courseDetail.isBookmarked,
+      isLiked: courseDetail.isLiked,
+      places: courseDetail.places,
+    };
+
+    dispatch(addFormValue(CourseFormValue));
+    router.push({
+      pathname: "/course/edit-course",
+      query: { courseId: courseId },
+    });
+  };
 
   return (
     <>

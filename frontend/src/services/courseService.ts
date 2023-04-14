@@ -24,6 +24,18 @@ export const createCourseApi = async (data: ICourseSubmitForm) => {
     },
   });
 };
+export const editCourseApi = async (
+  courseId: number,
+  data: ICourseSubmitForm
+) => {
+  const accessToken = await cookie.load("accessToken");
+  return await axios.put(`${CourseApiConfig.course}/${courseId}`, data, {
+    headers: {
+      "Access-Token": accessToken,
+      withCredentials: true,
+    },
+  });
+};
 
 export const deleteCourseApi = async (courseId: number) => {
   const accessToken = await cookie.load("accessToken");

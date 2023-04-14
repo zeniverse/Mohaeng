@@ -42,7 +42,7 @@ export interface ICourseForm {
   isPublished: boolean;
   courseDays: string;
   region: string;
-  thumbnailUrl: string;
+  thumbnailUrl?: string;
   content: string;
   likeCount: number;
   isBookmarked: boolean;
@@ -50,6 +50,11 @@ export interface ICourseForm {
 }
 export interface ICourseOriginForm extends ICourseForm {
   places: IPlacesForm[];
+}
+
+export interface ICourseEditParam {
+  courseId: number;
+  course: ICourseOriginForm;
 }
 
 export interface ICourseSubmitForm extends ICourseForm {
