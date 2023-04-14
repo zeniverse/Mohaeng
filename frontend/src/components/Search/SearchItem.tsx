@@ -113,7 +113,7 @@ export default function SearchItem({
           name: name,
         },
       },
-      `place/${contentId}`
+      `/place/${contentId}`
     );
   };
 

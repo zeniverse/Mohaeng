@@ -20,6 +20,7 @@ import { resetFilter } from "@/src/store/reducers/FilterSlice";
 import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
 import cookie from "react-cookies";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
+import { getCourseListAction } from "@/src/store/reducers/CourseListSlice";
 
 interface CourseFormProps {
   isEditMode: boolean;
@@ -32,7 +33,7 @@ const CourseForm = ({ isEditMode }: CourseFormProps) => {
     (state) => state.courseForm ?? initialState
   );
   const accessToken = cookie.load("accessToken");
-  // console.log(course);
+
   const id = useRouterQuery("courseId");
 
   const handleInputChange = (
@@ -48,21 +49,22 @@ const CourseForm = ({ isEditMode }: CourseFormProps) => {
     );
   };
 
-  const handleCourseSubmit = (e: React.FormEvent) => {
+  const handleCourseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = id ? { courseId: id, course } : null;
+    const editData = id ? { courseId: id, course } : null;
     if (!isEditMode) {
-      dispatch(createCourseAction(course)).then(() => {
-        dispatch(getMyCourse(accessToken));
-      });
+      await dispatch(createCourseAction(course));
+      await dispatch(getMyCourse(accessToken));
     } else {
-      console.log("edit 수행");
-      if (formData) dispatch(editCourseAction(formData));
+      if (editData) {
+        await dispatch(editCourseAction(editData));
+        await dispatch(getCourseListAction({}));
+      }
     }
-    // as를 전달하여 페이지가 새로 고쳐지고 데이터가 업데이트 됨.
     dispatch(resetFormValue());
     dispatch(resetFilter());
     router.push("/course");
+    console.log("클릭함");
   };
 
   const handleCourseCancel = () => {
@@ -70,6 +72,7 @@ const CourseForm = ({ isEditMode }: CourseFormProps) => {
     // as를 전달하여 페이지가 새로 고쳐지고 데이터가 업데이트 됨.
     router.push("/course", "/course");
   };
+
   return (
     <>
       <div className={styles["course-form-container"]}>
@@ -91,11 +94,10 @@ const CourseForm = ({ isEditMode }: CourseFormProps) => {
             취소
           </button>
           <button
-            type="submit"
             className={`${styles["submit-btn"]} ${styles.btn}`}
             onClick={handleCourseSubmit}
           >
-            작성하기
+            {isEditMode ? "수정하기" : "작성하기"}
           </button>
         </div>
       </div>

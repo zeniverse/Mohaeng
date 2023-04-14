@@ -12,8 +12,6 @@ import java.util.List;
 @Builder
 public class MainPageResponse {
     private List<MainPageDto> content;
-    private int totalPages;
-    private long totalElements;
 
     public static MainPageResponse from(List<MainPageDto> content) {
         return MainPageResponse.builder()

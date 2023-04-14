@@ -26,7 +26,7 @@ interface Uploader {
 }
 
 const UserEdit = () => {
-  const selectFile = useRef("");
+  const selectFile = useRef<any>(null);
 
   const id = useSelector((state: RootState) => state.id.id);
   const nickname = useSelector((state: RootState) => state.nickName.nickName);
@@ -34,7 +34,7 @@ const UserEdit = () => {
   const profileUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
   const accessToken = cookie.load("accessToken");
   const [imagePath, changeUrl] = useState("");
-  const [imgFile, setFile] = useState();
+  const [imgFile, setFile] = useState("");
 
   const dispatch = useDispatch();
   const router = useRouter();

@@ -30,14 +30,15 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -116,30 +117,35 @@ public class PlaceService {
         return places;
     }
 
-    private String getOverview(String contentId) {
+    public String getOverview(String contentId) {
         String urlStr = getBaseUrl2().replace("contentId=", "contentId=" + contentId);
-        Document doc;
-        NodeList nodeList;
         String overviewText = "";
-        String overview = "";
         List<String> excludedIds = Arrays.asList("2763773", "2784642", "2946071", "2930677", "2891338",
                 "2725011", "2891349", "2777911", "2750886", "2946230",
                 "2760807", "2930681");
 
         try {
-            doc = getXmlDocument(urlStr);
-            nodeList = doc.getElementsByTagName("item");
-            if (nodeList.getLength() > 0) {
-                Node node = nodeList.item(0);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    overviewText = element.getElementsByTagName("overview").item(0).getTextContent();
+            URL url = new URL(urlStr);
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            XMLEventReader eventReader = factory.createXMLEventReader(url.openStream());
+
+            while (eventReader.hasNext()) {
+                XMLEvent event = eventReader.nextEvent();
+
+                if (event.isStartElement()) {
+                    StartElement startElement = event.asStartElement();
+
+                    if (startElement.getName().getLocalPart().equals("overview")) {
+                        event = eventReader.nextEvent();
+                        overviewText = event.asCharacters().getData();
+                        break;
+                    }
                 }
             }
         } catch (Exception e) {
             log.info("Exception:", e);
-            // retry
         }
+
         return overviewText;
     }
 
@@ -194,21 +200,24 @@ public class PlaceService {
         stopWatch.start();
 
         List<Place> places = placeRepository.findByContentId(contentId);
-        List<String> overviews = new ArrayList<>();
-        for (Place place : places) {
-            if (place.getContentId().equals(contentId)) {
-                String overview = getOverview(place.getContentId());
-                overview = overview.replaceAll("<br>|<br >|< br>|<br />|</br>|<strong>|</ strong>", "");
-                overviews.add(overview);
-            }
-        }
+
+        // Use a parallel stream to call getOverview in parallel
+        List<String> overviews = places.parallelStream()
+                .filter(place -> place.getContentId().equals(contentId))
+                .map(place -> {
+                    String overview = getOverview(place.getContentId());
+                    overview = overview.replaceAll("\\n|<br>|<br >|< br>|<br />|</br>|<br/>|<strong>|</ strong>", "");
+                    return overview;
+                })
+                .collect(Collectors.toList());
+
         stopWatch.stop();
         long totalTimeMillis = stopWatch.getTotalTimeMillis();
-        System.out.println("total time : " + totalTimeMillis);
+        System.out.println("getPlaceOverview total time : " + totalTimeMillis);
         return overviews;
     }
 
-    public PlaceDetailsResponse getPlaceDetailsByContentId(String contentId, Member member) throws IOException, ParserConfigurationException, SAXException {
+    public PlaceDetailsResponse getPlaceDetailsByContentId(String contentId, Member member) {
         Place currentPlace = null;
         Boolean isBookmark = false;
 

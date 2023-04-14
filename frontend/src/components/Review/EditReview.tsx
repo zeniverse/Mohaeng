@@ -8,6 +8,7 @@ import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
+import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 
 export interface formData {
   reviewId: number;
@@ -43,16 +44,7 @@ export default function EditReview() {
   let rating = clicked.filter(Boolean).length;
 
   // * 새로고침 방지
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = "";
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
+  usePreventRefresh();
 
   // * 수정 전 별점 보여주기
   useEffect(() => {

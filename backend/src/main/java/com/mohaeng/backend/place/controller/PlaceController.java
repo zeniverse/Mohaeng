@@ -28,7 +28,9 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -147,8 +149,18 @@ public class PlaceController {
     @GetMapping("/place/main")
     public ResponseEntity getPlaceReviewsByRatingTop10() {
         List<Review> reviews = reviewService.getAllReviewsByRatingTop10();
+        List<String> contentIds = reviews.stream()
+                .map(review -> review.getPlace().getContentId())
+                .collect(Collectors.toList());
+
+        Map<String, String> overviews = new HashMap<>();
+        for (String contentId : contentIds) {
+            String overview = placeService.getOverview(contentId);
+            overviews.put(contentId, overview);
+        }
+
         List<MainPageDto> content = reviews.stream()
-                .map(review -> MainPageDto.Of(review.getPlace(), review, placeService))
+                .map(review -> MainPageDto.Of(review.getPlace(), placeService, overviews))
                 .collect(Collectors.toList());
         MainPageResponse response = MainPageResponse.from(content);
         return ResponseEntity.ok(BaseResponse.success("ok", response));

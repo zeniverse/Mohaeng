@@ -8,7 +8,7 @@ import {
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ICoursePlaceName } from "../../interfaces/Course.type";
 import { RootState } from "../store";
-import { createCourseAction } from "./CourseFormSlice";
+import { createCourseAction, editCourseAction } from "./CourseFormSlice";
 
 interface CourseState {
   error?: string;
@@ -105,6 +105,8 @@ export const CourseListSlice = createSlice({
       };
       state.courseList.push(createdCourse);
     });
+    builder.addCase(editCourseAction.fulfilled, (state, action) => {});
+
     builder.addCase(getCourseListAction.pending, (state) => {});
     builder.addCase(getCourseListAction.fulfilled, (state, action) => {
       const { courseList, totalElements, totalPages } = action.payload;

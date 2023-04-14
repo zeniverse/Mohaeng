@@ -42,17 +42,6 @@ export default function CourseDetail() {
     }
   };
 
-  // title: "",
-  // content: "",
-  // courseDays: "",
-  // startDate: "",
-  // endDate: "",
-  // region: "",
-  // isPublished: true,
-  // isBookmarked: false,
-  // isLiked: true,
-  // places: [],
-
   const handleEditCourse = () => {
     const CourseFormValue = {
       title: courseDetail.title,

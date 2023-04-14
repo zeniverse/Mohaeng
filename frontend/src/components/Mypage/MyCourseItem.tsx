@@ -33,14 +33,14 @@ const MyCourseItem = (myCourse: MyCourseItemProps) => {
 
   const appDispatch = useAppDispatch();
 
-  const toggleSwitchclassName =
-    myCourse.courseStatus === "PUBLIC"
-      ? `${styles["toggle-switch"]} ${styles.publish}`
-      : `${styles["toggle-switch"]} ${styles.private}`;
-  const textclassName =
-    myCourse.courseStatus === "PUBLIC"
-      ? `${styles["toggle-switch-text"]} ${styles.publish}`
-      : `${styles["toggle-switch-text"]} ${styles.private}`;
+  // const toggleSwitchclassName =
+  //   myCourse.courseStatus === "PUBLIC"
+  //     ? `${styles["toggle-switch"]} ${styles.publish}`
+  //     : `${styles["toggle-switch"]} ${styles.private}`;
+  // const textclassName =
+  //   myCourse.courseStatus === "PUBLIC"
+  //     ? `${styles["toggle-switch-text"]} ${styles.publish}`
+  //     : `${styles["toggle-switch-text"]} ${styles.private}`;
 
   const clickToggle = () => {
     var ispublish: boolean = true;
@@ -85,8 +85,12 @@ const MyCourseItem = (myCourse: MyCourseItemProps) => {
         />
       </Link>
       <div>
-        <button onClick={clickToggle}>
-          {myCourse.courseStatus === "PUBLIC" ? <p>공개</p> : <p>비공개</p>}
+        <button className={styles.publicButton} onClick={clickToggle}>
+          {myCourse.courseStatus === "PUBLIC" ? (
+            <p className={styles.public}>공개</p>
+          ) : (
+            <p className={styles.private}>비공개</p>
+          )}
         </button>
         <h2>{myCourse.title}</h2>
         <p>{getFormattedDate(new Date(myCourse.createdDate))}</p>

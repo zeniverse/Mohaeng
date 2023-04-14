@@ -43,7 +43,7 @@ export const createCourseAction = createAsyncThunk(
       placeIds: extractedPlaceIds,
       thumbnailUrl: thumbnailUrl,
     };
-    console.log(extractedPlaceIds);
+
     const response = await createCourseApi(validData);
     const resData = await response.data.data;
     return { formData, resData };
@@ -58,15 +58,14 @@ export const editCourseAction = createAsyncThunk(
     const validPlace = places.find((place) => place.imgUrl.trim() !== "");
     const thumbnailUrl = validPlace?.imgUrl ?? "";
     const extractedPlaceIds = places.map((place) => place.placeId);
-    console.log(extractedPlaceIds);
+
     const validData = {
       ...rest,
       placeIds: extractedPlaceIds,
       thumbnailUrl: thumbnailUrl,
     };
     const response = await editCourseApi(courseId, validData);
-    const resData = await response.data.data;
-    return { formData, resData };
+    return formData;
   }
 );
 

@@ -8,7 +8,7 @@ export interface ICourse {
   isPublished: boolean;
   courseDays: string;
   region: string;
-  thumbnailUrl: string;
+  thumbnailUrl?: string;
   content: string;
   likeCount: number;
   isBookmarked: boolean;
