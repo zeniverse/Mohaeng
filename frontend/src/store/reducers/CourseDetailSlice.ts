@@ -29,21 +29,6 @@ const initialState: CourseDetailState = {
   },
 };
 
-// courseId: number;
-// title: string;
-// content: string;
-// nickname: string;
-// likeCount: number;
-// courseDays: string;
-// createdDate: string;
-// startDate: string;
-// endDate: string;
-// region: string;
-// isBookmarked: boolean;
-// isLiked: boolean;
-// isPublished: boolean;
-// places: IPlaces[];
-
 export const detailBookmarkToggleAction = createAsyncThunk(
   "course/detailToggleBookmark",
   async (courseId: number, { getState }) => {

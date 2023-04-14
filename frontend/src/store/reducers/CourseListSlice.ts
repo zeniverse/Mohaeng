@@ -1,5 +1,6 @@
 import { CourseDetailType } from "@/src/interfaces/Course";
 import {
+  deleteCourseApi,
   getCourseListApi,
   toggleBookmarkApi,
   toggleLikeApi,
@@ -7,7 +8,7 @@ import {
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ICoursePlaceName } from "../../interfaces/Course.type";
 import { RootState } from "../store";
-import { createCourseAction } from "./CourseFormSlice";
+import { createCourseAction, editCourseAction } from "./CourseFormSlice";
 
 interface CourseState {
   error?: string;
@@ -30,6 +31,17 @@ export const getCourseListAction = createAsyncThunk(
     try {
       const response = await getCourseListApi(queryParams);
       return response.data.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const removeCourseAction = createAsyncThunk(
+  "course/removeCourseAction",
+  async (courseId: number, { rejectWithValue }) => {
+    try {
+      await deleteCourseApi(courseId);
+      return courseId;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
@@ -86,7 +98,6 @@ export const CourseListSlice = createSlice({
       // state.createUserFormStatus = ApiStatus.success;
       const { formData, resData } = action.payload;
       const placeNames = formData.places.map((place) => place.name).join(",");
-      console.log(placeNames);
       const createdCourse: ICoursePlaceName = {
         courseId: parseInt(resData.courseId),
         ...formData,
@@ -94,6 +105,8 @@ export const CourseListSlice = createSlice({
       };
       state.courseList.push(createdCourse);
     });
+    builder.addCase(editCourseAction.fulfilled, (state, action) => {});
+
     builder.addCase(getCourseListAction.pending, (state) => {});
     builder.addCase(getCourseListAction.fulfilled, (state, action) => {
       const { courseList, totalElements, totalPages } = action.payload;
@@ -121,6 +134,14 @@ export const CourseListSlice = createSlice({
       }
     });
     builder.addCase(listLikeToggleAction.rejected, (state) => {});
+    builder.addCase(removeCourseAction.pending, (state) => {});
+    builder.addCase(removeCourseAction.fulfilled, (state, action) => {
+      const newList = state.courseList?.filter(
+        (x) => x.courseId !== action.payload
+      );
+      state.courseList = newList;
+    });
+    builder.addCase(removeCourseAction.rejected, (state) => {});
   },
 });
 
