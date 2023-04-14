@@ -53,4 +53,9 @@ public class Review extends BaseTimeEntity {
         this.rating = rating;
     }
 
+    public Review(Place place, String rating) {
+        this.place = place;
+        this.rating = rating;
+    }
+
 }
