@@ -1,14 +1,11 @@
-import { UserProps } from "@/src/interfaces/Auth";
 import Button from "@/src/components/Button/Button";
-import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/src/store/store";
 import React, { useEffect, useState, useRef } from "react";
-import styles from "./userEdit.module.css";
+import styles from "./UserEdit.module.css";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
-import { json } from "stream/consumers";
 import cookie from "react-cookies";
 import Image from "next/image";
 import {
