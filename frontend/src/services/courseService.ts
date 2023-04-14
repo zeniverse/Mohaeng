@@ -24,6 +24,26 @@ export const createCourseApi = async (data: ICourseSubmitForm) => {
     },
   });
 };
+
+export const deleteCourseApi = async (courseId: number) => {
+  const accessToken = await cookie.load("accessToken");
+  try {
+    const config = {
+      headers: {
+        "Access-Token": accessToken,
+        withCredentials: true,
+      },
+    };
+    const response = await axios.delete(
+      `${CourseApiConfig.course}/${courseId}`,
+      config
+    );
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const toggleBookmarkApi = async (
   courseId: number,
   method: "POST" | "DELETE"

@@ -1,5 +1,3 @@
-const { type } = require("os");
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   fallback: true,
@@ -8,8 +6,6 @@ const nextConfig = {
       "tong.visitkorea.or.kr",
       "cdn.visitkorea.or.kr",
       "k.kakaocdn.net",
-      "lh3.google.com",
-      "drive.google.com",
       "mohaeng.s3.ap-northeast-2.amazonaws.com",
     ],
   },
@@ -19,12 +15,24 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      {
-        source: "/:path*",
-        destination: "http://localhost:8080/:path*",
-      },
+      // {
+      //   source: "/:path*",
+      //   destination: "http://localhost:8080/:path*",
+      // },
       // 코스 상세를 보려면 위 코드는 주석 처리하고 아래 코드는 주석을 풀어주세요.
       // 다른 url 경로 추가
+      {
+        source: "/api/myPage/course/bookMark",
+        destination: "http://localhost:8080/api/myPage/course/bookMark",
+      },
+      {
+        source: "/api/myPage/myReview",
+        destination: "http://localhost:8080/api/myPage/myReview",
+      },
+      {
+        source: "/api/myPage/course",
+        destination: "http://localhost:8080/api/myPage/course",
+      },
       {
         source: "/login/:path*",
         destination: "http://localhost:8080/login/:path*",

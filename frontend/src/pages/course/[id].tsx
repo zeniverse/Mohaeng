@@ -6,6 +6,8 @@ import CourseDetailContent from "@/src/components/CourseDetail/CourseDetailConte
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { getCourseDetailAction } from "@/src/store/reducers/CourseDetailSlice";
+import { removeCourseAction } from "@/src/store/reducers/CourseListSlice";
+import { useRouter } from "next/router";
 
 export default function CourseDetail() {
   const courseDetail = useAppSelector((state) => state.courseDetail.course);
@@ -17,15 +19,29 @@ export default function CourseDetail() {
     createdDate,
     isBookmarked,
     places,
+    nickname,
   } = courseDetail;
+  const { nickName } = useAppSelector((state) => state.nickName);
   const dispatch = useAppDispatch();
   const id = useRouterQuery("id");
+  const router = useRouter();
 
   useEffect(() => {
     if (id) {
       dispatch(getCourseDetailAction(id));
     }
   }, [id]);
+
+  const handleRemoveCourse = () => {
+    if (confirm(`${title} 코스를 정말 삭제하시겠습니까?`)) {
+      if (id) {
+        dispatch(removeCourseAction(id));
+        router.push("/course");
+      }
+    }
+  };
+
+  const handleEditCourse = () => {};
 
   const placeNames = places?.map((place) => place.name).join(",");
 
@@ -41,6 +57,22 @@ export default function CourseDetail() {
           </h1>
           <div className={styles["title-info"]}>
             <span className={styles.userinfo}>유저 정보</span>
+            {nickName === nickname ? (
+              <div className={styles["btn-wrapper"]}>
+                <button
+                  className={`${styles["remove-btn"]} ${styles.btn}`}
+                  onClick={handleRemoveCourse}
+                >
+                  삭제
+                </button>
+                <button
+                  className={`${styles["edit-btn"]} ${styles.btn}`}
+                  onClick={handleEditCourse}
+                >
+                  수정
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
         <CourseDetailNav />
