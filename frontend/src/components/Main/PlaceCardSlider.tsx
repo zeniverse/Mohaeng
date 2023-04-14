@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 
 import { Navigation } from "swiper";
@@ -9,18 +8,18 @@ import PlaceCard from "@/src/components/Main/PlaceCard";
 
 import "swiper/css";
 import "swiper/css/navigation";
-import { Place } from "@/src/interfaces/Place";
+import { ITopTenPlace } from "@/src/interfaces/Place";
 import axios from "axios";
 
 const PlaceCardSlider = () => {
-  const [topTenPlace, setTopTenPlace] = useState([]);
+  const [topTenPlace, setTopTenPlace] = useState<ITopTenPlace[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const accessToken = await cookie.load("accessToken");
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/course/main`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/place/main`,
           {
             headers: {
               "Access-Token": accessToken,
@@ -28,8 +27,7 @@ const PlaceCardSlider = () => {
             },
           }
         );
-        console.log(response);
-        setTopTenPlace(response.data);
+        setTopTenPlace(response.data.data.content);
       } catch (error) {
         console.error(error);
       }
@@ -48,18 +46,19 @@ const PlaceCardSlider = () => {
       // onSwiper={(swiper) => console.log(swiper)}
       // onSlideChange={() => console.log("slide change")}
     >
-      {/* {topTenPlace?.map((place, idx) => (
-        <SwiperSlide key={idx}>
-          <PlaceCard
-            key={place.id}
-            id={place.id}
-            placeTitle={place.title}
-            placeDesc={place.description}
-            placeImg={place.firstimage}
-            placeRating={place.rating}
-          />
-        </SwiperSlide>
-      ))} */}
+      {topTenPlace.length > 0 &&
+        topTenPlace?.map((place, idx) => (
+          <SwiperSlide key={idx}>
+            <PlaceCard
+              key={place.placeId}
+              placeId={place.placeId}
+              name={place.name}
+              content={place.content}
+              firstImage={place.firstImage}
+              averageRating={place.averageRating}
+            />
+          </SwiperSlide>
+        ))}
     </Swiper>
   );
 };

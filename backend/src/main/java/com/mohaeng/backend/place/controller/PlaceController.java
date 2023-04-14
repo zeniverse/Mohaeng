@@ -7,10 +7,7 @@ import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
 import com.mohaeng.backend.place.domain.Review;
-import com.mohaeng.backend.place.dto.FindAllPlacesDto;
-import com.mohaeng.backend.place.dto.PlaceDTO;
-import com.mohaeng.backend.place.dto.PlaceRatingDto;
-import com.mohaeng.backend.place.dto.PlaceSearchDto;
+import com.mohaeng.backend.place.dto.*;
 import com.mohaeng.backend.place.dto.response.*;
 import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
@@ -31,7 +28,10 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -63,7 +63,7 @@ public class PlaceController {
 
     @GetMapping("/place/{contentId}")
     public ResponseEntity<PlaceDTO> getPlace(@PathVariable String contentId) throws IOException, ParserConfigurationException, SAXException {
-        Place place = placeService.getPlace(contentId);
+        Place place = placeService.getPlaceByContentId(contentId);
         if (place == null) {
             return ResponseEntity.notFound().build();
         }
@@ -146,13 +146,23 @@ public class PlaceController {
         return ResponseEntity.ok().body(BaseResponse.success("OK", response));
     }
 
-    @GetMapping("/main")
-    public ResponseEntity getPlaceReviewsByRatingTop10(
-            @RequestParam(defaultValue = "1") int page) {
-        Page<Review> reviews = reviewService.getAllReviewsByRatingTop10(page);
-        List<FindAllReviewResponse> data = reviews.map(FindAllReviewResponse::of).getContent();
-        double averageRating = Math.round(reviewService.getAverageRating(reviewService.getAllReviews()) * 100.0) / 100.0;
-        FindSearchReviewsResponse response = new FindSearchReviewsResponse(data, reviews.getTotalPages(), reviews.getTotalElements(), averageRating);
+    @GetMapping("/place/main")
+    public ResponseEntity getPlaceReviewsByRatingTop10() {
+        List<Review> reviews = reviewService.getAllReviewsByRatingTop10();
+        List<String> contentIds = reviews.stream()
+                .map(review -> review.getPlace().getContentId())
+                .collect(Collectors.toList());
+
+        Map<String, String> overviews = new HashMap<>();
+        for (String contentId : contentIds) {
+            String overview = placeService.getOverview(contentId);
+            overviews.put(contentId, overview);
+        }
+
+        List<MainPageDto> content = reviews.stream()
+                .map(review -> MainPageDto.Of(review.getPlace(), placeService, overviews))
+                .collect(Collectors.toList());
+        MainPageResponse response = MainPageResponse.from(content);
         return ResponseEntity.ok(BaseResponse.success("ok", response));
     }
 

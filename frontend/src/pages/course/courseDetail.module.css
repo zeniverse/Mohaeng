@@ -19,11 +19,27 @@
 }
 
 .title {
-  padding: 0.4rem 4rem 1rem;
+  padding: 1.8rem 1rem 5rem 1rem;
 }
 
 .title-info {
   display: flex;
   justify-content: space-between;
-  padding: 0.6rem 0.2rem;
+  padding: 0.3rem 0.2rem;
+}
+
+.btn-wrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  padding: 0.4rem 1.1rem;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--color-text-basic);
+  font-weight: 600;
+  transition: 0.3s;
+  border: none;
 }

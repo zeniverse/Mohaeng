@@ -38,6 +38,7 @@ const CourseItem = ({
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
   const dispatch = useAppDispatch();
   const accessToken = cookie.load("accessToken");
+  const router = useRouter();
 
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
@@ -60,7 +61,6 @@ const CourseItem = ({
     e.stopPropagation();
     dispatch(listLikeToggleAction(courseId));
   };
-  const router = useRouter();
 
   const handleLinkClick = () => {
     router.push(`/course/${courseId}`);

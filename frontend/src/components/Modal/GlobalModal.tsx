@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import LoginModal from "./LoginModal";
 import BasicModal from "./BasicModal";
 import DeleteMemberModal from "./DeleteMemberModal";
-import DeleteReviewModal from "./DeleteReviewModal";
 
 interface ModalComponent {
   type: string;
@@ -22,7 +21,6 @@ const MODAL_TYPES = {
   LoginModal: "LoginModal",
   BasicModal: "BasicModal",
   DeleteMemberModal: "DeleteMemberModal",
-  DeleteReviewModal: "DeleteReviewModal",
 } as const;
 
 const MODAL_COMPONENTS: ModalComponent[] = [
@@ -37,10 +35,6 @@ const MODAL_COMPONENTS: ModalComponent[] = [
   {
     type: MODAL_TYPES.DeleteMemberModal,
     component: <DeleteMemberModal />,
-  },
-  {
-    type: MODAL_TYPES.DeleteReviewModal,
-    component: <DeleteReviewModal />,
   },
 ];
 

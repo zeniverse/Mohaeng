@@ -1,14 +1,11 @@
-import { UserProps } from "@/src/interfaces/Auth";
 import Button from "@/src/components/Button/Button";
-import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/src/store/store";
 import React, { useEffect, useState, useRef } from "react";
-import styles from "./userEdit.module.css";
+import styles from "./UserEdit.module.css";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
-import { json } from "stream/consumers";
 import cookie from "react-cookies";
 import Image from "next/image";
 import {
@@ -26,7 +23,7 @@ interface Uploader {
 }
 
 const UserEdit = () => {
-  const selectFile = useRef("");
+  const selectFile = useRef<any>(null);
 
   const id = useSelector((state: RootState) => state.id.id);
   const nickname = useSelector((state: RootState) => state.nickName.nickName);
@@ -34,7 +31,7 @@ const UserEdit = () => {
   const profileUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
   const accessToken = cookie.load("accessToken");
   const [imagePath, changeUrl] = useState("");
-  const [imgFile, setFile] = useState();
+  const [imgFile, setFile] = useState("");
 
   const dispatch = useDispatch();
   const router = useRouter();

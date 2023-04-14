@@ -84,17 +84,17 @@
 }
 
 .unbookmark {
-  color: var(--color-primary);
+  color: var(--color-blue);
   font-size: 26px;
 }
 
 .unbookmark:hover {
-  color: var(--color-primary);
+  color: var(--color-blue);
   scale: 105%;
   transition: 200ms;
 }
 
 .bookmark {
-  color: var(--color-primary);
+  color: var(--color-blue);
   font-size: 26px;
 }

@@ -4,6 +4,7 @@ import axios from "axios";
 interface myReviewData {
   reviewId: number;
   placeId: number;
+  contendId: string;
   title: string;
   content: string;
   likeCount: number;
