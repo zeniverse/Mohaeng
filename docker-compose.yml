@@ -1,29 +1,16 @@
 version: "3"
 
 services:
-  db:
-    container_name: my_sql
-    image: mysql
-    environment:
-      MYSQL_DATABASE: testdb
-      MYSQL_ROOT_PASSWORD: 1234
-    volumes:
-      - ./db:/var/lib/mysql:rw
-    ports:
-      - 3306:3306
-    restart: always
-
-  backend:
+  frontend:
     build:
-      context: backend/
+      context: frontend/
       dockerfile: Dockerfile
     restart: always
     ports:
-      - "8080:8080"
-    depends_on:
-      - db
-    container_name: "backend"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://my_sql:3306/testdb?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1234
+      - "3000:3000"
+    container_name: "frontend"
+    networks:
+      - mohaeng_network
+
+networks:
+  mohaeng_network:
