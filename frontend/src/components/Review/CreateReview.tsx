@@ -113,17 +113,7 @@ export default function CreateReview() {
         .then((response) => {
           console.log(response.data, "리뷰 작성 성공!");
           appDispatch(getMyReview(accessToken));
-          router.push(
-            {
-              pathname: `/place/[id]`,
-              query: {
-                contentId: contentId,
-                placeId: placeId,
-                name: name,
-              },
-            },
-            `/place/${contentId}`
-          );
+          router.push(`/search?keyword=${name}`);
         });
     } catch (error) {
       router.push(`/search?keyword=${name}`);
