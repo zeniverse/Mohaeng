@@ -50,6 +50,7 @@ public class PlaceService {
     private final PlaceBookmarkRepository placeBookmarkRepository;
     private final MemberRepository memberRepository;
     private final AmazonS3Service amazonS3Service;
+    private final ReviewService reviewService;
 
     @Value("${API_KEY}")
     private String API_KEY;
@@ -63,7 +64,7 @@ public class PlaceService {
         return "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=" + API_KEY + "&MobileOS=ETC&MobileApp=AppTest&_type=xml&contentId=&contentTypeId=12&&overviewYN=Y";
     }
 
-    public void savePlace() throws IOException {
+    public void saveInitImage() throws IOException {
         // 1. 리소스 폴더에 있는 파일을 읽어들인다
         Resource resource = new ClassPathResource("initImage/everytrip.png");
         InputStream inputStream = resource.getInputStream();
@@ -164,7 +165,7 @@ public class PlaceService {
         return placeRepository.findByAddressContainingIgnoreCase(searchValue);
     }
 
-    public Place getPlace(String contentId) throws IOException, ParserConfigurationException, SAXException {
+    public Place getPlaceByContentId(String contentId) throws IOException, ParserConfigurationException, SAXException {
         List<Place> places = getPlaces();
         for (Place place : places) {
             if (place.getContentId().equals(contentId)) {
@@ -244,5 +245,10 @@ public class PlaceService {
 
     public String getFirstImage() {
         return fileUrl;
+    }
+
+    public double getAverageRatingForPlace(Long placeId) {
+        List<Review> placeReviews = reviewService.getAllReviewById(placeId);
+        return Math.round(reviewService.getAverageRating(placeReviews) * 100.0) / 100.0;
     }
 }

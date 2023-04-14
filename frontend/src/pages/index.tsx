@@ -13,22 +13,7 @@ export default function Home() {
       <main className={styles.main}>
         <BannerSearch />
         <div className={styles["home-body-container"]}>
-          <div className={styles["home-content-container"]}>
-            <RecommendedSection
-              title="🔥별점 Top 5 여행지"
-              bgColor="Mgrey"
-              linkUrl="place"
-            >
-              <PlaceCardSlider />
-            </RecommendedSection>
-            <RecommendedSection
-              title="❤️추천 코스"
-              bgColor="Lgrey"
-              linkUrl="course"
-            >
-              <CourseCardSlider />
-            </RecommendedSection>
-          </div>
+          <div className={styles["home-content-container"]}></div>
         </div>
       </main>
     </>
