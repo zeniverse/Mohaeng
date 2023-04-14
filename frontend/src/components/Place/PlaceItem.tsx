@@ -11,6 +11,7 @@ import { RootState } from "@/src/store/store";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
+import { useRouter } from "next/router";
 
 const PlaceItem = ({
   name,
@@ -27,8 +28,13 @@ const PlaceItem = ({
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const page = useSelector((state: RootState) => state.page.page);
+  const router = useRouter();
 
   const addBookmark = () => {
+    if (!accessToken) {
+      router.push("/login");
+      return;
+    }
     const response = async () => {
       await axios.post(
         `/api/place/bookmark/${placeId}`,
@@ -61,6 +67,10 @@ const PlaceItem = ({
   };
 
   const delBookmark = () => {
+    if (!accessToken) {
+      router.push("/login");
+      return;
+    }
     const response = async () => {
       await axios.delete(`/api/place/bookmark/${placeId}`, {
         headers: {

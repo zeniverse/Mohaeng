@@ -23,7 +23,7 @@ public class FindAllReviewResponse {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdDate;
-    private List<String> imgUrl = new ArrayList<>();
+    private List<String> imgUrl;
 
 
     @Builder

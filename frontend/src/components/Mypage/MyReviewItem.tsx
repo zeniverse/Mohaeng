@@ -11,6 +11,7 @@ export interface MyReviewItemProps {
   rating: string;
   imgUrl: string;
   createdDate: string;
+  contentId: string;
 }
 const MyReviewItem = (myReview: MyReviewItemProps) => {
   const getFormattedDate = (date: Date) => {
@@ -29,12 +30,12 @@ const MyReviewItem = (myReview: MyReviewItemProps) => {
         href={{
           pathname: "/place/[id]",
           query: {
-            contentId: myReview.reviewId,
+            contentId: myReview.contentId,
             placeId: myReview.reviewId,
             name: myReview.title,
           },
         }}
-        as={`/place/${myReview.reviewId}`}
+        as={`/place/${myReview.contentId}`}
       >
         <img
           src={myReview.imgUrl}

@@ -60,12 +60,12 @@ export default function CourseDetail() {
             <span className={styles.dateinfo}>{formattedDate}</span>
           </div>
         </div>
-        <CourseDetailNav
+        {/* <CourseDetailNav
           likeCount={likeCount}
           places={placeNames}
           courseId={courseId}
           isBookmarked={isBookmarked}
-        />
+        /> */}
         <CourseDetailContent
           mapData={places}
           places={places}

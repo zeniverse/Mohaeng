@@ -105,7 +105,7 @@ export default function PlaceDetail() {
         const res = await axios.get(`/api/place/overview/${id}`, {
           headers,
         });
-        if (res.data.data.content[0] !== {}) {
+        if (Object.keys(res.data.data.content[0]).length > 0) {
           const { content } = res.data.data;
           setPlaceInfo({ ...placeInfo, ...content[0] });
           setBookMarked(res.data.data.isBookmarked);
