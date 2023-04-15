@@ -85,7 +85,7 @@
 
 
 ### 마이페이지
-
+![마이페이지 전체](https://user-images.githubusercontent.com/94662639/232225826-ca25b0b2-6c32-4b5a-9c20-aac238b90115.gif)
 
 
 ## ✉️ Contact
