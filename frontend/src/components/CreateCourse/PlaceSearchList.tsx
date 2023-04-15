@@ -33,11 +33,6 @@ const PlaceSearchList = ({ places, isLoading, debouncedSearch }: any) => {
     function handleScroll() {
       if (listRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = listRef.current;
-        // console.log(
-        //   `scrollTop: ${Math.floor(
-        //     scrollTop
-        //   )}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`
-        // );
         if (
           Math.floor(scrollHeight) - scrollTop <= clientHeight &&
           hasNext &&
@@ -62,7 +57,7 @@ const PlaceSearchList = ({ places, isLoading, debouncedSearch }: any) => {
 
   useEffect(() => {
     if (page === 0) return;
-    const lastItemIndex = items?.length - 1;
+    const lastItemIndex = items ? items.length - 1 : -1;
     const lastid = items[lastItemIndex]?.placeId;
     const lastRating = items[lastItemIndex]?.rating;
     async function fetchItems() {
@@ -76,10 +71,12 @@ const PlaceSearchList = ({ places, isLoading, debouncedSearch }: any) => {
           ...prevItems,
           ...placeSearchResult?.data.places,
         ]);
-        setHasNext(placeSearchResult.data.hasNext);
+        //  placeSearchResult?.data 가 undefined 일 때 기본값 false 를 할당
+        setHasNext(placeSearchResult?.data?.hasNext || false);
         setLoading(false);
       } catch (error) {
         console.error(error);
+      } finally {
         setLoading(false);
       }
     }
