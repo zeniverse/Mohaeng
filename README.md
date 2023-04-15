@@ -73,8 +73,8 @@
 
 ## Contact
 - 강승구
-- 장지혜
+- 장지혜 : jihye219219@gmail.com
 - 홍석영
 - 김새롬
-- 김정민
+- 김정민 
 - 유은경 : deaese94@gmail.com
