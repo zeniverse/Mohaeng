@@ -67,6 +67,7 @@
 
 ### 마이페이지
 
+![image](https://user-images.githubusercontent.com/94662639/232209314-5307c8d6-5d3a-4ac8-9d1e-9d3920375cee.png)
 
 
 
