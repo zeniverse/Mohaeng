@@ -38,10 +38,5 @@
   "devDependencies": {
     "@types/styled-components": "^5.1.26",
     "@types/swiper": "^6.0.0"
-  },
-  {
-    "engines": {
-      "node": "16.X"
-    }
   }
 }
