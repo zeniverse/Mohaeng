@@ -126,9 +126,9 @@ public class PlaceController {
         Page<Place> places;
 
         if ("all".equals(areaCode)) {
-            places = placeRepository.findAll(pageable);
+            places = placeRepository.findAllSortedByRating(pageable);
         } else {
-            places = placeRepository.findByAreaCodeEquals(areaCode, pageable);
+            places = placeRepository.findByAreaCodeSortedByRating(areaCode, pageable);
         }
 
         List<FindAllPlacesDto> result = new ArrayList<>();

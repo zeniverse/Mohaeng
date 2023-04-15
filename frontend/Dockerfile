@@ -1,5 +1,46 @@
+# FROM node:18-alpine AS base
+
+# # Install dependencies only when needed
+# FROM base AS deps
+# RUN apk add --no-cache libc6-compat
+# WORKDIR /usr/src/app
+
+# # Install dependencies based on the preferred package manager
+# COPY package.json yarn.lock ./
+# #RUN yarn --frozen-lockfile --production;
+# RUN yarn install
+# RUN rm -rf ./.next/cache
+
+# # Rebuild the source code only when needed
+# FROM base AS builder
+# WORKDIR /usr/src/app
+# COPY --from=deps /usr/src/app/node_modules ./node_modules
+# COPY . .
+# RUN yarn build
+
+# # Production image, copy all the files and run next
+# FROM base AS runner
+# WORKDIR /usr/src/app
+
+# ENV NODE_ENV=production
+
+# RUN addgroup --system --gid 1001 nodejs
+# RUN adduser --system --uid 1001 nextjs
+
+# COPY --from=builder /usr/src/app/public ./public
+# COPY --from=builder --chown=nextjs:nodejs /usr/src/app/.next/standalone ./
+# COPY --from=builder --chown=nextjs:nodejs /usr/src/app/.next/static ./.next/static
+
+# USER nextjs
+
+# EXPOSE 3000
+
+# ENV PORT 3000
+
+# CMD ["node", "server.js"]
+
 # 위에서 도커 허브 node 이미지를 기반으로 로컬로 다운로드 및 캐싱 되었기 때문에 이미지를 가져올 수 있다.
-FROM node:18.14.0
+FROM node:18.4.0
 
 # 만약 컨테이너 안의 이미지의 경로가 /app 이런식으로 되어있다면 작업할 div 경로를 설정할 수도 있다.
 # 설정해주면 COPY 의 두번째 경로를 ./ 이것으로 했을 때 자동으로 /app 경로가 된다.
@@ -12,7 +53,7 @@ COPY package.json /app
 RUN npm install
 
 
-# 어떤 파일이 이미지에 들어가야 하는지
+# 어떤 파일이 이미지에 들어가야 하는지 
 # 첫 번째 .은 이 프로젝트의 모든 폴더 및 파일들 (Dockerfile을 제외한)
 # 두 번째 .은 파일을 저장할 컨테이너 내부 경로 (ex /app)
 COPY . /app
