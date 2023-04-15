@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,6 +17,23 @@ public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceReposi
     Page<Place> findByNameContaining(String name, Pageable pageable);
     Page<Place> findByAreaCodeEquals(String areaCode, Pageable pageable);
     List<Place> findByContentId(String contentId);
+
+    @Query("SELECT p " +
+            "FROM Place p " +
+            "LEFT JOIN Review r " +
+            "ON p.id = r.place.id " +
+            "GROUP BY p.id " +
+            "ORDER BY COUNT(r) DESC, AVG(CAST(r.rating AS double)) DESC")
+    Page<Place> findAllSortedByRating(Pageable pageable);
+
+    @Query("SELECT p " +
+            "FROM Place p " +
+            "LEFT JOIN Review r " +
+            "ON p.id = r.place.id " +
+            "WHERE p.areaCode = :areaCode " +
+            "GROUP BY p.id " +
+            "ORDER BY COUNT(r) DESC, AVG(CAST(r.rating AS double)) DESC")
+    Page<Place> findByAreaCodeSortedByRating(@Param("areaCode") String areaCode, Pageable pageable);
 
     @Query(value = "SELECT p.*, AVG(r.rating) as avg_rating " +
             "FROM place p " +
