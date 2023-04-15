@@ -58,8 +58,8 @@
   right: 0;
   left: 0;
   bottom: 0;
-  width: 2px;
+  width: 1px;
   background-color: var(--color-text-semi);
   margin: auto;
-  height: 70%;
+  height: 50%;
 }
