@@ -19,12 +19,14 @@
 
 ## 프로젝트 소개
 
-
 - 프로젝트 배경 : 사용자 경험에 초점을 맞춘 국내 여행 웹사이트의 필요성
 - 프로젝트 목표 : 직접 일정을 작성하고 유저들과 공유하며 국내 여행을 보다 더 편리하고 즐겁게 할 수 있는 경험을 제공하자
 - 개발기간 : 2023/02/01 ~ 2023/04/09 (약 2달)
 - 인원 : 6명(FE 3명, BE 3명)
-- 리액트를 이용한 소셜뉴스 커뮤니티 Reddit 웹사이트 클론 프로젝트
+
+
+## 기획 의도
+![image](https://user-images.githubusercontent.com/94662639/232201100-dd23a0f9-5b6d-4b21-8b12-984aea1aabbd.png)
 
 ## 사용 기술
 ![image](https://user-images.githubusercontent.com/94662639/232202389-3d32497b-1c6c-42f2-a17c-447ef2502510.png)
@@ -43,8 +45,6 @@
 
 (수정 후 추가)
 
-## 기획 의도
-![image](https://user-images.githubusercontent.com/94662639/232201100-dd23a0f9-5b6d-4b21-8b12-984aea1aabbd.png)
 
 
 ## 주요 구현 사항
