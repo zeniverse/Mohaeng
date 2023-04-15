@@ -1,5 +1,6 @@
 
-![모두의 여행](https://velog.velcdn.com/images/hazel_1130/post/74ea3fdc-9b8d-4641-a041-029ebaec903b/image.png)
+![모두의 여행](https://velog.velcdn.com/images/hazel_1130/post/74ea3fdc-9b8d-4641-a041-029ebaec903b/image.png) ![image](https://user-images.githubusercontent.com/94662639/232196323-e3cb1aa7-69a3-45e6-806d-f4861171207b.png)
+
 
 모두의 여행은 국내 여행 커뮤니티 플랫폼입니다
 
@@ -25,31 +26,7 @@
 - 리액트를 이용한 소셜뉴스 커뮤니티 Reddit 웹사이트 클론 프로젝트
 
 ## 사용 기술
-
-
-**프론트엔드**
-
-- TypeScript
-- React
-- Next.js
-- Redux-Toolkit
-- PostCSS
-- Styled-component
-
-**백엔드**
-
-- Spring Boot, Spring Data JPA
-- Gradle
-- java 17
-- oAuth2
-- JWT
-- QueryDSL
-- MySQL
-- JUnit5
-- Mockito
-- AWS - S3, EC2
-- NGINX
-
+![image](https://user-images.githubusercontent.com/94662639/232202389-3d32497b-1c6c-42f2-a17c-447ef2502510.png)
 ## 협업 툴
 
 
@@ -64,6 +41,10 @@
 
 
 (수정 후 추가)
+
+## 기획 의도
+![image](https://user-images.githubusercontent.com/94662639/232201100-dd23a0f9-5b6d-4b21-8b12-984aea1aabbd.png)
+
 
 ## 주요 구현 사항
 
