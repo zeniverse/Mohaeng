@@ -84,6 +84,10 @@ const nextConfig = {
         source: "/api/myPage/place/bookMark",
         destination: "http://localhost:8080/api/myPage/place/bookMark",
       },
+      {
+        source: "/api/place/main/:path",
+        destination: "http://localhost:8080/api/place/main/:path",
+      },
     ];
   },
 };
