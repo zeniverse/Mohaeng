@@ -92,7 +92,6 @@
 
 ### 마이페이지
 ![마이페이지 전체](https://user-images.githubusercontent.com/94662639/232225826-ca25b0b2-6c32-4b5a-9c20-aac238b90115.gif)
-### 마이페이지
 
 - 회원정보
     - 정보 수정 버튼을 통한 프로필 사진과 닉네임 변경이 가능하다.
@@ -112,9 +111,13 @@
     - 모든 리뷰 아이템은 목록 내에서 무한 스크롤 방식으로 조회할 수 있다.
 
 ## ✉️ Contact
+
+### 백엔드
 - 강승구 : **krrr883@gmail.com**
-- 장지혜 : jihye219219@gmail.com
-- 홍석영 : binaryhong@gmail.com
-- 김새롬 : sagesaeromkim@gmail.com
+- 장지혜 : **jihye219219@gmail.com**
+- 홍석영 : **binaryhong@gmail.com**
+- 
+### 프론트엔드
+- 김새롬 : **sagesaeromkim@gmail.com**
 - 김정민 
-- 유은경 : deaese94@gmail.com
+- 유은경 : **deaese94@gmail.com**
