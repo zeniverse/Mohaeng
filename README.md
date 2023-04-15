@@ -95,7 +95,7 @@
 
 
 ## ✉️ Contact
-- 강승구
+- 강승구 : **krrr883@gmail.com**
 - 장지혜 : jihye219219@gmail.com
 - 홍석영 : binaryhong@gmail.com
 - 김새롬 : sagesaeromkim@gmail.com
