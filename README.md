@@ -1,5 +1,6 @@
 
-![모두의 여행](https://velog.velcdn.com/images/hazel_1130/post/74ea3fdc-9b8d-4641-a041-029ebaec903b/image.png) ![image](https://user-images.githubusercontent.com/94662639/232196323-e3cb1aa7-69a3-45e6-806d-f4861171207b.png)
+![image](https://user-images.githubusercontent.com/94662639/232202485-4d2b4605-312a-406b-be3c-e396dd0f8972.png)
+
 
 
 모두의 여행은 국내 여행 커뮤니티 플랫폼입니다
