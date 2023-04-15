@@ -23,7 +23,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceReposi
             "LEFT JOIN Review r " +
             "ON p.id = r.place.id " +
             "GROUP BY p.id " +
-            "ORDER BY COUNT(r) DESC, AVG(CAST(r.rating AS double)) DESC")
+            "ORDER BY COUNT(r) DESC, AVG(CAST(r.rating AS double)) DESC NULLS LAST, p.id ASC")
     Page<Place> findAllSortedByRating(Pageable pageable);
 
     @Query("SELECT p " +
@@ -32,9 +32,8 @@ public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceReposi
             "ON p.id = r.place.id " +
             "WHERE p.areaCode = :areaCode " +
             "GROUP BY p.id " +
-            "ORDER BY COUNT(r) DESC, AVG(CAST(r.rating AS double)) DESC")
+            "ORDER BY COUNT(r) DESC, AVG(CAST(r.rating AS double)) DESC NULLS LAST, p.id ASC")
     Page<Place> findByAreaCodeSortedByRating(@Param("areaCode") String areaCode, Pageable pageable);
-
     @Query(value = "SELECT p.*, AVG(r.rating) as avg_rating " +
             "FROM place p " +
             "JOIN review r ON p.place_id = r.place_id " +
