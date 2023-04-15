@@ -53,21 +53,24 @@ export default function ReviewItem({
   };
 
   const deleteReview = async () => {
-    try {
-      const accessToken = await cookie.load("accessToken");
-      const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/review/detail/${reviewId}`,
-        {
-          headers: {
-            "Access-Token": accessToken,
-          },
-        }
-      );
-      console.log(response.status);
-      console.log(response.data);
-      router.push(`/search?keyword=${name}`);
-    } catch (error) {
-      console.error(error);
+    const confirmed = window.confirm("리뷰를 삭제하시겠습니까?");
+    if (confirmed) {
+      try {
+        const accessToken = await cookie.load("accessToken");
+        const response = await axios.delete(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/review/detail/${reviewId}`,
+          {
+            headers: {
+              "Access-Token": accessToken,
+            },
+          }
+        );
+        console.log(response.status);
+        console.log(response.data);
+        router.push(`/search?keyword=${name}`);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
