@@ -54,6 +54,9 @@
 ### 메인페이지
 
 ### 여행지 목록 페이지
+![여행지 전체](https://user-images.githubusercontent.com/94662639/232213110-0fdd347b-729c-43c5-b00a-2f02483a4e76.gif)
+
+
 
 ### 여행지 상세 페이지
 
@@ -67,14 +70,12 @@
 
 ### 마이페이지
 
-![image](https://user-images.githubusercontent.com/94662639/232209314-5307c8d6-5d3a-4ac8-9d1e-9d3920375cee.png)
-
 
 
 ## Contact
 - 강승구
 - 장지혜 : jihye219219@gmail.com
-- 홍석영 : binaryhong@gmail.com
+- 홍석영
 - 김새롬
 - 김정민 
 - 유은경 : deaese94@gmail.com
