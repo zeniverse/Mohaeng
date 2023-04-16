@@ -77,18 +77,18 @@ export default function CourseDetail() {
             <span className={styles.userinfo}>유저 정보</span>
             {nickName === nickname ? (
               <div className={styles["btn-wrapper"]}>
-                <button
-                  className={`${styles["remove-btn"]} ${styles.btn}`}
-                  onClick={handleRemoveCourse}
-                >
-                  삭제
-                </button>
-                <button
+                <div
                   className={`${styles["edit-btn"]} ${styles.btn}`}
                   onClick={handleEditCourse}
                 >
                   수정
-                </button>
+                </div>
+                <div
+                  className={`${styles["remove-btn"]} ${styles.btn}`}
+                  onClick={handleRemoveCourse}
+                >
+                  삭제
+                </div>
               </div>
             ) : null}
           </div>

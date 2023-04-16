@@ -6,6 +6,7 @@ import {
   ICourseOriginForm,
   ICourseSubmitForm,
 } from "../../interfaces/Course.type";
+import PlaceId from "@/src/pages/place/[id]";
 
 interface CourseState {
   error?: string;
@@ -91,6 +92,7 @@ export const CourseFormSlice = createSlice({
       const newList = state.course.places.filter(
         (place) => place.placeId !== action.payload
       );
+      console.log(newList);
       state.course.places = newList;
     },
     resetFormValue: () => {
@@ -98,6 +100,15 @@ export const CourseFormSlice = createSlice({
     },
     addPlaceObject: (state, action) => {
       const data = action.payload;
+
+      const placeIds = new Set(
+        state.course.places.map((place) => place.placeId)
+      );
+      if (placeIds.has(data.placeId)) {
+        // 이미 같은 placeId를 가진 객체가 존재하므로 추가하지 않음
+        return;
+      }
+
       state.course.places.push(data);
     },
     addFormValue: (state, action) => {

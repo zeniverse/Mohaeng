@@ -9,6 +9,7 @@ const CourseOrderList = ({ places, mode }: any) => {
   const handleRemovePlace = (placeId: number) => {
     dispatch(removePlace(placeId));
   };
+
   return (
     <div className={styles["course-orderlist-container"]}>
       <ol className={styles["course-list"]}>
@@ -31,12 +32,6 @@ const CourseOrderList = ({ places, mode }: any) => {
                 <p className={styles.name}>{place.name}</p>
                 <p className={styles.address}>주소: {place.address}</p>
               </div>
-              <button
-                className={styles.button}
-                onClick={() => console.log("자세히보기")}
-              >
-                자세히 보기
-              </button>
             </div>
             {mode === "write" && (
               <div className={styles["remove-btn-wrapper"]}>
