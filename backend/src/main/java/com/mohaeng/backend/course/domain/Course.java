@@ -36,8 +36,6 @@ public class Course extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String title;
-
-    private String nickname;
     private String region;
     private String courseDays;
 
@@ -52,12 +50,11 @@ public class Course extends BaseTimeEntity {
     private String thumbnailUrl;
 
     @Builder
-    public Course(List<CoursePlace> coursePlaces, Member member, String title, String nickname, String region, String courseDays, LocalDateTime startDate, LocalDateTime endDate,
+    public Course(List<CoursePlace> coursePlaces, Member member, String title, String region, String courseDays, LocalDateTime startDate, LocalDateTime endDate,
                   LocalDateTime deletedDate, String content, Integer likeCount, CourseStatus courseStatus, String thumbnailUrl) {
         this.coursePlaces = coursePlaces;
         this.member = member;
         this.title = title;
-        this.nickname = nickname;
         this.region = region;
         this.courseDays = courseDays;
         this.startDate = startDate;

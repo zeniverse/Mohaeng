@@ -26,20 +26,40 @@
   display: flex;
   justify-content: space-between;
   padding: 0.3rem 0.2rem;
+  align-items: flex-end;
 }
 
 .btn-wrapper {
+  position: relative;
   display: flex;
-  gap: 0.5rem;
+  gap: 0.6rem;
 }
 
 .btn {
-  padding: 0.4rem 1.1rem;
-  font-size: 0.9rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 1.1rem;
   border-radius: 5px;
   cursor: pointer;
-  color: var(--color-text-basic);
-  font-weight: 600;
+  color: var(--color-border-semi);
   transition: 0.3s;
   border: none;
+}
+
+.btn:hover {
+  color: var(--color-text-basic);
+  font-weight: 600;
+  border: none;
+}
+
+.btn-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: var(--color-text-semi);
+  margin: auto;
+  height: 50%;
 }

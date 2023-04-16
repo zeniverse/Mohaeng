@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   fallback: true,
   reactStrictMode: false,
@@ -24,6 +25,10 @@ const nextConfig = {
       // },
       // 코스 상세를 보려면 위 코드는 주석 처리하고 아래 코드는 주석을 풀어주세요.
       // 다른 url 경로 추가
+      {
+        source: "/api/course/:path*",
+        destination: "http://localhost:8080/api/course/:path*",
+      },
       {
         source: "/api/myPage/course/bookMark",
         destination: "http://localhost:8080/api/myPage/course/bookMark",
@@ -83,6 +88,14 @@ const nextConfig = {
       {
         source: "/api/myPage/place/bookMark",
         destination: "http://localhost:8080/api/myPage/place/bookMark",
+      },
+      {
+        source: "/api/myPage/:path*",
+        destination: "http://localhost:8080/api/myPage/:path*",
+      },
+      {
+        source: "/api/place/main/:path",
+        destination: "http://localhost:8080/api/place/main/:path",
       },
     ];
   },

@@ -1,10 +1,6 @@
 "use client";
-
-import Button from "@/src/components/Button/Button";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styles from "./index.module.css";
-import MypageLayout from "./layout";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import UserInfo from "@/src/components/Mypage/UserInfo";

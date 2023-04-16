@@ -41,6 +41,7 @@
   text-align: center;
   font-size: medium;
   color: var(--color-text-basic);
+  cursor: pointer;
 }
 
 .reviewBtn:hover {
