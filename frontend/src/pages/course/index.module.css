@@ -25,11 +25,6 @@
   width: 100%;
 }
 
-.course-body-head {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .write-btn {
   padding: 0.6rem 1rem;
   border-radius: 0.4rem;
@@ -44,4 +39,18 @@
   margin-bottom: 0.4rem;
   cursor: pointer;
   margin-top: 0.6rem;
+}
+.filter-wrapper {
+  display: flex;
+  gap: 4rem;
+}
+.course-wrapper {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 8rem 1rem;
+}
+.filter-wrapper h4 {
+  margin-bottom: 0.4rem;
 }

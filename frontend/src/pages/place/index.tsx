@@ -1,15 +1,62 @@
 import styles from "./index.module.css";
-import { BiPencil } from "react-icons/bi";
-import { useRouter } from "next/router";
 import PlaceList from "@/src/components/Place/PlaceList";
-import PlaceFilter from "@/src/components/Place/PlaceFilter";
+import AreaSelector from "@/src/components/Filter/AreaSelector";
+import PageBar, { totalPageProps } from "@/src/components/Pagenation/Pagebar";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/src/store/store";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { setPlace } from "@/src/store/reducers/PlaceSlice";
+import { setPage } from "@/src/store/reducers/pageSlice";
+import cookie from "react-cookies";
 
 export default function Place() {
-  const router = useRouter();
-  const handleCreateClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    router.push("course/create-course");
-  };
+  const dispatch = useDispatch();
+  const { areaCode } = useSelector((state: RootState) => state.filter.area);
+  const page = useSelector((state: RootState) => state.page.page);
+  const totalPages: number = useSelector(
+    (state: RootState) => state.place.totalPages
+  );
+  const accessToken = cookie.load("accessToken");
+
+  useEffect(() => {
+    dispatch(setPage(1));
+    const response = async () => {
+      await axios
+        .get(`/api/places`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          params: {
+            areaCode: areaCode,
+            page: page,
+          },
+          withCredentials: true,
+        })
+        .then((res) => dispatch(setPlace(res.data.data)));
+    };
+    response();
+  }, [areaCode]);
+
+  useEffect(() => {
+    console.log("AreaCode is " + areaCode);
+    const response = async () => {
+      await axios
+        .get(`/api/places`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          params: {
+            areaCode: areaCode,
+            page: page,
+          },
+          withCredentials: true,
+        })
+        .then((res) => dispatch(setPlace(res.data.data)));
+    };
+    response();
+  }, [page]);
+
   return (
     <main className={styles.main}>
       <div className={styles["place-container"]}>
@@ -18,8 +65,9 @@ export default function Place() {
         </div>
         <div className={styles["place-body-container"]}>
           <div className={styles["place-body-head"]}></div>
-          <PlaceFilter />
+          <AreaSelector />
           <PlaceList />
+          <PageBar totalPage={totalPages} />
         </div>
       </div>
     </main>

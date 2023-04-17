@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +19,9 @@ public class CourseUpdateReq {
     @NotBlank
     private String title;
     @NotNull
-    private LocalDateTime startDate;
+    private String startDate;
     @NotNull
-    private LocalDateTime endDate;
+    private String endDate;
     @NotNull
     private Boolean isPublished;
     private String courseDays;
@@ -33,7 +34,7 @@ public class CourseUpdateReq {
     private List<Long> placeIds = new ArrayList<>();
 
     @Builder
-    public CourseUpdateReq(String title, LocalDateTime startDate, LocalDateTime endDate,
+    public CourseUpdateReq(String title, String startDate, String endDate,
                            Boolean isPublished, String courseDays, String region, String thumbnailUrl, String content, List<Long> placeIds) {
         this.title = title;
         this.startDate = startDate;

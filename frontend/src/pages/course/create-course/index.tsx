@@ -1,5 +1,10 @@
-import React from "react";
+import CourseForm from "@/src/components/Course/CourseForm";
+import styles from "./index.module.css";
 
 export default function index() {
-  return <div>코스 작성 페이지 입니다.</div>;
+  return (
+    <div className={styles.Container}>
+      <CourseForm isEditMode={false} />
+    </div>
+  );
 }

@@ -7,10 +7,10 @@ export interface Place {
   rating: string;
 }
 
-export type PlaceProps = {
-  id: string;
-  placeImg: string;
-  placeTitle: string;
-  // placeDesc: string;
-  placeRating: string;
+export type ITopTenPlace = {
+  placeId: number;
+  name: string;
+  content: string;
+  firstImage: string;
+  averageRating: string;
 };

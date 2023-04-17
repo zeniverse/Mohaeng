@@ -2,20 +2,25 @@ package com.mohaeng.backend.member.domain;
 
 import com.mohaeng.backend.common.BaseTimeEntity;
 import com.mohaeng.backend.course.domain.Course;
+import com.mohaeng.backend.course.domain.CourseBookmark;
+import com.mohaeng.backend.place.domain.PlaceBookmark;
+import com.mohaeng.backend.place.domain.Review;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Where(clause = "deleted_date IS NULL")
+@SQLDelete(sql = "UPDATE member SET deleted_date = CURRENT_TIMESTAMP WHERE member_id = ?")
 public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,8 +50,18 @@ public class Member extends BaseTimeEntity {
 
     private Long kakaoId;
 
-    @OneToMany(mappedBy = "member")
-    private List<CourseBookMark> courseBookMarkList = new ArrayList<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<CourseBookmark> courseBookMarkList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<PlaceBookmark> placeBookmarkList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Review> reviewList;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Course> courseList = new ArrayList<>();
+
 
     @Builder
     public Member(String name, String email, Role role, String nickName) {
@@ -66,9 +81,12 @@ public class Member extends BaseTimeEntity {
         this.nickName = nickName;
     }
 
-    public void addCourseBookMark(CourseBookMark courseBookMark) {
+    public void addCourseBookMark(CourseBookmark courseBookMark) {
         this.courseBookMarkList.add(courseBookMark);
-        courseBookMark.setMember(this);
+    }
+
+    public void removeCourseBookMark(CourseBookmark courseBookmark){
+        this.courseBookMarkList.remove(courseBookmark);
     }
 
     public void setOauthAccessToken(String oauthAccessToken) {
@@ -79,12 +97,26 @@ public class Member extends BaseTimeEntity {
         this.imageURL = imageURL;
     }
 
-    public void changeImageName(String imageName) {
-        this.imageName = imageName;
-    }
-
     public void setKakaoId(Long kakaoId) {
         this.kakaoId = kakaoId;
+    }
+
+
+    public void addPlaceBookmark(PlaceBookmark placeBookmark) {
+        this.placeBookmarkList.add(placeBookmark);
+    }
+
+    public void removePlaceBookmark(PlaceBookmark placeBookmark){
+        this.placeBookmarkList.remove(placeBookmark);
+    }
+
+    public void updateProfileImage(String imageName, String imageURL){
+        this.imageName = imageName;
+        this.imageURL = imageURL;
+    }
+
+    public void addReview(Review review) {
+        this.reviewList.add(review);
     }
 }
 

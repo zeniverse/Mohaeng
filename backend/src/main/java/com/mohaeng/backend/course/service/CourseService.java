@@ -2,28 +2,26 @@ package com.mohaeng.backend.course.service;
 
 import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.domain.CoursePlace;
-import com.mohaeng.backend.course.dto.CourseInPlaceDto;
-import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
-import com.mohaeng.backend.course.dto.CourseSearchDto;
-import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
-import com.mohaeng.backend.course.dto.request.CourseReq;
-import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
-import com.mohaeng.backend.course.dto.response.CourseIdRes;
-import com.mohaeng.backend.course.dto.CourseListDto;
-import com.mohaeng.backend.course.dto.response.CourseListRes;
-import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
-import com.mohaeng.backend.course.dto.response.CourseRes;
+import com.mohaeng.backend.course.domain.CourseStatus;
+import com.mohaeng.backend.course.dto.*;
+import com.mohaeng.backend.course.dto.request.*;
+import com.mohaeng.backend.course.dto.response.*;
+import com.mohaeng.backend.course.repository.CourseBookmarkRepository;
 import com.mohaeng.backend.course.repository.CourseLikesRepository;
 import com.mohaeng.backend.course.repository.CoursePlaceRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
+import com.mohaeng.backend.exception.badrequest.InvalidKeywordPlaceInCourse;
+import com.mohaeng.backend.exception.notfound.CourseNotFoundException;
+import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
+import com.mohaeng.backend.exception.notfound.PlaceNotFoundException;
+import com.mohaeng.backend.exception.unauthrized.MemberPermissionDenied;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
-import com.mohaeng.backend.place.domain.PlaceImage;
-import com.mohaeng.backend.place.repository.PlaceImageRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -32,6 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
 
 
 @Service
@@ -43,49 +43,38 @@ public class CourseService {
     private final MemberRepository memberRepository;
     private final CourseRepository courseRepository;
     private final CoursePlaceRepository coursePlaceRepository;
-    private final PlaceImageRepository placeImageRepository;
     private final CourseLikesRepository courseLikesRepository;
+    private final CourseBookmarkRepository courseBookmarkRepository;
 
     public CoursePlaceSearchRes placeSearch(CoursePlaceSearchReq req, Pageable pageable) {
         // keyword에 null이 담겨있을 때
         if (req.getKeyword() == null){
-            throw new IllegalArgumentException("keyword 값이 비어있습니다.");
+            throw new InvalidKeywordPlaceInCourse();
         }
-        // rating에 점수가 담겨있지 않을 때
-        Double rating = req.parseRatingToDouble(req.getLastRating());
-        Slice<CoursePlaceSearchDto> placeInCourse = placeRepository.findPlaceInCourse(req.getKeyword(), req.getLastPlaceId(), rating, pageable);
 
-        return CoursePlaceSearchRes.from(placeInCourse);
+        // rating에 점수가 담겨있지 않을 때
+        double rating = req.parseRatingToDouble(req.getLastRating());
+
+        Slice<Place> places = placeRepository.findPlaceInCourse(req.getKeyword(), req.getLastId(), rating, pageable);
+
+        List<CoursePlaceSearchDto> coursePlaceSearchList = places.stream()
+                .map(place -> CoursePlaceSearchDto.from(place))
+                .collect(Collectors.toList());
+        return CoursePlaceSearchRes.from(places.hasNext(), coursePlaceSearchList);
     }
 
     @Transactional
-    public CourseIdRes createCourse(CourseReq req, String memberEmail) {
+    public CourseIdRes createCourse(CourseReq req,String memberEmail) {
 
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+        // 1.유저 확인
+        Member member = isMember(memberEmail);
 
-        Course course = Course.builder()
-                .title(req.getTitle())
-                .startDate(req.getStartDate())
-                .endDate(req.getEndDate())
-                .isPublished(req.getIsPublished())
-                .courseDays(req.getCourseDays())
-                .region(req.getRegion())
-                .thumbnailUrl(req.getThumbnailUrl())
-                .content(req.getContent())
-                .isPublished(false)
-                .likeCount(0)
-                .member(member)
-                .build();
+        // 2. 코스 생성
+        Course course = Course.createCourse(req, member);
 
         List<CoursePlace> coursePlaces = new ArrayList<>();
         for (Long id : req.getPlaceIds()) {
-            Place place = placeRepository.findById(id).orElseThrow(
-                    // TODO: Exception 처리
-                    () -> new IllegalArgumentException("존재하지 않는 장소 입니다.")
-            );
+            Place place = placeRepository.findById(id).orElseThrow(PlaceNotFoundException::new);
             coursePlaces.add(
                     CoursePlace.builder()
                             .course(course)
@@ -102,26 +91,25 @@ public class CourseService {
         return CourseIdRes.from(createdCourse.getId());
     }
 
-    public CourseRes getCourse(Long courseId) {
-        // 1. courseId로 course 조회
-        Course findCourse = courseRepository.findById(courseId).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
-        );
+    public CourseRes getCourse(Long courseId, String memberEmail) {
+        // 1.로그인 유무 화인
+        Member member = isLogin(memberEmail);
 
-        // 2. courseId로 CoursePlace 조회
+        // 2. courseId로 course 조회
+        Course findCourse = isCourse(courseId);
+
+        // 3. courseId로 CoursePlace 조회
         List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
         List<CourseInPlaceDto> courseInPlaceDtoList = new ArrayList<>();
 
-        // 3. CoursePlaces에 담긴 Place 정보와 PlaceImage를 사용해 CourseInPlaceDTO에 담아준다.
+        // 4. CoursePlaces에 담긴 Place 정보를 사용해 CourseInPlaceDTO에 담아준다.
         for (CoursePlace coursePlace : coursePlaces) {
             Place place = coursePlace.getPlace();
-            PlaceImage findPlaceImage = placeImageRepository.findFirstByPlace(place);
             courseInPlaceDtoList.add(
                     CourseInPlaceDto.builder()
                             .placeId(place.getId())
                             .name(place.getName())
-                            .imgUrl(findPlaceImage.getImgUrl())
+                            .imgUrl(place.getFirstImage())
                             .address(place.getAddress())
                             .mapX(place.getMapX())
                             .mapY(place.getMapY())
@@ -129,29 +117,34 @@ public class CourseService {
             );
         }
 
-        return CourseRes.from(findCourse, courseInPlaceDtoList);
+        Boolean isLiked = false;
+        Boolean isBookmarked = false;
+
+        if (member != null){
+            isLiked = courseLikesRepository.existsCourseLikesByMemberAndCourse(member, findCourse);
+            isBookmarked = courseBookmarkRepository.existsCourseBookmarkByMemberAndCourse(member, findCourse);
+        }
+
+        return CourseRes.from(findCourse, courseInPlaceDtoList, isLiked, isBookmarked);
     }
 
     @Transactional
     public CourseIdRes updateCourse(String memberEmail, Long courseId, CourseUpdateReq req) {
 
-        Course course = courseRepository.findById(courseId).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 course 입니다.")
-        );
-
+        // 1. 코스 존재 여부 & 작성자와 요청자가 같은지 확인
+        Course course = isCourse(courseId);
         isWriter(memberEmail, course.getMember());
 
+        // 2. 기존에 존재하던 CoursePlaces 삭제
         List<CoursePlace> coursePlaces = coursePlaceRepository.findAllByCourseId(courseId);
-        coursePlaceRepository.deleteAllInBatch(coursePlaces);
+        for (CoursePlace coursePlace : coursePlaces) {
+            coursePlace.updateDeletedDate();
+        }
+        coursePlaces.clear();
 
-        List<CoursePlace> updatedCoursePlaces = new ArrayList<>();
         for (Long id : req.getPlaceIds()) {
-            Place place = placeRepository.findById(id).orElseThrow(
-                    // TODO: Exception 처리
-                    () -> new IllegalArgumentException("존재하지 않는 장소 입니다.")
-            );
-            updatedCoursePlaces.add(
+            Place place = placeRepository.findById(id).orElseThrow(PlaceNotFoundException::new);
+            coursePlaces.add(
                     CoursePlace.builder()
                             .course(course)
                             .place(place)
@@ -159,8 +152,8 @@ public class CourseService {
             );
         }
 
-        coursePlaceRepository.saveAll(updatedCoursePlaces);
-        course.addCoursePlaces(updatedCoursePlaces);
+        coursePlaceRepository.saveAll(coursePlaces);
+        course.addCoursePlaces(coursePlaces);
         course.updateCourse(req);
 
         return CourseIdRes.from(course.getId());
@@ -168,59 +161,67 @@ public class CourseService {
 
     @Transactional
     public void deleteCourse(String memberEmail, Long courseId) {
-        Course course = courseRepository.findById(courseId).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 course 입니다.")
-        );
 
+        // 1. 코스 존재 여부 확인
+        Course course = isCourse(courseId);
+
+        // 2. 작성자와 요청자가 같은지 확인
         isWriter(memberEmail, course.getMember());
+
+        // 3. course soft delete 처리
         course.updateDeletedDate(course.getCoursePlaces());
     }
 
 
     public CourseListRes getCourseList(CourseSearchDto courseSearchDto, Pageable pageable, String memberEmail) {
-        // 1.로그인 유무 화인
-        Member member = null;
-
-        if (memberEmail != null){
-            member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                    // TODO: Exception 처리
-                    () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-            );
+        // 1. 로그인 유무 확인
+        Member member = isLogin(memberEmail);
+        Long memberId = 0L;
+        if (member != null){
+            memberId = member.getId();
         }
 
-        // 2. 검색 조건으로 검색 결과 조회
-        Page<Course> courses = courseRepository.findAllCourseWithKeyword(courseSearchDto, pageable);
+        // 2. 코스 조회 결과 불러오기기
+        Page<CourseListDto> results = courseRepository.findAllCourseWithBookmarkAndLikes(courseSearchDto, pageable, memberId);
 
-        // 3. 검색 결과 CourseListDto 타입으로 변경
-        List<CourseListDto> courseList = new ArrayList<>();
-        for (Course course : courses) {
-            boolean isLike = false;
-            if(memberEmail != null){
-                isLike = courseLikesRepository.existsCourseLikesByMemberAndCourse(member, course);
-            }
-            CourseListDto dto = CourseListDto.from(course, isLike);
-            courseList.add(dto);
+        return CourseListRes.from(results.getContent(), results.getTotalElements(), results.getTotalPages());
+    }
+
+
+    public List<MainCourseListDto> getMainCourse(String memberEmail) {
+        // 1. 로그인 유무 확인
+        Member member = isLogin(memberEmail);
+        Long memberId = 0L;
+        if (member != null){
+            memberId = member.getId();
         }
 
-//        List<CourseListDto> courseList = courses.stream()
-//                .map(course -> CourseListDto.from(course))
-//                .collect(Collectors.toList());
-//
-        return CourseListRes.from(courseList, courses.getTotalElements(), courses.getTotalPages());
+        // 2. 코스 조회 결과 불러오기기
+        List<MainCourseListDto> results = courseRepository.findTop10Course(memberId);
+
+        return results;
     }
 
 
     private Member isWriter(String memberEmail, Member writer){
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
+        Member member = isMember(memberEmail);
 
-        if(!member.getEmail().equals(writer.getEmail()))
-            // TODO: Exception 처리
-            throw new RuntimeException("요청자와 작성자가 일치하지 않습니다.");
+        if(!member.getEmail().equals(writer.getEmail())){
+            throw new MemberPermissionDenied();
+        }
         return member;
 
+    }
+
+    private Member isLogin(String email){
+        return isNull(email) ? null : memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private Member isMember(String memberEmail){
+        return memberRepository.findByEmail(memberEmail).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private Course isCourse(Long id){
+        return courseRepository.findById(id).orElseThrow(CourseNotFoundException::new);
     }
 }

@@ -1,5 +1,7 @@
-export interface Course {
-  id?: number;
+import { placesName } from "./Course.type";
+
+export interface CourseList {
+  courseId?: number;
   title: string;
   likeCount: number;
   courseDays?: string;
@@ -7,40 +9,41 @@ export interface Course {
   thumbnailUrl: string;
   isPublished?: boolean;
   content?: string;
-  places?: Places[];
-}
-export interface Places {
-  placeId?: number;
-  imgUrl?: string;
-  name?: string;
-  address?: string;
+  places?: string;
 }
 
-export type CourseProps = {
-  id?: number;
-  courseTitle: string;
-  courseDesc?: string;
-  courseLike: number;
-  courseDays?: string;
-  thumbnailUrl: string;
-  courseList?: Places[];
+export type CourseListProps = {
+  courseId: number;
+  title: string;
+  content: string;
+  likeCount: number;
+  courseDays: string;
+  thumbnailUrl?: string;
+  isBookmarked: boolean;
+  isLiked: boolean;
+  places: string;
 };
 
 export interface RoughMapTitle {
-  RoughMapData: string[];
-  setIsRoughMapOpen?: any;
-  isRoughMapOpen?: any;
+  RoughMapData: string;
+  onClose: any;
 }
 
 export interface CourseDetailType {
+  courseId: number;
   title: string;
-  nickname: string;
-  likeCount: number | string;
+  startDate: string;
+  endDate: string;
+  isPublished: boolean;
   courseDays: string;
   region: string;
   content: string;
+  likeCount: number;
   createdDate: string;
-  places: CourseDetailPlaces[];
+  isBookmarked: boolean;
+  isLiked: boolean;
+  nickname: string;
+  places?: any;
 }
 
 export interface CourseDetailPlaces {
@@ -53,14 +56,26 @@ export interface CourseDetailPlaces {
 }
 
 export interface kakaoPlaces {
-  placeId: number;
+  placeId?: number;
   name: string;
   mapX: string;
   mapY: string;
+  imgUrl?: string;
+  address?: string;
 }
 
 export interface PositionsProps {
-  positions: kakaoPlaces[];
+  mapData: kakaoPlaces[];
 }
 
 export interface formatPositions {}
+
+export interface Course {
+  courseId: number;
+  title: string;
+  content: string;
+  thumbnailUrl: string;
+  courseDays: string;
+  likeCount: number;
+  places: any;
+}

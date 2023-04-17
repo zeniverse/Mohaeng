@@ -5,6 +5,10 @@ import com.mohaeng.backend.course.domain.CourseLikes;
 import com.mohaeng.backend.course.dto.response.CourseLikesRes;
 import com.mohaeng.backend.course.repository.CourseLikesRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
+import com.mohaeng.backend.exception.badrequest.InvalidCourseLikes;
+import com.mohaeng.backend.exception.notfound.CourseLikesNotFoundException;
+import com.mohaeng.backend.exception.notfound.CourseNotFoundException;
+import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,21 +29,12 @@ public class CourseLikesService {
     @Transactional
     public CourseLikesRes addLikes(Long courseId, String memberEmail) {
         // 1. 로그인 하지 않은 유저 확인
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
-
+        Member member = isMember(memberEmail);
         // 2. 존재하지 않는 Course 인지 확인
-       Course course = courseRepository.findById(courseId).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
-        );
+        Course course = isCourse(courseId);
 
         // 3. 이미 좋아요를 누른 회원인지 확인
-        if (isExistLikes(member, course)){
-            throw new IllegalArgumentException("이미 좋아요를 누른 회원입니다.");
-        }
+        if (isExistLikes(member, course)){throw new InvalidCourseLikes();}
 
         // 4. CourseLikes 저장
         courseLikesRepository.save(CourseLikes.of(member, course));
@@ -54,26 +49,20 @@ public class CourseLikesService {
     @Transactional
     public CourseLikesRes cancelLikes(Long courseId, String memberEmail) {
         // 1. 로그인 하지 않은 유저 확인
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
-
+        Member member = isMember(memberEmail);
         // 2. 존재하지 않는 Course 인지 확인
-        Course course = courseRepository.findById(courseId).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
-        );
+        Course course = isCourse(courseId);
 
         // 3. 이미 좋아요를 누른 회원인지 확인
         if (!isExistLikes(member, course)) {
-            throw new IllegalArgumentException("member가 해당 course의 좋아요룰 누르지 않았습니다");
+            throw new CourseLikesNotFoundException();
         }
 
         // 4. 해당 CourseLikes 찾아서, deletedDate update & Course likeCount 감소
         CourseLikes courseLikes = courseLikesRepository.findByMemberAndCourse(member, course);
         courseLikes.updateDeleteDate();
         course.cancelLikeCount();
+
         Long totalLikes = getTotalLikes(course);
 
         return CourseLikesRes.from(courseId, totalLikes);
@@ -83,10 +72,7 @@ public class CourseLikesService {
     public CourseLikesRes countLikes(Long courseId) {
 
         // 존재하지 않는 Course 인지 확인
-        Course course = courseRepository.findById(courseId).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
-        );
+        Course course = isCourse(courseId);
         Long totalLikes = getTotalLikes(course);
 
         return CourseLikesRes.from(courseId, totalLikes);
@@ -98,17 +84,9 @@ public class CourseLikesService {
 
 
     public boolean isExistCourseLikes(Long courseId, String memberEmail) {
-        // 1. 로그인 하지 않은 유저 확인
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
-        );
-
-        // 2. 존재하지 않는 Course 인지 확인
-        Course course = courseRepository.findById(courseId).orElseThrow(
-                // TODO: Exception 처리
-                () -> new IllegalArgumentException("존재하지 않는 코스 입니다.")
-        );
+        // 1. 유저 확인 & Course 확인
+        Member member = isMember(memberEmail);
+        Course course = isCourse(courseId);
 
         return isExistLikes(member, course);
     }
@@ -116,5 +94,14 @@ public class CourseLikesService {
     private boolean isExistLikes(Member member, Course course) {
         return courseLikesRepository.existsCourseLikesByMemberAndCourse(member, course);
     }
+
+    private Member isMember(String memberEmail){
+        return memberRepository.findByEmail(memberEmail).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private Course isCourse(Long id){
+        return courseRepository.findById(id).orElseThrow(CourseNotFoundException::new);
+    }
+
 
 }

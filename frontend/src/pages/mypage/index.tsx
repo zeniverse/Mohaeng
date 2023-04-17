@@ -1,48 +1,52 @@
 "use client";
-
-import Button from "@/src/components/Button/Button";
-import { User, userData } from "@/src/interfaces/Auth";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styles from "./index.module.css";
-import MypageLayout from "./layout";
+import { useSelector } from "react-redux";
+import { RootState } from "@/src/store/store";
+import UserInfo from "@/src/components/Mypage/UserInfo";
+import UserEdit from "@/src/components/Mypage/UserEdit";
+import UserBookmark from "@/src/components/Mypage/UserBookmark";
+import Sidebar from "@/src/components/Mypage/Sidebar";
+import { useRouter } from "next/router";
+import cookie from "react-cookies";
+import withAuth from "../withAuth";
+import MyCourse from "@/src/components/Mypage/MyCourse";
+import MyReview from "@/src/components/Mypage/MyReview";
 
 const MyPage: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<User>();
+  const currIdx = useSelector((state: RootState) => state.mypage.currIdx);
+  const label = useSelector((state: RootState) => state.mypage.label);
+  const accessToken = cookie.load("accessToken");
+
+  const router = useRouter();
+
+  //TODO: 로그인 페이지 완성시 경로 '/login'으로 바꿔두기
   useEffect(() => {
-    async function fetchData() {
-      const res = await fetch("/api/user");
-      const data = await res.json();
-      setCurrentUser(data);
+    if (!accessToken) {
+      router.replace("/login");
     }
-    fetchData();
-  }, []);
+  }, [accessToken]);
 
-  const Img = currentUser?.data.profileUrl;
   return (
-    <MypageLayout>
-      <h1 className={styles["Title"]}>마이페이지</h1>
-      <div className={styles["Container"]}>
-        <div className={styles["ProfileWrapper"]}>
-          <img src={Img} className={styles["Avatar"]} />
-          <div>
-            <div className={styles["Name"]}>{currentUser?.data.userId}</div>
-            <div className={styles["Nickname"]}>
-              {currentUser?.data.userNickname}
-            </div>
-            <div className={styles["Email"]}>{currentUser?.data.userEmail}</div>
-          </div>
-        </div>
-        <div className={styles["ButtonWrapper"]}>
-          <Link href="/mypage/edit">
-            <Button text="정보수정" />
-          </Link>
-
-          <Button text="회원탈퇴" />
+    <div className={styles.Container}>
+      <Sidebar />
+      <div className={styles.contentWrapper}>
+        <h1 className={styles["Title"]}>{label}</h1>
+        <div className={styles.itemWrapper}>
+          {
+            {
+              0: <UserInfo />,
+              1: <UserBookmark />,
+              2: <MyCourse />,
+              3: <MyReview />,
+              4: <UserEdit />,
+            }[currIdx]
+          }
         </div>
       </div>
-    </MypageLayout>
+    </div>
   );
 };
 
+// export default withAuth(MyPage);
 export default MyPage;

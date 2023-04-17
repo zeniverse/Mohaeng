@@ -1,11 +1,9 @@
 package com.mohaeng.backend.place.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.mohaeng.backend.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Table;
@@ -15,11 +13,15 @@ import org.hibernate.id.enhanced.SequenceStyleGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 @Entity
 @Builder
 @Getter
 @Table(appliesTo = "place")
 @RequiredArgsConstructor
+@ToString
+@AllArgsConstructor
 public class Place {
 
     @Id
@@ -41,18 +43,22 @@ public class Place {
     private String address;
     private String areaCode;
     private String sigunguCode;
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String firstImage;
     private String firstImage2;
     private String mapX;
     private String mapY;
     private String contentId;
+    private String overview;
     private double rating;
+    private String fileUrl;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-    @Builder.Default
     @OneToMany(mappedBy = "place")
-    @ToString.Exclude
-    private List<PlaceImage> placeImages = new ArrayList<>();
+    private List<Review> reviewList = new ArrayList<>();
 
     public Place(String name, String address, String areaCode, String sigunguCode, String contentId, String firstImage, String firstImage2, String mapX, String mapY) {
         this.name = name;
@@ -66,7 +72,7 @@ public class Place {
         this.mapY = mapY;
     }
 
-    public Place(Long id, String name, String address, String areaCode, String firstImage, String firstImage2, String mapX, String mapY, String sigunguCode, String contentId, double rating) {
+    public Place(Long id, String name, String address, String areaCode, String firstImage, String firstImage2, String mapX, String mapY, String sigunguCode, String contentId, String overview, double rating) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -77,23 +83,10 @@ public class Place {
         this.mapY = mapY;
         this.sigunguCode = sigunguCode;
         this.contentId = contentId;
+        this.overview = overview;
         this.rating = rating;
     }
 
-    public Place(Long id, String name, String address, String areaCode, String sigunguCode, String firstImage, String firstImage2, String mapX, String mapY, String contentId, double rating, List<PlaceImage> placeImages) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.areaCode = areaCode;
-        this.sigunguCode = sigunguCode;
-        this.firstImage = firstImage;
-        this.firstImage2 = firstImage2;
-        this.mapX = mapX;
-        this.mapY = mapY;
-        this.contentId = contentId;
-        this.rating = rating;
-        this.placeImages = placeImages;
-    }
     public Place(Long id, String name, String address, String areaCode, String sigunguCode, String firstImage, String firstImage2, String mapX, String mapY, String contentId) {
         this.id = id;
         this.name = name;
@@ -105,5 +98,35 @@ public class Place {
         this.mapX = mapX;
         this.mapY = mapY;
         this.contentId = contentId;
+    }
+
+    public Place(String name, String firstImage, String contentId) {
+        this.name = name;
+        this.firstImage = firstImage;
+        this.contentId = contentId;
+    }
+
+    public Place(Long id, String name, String address, String areaCode, String sigunguCode, String firstImage, String firstImage2, String mapX, String mapY, String contentId, String overview, double rating, Member member) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.areaCode = areaCode;
+        this.sigunguCode = sigunguCode;
+        this.firstImage = firstImage;
+        this.firstImage2 = firstImage2;
+        this.mapX = mapX;
+        this.mapY = mapY;
+        this.contentId = contentId;
+        this.overview = overview;
+        this.rating = rating;
+        this.member = member;
+    }
+
+    public Place(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    public void addReview(Review review) {
+        this.getReviewList().add(review);
     }
 }

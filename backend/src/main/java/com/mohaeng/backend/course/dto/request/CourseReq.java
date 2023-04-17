@@ -18,9 +18,9 @@ public class CourseReq {
     @NotBlank
     private String title;
     @NotNull
-    private LocalDateTime startDate;
+    private String startDate;
     @NotNull
-    private LocalDateTime endDate;
+    private String endDate;
     @NotNull
     private Boolean isPublished;
     private String courseDays;
@@ -33,7 +33,7 @@ public class CourseReq {
     private List<Long> placeIds = new ArrayList<>();
 
     @Builder
-    public CourseReq(String title, LocalDateTime startDate, LocalDateTime endDate,
+    public CourseReq(String title, String startDate, String endDate,
                      Boolean isPublished, String courseDays, String region, String thumbnailUrl, String content, List<Long> placeIds) {
         this.title = title;
         this.startDate = startDate;

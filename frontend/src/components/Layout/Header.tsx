@@ -1,9 +1,6 @@
-"use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
-import { BsSearch } from "react-icons/bs";
-import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../store/reducers/modalSlice";
 import { useRouter } from "next/router";
@@ -11,54 +8,71 @@ import {
   setEmail,
   setId,
   setNickname,
-  setProfileUrl,
   setToken,
+  setImgUrl,
 } from "@/src/store/reducers/loginTokenSlice";
-import { RootState } from "@/src/store/store";
+import { AppDispatch, RootState } from "@/src/store/store";
 import axios from "axios";
 import cookie from "react-cookies";
+import SearchBar from "../Search/SearchBar";
 import Image from "next/image";
+import { resetFilter, selectArea } from "@/src/store/reducers/FilterSlice";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+// import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
+import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
+import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
+import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
+import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
+import Dropdown from "../Mypage/Dropdown";
+import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 
-const StyledIcon = styled(BsSearch)`
-  color: #004aad;
-`;
+type User = {
+  id: number;
+  nickName: string;
+  email: string;
+  imgUrl: string;
+};
 
 type Props = {};
 
 function Header({}: Props) {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState<User[]>([]);
   const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
   const router = useRouter();
-  const loginToken = useSelector((state: RootState) => state.token.token);
+  const userid = useSelector((state: RootState) => state.id.id);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
-  const profileUrl = useSelector(
-    (state: RootState) => state.profileUrl.profileUrl
-  );
+  const accessToken = cookie.load("accessToken");
+  const imgUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
+  const [view, setView] = useState(false);
 
+  // * 로그인 정보 조회
   useEffect(() => {
     const response = async () => {
-      if (loginToken) {
-        const userData = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/loginInfo`,
-          {
-            headers: {
-              "Access-Token": loginToken,
-            },
-            withCredentials: true,
-          }
-        );
-        console.log(userData);
-        const nickName = userData.data.data.nickName;
-        const profileUrl = userData.data.data.profileUrl;
+      // console.log("ACcess = " + accessToken);
+      if (accessToken) {
+        const userRes = await axios.get(`/loginInfo`, {
+          headers: {
+            "Access-Token": accessToken,
+          },
+          withCredentials: true,
+        });
+        const { id, nickName, email, imgUrl } = userRes.data.data;
+        dispatch(setId(id));
+        dispatch(setEmail(email));
         dispatch(setNickname(nickName));
-        dispatch(setProfileUrl(profileUrl));
-        console.log(nickName);
-        setUser(userData.data.data);
+        dispatch(setImgUrl(imgUrl));
+        appDispatch(getCourseBookmark(accessToken));
+        appDispatch(getPlaceBookmark(accessToken));
+        appDispatch(getMyCourse(accessToken));
+        appDispatch(getMyReview(accessToken));
+        setUser(nickName);
       }
     };
     response();
-  }, [loginToken]);
+  }, [accessToken]);
 
+  // * 로그인 모달
   const handleOpenLoginModal = () => {
     dispatch(
       openModal({
@@ -68,42 +82,52 @@ function Header({}: Props) {
     );
   };
 
-  const handleLogout = () => {
-    cookie.remove("accessToken", { path: "/" });
-    dispatch(setToken(""));
-    dispatch(setNickname(""));
-    dispatch(setEmail(""));
-    dispatch(setId(0));
-    router.replace("/");
-    window.alert("로그아웃되었습니다!");
+  // * 로그아웃
+  // const handleLogout = () => {
+  //   cookie.remove("accessToken", { path: "/" });
+  //   dispatch(setToken(""));
+  //   dispatch(setNickname(""));
+  //   dispatch(setEmail(""));
+  //   dispatch(setImgUrl(""));
+  //   dispatch(setId(0));
+  //   setUser([]);
+  //   router.replace("/");
+  // };
+
+  const ResetStatus = () => {
+    dispatch(resetFilter());
+
+    const currComponent: myPageState = {
+      currIdx: 0,
+      label: "회원정보",
+    };
+
+    dispatch(setCurrIdx(currComponent));
   };
 
   return (
     <header className={styles.header}>
       <nav>
         <div className={styles.nav}>
-          <Link href="/">
+          <Link href="/" onClick={ResetStatus}>
             <img src="/assets/logo.png" alt="logo" className={styles.logo} />
           </Link>
-          <div className={styles["search-bar"]}>
-            <input
-              className={styles["search-input"]}
-              type="text"
-              placeholder="어디 가고 싶으세요?"
-            />
-            <button className={styles["search-icon"]}>
-              <StyledIcon size={20} />
-            </button>
-          </div>
+
+          <SearchBar />
+
           <div className={styles.menu}>
-            <Link href="/place">여행지</Link>
-            <Link href="/course">코스</Link>
-            <Link href="/mypage">마이페이지</Link>
+            <Link href="/place" onClick={ResetStatus}>
+              여행지
+            </Link>
+            <Link href="/course" onClick={ResetStatus}>
+              코스
+            </Link>
           </div>
         </div>
       </nav>
+
       <div className={styles.btn}>
-        {!loginToken ? (
+        {!nickName ? (
           <>
             <button
               id="login-btn"
@@ -115,21 +139,31 @@ function Header({}: Props) {
           </>
         ) : (
           <>
-            <Image
-              className={styles["kakao-profile-img"]}
-              src={profileUrl}
-              alt="카카오프로필"
-              width={40}
-              height={40}
-            />
-            {nickName}님
+            <ul
+              className={styles.dropdownContainer}
+              onClick={() => {
+                setView(!view);
+              }}
+            >
+              <Image
+                className={styles["kakao-profile-img"]}
+                src={imgUrl}
+                alt="카카오프로필"
+                width={45}
+                height={45}
+              />
+              반가워요, {nickName} 님! {view ? "⌃" : "⌄"}
+              {view && <Dropdown />}
+            </ul>
+            {/* 
+            <Link href="/mypage">반가워요, {nickName}님!</Link>
             <button
               id="login-btn"
               className={styles["login-btn"]}
               onClick={handleLogout}
             >
               로그아웃
-            </button>
+            </button> */}
           </>
         )}
       </div>

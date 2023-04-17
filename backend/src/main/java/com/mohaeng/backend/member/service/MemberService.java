@@ -1,30 +1,31 @@
 package com.mohaeng.backend.member.service;
 
+import com.mohaeng.backend.Image.AmazonS3Service;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.domain.Role;
+import com.mohaeng.backend.member.dto.request.UserInfoChangeRequest;
 import com.mohaeng.backend.member.dto.response.KakaoUserDto;
+import com.mohaeng.backend.member.dto.response.MemberLoginDto;
 import com.mohaeng.backend.member.jwt.Token;
 import com.mohaeng.backend.member.jwt.TokenGenerator;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
-import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,12 +34,18 @@ public class MemberService {
     private final RandomNameService randomNameService;
     private final TokenGenerator tokenGenerator;
 
-    private final String CLIENT_ID = "d7c41513380cc7e5cbbfce173bf86002";
-    private final String REDIRECT_URL = "http://localhost:3000/login/kakao";
+    private final AmazonS3Service amazonS3Service;
 
-    private final String GET_ACCESS_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
-    private final String GET_PROFILE_URL = "https://kapi.kakao.com/v2/user/me";
-    private final String IMG_PATH = "../../../../../../resources/image/";
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    private String CLIENT_ID;
+    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    private String REDIRECT_URL;
+
+    @Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
+    private String GET_ACCESS_TOKEN_URL;
+
+    @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
+    private String GET_PROFILE_URL;
 
 
     public Member findByEmail(String email) {
@@ -95,70 +102,85 @@ public class MemberService {
         );
 
         String body = kakaoProfileResponse.getBody();
-
         JSONObject jsonObject = new JSONObject(body);
         long id = jsonObject.getLong("id");
-        System.out.println("id = " + id);
         String parsedEmail = jsonObject.getJSONObject("kakao_account").getString("email");
         String parsedName = jsonObject.getJSONObject("properties").getString("nickname");
         String profileImage = jsonObject.getJSONObject("properties").getString("profile_image");
-        System.out.println("profileImage = " + profileImage);
 
         return new KakaoUserDto(id, parsedEmail, parsedName, profileImage);
     }
 
-    public Member saveMember(String token) throws IOException {
-        KakaoUserDto kakaoUser = findProfile(token);
-        Member member = memberRepository.findByEmail(kakaoUser.getEmail())
-                .orElse(new Member(kakaoUser.getName(),
-                        kakaoUser.getEmail(), Role.NORMAL, randomNameService.generateNickName()));
-
-        String fileName = downloadFile(kakaoUser.getProfileImage());
-
-        member.changeImageURL(IMG_PATH);
-        member.changeImageName(fileName);
-        member.setOauthAccessToken(token);
-        member.setKakaoId(kakaoUser.getKakaoId());
-
-        memberRepository.save(member);
-        return member;
+    public Member saveMember(Member member) {
+        return memberRepository.save(member);
     }
 
-    private String downloadFile(String url) throws IOException {
-        // URL 객체 생성
-        URL fileUrl = new URL(url);
+    public Member saveMember(String token) throws IOException {
+        KakaoUserDto kakaoUser = findProfile(token);
+        Member member = memberRepository.findByEmail(kakaoUser.getEmail()).
+                orElse(null);
 
-        // 파일 경로 추출
-        String fileName = url.substring(url.lastIndexOf("/") + 1);
-
-        System.out.println("fileName = " + fileName);
-
-        // 로컬 디렉토리 경로 생성
-        File directory = new File(IMG_PATH);
-        if (!directory.exists()) {
-            directory.mkdirs();
-            System.out.println("directory.exists() = " + directory.exists());
+        if (member == null) {
+            member = new Member(kakaoUser.getName(), kakaoUser.getEmail(), Role.NORMAL, randomNameService.generateNickName());
+            String fullUrl = kakaoUser.getProfileImage();
+            setMemberImageUrl(member, fullUrl);
         }
 
-        // 파일 다운로드
-        ReadableByteChannel readableByteChannel = Channels.newChannel(fileUrl.openStream());
-        FileOutputStream fileOutputStream = new FileOutputStream(IMG_PATH + "/" + fileName);
-        FileChannel fileChannel = fileOutputStream.getChannel();
-        long transferredBytes = fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-
-
-        // 다운로드 완료 후 리소스 해제
-        fileOutputStream.close();
-        readableByteChannel.close();
-        System.out.println(String.format("File downloaded to %s%s%s. Total bytes transferred: %d",
-                IMG_PATH, File.separator, fileName, transferredBytes));
-        return fileName;
+        member.setOauthAccessToken(token);
+        member.setKakaoId(kakaoUser.getKakaoId());
+        memberRepository.save(member);
+        return member;
     }
 
     public Token createToken(Member member) {
         return tokenGenerator.generateToken(member.getEmail(), member.getRole());
     }
 
+    public MemberLoginDto getLoginInfo(Member member) {
+        MemberLoginDto memberLoginDto = MemberLoginDto.builder()
+                .id(member.getId())
+                .email(member.getEmail())
+                .nickName(member.getNickName())
+                .imgUrl(member.getImageURL() + "/" + member.getImageName())
+                .build();
+        return memberLoginDto;
+    }
 
+    @Transactional
+    public void changeProfile(Member member, UserInfoChangeRequest userInfoChangeRequest, MultipartFile multipartFile) throws IOException {
+        member.changeNickName(userInfoChangeRequest.getNickName());
+        if (multipartFile != null) {
+            amazonS3Service.deleteFile(member.getImageName());
+            String fullFileName = amazonS3Service.uploadFile(List.of(multipartFile)).get(0);
+            setMemberImageUrl(member, fullFileName);
+        }
+
+    }
+
+    private void setMemberImageUrl(Member member, String fullFileName) {
+        String fileName = fullFileName.substring(fullFileName.lastIndexOf("/") + 1);
+        String url = fullFileName.substring(0, fullFileName.lastIndexOf("/"));
+        member.updateProfileImage(fileName, url);
+    }
+
+//    @Transactional
+//    public List<String> changeProfile2(Member member, UserInfoChangeRequest req, List<MultipartFile> multipartFiles) throws IOException {
+//        member.changeNickName(req.getNickName());
+//
+//        List<String> strings = new ArrayList<>();
+//        if (multipartFiles != null) {
+//            if (!isEmpty(member.getImageName())){
+//                // 저장된 url에서 파일 이름 뽑아내기
+//                String name = member.getImageURL().substring(member.getImageURL().lastIndexOf("/") + 1);
+//                amazonS3Service.deleteFile(name);
+//                strings = amazonS3Service.uploadFile(multipartFiles);
+//
+//                String newName = strings.get(0).substring(strings.get(0).lastIndexOf("/") + 1);
+//                member.updateProfileImage(newName, strings.get(0));
+//            }
+//        }
+//
+//        return strings;
+//    }
 
 }

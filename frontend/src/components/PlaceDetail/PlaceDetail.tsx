@@ -1,74 +1,167 @@
-"use client";
-import React, { useState } from "react";
 import styles from "./PlaceDetail.module.css";
-import { IoMdHeart } from "react-icons/io";
 import Image from "next/image";
-import Review from "../Review/Review";
-import KakaoMap from "../KakaoMap/KakaoMap";
-import Link from "next/link";
-import PlaceDetailCardSlider from "./PlaceDetailCardSlider";
+import axios from "axios";
+import cookie from "react-cookies";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
+import PlaceBookmark from "@/src/components/Bookmark/PlaceBookmark";
+import PlaceDetailMap from "@/src/components/PlaceDetail/PlaceDetailMap";
+import ReviewList from "@/src/components/Review/ReviewList";
+import { useRouterQuery } from "@/src/hooks/useRouterQuery";
+
+//ToDo: 새로고침 이슈
+
+interface PlaceInfo {
+  placeId: number;
+  name: string;
+  areaCode: string;
+  firstImage: string;
+  contentId: string;
+  mapX: string;
+  mapY: string;
+  overview: string;
+  rating: string;
+  review: string;
+}
 
 export default function PlaceDetail() {
-  const [bookMarkIcon, setbookMarkIcon] = useState(false);
+  const accessToken = cookie.load("accessToken");
+  const appDispatch = useAppDispatch();
+  const router = useRouter();
+  const { placeId, contentId } = router.query;
+  const id = useRouterQuery("id");
+  console.log(id);
+
+  const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
+    placeId: 0,
+    name: "",
+    areaCode: "",
+    firstImage: "",
+    contentId: "",
+    mapX: "",
+    mapY: "",
+    overview: "",
+    rating: "",
+    review: "",
+  });
+
+  const [bookMarked, setBookMarked] = useState(false);
+
+  function handleCheckBookmark() {
+    if (!accessToken) {
+      router.push("/login");
+    } else {
+      handleBookmarkClick();
+    }
+  }
+
+  // * 북마크
+  const handleBookmarkClick = async () => {
+    try {
+      if (bookMarked === false) {
+        const res = await axios
+          .post(
+            `/api/place/bookmark/${placeId}`,
+            {},
+            {
+              headers: {
+                "Access-Token": `${accessToken}`,
+                withCredentials: true,
+              },
+            }
+          )
+          .then(() => {
+            appDispatch(getPlaceBookmark(accessToken));
+          });
+      } else {
+        const res = await axios
+          .delete(`/api/place/bookmark/${placeId}`, {
+            headers: {
+              "Access-Token": `${accessToken}`,
+              withCredentials: true,
+            },
+          })
+          .then(() => {
+            appDispatch(getPlaceBookmark(accessToken));
+          });
+      }
+      setBookMarked(!bookMarked);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // * 상세 데이터
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const headers: { [key: string]: string } = {};
+        if (accessToken) {
+          headers["Access-Token"] = accessToken;
+          headers.withCredentials = "true";
+        }
+        const res = await axios.get(`/api/place/overview/${id}`, {
+          headers,
+        });
+        if (Object.keys(res.data.data.content[0]).length > 0) {
+          const { content } = res.data.data;
+          setPlaceInfo({ ...placeInfo, ...content[0] });
+          setBookMarked(res.data.data.isBookmarked);
+          console.log(content);
+        } else {
+          console.log(placeInfo);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
+
   return (
     <>
       <section className={styles.placeDetail}>
         <div className={styles.detailHeader}>
           <div className={styles.headerTitle}>
-            <h2 className={styles.h1}>여행지 이름</h2>
-            <a href="#review">
-              <p className={styles.rating}>별점 </p>
-              <p className={styles.review}>12건의 리뷰</p>
-            </a>
+            <h2 className={styles.h2}>{placeInfo.name}</h2>
           </div>
-          <button
-            className={styles.likeBtn}
-            onClick={() => setbookMarkIcon(!bookMarkIcon)}
-          >
-            <p className={styles.likeText}>즐겨찾기</p>
-            {bookMarkIcon === true ? (
-              <IoMdHeart className={styles.bookmark} />
-            ) : (
-              <IoMdHeart className={styles.unbookmark} />
-            )}
-          </button>
-        </div>
-        <div className={styles.imgSlider}>
-          <PlaceDetailCardSlider />
+          <div className={styles.bookMarkBox}>
+            <p className={styles.bookMarkText}>북마크에 추가</p>
+            <PlaceBookmark
+              bookMarked={bookMarked}
+              onToggle={handleCheckBookmark}
+            />
+          </div>
         </div>
         <div className={styles.detailContent}>
-          <div className={styles.detailDesc}>
-            <p className={styles.descInfo}>
-              <span className={styles.descTitle}>주소 </span>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Voluptatem, odio incidunt temporibus similique qui rem quod
-              cupiditate obcaecati molestiae? Reiciendis distinctio rem odit,
-              aliquam dolore minus iusto enim. Voluptatum, labore.
-            </p>
-            <p className={styles.descInfo}>
-              <span className={styles.descTitle}>전화번호 </span>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </p>
-            <p className={styles.descInfo}>
-              <span className={styles.descTitle}>운영 시간 </span>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </p>
-            <p className={styles.descInfo}>
-              <span className={styles.descTitle}>세부 설명 </span>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Voluptatem, odio incidunt temporibus similique qui rem quod
-              cupiditate obcaecati molestiae? Reiciendis distinctio rem odit,
-              aliquam dolore minus iusto enim. Voluptatum, labore.
-            </p>
+          <div className={styles.imgBox}>
+            <Image
+              className={styles.img}
+              src={placeInfo.firstImage}
+              width={500}
+              height={350}
+              alt={placeInfo.name}
+            />
           </div>
           <div className={styles.detailMap} id="map">
-            <KakaoMap />
+            <PlaceDetailMap
+              latitude={placeInfo.mapY}
+              longitude={placeInfo.mapX}
+            />
           </div>
         </div>
+        <div className={styles.detailDesc}>
+          <p className={styles.descTitle}>세부 설명 </p>
+          <p className={styles.descInfo}>{placeInfo.overview}</p>
+        </div>
       </section>
-
       <div id="review">
-        <Review />
+        <ReviewList />
       </div>
     </>
   );

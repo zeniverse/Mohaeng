@@ -3,6 +3,7 @@ package com.mohaeng.backend.course.service;
 import com.mohaeng.backend.course.domain.Course;
 import com.mohaeng.backend.course.dto.CoursePlaceSearchDto;
 import com.mohaeng.backend.course.dto.CourseSearchDto;
+import com.mohaeng.backend.course.dto.MainCourseListDto;
 import com.mohaeng.backend.course.dto.request.CoursePlaceSearchReq;
 import com.mohaeng.backend.course.dto.request.CourseReq;
 import com.mohaeng.backend.course.dto.request.CourseUpdateReq;
@@ -12,12 +13,15 @@ import com.mohaeng.backend.course.dto.response.CoursePlaceSearchRes;
 import com.mohaeng.backend.course.dto.response.CourseRes;
 import com.mohaeng.backend.course.repository.CoursePlaceRepository;
 import com.mohaeng.backend.course.repository.CourseRepository;
+import com.mohaeng.backend.exception.badrequest.InvalidKeywordPlaceInCourse;
+import com.mohaeng.backend.exception.notfound.CourseNotFoundException;
+import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
+import com.mohaeng.backend.exception.notfound.PlaceNotFoundException;
+import com.mohaeng.backend.exception.unauthrized.MemberPermissionDenied;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.domain.Role;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
-import com.mohaeng.backend.place.domain.PlaceImage;
-import com.mohaeng.backend.place.repository.PlaceImageRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.*;
@@ -26,7 +30,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +39,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class CourseServiceTest {
     @Autowired CourseService courseService;
     @Autowired PlaceRepository placeRepository;
-    @Autowired PlaceImageRepository placeImageRepository;
     @Autowired CourseRepository courseRepository;
     @Autowired MemberRepository memberRepository;
     @Autowired CoursePlaceRepository coursePlaceRepository;
@@ -45,67 +47,34 @@ class CourseServiceTest {
     public void before(){
         Place place1 = Place.builder()
                 .name("경복궁")
-                .addr1("서울시 종로구")
+                .address("서울시 종로구")
+                .firstImage("images/01.jpg")
                 .rating(4.5)
                 .build();
 
         Place place2 = Place.builder()
                 .name("부산 경복궁")
-                .addr1("부산시 해운대구")
-                .rating(4.5)
+                .address("부산시 해운대구")
+                .firstImage("images/02.jpg")
+                .rating(4.3)
                 .build();
 
         Place place3 = Place.builder()
                 .name("경복")
-                .addr1("서울시 강남구")
+                .address("서울시 강남구")
+                .firstImage("images/03.jpg")
                 .rating(5.0)
                 .build();
 
         Place place4 = Place.builder()
                 .name("경복궁 요리")
-                .addr1("서울시 강동구")
-                .rating(5.0)
+                .address("서울시 강동구")
+                .firstImage("images/04.jpg")
+                .rating(4.8)
                 .build();
 
         placeRepository.saveAll(Lists.list(place1, place2, place3, place4));
 
-        PlaceImage placeImage1 = PlaceImage.builder()
-                .origin_name("image_01.jpg")
-                .name("001234231")
-                .imgUrl("image/0.jpg")
-                .place(place1)
-                .build();
-
-        PlaceImage placeImage2 = PlaceImage.builder()
-                .origin_name("image_02.jpg")
-                .name("00")
-                .imgUrl("image/00.jpg")
-                .place(place1)
-                .build();
-
-        PlaceImage placeImage3 = PlaceImage.builder()
-                .origin_name("image_03.jpg")
-                .name("1121")
-                .imgUrl("image/1121.jpg")
-                .place(place2)
-                .build();
-
-        PlaceImage placeImage4 = PlaceImage.builder()
-                .origin_name("image_04.jpg")
-                .name("11111")
-                .imgUrl("image/11111.jpg")
-                .place(place3)
-                .build();
-
-        PlaceImage placeImage5 = PlaceImage.builder()
-                .origin_name("image_05.jpg")
-                .name("222")
-                .imgUrl("image/222.jpg")
-                .place(place4)
-                .build();
-
-        placeImageRepository.saveAll(
-                Lists.list(placeImage1, placeImage2, placeImage3, placeImage4, placeImage5));
     }
 
     @AfterEach
@@ -119,24 +88,19 @@ class CourseServiceTest {
     @DisplayName("장소 검색 - 정상 처리")
     public void placeSearchTest(){
         //Given
-        List<Place> placeList = placeRepository.findAll();
-        CoursePlaceSearchReq req = new CoursePlaceSearchReq("경복", placeList.get(3).getId(), "5.0");
+        CoursePlaceSearchReq req = new CoursePlaceSearchReq("경복",3L, "5.0");
 
         //When
         CoursePlaceSearchRes res = courseService.placeSearch(req, PageRequest.ofSize(2));
 
         //Then
         List<CoursePlaceSearchDto> places = res.getPlaces();
-        System.out.println("places = " + places);
-        List<Place> all = placeRepository.findAll();
-        for (Place place : all) {
-            System.out.println("place = " + place);
-        }
+//        System.out.println("places = " + places);
 
         assertNotNull(res);
-        assertEquals(true, res.isHasNext());
+        assertEquals(false, res.isHasNext());
         assertEquals(2, places.size());
-        assertEquals("image/11111.jpg", places.get(0).getImgUrl());
+        assertEquals("경복궁", places.get(0).getName());
     }
 
     @Test()
@@ -146,12 +110,12 @@ class CourseServiceTest {
         CoursePlaceSearchReq req = new CoursePlaceSearchReq(null, null, null);
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(InvalidKeywordPlaceInCourse.class, () -> {
             courseService.placeSearch(req, PageRequest.ofSize(2));
         });
 
         //Then
-        assertEquals(exception.getMessage(), "keyword 값이 비어있습니다.");
+        assertEquals( "코스에 추가할 여행지를 입력하세요.", exception.getMessage());
     }
 
     @Test
@@ -171,8 +135,8 @@ class CourseServiceTest {
                 () -> new IllegalArgumentException("존재하지 않는 일정 입니다")
         );
 
-        System.out.println("course22222 = " + course.getMember());
-        System.out.println("course22222 = " + course.getCoursePlaces().get(0));
+//        System.out.println("course22222 = " + course.getMember());
+//        System.out.println("course22222 = " + course.getCoursePlaces().get(0));
 
         assertNotNull(course.getCoursePlaces());
         assertEquals(2, course.getCoursePlaces().size());
@@ -189,12 +153,12 @@ class CourseServiceTest {
         Member savedMember = createMember("createNoPlace");
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(PlaceNotFoundException.class, () -> {
             courseService.createCourse(courseReq, savedMember.getEmail());
         });
 
         //Then
-        assertEquals(exception.getMessage(), "존재하지 않는 장소 입니다.");
+        assertEquals( "장소를 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -204,12 +168,12 @@ class CourseServiceTest {
         CourseReq courseReq = createCourseReq("코스 제목", List.of(1L, 2L));
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(MemberNotFoundException.class, () -> {
             courseService.createCourse(courseReq, "test@test.com");
         });
 
         //Then
-        assertEquals(exception.getMessage(), "존재하지 않는 member 입니다.");
+        assertEquals("회원을 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -223,7 +187,7 @@ class CourseServiceTest {
 
 
         //When
-        CourseRes courseRes = courseService.getCourse(courseIdRes.getCourseId());
+        CourseRes courseRes = courseService.getCourse(courseIdRes.getCourseId(), savedMember.getEmail());
         System.out.println("courseRes = " + courseRes);
 
         //Then
@@ -238,14 +202,15 @@ class CourseServiceTest {
     public void getCourse_courseId_isNull() throws Exception{
         //Given
         Long courseId = 1000L;
+        Member savedMember = createMember("getCourseIdIsNull");
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            courseService.getCourse(courseId);
+        Exception exception = assertThrows(CourseNotFoundException.class, () -> {
+            courseService.getCourse(courseId, savedMember.getEmail());
         });
 
         //Then
-        assertEquals(exception.getMessage(), "존재하지 않는 코스 입니다.");
+        assertEquals("코스를 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -285,12 +250,12 @@ class CourseServiceTest {
 
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(CourseNotFoundException.class, () -> {
             courseService.updateCourse(savedMember.getEmail(), courseId, updateReq);
         });
 
         //Then
-        assertEquals(exception.getMessage(), "존재하지 않는 course 입니다.");
+        assertEquals(exception.getMessage(), "코스를 찾을 수 없습니다.");
     }
 
     @Test
@@ -307,12 +272,12 @@ class CourseServiceTest {
         CourseUpdateReq updateReq = createUpdateCourseReq(List.of(placeList.get(2).getId(), placeList.get(3).getId()));
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(MemberNotFoundException.class, () -> {
             courseService.updateCourse("test@null.com", courseId, updateReq);
         });
 
         //Then
-        assertEquals(exception.getMessage(), "존재하지 않는 member 입니다.");
+        assertEquals("회원을 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -331,12 +296,12 @@ class CourseServiceTest {
         Member newMem = createMember("newMem");
 
         //When
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            courseService.updateCourse("new@new", courseId, updateReq);
+        Exception exception = assertThrows(MemberPermissionDenied.class, () -> {
+            courseService.updateCourse(newMem.getEmail(), courseId, updateReq);
         });
 
         //Then
-        assertEquals(exception.getMessage(), "요청자와 작성자가 일치하지 않습니다.");
+        assertEquals("요청자와 작성자가 일치하지 않습니다.", exception.getMessage());
     }
 
     @Test
@@ -380,12 +345,12 @@ class CourseServiceTest {
         Member newMem = memberRepository.save(newMember);
 
         //When
-        Exception exception = assertThrows(RuntimeException.class, () -> {
+        Exception exception = assertThrows(MemberPermissionDenied.class, () -> {
             courseService.deleteCourse(newMember.getEmail(), courseId);
         });
 
         //Then
-        assertEquals(exception.getMessage(), "요청자와 작성자가 일치하지 않습니다.");
+        assertEquals("요청자와 작성자가 일치하지 않습니다.", exception.getMessage());
     }
 
     @Test
@@ -396,12 +361,12 @@ class CourseServiceTest {
         Member savedMember = createMember("deleteCourseIdNull");
 
         //When
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(CourseNotFoundException.class, () -> {
             courseService.deleteCourse(savedMember.getEmail(), courseId);
         });
 
         //Then
-        assertEquals(exception.getMessage(), "존재하지 않는 course 입니다.");
+        assertEquals("코스를 찾을 수 없습니다.", exception.getMessage());
     }
 
     @Test
@@ -429,16 +394,15 @@ class CourseServiceTest {
         assertEquals(1, courseList.getTotalPages());
     }
 
-
     private CourseReq createCourseReq(String title, List<Long> placeIds) {
         CourseReq myCourseReq = CourseReq.builder()
                 .title(title)
                 .courseDays("1박2일")
-                .isPublished(false)
+                .isPublished(true)
                 .region("서울")
                 .thumbnailUrl("images/01.jpg")
-                .startDate(LocalDateTime.now())
-                .endDate(LocalDateTime.now().plusDays(1))
+                .startDate("2023-03-30")
+                .endDate("2023-03-31")
                 .content("나의 첫번재 일정 입니다.")
                 .placeIds(placeIds)
                 .build();
@@ -460,11 +424,11 @@ class CourseServiceTest {
         CourseUpdateReq updateReq = CourseUpdateReq.builder()
                 .title("수정된 제목 입니다")
                 .courseDays("2박3일")
-                .isPublished(false)
+                .isPublished(true)
                 .region("서울")
                 .thumbnailUrl("images/01.jpg")
-                .startDate(LocalDateTime.now())
-                .endDate(LocalDateTime.now().plusDays(1))
+                .startDate("2023-04-01")
+                .endDate("2023-04-05")
                 .content("나의 첫번재 일정 입니다.")
                 .placeIds(placeIds)
                 .build();
@@ -472,5 +436,3 @@ class CourseServiceTest {
     }
 
 }
-
-

@@ -1,0 +1,132 @@
+.keywordItemContainer {
+  width: 100%;
+  max-width: 280px;
+
+  border: 2px solid var(--color-border-light);
+  border-radius: 16px;
+}
+
+.keywordItemContainer:hover {
+  color: var(--color-text-basic);
+  transition: all ease 0.3s;
+  box-shadow: 7px 4px 14px -5px var(--color-border-light);
+  -webkit-box-shadow: 7px 4px 14px -5px var(--color-border-light);
+  -moz-box-shadow: 7px 4px 14px -5px var(--color-border-light);
+}
+
+.keywordItem {
+  background-color: transparent;
+  border: none;
+  text-decoration: none;
+  color: var(--color-text-basic);
+  cursor: pointer;
+}
+
+.img {
+  width: "auto";
+  height: "auto";
+  text-align: center;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+
+.keywordInfo {
+  display: flex;
+  flex-direction: row;
+  padding: 0 1rem 0.5em 1rem;
+}
+
+.keywordDesc {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.title {
+  display: block;
+  width: 180px;
+  margin-top: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: medium;
+  text-align: left;
+  font-weight: 700;
+}
+
+.review {
+  font-size: small;
+}
+
+.keywordBookmark {
+  width: 30px;
+  margin-top: 1rem;
+  margin-left: 36px;
+  cursor: pointer;
+}
+
+.btn {
+  width: 30px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  --color-icon: #cfcfcf;
+}
+
+.bookmark,
+.unbookmark {
+  background-color: transparent;
+  border: none;
+  color: var(--color-border-light);
+}
+
+.unbookmark {
+  color: var(--color-border-light);
+  font-size: 30px;
+}
+
+.unbookmark:hover {
+  color: var(--color-blue);
+  scale: 105%;
+  transition: 200ms;
+}
+
+.bookmark {
+  color: var(--color-blue);
+  font-size: 28px;
+}
+
+@media (max-width: 920px) {
+  .keywordItemContainer {
+    width: 100%;
+  }
+
+  .img {
+    width: 100%;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+
+  .keywordInfo {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .title {
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+    font-size: small;
+    font-weight: 500;
+  }
+
+  .review {
+    font-size: x-small;
+    margin-top: 4px;
+  }
+
+  .keywordBookmark {
+    margin: 0 auto;
+    margin-top: 0.5rem;
+  }
+}

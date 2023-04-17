@@ -1,0 +1,234 @@
+.registerReviewContainer {
+  width: 100%;
+  max-width: 70rem;
+  margin: 2rem 8rem;
+  --color-icon: #cfcfcf;
+}
+
+.h2 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.registerReview {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 3rem;
+  background-color: var(--color-bg-lightgray);
+  border-radius: 12px;
+}
+
+/* 선택한 여행지 이름 */
+.reviewTitle {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+}
+
+.boldTitle {
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+/* 별점 */
+.ratingBox {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.star:hover {
+  color: yellow;
+}
+
+.ratingTxt {
+  margin-top: 4px;
+  padding: 8px;
+}
+
+.ratingDesc {
+  margin-left: 4px;
+  font-size: small;
+  color: var(--color-border-semi);
+}
+
+/* form */
+.form {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+
+.formTxtArea {
+  resize: none;
+  height: 12rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  font-size: 16px;
+}
+
+.inputFileBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.chooseFile {
+  width: 8rem;
+  margin-bottom: 1rem;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-light);
+  background-color: var(--color-bg-white);
+  cursor: pointer;
+  text-align: center;
+}
+
+.chooseFile:hover {
+  background: var(--color-border-light);
+  color: #fff;
+}
+
+.imageForm {
+  width: 8rem;
+  display: none;
+}
+
+.inputFileDesc {
+  margin-bottom: 1rem;
+  color: var(--color-text-semi);
+  font-size: 16px;
+}
+
+.imgContainer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2rem;
+}
+
+.imgBox {
+  position: relative;
+  display: flex;
+  margin: 1rem;
+}
+
+.deleteImg {
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+}
+
+.deleteImg:hover {
+  color: var(--color-red);
+}
+
+.btnGroup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.postBtn,
+.cancelBtn {
+  width: 120px;
+  height: 50px;
+  margin-right: 3rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 50px;
+  text-decoration: none;
+  text-align: center;
+  font-size: medium;
+  color: black;
+}
+
+.postBtn:hover,
+.cancelBtn:hover {
+  filter: brightness(90%);
+}
+
+.postBtn {
+  background-color: var(--color-primary);
+}
+
+.cancelBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-icon);
+}
+
+@media screen and (max-width: 768px) {
+  .registerReviewContainer {
+    margin: 2rem;
+  }
+  .h2 {
+    font-size: 1.5rem;
+  }
+  .registerReview {
+    padding: 1rem;
+  }
+  .reviewTitle {
+    margin-bottom: 1rem;
+  }
+  .ratingBox {
+    margin-bottom: 1rem;
+  }
+  .ratingDesc {
+    margin-left: 0;
+  }
+  .formTxtArea {
+    height: 8rem;
+  }
+  .imgContainer {
+    flex-wrap: wrap;
+  }
+  .imgBox {
+    margin: 0.5rem;
+  }
+  .postBtn,
+  .cancelBtn {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+}
+
+/* For screens between 768px and 1024px */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .registerReviewContainer {
+    margin: 2rem;
+  }
+  .h2 {
+    font-size: 1.8rem;
+  }
+  .registerReview {
+    padding: 1.5rem;
+  }
+  .ratingBox {
+    margin-bottom: 1.5rem;
+  }
+  .ratingDesc {
+    margin-left: 0.5rem;
+  }
+  .formTxtArea {
+    height: 10rem;
+  }
+  .imgContainer {
+    flex-wrap: wrap;
+  }
+  .imgBox {
+    margin: 1rem;
+  }
+  .postBtn,
+  .cancelBtn {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+}

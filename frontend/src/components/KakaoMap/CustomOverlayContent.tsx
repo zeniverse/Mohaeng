@@ -1,5 +1,6 @@
 import styles from "./CustomOverlayContent.module.css";
 import Link from "next/link";
+import React from "react";
 
 interface objProps {
   title: string;
@@ -16,4 +17,4 @@ const CustomOverlayContent = ({ title }: objProps) => {
   );
 };
 
-export default CustomOverlayContent;
+export default React.memo(CustomOverlayContent);

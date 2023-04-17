@@ -9,8 +9,7 @@ import { closeModal } from "../../store/reducers/modalSlice";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
 import btnKakao from "/public/assets/btnKakao.png";
-import btnGoogle from "/public/assets/btnGoogle.png";
-import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL } from "../../pages/api/auth/OAuth";
+import { KAKAO_AUTH_URL } from "../../pages/api/auth/OAuth";
 
 export default function LoginModal() {
   const dispatch = useDispatch();
@@ -30,12 +29,6 @@ export default function LoginModal() {
             <Image src={btnKakao} alt="카카오 로그인" width={352} height={54} />
           </KakaoBtn>
         </Link>
-        <Link className={styles.link} href={GOOGLE_AUTH_URL}>
-          <GoogleBtn className={styles.btn}>
-            <Image src={btnGoogle} alt="구글 로그인" width={54} height={54} />
-            <p className={styles.loginGoogle}>Google 로그인</p>
-          </GoogleBtn>
-        </Link>
       </div>
       <p className={styles.footer}>
         로그인 또는 회원가입 시, 모두의 여행 이용약관 및 개인정보 정책에 동의한
@@ -52,21 +45,6 @@ const KakaoBtn = styled.button`
   border: 0;
   outline: 0;
   background-color: transparent;
-  cursor: pointer;
-`;
-
-const GoogleBtn = styled.button`
-  width: 352px;
-  color: white;
-  display: flex;
-  align-items: center;
-  border: 0;
-  border-radius: 6px;
-  background-color: #4285f4;
-  border: none;
-  font-weight: 500;
-  font-size: 16px;
-  padding: 1px;
   cursor: pointer;
 `;
 
@@ -92,5 +70,3 @@ const Content = styled.section`
   padding: 4rem;
   z-index: 1;
 `;
-
-// onClick={() => signIn("kakao")}
