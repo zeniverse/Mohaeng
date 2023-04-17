@@ -35,7 +35,7 @@ const Sidebar = () => {
     { currIdx: 0, label: "회원정보" },
     { currIdx: 1, label: "즐겨찾기" },
     { currIdx: 2, label: "나의 여행 일정" },
-    { currIdx: 3, label: "내가 쓴 글" },
+    { currIdx: 3, label: "나의 리뷰" },
   ];
 
   return (
