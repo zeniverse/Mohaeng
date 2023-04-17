@@ -1,6 +1,6 @@
 import styles from "./CourseFilter.module.css";
 import React, { useState } from "react";
-import { Select, SelectOptions } from "../Select/Select";
+import { Select, SelectOptions } from "../Filter/Select";
 import FilterTag from "../UI/FilterTag";
 import { GrPowerReset } from "react-icons/gr";
 

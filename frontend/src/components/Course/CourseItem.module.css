@@ -12,6 +12,7 @@
 .item-info-container {
   /* flex: 8; */
   background: transparent;
+  cursor: pointer;
 }
 
 .item-nav-container {
@@ -104,15 +105,48 @@
   border-left: 1px solid var(--color-border-semi);
 }
 
-.courseDays-container {
-  display: inline-block;
-  padding: 0.3rem 0.4rem;
-  font-size: 0.7rem;
-  border-radius: 0.2rem;
-  background-color: var(--color-primary);
-  color: #fff;
-}
-
 .roughmapBtn {
   position: relative;
+}
+
+.unbookmark {
+  color: var(--color-icon);
+}
+
+.unbookmark:hover,
+.bookmark:hover {
+  color: var(--color-blue);
+  scale: 107%;
+  transition: 200ms;
+}
+
+.bookmark {
+  color: var(--color-blue);
+}
+
+.course-like-container {
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 100%;
+  top: 0.5rem;
+  right: 0.5rem;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--color-border-semi);
+  color: var(--color-text-basic);
+  font-family: var(--primary-font);
+}
+.courseLike {
+  position: absolute;
+  bottom: 2px;
+  font-size: 0.1rem;
+}
+
+.map-icon:hover {
+  color: var(--color-blue);
+  scale: 107%;
+  transition: 200ms;
 }

@@ -1,0 +1,101 @@
+.course-orderlist-container {
+  padding: 1rem;
+  flex-basis: 38%;
+  background-color: var(--color-bg-gray);
+  border-radius: 1rem;
+}
+
+.course-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
+  padding: 0.6rem;
+}
+
+.course-item {
+  display: flex;
+  width: 100%;
+  background-color: var(--color-bg-white);
+  margin-bottom: 0.8rem;
+  border-radius: 1rem;
+  position: relative;
+}
+
+.course-item:nth-last-child(1) {
+  margin-bottom: 0;
+}
+.order-number {
+  padding: 30px 0.7rem;
+  text-align: center;
+  background-color: var(--color-primary);
+  border-bottom-left-radius: 1rem;
+  border-top-left-radius: 1rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.item-content {
+  flex: 1;
+  padding: 0.4rem;
+  display: flex;
+  width: 200px;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.item-content-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.address {
+  font-size: 0.8rem;
+  color: var(--color-text-basic);
+}
+
+.remove-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+  padding: 0 0.7rem;
+}
+.remove-btn {
+  cursor: pointer;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+  padding: 0.6rem;
+  border-radius: 100%;
+  border: 2px solid #ea5455;
+  background-color: var(--color-bg-white);
+}
+.remove-btn:hover {
+  background-color: #ea5455;
+  color: #fff;
+}
+
+.course-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* 스크롤바 막대 설정*/
+.course-list::-webkit-scrollbar-thumb {
+  height: 17%;
+  background-color: rgba(33, 133, 133, 1);
+  border-radius: 10px;
+}
+
+/* 스크롤바 뒷 배경 설정*/
+.course-list::-webkit-scrollbar-track {
+  background-color: rgba(33, 133, 133, 0.33);
+}

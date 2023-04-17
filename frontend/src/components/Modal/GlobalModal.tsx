@@ -3,6 +3,7 @@ import { closeModal } from "../../store/reducers/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import LoginModal from "./LoginModal";
 import BasicModal from "./BasicModal";
+import DeleteMemberModal from "./DeleteMemberModal";
 
 interface ModalComponent {
   type: string;
@@ -19,6 +20,7 @@ interface RootState {
 const MODAL_TYPES = {
   LoginModal: "LoginModal",
   BasicModal: "BasicModal",
+  DeleteMemberModal: "DeleteMemberModal",
 } as const;
 
 const MODAL_COMPONENTS: ModalComponent[] = [
@@ -29,6 +31,10 @@ const MODAL_COMPONENTS: ModalComponent[] = [
   {
     type: MODAL_TYPES.BasicModal,
     component: <BasicModal />,
+  },
+  {
+    type: MODAL_TYPES.DeleteMemberModal,
+    component: <DeleteMemberModal />,
   },
 ];
 
@@ -58,10 +64,10 @@ const Container = styled.div`
   align-items: center;
   position: fixed;
   inset: 0;
-  z-index: 2;
+  z-index: 3;
 `;
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
 `;

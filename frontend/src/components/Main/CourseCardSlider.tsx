@@ -6,20 +6,37 @@ import { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import CourseCard from "@/src/components/Main/CourseCard";
+import cookie from "react-cookies";
 
 import "swiper/css";
 import "swiper/css/navigation";
-import { Course } from "@/src/interfaces/Course";
+import axios from "axios";
+import { IRecommandCourse } from "@/src/interfaces/Course.type";
 
 const CourseCardSlider = () => {
-  const [courseData, setCoueseData] = useState<Course[]>([]);
+  const [recommandCourse, setRecommandCourse] = useState<IRecommandCourse[]>(
+    []
+  );
 
   useEffect(() => {
-    async function fetchData() {
-      const res = await fetch("/api/course");
-      const data = await res.json();
-      setCoueseData(data);
-    }
+    const fetchData = async () => {
+      const accessToken = await cookie.load("accessToken");
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/course/main`,
+          {
+            headers: {
+              "Access-Token": accessToken,
+              withCredentials: true,
+            },
+          }
+        );
+        setRecommandCourse(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     fetchData();
   }, []);
 
@@ -31,19 +48,20 @@ const CourseCardSlider = () => {
       slidesPerGroup={3}
       navigation
     >
-      {courseData?.map((course, idx) => (
-        <SwiperSlide key={idx}>
-          <CourseCard
-            key={course.courseId}
-            id={course.courseId}
-            courseDays={course.courseDays}
-            courseTitle={course.title}
-            courseDesc={course.content}
-            courseLike={course.like}
-            courseList={course.places}
-          />
-        </SwiperSlide>
-      ))}
+      {recommandCourse.length > 0 &&
+        recommandCourse?.map((course, idx) => (
+          <SwiperSlide key={idx}>
+            <CourseCard
+              key={course.courseId}
+              courseId={course.courseId}
+              title={course.title}
+              content={course.content}
+              thumbnailUrl={course.thumbnailUrl}
+              likeCount={course.likeCount}
+              isLiked={course.isLiked}
+            />
+          </SwiperSlide>
+        ))}
     </Swiper>
   );
 };

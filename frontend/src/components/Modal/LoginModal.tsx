@@ -9,8 +9,7 @@ import { closeModal } from "../../store/reducers/modalSlice";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
 import btnKakao from "/public/assets/btnKakao.png";
-import btnGoogle from "/public/assets/btnGoogle.png";
-import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL } from "../../pages/api/auth/OAuth";
+import { KAKAO_AUTH_URL } from "../../pages/api/auth/OAuth";
 
 export default function LoginModal() {
   const dispatch = useDispatch();
@@ -20,21 +19,15 @@ export default function LoginModal() {
 
   return (
     <Content className={styles.loginContent}>
-      <h1 className={styles.loginTitle}>로그인 / 회원가입</h1>
+      <h2 className={styles.loginTitle}>로그인 / 회원가입</h2>
       <p className={styles.loginInfo}>
         간편하게 로그인하고 모두의 여행을 경험해보세요
       </p>
       <div className={styles.btnList}>
         <Link className={styles.link} href={KAKAO_AUTH_URL}>
           <KakaoBtn className={styles.btn}>
-            <Image src={btnKakao} alt="카카오 로그인" width={320} height={48} />
+            <Image src={btnKakao} alt="카카오 로그인" width={352} height={54} />
           </KakaoBtn>
-        </Link>
-        <Link className={styles.link} href={GOOGLE_AUTH_URL}>
-          <GoogleBtn className={styles.btn}>
-            <Image src={btnGoogle} alt="구글 로그인" width={46} height={46} />
-            <p className={styles.loginGoogle}>Google 로그인</p>
-          </GoogleBtn>
         </Link>
       </div>
       <p className={styles.footer}>
@@ -55,21 +48,6 @@ const KakaoBtn = styled.button`
   cursor: pointer;
 `;
 
-const GoogleBtn = styled.button`
-  width: 320px;
-  color: white;
-  display: flex;
-  align-items: center;
-  border: 0;
-  border-radius: 6px;
-  background-color: #4285f4;
-  border: none;
-  font-weight: 500;
-  font-size: 16px;
-  padding: 1px;
-  cursor: pointer;
-`;
-
 const CloseBtn = styled.button`
   position: absolute;
   top: 18px;
@@ -85,8 +63,8 @@ const Content = styled.section`
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 28rem;
-  height: 32rem;
+  width: 30rem;
+  height: 33rem;
   background: #fff;
   border-radius: 12px;
   padding: 4rem;

@@ -89,3 +89,12 @@ target
 .flattened-pom.xml
 secrets.yml
 .gradletasknamecache
+
+#db volume
+../db
+
+#properties
+src/main/resources/application-oauth.properties
+src/main/resources/application.properties
+src/main/resources/application-API-KYE.properties
+

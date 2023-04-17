@@ -1,31 +1,81 @@
-export interface Course {
-  courseId: number;
+import { placesName } from "./Course.type";
+
+export interface CourseList {
+  courseId?: number;
   title: string;
-  like: number;
-  courseDays: string;
-  createdDate: string;
-  isPublished: boolean;
-  content: string;
-  places: Places[];
-}
-export interface Places {
-  placeId: number;
-  imgUrl: string;
-  title: string;
-  address: string;
+  likeCount: number;
+  courseDays?: string;
+  createdDate?: string;
+  thumbnailUrl: string;
+  isPublished?: boolean;
+  content?: string;
+  places?: string;
 }
 
-export type CourseProps = {
-  id: number;
-  courseTitle: string;
-  courseDesc: string;
-  courseLike: number;
+export type CourseListProps = {
+  courseId: number;
+  title: string;
+  content: string;
+  likeCount: number;
   courseDays: string;
-  courseList: Places[];
+  thumbnailUrl?: string;
+  isBookmarked: boolean;
+  isLiked: boolean;
+  places: string;
 };
 
 export interface RoughMapTitle {
-  RoughMapData: string[];
-  setIsRoughMapOpen?: any;
-  isRoughMapOpen?: any;
+  RoughMapData: string;
+  onClose: any;
+}
+
+export interface CourseDetailType {
+  courseId: number;
+  title: string;
+  startDate: string;
+  endDate: string;
+  isPublished: boolean;
+  courseDays: string;
+  region: string;
+  content: string;
+  likeCount: number;
+  createdDate: string;
+  isBookmarked: boolean;
+  isLiked: boolean;
+  nickname: string;
+  places?: any;
+}
+
+export interface CourseDetailPlaces {
+  placeId: number;
+  imgUrl: string;
+  name: string;
+  address: string;
+  mapX: string;
+  mapY: string;
+}
+
+export interface kakaoPlaces {
+  placeId?: number;
+  name: string;
+  mapX: string;
+  mapY: string;
+  imgUrl?: string;
+  address?: string;
+}
+
+export interface PositionsProps {
+  mapData: kakaoPlaces[];
+}
+
+export interface formatPositions {}
+
+export interface Course {
+  courseId: number;
+  title: string;
+  content: string;
+  thumbnailUrl: string;
+  courseDays: string;
+  likeCount: number;
+  places: any;
 }

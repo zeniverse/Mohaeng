@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Select, SelectOptions } from "../Select/Select";
+import { Select, SelectOptions } from "../Filter/Select";
 import FilterTag from "../UI/FilterTag";
 import { GrPowerReset } from "react-icons/gr";
 
@@ -40,7 +40,6 @@ const BoardFilters = () => {
   //   SelectOptions | undefined
   // >();
 
-  // TODO: 컴포넌트화
   // TODO: 컴포넌트화
   const [siguMultiValue, setSiGuMultiValue] = useState<SelectOptions[]>([]);
   const [ageMultiValue, setAgeMultiValue] = useState<SelectOptions[]>([]);
