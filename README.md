@@ -137,7 +137,7 @@
 - 강승구 : **krrr883@gmail.com**
 - 장지혜 : **jihye219219@gmail.com**
 - 홍석영 : **binaryhong@gmail.com**
-- 
+
 ### 프론트엔드
 - 김새롬 : **sagesaeromkim@gmail.com**
 - 김정민 
