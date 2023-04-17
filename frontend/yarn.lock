@@ -189,11 +189,6 @@
   resolved "https://registry.yarnpkg.com/@next/env/-/env-13.2.3.tgz#77ca49edb3c1d7c5263bb8f2ebe686080e98279e"
   integrity sha512-FN50r/E+b8wuqyRjmGaqvqNDuWBWYWQiigfZ50KnSFH0f+AMQQyaZl+Zm2+CIpKk0fL9QxhLxOpTVA3xFHgFow==
 
-"@next/font@^13.2.3":
-  version "13.3.0"
-  resolved "https://registry.yarnpkg.com/@next/font/-/font-13.3.0.tgz#790c5444348fad7aabbfc35a45bfc50505219725"
-  integrity sha512-xUv7VRUA2Zr6n/KJDILyv7/zGy9xKUsyQURaQqYr7lVxn0REScazwyZQzhSm+DnJoUyo+9DcFs2J3WsZXHUvQw==
-
 "@next/swc-android-arm-eabi@13.2.3":
   version "13.2.3"
   resolved "https://registry.yarnpkg.com/@next/swc-android-arm-eabi/-/swc-android-arm-eabi-13.2.3.tgz#85eed560c87c7996558c868a117be9780778f192"
