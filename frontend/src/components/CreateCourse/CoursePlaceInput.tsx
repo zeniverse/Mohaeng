@@ -2,7 +2,7 @@ import { useDebounce } from "@/src/hooks/useDebounce";
 
 import { useEffect, useState } from "react";
 import styles from "./CoursePlaceInput.module.css";
-import PlaceSearchList from "./PlaceSearchList";
+import PlaceSelectList from "./PlaceSelectList";
 
 export interface Places {
   placeId: number;
@@ -63,9 +63,7 @@ const CoursePlaceInput = () => {
           placeholder={"검색할 장소를 입력해주세요"}
         />
       </label>
-      {/* TODO: 컨트리가 없고, 키워드가 있으면 로딩 상태이고 */}
-      {/* TODO: 컨트리가 있고, 키워드가 있으면 컨트리 리스트를 보여준다. ㅇㅋ? */}
-      <PlaceSearchList
+      <PlaceSelectList
         places={places}
         isLoading={isLoading}
         debouncedSearch={debouncedSearch}
