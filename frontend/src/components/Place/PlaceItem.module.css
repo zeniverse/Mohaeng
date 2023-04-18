@@ -19,7 +19,6 @@
 }
 .item-image {
   position: relative;
-  max-width: 280px;
   height: 12rem;
   border-top-left-radius: 0.8rem;
   border-top-right-radius: 0.8rem;

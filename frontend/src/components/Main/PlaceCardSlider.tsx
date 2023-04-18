@@ -28,6 +28,7 @@ const PlaceCardSlider = () => {
           }
         );
         setTopTenPlace(response.data.data.content);
+        console.log(response.data.data.content);
       } catch (error) {
         console.error(error);
       }
@@ -52,6 +53,7 @@ const PlaceCardSlider = () => {
             <PlaceCard
               key={place.placeId}
               placeId={place.placeId}
+              contentId={place.contentId}
               name={place.name}
               content={place.content}
               firstImage={place.firstImage}

@@ -125,8 +125,8 @@ export default function SearchItem({
             className={styles.img}
             src={firstImage}
             alt={name}
-            width={276}
-            height={200}
+            width={700}
+            height={700}
             priority
           />
         )}
