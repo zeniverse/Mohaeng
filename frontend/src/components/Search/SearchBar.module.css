@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 29rem;
+  width: 33rem;
   height: 55px;
   background-color: white;
   border-radius: 50px;
@@ -27,7 +27,7 @@
 
 .search-input {
   width: 100%;
-  max-width: 22rem;
+  max-width: 25rem;
   height: 55px;
   font-size: 20px;
   background-color: transparent;
