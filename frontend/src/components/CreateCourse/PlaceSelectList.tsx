@@ -1,27 +1,17 @@
-import styles from "./PlaceSearchList.module.css";
+import styles from "./PlaceSelectList.module.css";
 import Image from "next/image";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
-import { EventHandler, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { addPlaceObject } from "@/src/store/reducers/CourseFormSlice";
 
-const PlaceSearchList = ({ places, isLoading, debouncedSearch }: any) => {
+const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
   const [items, setItems] = useState([...places]);
   const [loading, setLoading] = useState(false);
   const [hasNext, setHasNext] = useState(true);
   const [page, setPage] = useState(0);
 
   const dispatch = useAppDispatch();
-  const { course } = useAppSelector((state) => state.courseForm);
-  const {
-    title,
-    startDate,
-    endDate,
-    isPublished,
-    courseDays,
-    region,
-    content,
-  } = course;
 
   const listRef = useRef<HTMLDivElement>(null)!;
 
@@ -63,7 +53,7 @@ const PlaceSearchList = ({ places, isLoading, debouncedSearch }: any) => {
     async function fetchItems() {
       try {
         const placeSearchRes = await fetch(
-          `http://localhost:8080/api/course/placeSearch?keyword=${debouncedSearch}&lastId=${lastid}&lastRating=${lastRating}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/course/placeSearch?keyword=${debouncedSearch}&lastId=${lastid}&lastRating=${lastRating}`
         );
         if (!placeSearchRes.ok) return;
         const placeSearchResult = await placeSearchRes.json();
@@ -118,4 +108,4 @@ const PlaceSearchList = ({ places, isLoading, debouncedSearch }: any) => {
   );
 };
 
-export default PlaceSearchList;
+export default PlaceSelectList;
