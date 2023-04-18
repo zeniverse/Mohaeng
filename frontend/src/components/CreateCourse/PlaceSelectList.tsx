@@ -53,7 +53,7 @@ const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
     async function fetchItems() {
       try {
         const placeSearchRes = await fetch(
-          `http://localhost:8080/api/course/placeSearch?keyword=${debouncedSearch}&lastId=${lastid}&lastRating=${lastRating}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/course/placeSearch?keyword=${debouncedSearch}&lastId=${lastid}&lastRating=${lastRating}`
         );
         if (!placeSearchRes.ok) return;
         const placeSearchResult = await placeSearchRes.json();

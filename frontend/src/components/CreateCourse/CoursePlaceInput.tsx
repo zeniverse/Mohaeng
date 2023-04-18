@@ -34,7 +34,7 @@ const CoursePlaceInput = () => {
       setPlaces([]);
       try {
         const placeSearchRes = await fetch(
-          `http://localhost:8080/api/course/placeSearch?keyword=${debouncedSearch}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/course/placeSearch?keyword=${debouncedSearch}`
         );
         const placeSearchResult = await placeSearchRes.json();
         setPlaces(placeSearchResult.data.places);
