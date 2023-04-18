@@ -99,45 +99,39 @@ const PlaceItem = ({
   };
   return (
     <div className={styles["place-item-container"]}>
-      <div className={styles["item-info-container"]}>
-        <Link
-          href={{
-            pathname: "/place/[id]",
-            query: {
-              contentId: contentId,
-              placeId: placeId,
-              name: name,
-            },
-          }}
-          as={`/place/${contentId}`}
-        >
-          <div className={styles["item-image"]}>
-            <div className={styles["item-image-box"]}></div>
-            <Image
-              src={firstImage}
-              alt={name}
-              width={700}
-              height={700}
-              priority
-            />
-          </div>
-        </Link>
-        <div className={styles.keywordInfo}>
-          <div className={styles.keywordDesc}>
-            <p className={styles.title}>{name}</p>
-            <FiveStarRating rating={averageRating.toString()} />
-            <p className={styles.review}>{review}건의 리뷰</p>
-          </div>
-          <div className={styles.keywordBookmark}>
-            {isBookmarked === true ? (
-              <BsBookmarkFill
-                onClick={delBookmark}
-                className={styles.bookmark}
-              />
-            ) : (
-              <BsBookmark onClick={addBookmark} className={styles.unbookmark} />
-            )}
-          </div>
+      <Link
+        href={{
+          pathname: "/place/[id]",
+          query: {
+            contentId: contentId,
+            placeId: placeId,
+            name: name,
+          },
+        }}
+        as={`/place/${contentId}`}
+      >
+        <div className={styles["item-image"]}>
+          <Image
+            src={firstImage}
+            alt={name}
+            width={700}
+            height={700}
+            priority
+          />
+        </div>
+      </Link>
+      <div className={styles.keywordInfo}>
+        <div className={styles.keywordDesc}>
+          <p className={styles.title}>{name}</p>
+          <FiveStarRating rating={averageRating.toString()} />
+          <p className={styles.review}>{review}건의 리뷰</p>
+        </div>
+        <div className={styles.keywordBookmark}>
+          {isBookmarked === true ? (
+            <BsBookmarkFill onClick={delBookmark} className={styles.bookmark} />
+          ) : (
+            <BsBookmark onClick={addBookmark} className={styles.unbookmark} />
+          )}
         </div>
       </div>
     </div>
