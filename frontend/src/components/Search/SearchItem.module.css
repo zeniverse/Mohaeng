@@ -26,10 +26,6 @@
   cursor: pointer;
 }
 
-/* .keywordItem img {
-
-} */
-
 .img {
   text-align: center;
   border-top-left-radius: 14px;
@@ -45,6 +41,7 @@
 .keywordInfo {
   display: flex;
   flex-direction: row;
+  position: relative;
   padding: 0 1rem 0.5em 1rem;
 }
 
@@ -71,6 +68,8 @@
 }
 
 .keywordBookmark {
+  position: absolute;
+  right: 1rem;
   width: 30px;
   margin-top: 1rem;
   margin-left: 36px;
@@ -106,39 +105,4 @@
 .bookmark {
   color: var(--color-blue);
   font-size: 28px;
-}
-
-@media (max-width: 920px) {
-  .keywordItemContainer {
-    width: 100%;
-  }
-
-  .img {
-    width: 100%;
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
-  }
-
-  .keywordInfo {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .title {
-    width: 100%;
-    text-align: center;
-    margin-top: 8px;
-    font-size: small;
-    font-weight: 500;
-  }
-
-  .review {
-    font-size: x-small;
-    margin-top: 4px;
-  }
-
-  .keywordBookmark {
-    margin: 0 auto;
-    margin-top: 0.5rem;
-  }
 }
