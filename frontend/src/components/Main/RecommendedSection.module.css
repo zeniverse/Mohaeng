@@ -1,0 +1,23 @@
+.recommended-container {
+  padding: 24px;
+  border-radius: 8px;
+  margin-bottom: 0.6rem;
+}
+
+.recommended-container-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.recommended-container-title h2 {
+  flex-grow: 1;
+  padding-bottom: 0.5rem;
+}
+.link-button {
+  display: inline-block;
+  background-color: black;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin-right: 1.5rem;
+}

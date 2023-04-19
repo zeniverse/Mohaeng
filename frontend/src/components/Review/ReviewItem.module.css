@@ -1,0 +1,92 @@
+.reviewBox {
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  padding: 30px 24px;
+  border: 1px solid var(--color-border-light);
+  background-color: var(--color-bg-white);
+}
+
+.reviewer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1rem;
+}
+
+.reviewerInfo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  color: var(--color-text-semi);
+}
+
+.userImg {
+  margin-right: 1rem;
+  border-radius: 50%;
+}
+
+.reviewContent {
+  margin-left: 66px;
+  display: flex;
+  flex-direction: column;
+}
+
+.reviewItem {
+  width: 100%;
+  max-width: 850px;
+}
+
+.reviewTxt {
+  margin-bottom: 1rem;
+}
+
+.reviewImgBox {
+  display: flex;
+  flex-direction: row;
+}
+.reviewImg {
+  padding: 4px;
+  margin-right: 0.5rem;
+}
+
+.btnGroup {
+  margin-left: auto;
+}
+
+.btn {
+  padding: 8px;
+  border: none;
+  text-align: center;
+  font-size: medium;
+  background-color: transparent;
+  color: var(--color-text-semi);
+  cursor: pointer;
+}
+
+.btn:hover {
+  color: var(--color-text-basic);
+}
+
+.showMoreBtn {
+  padding-right: 1rem;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.showMoreBtn:hover {
+  color: var(--color-primary);
+}
+
+.likeBtn {
+  width: 60px;
+  height: 30px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 50px;
+  background-color: var(--color-bg-white);
+  cursor: pointer;
+}
+
+.likeBtn:hover {
+  color: var(--color-red);
+  border-color: var(--color-red);
+}

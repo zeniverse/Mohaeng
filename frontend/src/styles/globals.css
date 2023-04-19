@@ -1,0 +1,68 @@
+:root {
+  --color-primary: #99d9d9;
+  --color-bg-gray: #ebebeb;
+  --color-bg-lightgray: #f9f9f9;
+  --color-bg-white: #ffffff;
+  --color-red: #f20000;
+  --color-blue: #004aad;
+  --color-border-dark: #7d7d7d;
+  --color-border-semi: #b7b7b7;
+  --color-border-light: #dddddd;
+  --color-text-basic: #333333;
+  --color-text-semi: #b7b7b7;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  height: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: var(--primary-font);
+}
+
+main {
+  display: block;
+  /* width: 100vw; */
+}
+
+fieldset {
+  border: none;
+}
+
+li {
+  list-style: none;
+}
+
+.wrap {
+  min-height: 100%;
+  position: relative;
+}
+
+.body-content {
+  padding-bottom: 230px; /* footer의 높이 */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+}
