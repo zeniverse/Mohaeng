@@ -22,6 +22,7 @@ const PlaceCard = ({
         query: {
           placeId: placeId,
           contentId: contentId,
+          name: name,
         },
       },
       `/place/${contentId}`
