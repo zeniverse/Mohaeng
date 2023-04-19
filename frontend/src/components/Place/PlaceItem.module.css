@@ -4,14 +4,8 @@
   height: 270px;
   border: 2px solid var(--color-border-semi);
   background-color: white;
-  display: flex;
-  flex-direction: column;
   box-sizing: border-box;
   border-radius: 1rem;
-}
-.item-info-container {
-  /* flex: 8; */
-  background: transparent;
 }
 
 .item-nav-container {
@@ -30,11 +24,6 @@
   border-top-right-radius: 0.8rem;
   overflow: hidden;
 }
-.item-image-box {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
 
 .item-image img {
   display: inline-block;
@@ -46,6 +35,7 @@
 
 .keywordInfo {
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
   padding: 0 1rem 0.5em 1rem;
 }
@@ -74,7 +64,6 @@
 .keywordBookmark {
   width: 30px;
   margin-top: 10px;
-  margin-left: 120px;
 }
 
 .bookmark,
