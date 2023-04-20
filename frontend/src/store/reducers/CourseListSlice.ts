@@ -1,6 +1,6 @@
 import { CourseDetailType } from "@/src/interfaces/Course";
 import {
-  deleteCourseApi,
+  removeCourseApi,
   getCourseListApi,
   toggleBookmarkApi,
   toggleLikeApi,
@@ -40,7 +40,7 @@ export const removeCourseAction = createAsyncThunk(
   "course/removeCourseAction",
   async (courseId: number, { rejectWithValue }) => {
     try {
-      await deleteCourseApi(courseId);
+      await removeCourseApi(courseId);
       return courseId;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

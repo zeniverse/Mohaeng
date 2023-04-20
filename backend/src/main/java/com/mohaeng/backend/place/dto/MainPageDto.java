@@ -16,6 +16,7 @@ public class MainPageDto {
     private Long placeId;
     private String name;
     private String content;
+    private String contentId;
     private String averageRating;
     private String firstImage;
 
@@ -32,9 +33,9 @@ public class MainPageDto {
                 .placeId(place.getId())
                 .name(place.getName())
                 .content(overview)
+                .contentId(place.getContentId())
                 .averageRating(String.valueOf(averageRating))
                 .firstImage(firstImage)
                 .build();
-
     }
 }

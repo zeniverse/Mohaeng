@@ -110,3 +110,12 @@ export interface IRecommandCourse {
   isBookmarked: boolean;
   isLiked: boolean;
 }
+
+export interface IFormErrors {
+  title?: string;
+  startDate?: string;
+  endDate?: string;
+  courseDays?: string;
+  places?: string;
+  content?: string;
+}

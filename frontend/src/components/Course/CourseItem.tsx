@@ -14,7 +14,7 @@ import {
 import RoughMap from "./RoughMap";
 
 import TagItem from "../UI/TagItem";
-import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import {
   listBookmarkToggleAction,
   listLikeToggleAction,
@@ -23,6 +23,7 @@ import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import cookie from "react-cookies";
 import { useRouter } from "next/router";
 import IsLikeState from "../UI/IsLikeState";
+import { openModal } from "@/src/store/reducers/modalSlice";
 
 const CourseItem = ({
   courseId,
@@ -36,6 +37,8 @@ const CourseItem = ({
   places,
 }: CourseListProps) => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
+
+  const { id: userId } = useAppSelector((state) => state.token);
   const dispatch = useAppDispatch();
   const accessToken = cookie.load("accessToken");
   const router = useRouter();
@@ -50,16 +53,34 @@ const CourseItem = ({
   };
 
   const bookmarkHandler = (id: number) => {
-    dispatch(listBookmarkToggleAction(id)).then(() => {
-      dispatch(getCourseBookmark(accessToken));
-    });
+    if (userId) {
+      dispatch(listBookmarkToggleAction(id)).then(() => {
+        dispatch(getCourseBookmark(accessToken));
+      });
+    } else {
+      dispatch(
+        openModal({
+          modalType: "LoginModal",
+          isOpen: true,
+        })
+      );
+    }
   };
 
   const handleToggleLike = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
-    dispatch(listLikeToggleAction(courseId));
+    if (userId) {
+      dispatch(listLikeToggleAction(courseId));
+    } else {
+      dispatch(
+        openModal({
+          modalType: "LoginModal",
+          isOpen: true,
+        })
+      );
+    }
   };
 
   const handleLinkClick = () => {

@@ -1,4 +1,4 @@
-import { ICourseEditParam } from "./../../interfaces/Course.type";
+import { ICourseEditParam, IFormErrors } from "./../../interfaces/Course.type";
 import { createCourseApi, editCourseApi } from "@/src/services/courseService";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
@@ -9,9 +9,9 @@ import {
 import PlaceId from "@/src/pages/place/[id]";
 
 interface CourseState {
-  error?: string;
+  errors?: IFormErrors;
+  isValid: boolean;
   course: ICourseOriginForm;
-  // places: IPlacesForm
 }
 
 export const initialState: CourseState = {
@@ -29,6 +29,7 @@ export const initialState: CourseState = {
     isLiked: false,
     likeCount: 0,
   },
+  isValid: false,
 };
 
 export const createCourseAction = createAsyncThunk(
@@ -114,6 +115,19 @@ export const CourseFormSlice = createSlice({
     addFormValue: (state, action) => {
       state.course = action.payload;
     },
+    setFormError: (
+      state,
+      action: PayloadAction<{
+        name: keyof ICourseForm;
+        error: string;
+      }>
+    ) => {
+      const { name, error } = action.payload;
+      state.errors = {
+        ...state.errors,
+        [name]: error,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(createCourseAction.pending, (state) => {
@@ -134,5 +148,6 @@ export const {
   addPlaceObject,
   removePlace,
   addFormValue,
+  setFormError,
 } = CourseFormSlice.actions;
 export default CourseFormSlice.reducer;
