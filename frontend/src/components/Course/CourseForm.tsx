@@ -7,11 +7,9 @@ import {
   editCourseAction,
   initialState,
   resetFormValue,
-  setFormValue,
 } from "@/src/store/reducers/CourseFormSlice";
 import CoursePlaceInput from "@/src/components/CreateCourse/CoursePlaceInput";
 
-import { ICourseForm } from "@/src/interfaces/Course.type";
 import KakaoMap from "@/src/components/KakaoMap/KakaoMap";
 
 import CourseOrderList from "@/src/components/CourseDetail/CourseOrderList";
@@ -33,38 +31,24 @@ const CourseForm = ({ isEditMode }: CourseFormProps) => {
     (state) => state.courseForm ?? initialState
   );
   const accessToken = cookie.load("accessToken");
-
   const id = useRouterQuery("courseId");
-
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    const { name, value, type } = e.target;
-    const newValue =
-      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
-    dispatch(
-      setFormValue({ name: name as keyof ICourseForm, value: newValue })
-    );
-  };
 
   const handleCourseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const editData = id ? { courseId: id, course } : null;
     if (!isEditMode) {
       await dispatch(createCourseAction(course));
-      await dispatch(getMyCourse(accessToken));
+      router.push("/course");
     } else {
       if (editData) {
         await dispatch(editCourseAction(editData));
         await dispatch(getCourseListAction({}));
+        await dispatch(getMyCourse(accessToken));
+        router.push(`/course/${editData.courseId}`);
       }
     }
     dispatch(resetFormValue());
     dispatch(resetFilter());
-    router.push("/course");
-    console.log("클릭함");
   };
 
   const handleCourseCancel = () => {
@@ -77,7 +61,7 @@ const CourseForm = ({ isEditMode }: CourseFormProps) => {
     <>
       <div className={styles["course-form-container"]}>
         <div className={styles["input-container"]}>
-          <CourseInputForm onChange={handleInputChange} />
+          <CourseInputForm />
           <CoursePlaceInput />
         </div>
         {course?.places?.length > 0 && (

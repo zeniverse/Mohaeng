@@ -32,7 +32,6 @@ export default function PlaceDetail() {
   const router = useRouter();
   const { placeId, contentId } = router.query;
   const id = useRouterQuery("id");
-  console.log(id);
 
   const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
     placeId: 0,
@@ -109,9 +108,6 @@ export default function PlaceDetail() {
           const { content } = res.data.data;
           setPlaceInfo({ ...placeInfo, ...content[0] });
           setBookMarked(res.data.data.isBookmarked);
-          console.log(content);
-        } else {
-          console.log(placeInfo);
         }
       } catch (error) {
         console.error(error);

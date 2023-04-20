@@ -15,12 +15,14 @@ import {
   detailBookmarkToggleAction,
   detailLikeToggleAction,
 } from "@/src/store/reducers/CourseDetailSlice";
+import { openModal } from "@/src/store/reducers/modalSlice";
 
 const CourseDetailNav = () => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
   const [formattedDate, setFormattedDate] = useState("");
 
   const dispatch = useAppDispatch();
+  const { id: userId } = useAppSelector((state) => state.token);
   const course = useAppSelector((state) => state.courseDetail.course);
   const { likeCount, places, courseId, isBookmarked, isLiked, createdDate } =
     course;
@@ -34,11 +36,29 @@ const CourseDetailNav = () => {
   };
 
   const bookmarkHandler = (id: number) => {
-    dispatch(detailBookmarkToggleAction(id));
+    if (userId) {
+      dispatch(detailBookmarkToggleAction(id));
+    } else {
+      dispatch(
+        openModal({
+          modalType: "LoginModal",
+          isOpen: true,
+        })
+      );
+    }
   };
 
   const handleDetailLike = () => {
-    dispatch(detailLikeToggleAction(courseId));
+    if (userId) {
+      dispatch(detailLikeToggleAction(courseId));
+    } else {
+      dispatch(
+        openModal({
+          modalType: "LoginModal",
+          isOpen: true,
+        })
+      );
+    }
   };
 
   const getFomattedDate = useCallback((date: Date) => {
