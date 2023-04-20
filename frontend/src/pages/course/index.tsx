@@ -9,12 +9,24 @@ import { clearKeyword, setKeyword } from "@/src/store/reducers/FilterSlice";
 import ResetButton from "@/src/components/UI/ResetButton";
 import SelectSorting from "@/src/components/Course/SelectSorting";
 import SearchKeyword from "@/src/components/Course/SearchKeyword";
+import { openModal } from "@/src/store/reducers/modalSlice";
 
 export default function Course() {
   const router = useRouter();
+  const { id: userId } = useAppSelector((state) => state.token);
+  const dispatch = useAppDispatch();
   const handleCreateClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    router.push("course/create-course");
+    if (userId) {
+      router.push("course/create-course");
+    } else {
+      dispatch(
+        openModal({
+          modalType: "LoginModal",
+          isOpen: true,
+        })
+      );
+    }
   };
 
   return (

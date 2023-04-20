@@ -37,7 +37,7 @@ export const editCourseApi = async (
   });
 };
 
-export const deleteCourseApi = async (courseId: number) => {
+export const removeCourseApi = async (courseId: number) => {
   const accessToken = await cookie.load("accessToken");
   try {
     const config = {
