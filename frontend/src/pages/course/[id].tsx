@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import styles from "./courseDetail.module.css";
 
 import CourseDetailNav from "@/src/components/CourseDetail/CourseDetailNav";
@@ -9,6 +9,8 @@ import { getCourseDetailAction } from "@/src/store/reducers/CourseDetailSlice";
 import { removeCourseAction } from "@/src/store/reducers/CourseListSlice";
 import { useRouter } from "next/router";
 import { addFormValue } from "@/src/store/reducers/CourseFormSlice";
+import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
+import cookie from "react-cookies";
 
 export default function CourseDetail() {
   const courseDetail = useAppSelector((state) => state.courseDetail.course);
@@ -36,7 +38,11 @@ export default function CourseDetail() {
   const handleRemoveCourse = () => {
     if (confirm(`${title} 코스를 정말 삭제하시겠습니까?`)) {
       if (id) {
-        dispatch(removeCourseAction(id));
+        const accessToken = cookie.load("accessToken");
+        dispatch(removeCourseAction(id)).then(() =>
+          dispatch(getMyCourse(accessToken))
+        );
+
         router.push("/course");
       }
     }
