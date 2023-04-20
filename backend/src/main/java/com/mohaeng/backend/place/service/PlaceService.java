@@ -280,7 +280,7 @@ public class PlaceService {
                 .mapToObj(i -> {
                     Place place = places.get(i);
                     String overview = overviews.get(i);
-                    return new PlaceDetailsDto(place.getId(), place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), place.getMapX(), place.getMapY(), overview);
+                    return new PlaceDetailsDto(place.getId(), place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), place.getMapX(), place.getMapY(), place.getAddress(), overview);
                 })
                 .collect(Collectors.toList());
 
