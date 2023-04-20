@@ -24,6 +24,7 @@ export default function SearchBar() {
         },
         `/search?keyword=${searchValue}`
       );
+      setSearchValue("");
     }
   };
 

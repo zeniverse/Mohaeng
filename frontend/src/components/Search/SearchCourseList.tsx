@@ -41,7 +41,7 @@ export default function SearchCourseList(): JSX.Element {
       <section className={styles.section}>
         <h3 className={styles.h3}>검색하신 결과: {keyword} </h3>
         <ul className={styles.keywordList}>
-          {courseList.length > 0 ? (
+          {courseList?.length > 0 ? (
             <ListContainer>
               {courseList?.map((course) => (
                 <CourseItem
