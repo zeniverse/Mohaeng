@@ -33,7 +33,7 @@ export default function CreateReview() {
 
   // *비동기적으로 받아오는 별점 개수 업데이트 확인
   useEffect(() => {
-    console.log(rating);
+    // console.log(rating);
     setStar(star);
   }, [clicked]);
 
@@ -111,13 +111,13 @@ export default function CreateReview() {
           },
         })
         .then((response) => {
-          console.log(response.data, "리뷰 작성 성공!");
+          // console.log(response.data, "리뷰 작성 성공!");
           appDispatch(getMyReview(accessToken));
           router.push(`/search?keyword=${name}`);
         });
     } catch (error) {
       router.push(`/search?keyword=${name}`);
-      console.log(error, "리뷰 작성 실패ㅠ");
+      console.log(error);
     }
   };
 

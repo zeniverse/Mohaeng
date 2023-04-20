@@ -60,7 +60,6 @@ export default function SearchPlaceList(): JSX.Element {
         setPage(totalPages);
         const { content } = res.data.data;
         setSearchResult(content);
-        console.log(content);
       } catch (error) {
         console.log("Error", error);
       }
