@@ -25,7 +25,6 @@ const KakaoLogin = () => {
         const response = await axios.get(`/oauth/token?code=${code}`, {
           withCredentials: true,
         });
-        console.log(response)
         const { accessToken } = response.data;
         const { refreshToken } = response.data;
         cookie.save("accessToken", accessToken, {

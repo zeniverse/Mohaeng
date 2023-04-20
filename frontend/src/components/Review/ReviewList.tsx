@@ -86,7 +86,6 @@ export default function ReviewList() {
           },
           withCredentials: true,
         });
-        console.log(res.data.data);
         dispatch(setReview(res.data.data));
         setReviewData(res.data.data.reviews);
       } catch (err) {

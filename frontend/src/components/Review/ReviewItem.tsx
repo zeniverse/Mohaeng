@@ -33,24 +33,13 @@ export default function ReviewItem({
 }: ReviewProps) {
   const router = useRouter();
   const { placeId, name } = router.query;
-  const [user, setUser] = useState();
+  // const [user, setUser] = useState();
   const currentUser = useSelector(
     (state: RootState) => state.nickName.nickName
   );
   const dispatch = useDispatch();
-  // setUser(currentUser);
   const isUser = nickname === currentUser;
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const handleOpenDeleteModal = () => {
-    dispatch(
-      openModal({
-        modalType: "DeleteReviewModal",
-        isOpen: true,
-        reviewId: reviewId,
-      })
-    );
-  };
 
   const deleteReview = async () => {
     const confirmed = window.confirm("리뷰를 삭제하시겠습니까?");
@@ -65,8 +54,8 @@ export default function ReviewItem({
             },
           }
         );
-        console.log(response.status);
-        console.log(response.data);
+        // console.log(response.status);
+        // console.log(response.data);
         router.push(`/search?keyword=${name}`);
       } catch (error) {
         console.error(error);
