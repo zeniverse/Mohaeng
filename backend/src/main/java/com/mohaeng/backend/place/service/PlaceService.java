@@ -32,6 +32,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.IOException;
@@ -39,6 +40,11 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -56,6 +62,10 @@ public class PlaceService {
     @Value("${API_KEY}")
     private String API_KEY;
     private String fileUrl;
+
+    private static final Pattern OVERVIEW_CLEANUP_PATTERN = Pattern.compile("\\n|<br>|<br >|< br>|<br />|</br>|<br/>|<strong>|</ strong>");
+    private static final int N_THREADS = 8; // 스레드 개수
+
 
     private String getBaseUrl() {
         return "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=" + API_KEY + "&pageNo=1&numOfRows=12100&MobileApp=AppTest&_type=xml&MobileOS=ETC&arrange=A&contentTypeId=12";
@@ -116,14 +126,12 @@ public class PlaceService {
         }
         return places;
     }
-
+//    List<String> excludedIds = Arrays.asList("2763773", "2784642", "2946071", "2930677", "2891338",
+//            "2725011", "2891349", "2777911", "2750886", "2946230",
+//            "2760807", "2930681");
     public String getOverview(String contentId) {
         String urlStr = getBaseUrl2().replace("contentId=", "contentId=" + contentId);
         String overviewText = "";
-        List<String> excludedIds = Arrays.asList("2763773", "2784642", "2946071", "2930677", "2891338",
-                "2725011", "2891349", "2777911", "2750886", "2946230",
-                "2760807", "2930681");
-
         try {
             URL url = new URL(urlStr);
             XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -136,8 +144,19 @@ public class PlaceService {
                     StartElement startElement = event.asStartElement();
 
                     if (startElement.getName().getLocalPart().equals("overview")) {
-                        event = eventReader.nextEvent();
-                        overviewText = event.asCharacters().getData();
+                        StringBuilder overviewBuilder = new StringBuilder();
+                        while (eventReader.hasNext()) {
+                            event = eventReader.nextEvent();
+                            if (event.isCharacters()) {
+                                overviewBuilder.append(event.asCharacters().getData());
+                            } else if (event.isEndElement()) {
+                                EndElement endElement = event.asEndElement();
+                                if (endElement.getName().getLocalPart().equals("overview")) {
+                                    break;
+                                }
+                            }
+                        }
+                        overviewText = overviewBuilder.toString();
                         break;
                     }
                 }
@@ -145,8 +164,41 @@ public class PlaceService {
         } catch (Exception e) {
             log.info("Exception:", e);
         }
-
         return overviewText;
+    }
+
+    public List<String> getOverviews(List<String> contentIds) throws InterruptedException, ExecutionException {
+        // ExecutorService 생성
+        ExecutorService executor = Executors.newFixedThreadPool(N_THREADS);
+
+        // Future 목록
+        List<Future<String>> futures = new ArrayList<>();
+
+        // 각 contentId에 대해 요청을 보내고 Future를 저장
+        for (String contentId : contentIds) {
+            Future<String> future = executor.submit(() -> {
+                // URL 생성
+                String urlStr = getBaseUrl2().replace("contentId=", "contentId=" + contentId);
+                // overview 가져오기
+                String overview = getOverview(urlStr);
+                return overview;
+            });
+            futures.add(future);
+        }
+
+        // 결과 목록
+        List<String> results = new ArrayList<>();
+
+        // 모든 Future의 결과를 가져옴
+        for (Future<String> future : futures) {
+            String overview = future.get();
+            results.add(overview);
+        }
+
+        // ExecutorService 종료
+        executor.shutdown();
+
+        return results;
     }
 
     private Document getXmlDocument(String urlStr) throws IOException, ParserConfigurationException, SAXException {
@@ -206,7 +258,8 @@ public class PlaceService {
                 .filter(place -> place.getContentId().equals(contentId))
                 .map(place -> {
                     String overview = getOverview(place.getContentId());
-                    overview = overview.replaceAll("\\n|<br>|<br >|< br>|<br />|</br>|<br/>|<strong>|</ strong>", "");
+                    overview = OVERVIEW_CLEANUP_PATTERN.matcher(overview).replaceAll("");
+
                     return overview;
                 })
                 .collect(Collectors.toList());
