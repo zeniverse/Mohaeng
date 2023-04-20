@@ -28,7 +28,6 @@ const PlaceCardSlider = () => {
           }
         );
         setTopTenPlace(response.data.data.content);
-        console.log(response.data.data.content);
       } catch (error) {
         console.error(error);
       }
