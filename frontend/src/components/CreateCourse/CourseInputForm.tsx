@@ -1,11 +1,16 @@
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
+import { ICourseForm } from "@/src/interfaces/Course.type";
 import {
-  resetFormValue,
+  setFormError,
   setFormValue,
 } from "@/src/store/reducers/CourseFormSlice";
-import React, { ChangeEvent, useState } from "react";
-import { Select } from "../Filter/Select";
+import React from "react";
 import styles from "./CourseInputForm.module.css";
+import {
+  validateCourseDays,
+  validateStartEndDate,
+  validateTitle,
+} from "@/src/utils/validation";
 
 const DaysOptions: string[] = [
   "당일 치기",
@@ -37,16 +42,8 @@ const ResionOptions = [
   "제주",
 ];
 
-interface CourseInputFormProps {
-  onChange: (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => void;
-}
-
-const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
-  const { course } = useAppSelector((state) => {
+const CourseInputForm = () => {
+  const { course, errors } = useAppSelector((state) => {
     return state.courseForm;
   });
   const {
@@ -58,6 +55,47 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
     region,
     content,
   } = course;
+  const dispatch = useAppDispatch();
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name, value, type } = e.target;
+    const newValue =
+      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+    dispatch(
+      setFormValue({ name: name as keyof ICourseForm, value: newValue })
+    );
+  };
+
+  // const handleBlur = (
+  //   e: React.FocusEvent<
+  //     HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+  //   >
+  // ) => {
+  //   const { name } = e.target;
+  //   console.log(name);
+  //   switch (name) {
+  //     case "title":
+  //       dispatch(setFormError({ name, error: validateTitle(course.title) }));
+  //       break;
+  //     case "startDate" || "endDate":
+  //       dispatch(
+  //         setFormError({
+  //           name,
+  //           error: validateStartEndDate(course.startDate, course.endDate),
+  //         })
+  //       );
+  //       break;
+  //     case "courseDays":
+  //       dispatch(
+  //         setFormError({ name, error: validateCourseDays(course.courseDays) })
+  //       );
+  //       break;
+  //   }
+  // };
 
   const toggleSwitchclassName = isPublished
     ? `${styles["toggle-switch"]} ${styles.publish}`
@@ -79,12 +117,13 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
               type="checkbox"
               name="isPublished"
               checked={isPublished}
-              onChange={onChange}
+              onChange={handleInputChange}
               className={styles.input}
               required
             />
           </div>
         </label>
+        {errors?.title && <p>{errors?.title}</p>}
         <div className={styles["input-group"]}>
           <label>
             <span>제목</span>
@@ -92,13 +131,14 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
               type="text"
               name="title"
               value={title}
-              onChange={onChange}
+              onChange={handleInputChange}
               placeholder={"제목을 작성해주세요"}
               required
             />
           </label>
         </div>
       </div>
+      {errors?.startDate && <p>{errors?.startDate}</p>}
       <div className={styles["second-line"]}>
         <div className={styles["input-group"]}>
           <label>
@@ -107,7 +147,7 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
               type="date"
               name="startDate"
               value={startDate}
-              onChange={onChange}
+              onChange={handleInputChange}
               required
             />
           </label>
@@ -119,7 +159,7 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
               type="date"
               name="endDate"
               value={endDate}
-              onChange={onChange}
+              onChange={handleInputChange}
               required
             />
           </label>
@@ -131,7 +171,7 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
               required
               name="region"
               value={region}
-              onChange={onChange}
+              onChange={handleInputChange}
               style={{ overflow: "auto" }}
             >
               <option value="" disabled>
@@ -152,7 +192,7 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
               required
               name="courseDays"
               value={courseDays}
-              onChange={onChange}
+              onChange={handleInputChange}
             >
               <option value="" disabled>
                 선택해주세요.
@@ -169,7 +209,11 @@ const CourseInputForm = ({ onChange }: CourseInputFormProps) => {
       <div className={styles["input-group"]}>
         <label>
           코스 설명
-          <textarea name="content" value={content} onChange={onChange} />
+          <textarea
+            name="content"
+            value={content}
+            onChange={handleInputChange}
+          />
         </label>
       </div>
     </form>
