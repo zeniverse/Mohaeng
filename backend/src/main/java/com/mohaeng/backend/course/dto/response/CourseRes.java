@@ -55,7 +55,7 @@ public class CourseRes {
                 .courseId(course.getId())
                 .title(course.getTitle())
                 .nickname(course.getMember().getNickName())
-                .profileImgUrl(course.getMember().getImageURL())
+                .profileImgUrl(course.getMember().getImageURL() + "/" +course.getMember().getImageName())
                 .likeCount(course.getLikeCount())
                 .courseDays(course.getCourseDays())
                 .region(course.getRegion())
