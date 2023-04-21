@@ -45,7 +45,6 @@ export const createCourseAction = createAsyncThunk(
       placeIds: extractedPlaceIds,
       thumbnailUrl: thumbnailUrl,
     };
-    console.log(validData);
 
     const response = await createCourseApi(validData);
     const resData = await response.data.data;
@@ -94,7 +93,6 @@ export const CourseFormSlice = createSlice({
       const newList = state.course.places.filter(
         (place) => place.placeId !== action.payload
       );
-      console.log(newList);
       state.course.places = newList;
     },
     resetFormValue: () => {

@@ -72,7 +72,7 @@ const CourseItem = ({
   ) => {
     e.stopPropagation();
     if (userId) {
-      dispatch(listLikeToggleAction(courseId));
+      dispatch(listLikeToggleAction({ courseId, isLiked }));
     } else {
       dispatch(
         openModal({

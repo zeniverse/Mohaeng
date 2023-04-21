@@ -39,6 +39,16 @@ const CourseCardSlider = () => {
 
     fetchData();
   }, []);
+  const updateRecommandCourse = (updatedCourse: IRecommandCourse) => {
+    const updatedCourses = recommandCourse.map((course) => {
+      if (course.courseId === updatedCourse.courseId) {
+        return updatedCourse;
+      } else {
+        return course;
+      }
+    });
+    setRecommandCourse(updatedCourses);
+  };
 
   return (
     <Swiper
@@ -59,6 +69,7 @@ const CourseCardSlider = () => {
               thumbnailUrl={course.thumbnailUrl}
               likeCount={course.likeCount}
               isLiked={course.isLiked}
+              onUpdateCourse={updateRecommandCourse}
             />
           </SwiperSlide>
         ))}
