@@ -93,7 +93,6 @@ export const CourseFormSlice = createSlice({
       const newList = state.course.places.filter(
         (place) => place.placeId !== action.payload
       );
-      console.log(newList);
       state.course.places = newList;
     },
     resetFormValue: () => {

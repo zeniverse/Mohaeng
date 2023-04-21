@@ -38,13 +38,13 @@ const CourseForm = ({ isEditMode }: CourseFormProps) => {
     const editData = id ? { courseId: id, course } : null;
     if (!isEditMode) {
       await dispatch(createCourseAction(course));
-      router.push("/course");
+      await router.push("/course");
     } else {
       if (editData) {
         await dispatch(editCourseAction(editData));
         await dispatch(getCourseListAction({}));
         await dispatch(getMyCourse(accessToken));
-        router.push(`/course/${editData.courseId}`);
+        await router.push(`/course/${editData.courseId}`);
       }
     }
     dispatch(resetFormValue());

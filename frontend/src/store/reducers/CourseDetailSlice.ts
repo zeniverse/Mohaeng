@@ -16,6 +16,7 @@ const initialState: CourseDetailState = {
     title: "",
     content: "",
     nickname: "",
+    profileImgUrl: "",
     likeCount: 0,
     courseDays: "",
     createdDate: "",
