@@ -228,6 +228,7 @@ export default function EditReview() {
               type="file"
               id="inputFile"
               multiple
+              accept="image/*"
               className={styles.imageForm}
               onChange={handleImageChange}
             />

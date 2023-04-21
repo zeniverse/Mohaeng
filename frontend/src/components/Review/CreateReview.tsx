@@ -67,6 +67,7 @@ export default function CreateReview() {
     setImages(newImages);
   };
 
+  // * 이미지 삭제
   const handleDeletePreview = (index: number) => {
     const newImages = [...images];
     const newPreviews = [...previews];
@@ -159,6 +160,7 @@ export default function CreateReview() {
               type="file"
               id="inputFile"
               multiple
+              accept="image/*"
               className={styles.imageForm}
               onChange={handleImageChange}
             />

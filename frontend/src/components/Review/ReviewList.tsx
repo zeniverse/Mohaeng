@@ -39,7 +39,7 @@ export default function ReviewList() {
   const accessToken = useSelector((state: RootState) => state.token.token);
 
   // * 새로고침 방지
-  usePreventRefresh();
+  // usePreventRefresh();
 
   // 정렬
   const handleChangeOption = (e: {

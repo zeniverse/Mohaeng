@@ -63,6 +63,18 @@
 .detailMap {
   width: 100%;
   height: 350px;
+  /* border: 1px solid var(--color-border-light);
+  background-color: var(--color-bg-white);
+  border-radius: 8px; */
+}
+
+.address {
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+.map {
+  height: 300px;
 }
 
 .detailDesc {
@@ -71,11 +83,12 @@
   overflow-x: hidden;
   overflow-y: scroll;
   margin-bottom: 1rem;
+  padding: 1rem;
 }
 
 .detailDesc,
-.detailMap {
-  padding: 1rem;
+.address,
+.map {
   border: 1px solid var(--color-border-light);
   background-color: var(--color-bg-white);
   border-radius: 8px;
