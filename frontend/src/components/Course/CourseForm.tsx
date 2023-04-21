@@ -38,6 +38,7 @@ const CourseForm = ({ isEditMode }: CourseFormProps) => {
     const editData = id ? { courseId: id, course } : null;
     if (!isEditMode) {
       await dispatch(createCourseAction(course));
+      await dispatch(getMyCourse(accessToken));
       router.push("/course");
     } else {
       if (editData) {
