@@ -145,7 +145,7 @@ export default function PlaceDetail() {
             />
           </div>
           <div className={styles.detailMap}>
-            <p className={styles.address}>{placeInfo.address}</p>
+            <p className={styles.address}>📍 {placeInfo.address}</p>
             <div className={styles.map} id="map">
               <PlaceDetailMap
                 latitude={placeInfo.mapY}
