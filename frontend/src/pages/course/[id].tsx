@@ -11,19 +11,11 @@ import { useRouter } from "next/router";
 import { addFormValue } from "@/src/store/reducers/CourseFormSlice";
 import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
 import cookie from "react-cookies";
+import Image from "next/image";
 
 export default function CourseDetail() {
   const courseDetail = useAppSelector((state) => state.courseDetail.course);
-  const {
-    courseId,
-    title,
-    content,
-    likeCount,
-    createdDate,
-    isBookmarked,
-    places,
-    nickname,
-  } = courseDetail;
+  const { courseId, title, profileImgUrl, places, nickname } = courseDetail;
   const { nickName } = useAppSelector((state) => state.nickName);
   const dispatch = useAppDispatch();
   const id = useRouterQuery("id");
@@ -47,6 +39,7 @@ export default function CourseDetail() {
       }
     }
   };
+  console.log(profileImgUrl);
 
   const handleEditCourse = () => {
     const CourseFormValue = {
@@ -80,7 +73,20 @@ export default function CourseDetail() {
             {title}
           </h1>
           <div className={styles["title-info"]}>
-            <span className={styles.userinfo}>유저 정보</span>
+            {profileImgUrl && nickname && (
+              <div className={styles["user-info"]}>
+                <Image
+                  className={styles["kakao-profile-img"]}
+                  src={profileImgUrl}
+                  alt="카카오프로필"
+                  width={36}
+                  height={36}
+                />
+
+                <p>{nickname}</p>
+              </div>
+            )}
+
             {nickName === nickname ? (
               <div className={styles["btn-wrapper"]}>
                 <div
@@ -100,11 +106,7 @@ export default function CourseDetail() {
           </div>
         </div>
         <CourseDetailNav />
-        <CourseDetailContent
-          mapData={places}
-          places={places}
-          content={content}
-        />
+        <CourseDetailContent />
       </div>
     </>
   );

@@ -1,5 +1,5 @@
 .content {
-  padding: 2rem 0 2rem;
+  padding: 2rem 0 4rem;
 }
 
 .info {
@@ -8,4 +8,19 @@
   position: relative;
   gap: 0.6rem;
   padding-top: 1rem;
+}
+.date {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.region {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+.text {
+  color: var(--color-text-basic);
 }

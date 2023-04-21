@@ -25,7 +25,7 @@
 .title-info {
   display: flex;
   justify-content: space-between;
-  padding: 0.3rem 0.2rem;
+  padding: 0.3rem 1rem;
   align-items: flex-end;
 }
 
@@ -62,4 +62,15 @@
   background-color: var(--color-text-semi);
   margin: auto;
   height: 50%;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kakao-profile-img {
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 0.6rem;
 }

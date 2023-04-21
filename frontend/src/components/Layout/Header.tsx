@@ -104,6 +104,7 @@ function Header({}: Props) {
 
     dispatch(setCurrIdx(currComponent));
   };
+  console.log(imgUrl);
 
   return (
     <header className={styles.header}>

@@ -45,6 +45,7 @@ export const createCourseAction = createAsyncThunk(
       placeIds: extractedPlaceIds,
       thumbnailUrl: thumbnailUrl,
     };
+    console.log(validData);
 
     const response = await createCourseApi(validData);
     const resData = await response.data.data;
