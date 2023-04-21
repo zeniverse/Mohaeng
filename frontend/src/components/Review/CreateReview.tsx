@@ -10,6 +10,7 @@ import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import ReviewTextArea from "./ReviewTextarea";
 import usePreventRefresh from "@/src/hooks/usePreventRefresh";
+import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 
 export default function CreateReview() {
   const router = useRouter();
@@ -27,6 +28,7 @@ export default function CreateReview() {
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   let rating = clicked.filter(Boolean).length;
+  const id = useRouterQuery("id");
 
   // * 새로고침 방지
   usePreventRefresh();
@@ -105,7 +107,7 @@ export default function CreateReview() {
     try {
       const accessToken = await cookie.load("accessToken");
       const response = await axios
-        .post(`/api/review/${placeId}`, formData, {
+        .post(`/api/review/${id}`, formData, {
           headers: {
             "Access-Token": accessToken,
             "Content-Type": "multipart/form-data",
