@@ -14,17 +14,6 @@ const CourseDetailContent = () => {
 
   return (
     <div className={styles["content-container"]}>
-      <div className={styles.date}>
-        <TagItem size="M" text="기간" bgColor="Dsky" />
-        <p className={styles.text}>
-          {startDate} ~ {endDate}
-        </p>
-      </div>
-      <div className={styles.region}>
-        <TagItem size="M" text="지역" bgColor="LMarinBlue" />
-        <p className={styles.text}>{region}</p>
-      </div>
-
       <p className={styles.content}>{content}</p>
       <div className={styles.info}>
         {places && places.length > 0 && <KakaoMap mapData={places} />}

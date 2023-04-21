@@ -1,110 +1,14 @@
-import { useEffect } from "react";
 import styles from "./courseDetail.module.css";
 
 import CourseDetailNav from "@/src/components/CourseDetail/CourseDetailNav";
 import CourseDetailContent from "@/src/components/CourseDetail/CourseDetailContent";
-import { useRouterQuery } from "@/src/hooks/useRouterQuery";
-import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import { getCourseDetailAction } from "@/src/store/reducers/CourseDetailSlice";
-import { removeCourseAction } from "@/src/store/reducers/CourseListSlice";
-import { useRouter } from "next/router";
-import { addFormValue } from "@/src/store/reducers/CourseFormSlice";
-import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
-import cookie from "react-cookies";
-import Image from "next/image";
+import CourseDetailHead from "@/src/components/CourseDetail/CourseDetailHead";
 
 export default function CourseDetail() {
-  const courseDetail = useAppSelector((state) => state.courseDetail.course);
-  const { courseId, title, profileImgUrl, places, nickname } = courseDetail;
-  const { nickName } = useAppSelector((state) => state.nickName);
-  const dispatch = useAppDispatch();
-  const id = useRouterQuery("id");
-  const router = useRouter();
-
-  useEffect(() => {
-    if (id) {
-      dispatch(getCourseDetailAction(id));
-    }
-  }, [id]);
-
-  const handleRemoveCourse = () => {
-    if (confirm(`${title} 코스를 정말 삭제하시겠습니까?`)) {
-      if (id) {
-        const accessToken = cookie.load("accessToken");
-        dispatch(removeCourseAction(id)).then(() =>
-          dispatch(getMyCourse(accessToken))
-        );
-
-        router.push("/course");
-      }
-    }
-  };
-  console.log(profileImgUrl);
-
-  const handleEditCourse = () => {
-    const CourseFormValue = {
-      title: courseDetail.title,
-      content: courseDetail.content,
-      courseDays: courseDetail.courseDays,
-      startDate: courseDetail.startDate,
-      endDate: courseDetail.endDate,
-      region: courseDetail.region,
-      isPublished: courseDetail.isPublished,
-      isBookmarked: courseDetail.isBookmarked,
-      isLiked: courseDetail.isLiked,
-      places: courseDetail.places,
-    };
-
-    dispatch(addFormValue(CourseFormValue));
-    router.push({
-      pathname: "/course/edit-course",
-      query: { courseId: courseId },
-    });
-  };
-
   return (
     <>
       <div className={styles["course-id-container"]}>
-        <div className={styles["title-container"]}>
-          <h1 className={styles.title}>
-            <div className={styles["title-length"]}>
-              {places && `${places.length}코스`}
-            </div>
-            {title}
-          </h1>
-          <div className={styles["title-info"]}>
-            {profileImgUrl && nickname && (
-              <div className={styles["user-info"]}>
-                <Image
-                  className={styles["kakao-profile-img"]}
-                  src={profileImgUrl}
-                  alt="카카오프로필"
-                  width={36}
-                  height={36}
-                />
-
-                <p>{nickname}</p>
-              </div>
-            )}
-
-            {nickName === nickname ? (
-              <div className={styles["btn-wrapper"]}>
-                <div
-                  className={`${styles["edit-btn"]} ${styles.btn}`}
-                  onClick={handleEditCourse}
-                >
-                  수정
-                </div>
-                <div
-                  className={`${styles["remove-btn"]} ${styles.btn}`}
-                  onClick={handleRemoveCourse}
-                >
-                  삭제
-                </div>
-              </div>
-            ) : null}
-          </div>
-        </div>
+        <CourseDetailHead />
         <CourseDetailNav />
         <CourseDetailContent />
       </div>
