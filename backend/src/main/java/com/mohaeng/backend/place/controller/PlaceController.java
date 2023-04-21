@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 
@@ -73,7 +74,7 @@ public class PlaceController {
 
     @GetMapping("/place/overview/{contentId}")
     public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String contentId,
-                                                                             HttpServletRequest request) throws IOException, ParserConfigurationException, SAXException {
+                                                                             HttpServletRequest request) {
         PlaceDetailsResponse response = placeService.getPlaceDetailsByContentId(contentId, isAccessMember(request));
         return ResponseEntity.ok().body(BaseResponse.success("OK",response));
     }
@@ -147,15 +148,20 @@ public class PlaceController {
     }
 
     @GetMapping("/place/main")
-    public ResponseEntity getPlaceReviewsByRatingTop10() {
+    public ResponseEntity getPlaceReviewsByRatingTop10() throws ExecutionException, InterruptedException {
         List<Review> reviews = reviewService.getAllReviewsByRatingTop10();
         List<String> contentIds = reviews.stream()
                 .map(review -> review.getPlace().getContentId())
                 .collect(Collectors.toList());
 
+        // getOverviews 메서드 호출
+        List<String> overviewsList = placeService.getOverviews(contentIds);
+
+        // 결과를 Map으로 변환
         Map<String, String> overviews = new HashMap<>();
-        for (String contentId : contentIds) {
-            String overview = placeService.getOverview(contentId);
+        for (int i = 0; i < contentIds.size(); i++) {
+            String contentId = contentIds.get(i);
+            String overview = overviewsList.get(i);
             overviews.put(contentId, overview);
         }
 
