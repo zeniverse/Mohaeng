@@ -31,7 +31,6 @@ export default function PlaceDetail() {
   const router = useRouter();
   const { placeId, contentId } = router.query;
   const id = useRouterQuery("id");
-
   const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
     placeId: 0,
     name: "",
