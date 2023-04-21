@@ -1,14 +1,15 @@
-.course-id-container {
-  padding: 1rem 6rem 0;
-}
-
-.title-container {
+.detail-head-container {
   border-bottom: 3px solid var(--color-border-semi);
   width: 100%;
   text-align: center;
   margin-bottom: 0.4rem;
 }
-.title-length {
+
+.title-wrapper {
+  padding: 1.8rem 1rem 5rem 1rem;
+}
+
+.course-length {
   display: inline-block;
   padding: 0.2rem 0.8rem;
   color: var(--color-bg-white);
@@ -18,15 +19,33 @@
   margin-right: 0.8rem;
 }
 
-.title {
-  padding: 1.8rem 1rem 5rem 1rem;
-}
-
-.title-info {
+.detail-head-nav {
   display: flex;
   justify-content: space-between;
   padding: 0.3rem 1rem;
   align-items: flex-end;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kakao-profile-img {
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 0.6rem;
+}
+
+.nav-right {
+  display: flex;
+  align-items: flex-end;
+}
+.create-date {
+  font-size: 0.8rem;
+  color: var(--color-text-semi);
+  margin-right: 1rem;
+  font-style: italic;
+  margin-bottom: 0.3rem;
 }
 
 .btn-wrapper {
@@ -40,7 +59,7 @@
   font-size: 1.1rem;
   border-radius: 5px;
   cursor: pointer;
-  color: var(--color-border-semi);
+  color: var(--color-border-dark);
   transition: 0.3s;
   border: none;
 }
@@ -62,15 +81,4 @@
   background-color: var(--color-text-semi);
   margin: auto;
   height: 50%;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.kakao-profile-img {
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 0.6rem;
 }

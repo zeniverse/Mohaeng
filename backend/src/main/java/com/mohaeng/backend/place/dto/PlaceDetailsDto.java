@@ -19,8 +19,9 @@ public class PlaceDetailsDto {
     private String mapY;
     private String address;
     private String overview;
+    private Boolean isBookmarked;
 
-    public static PlaceDetailsDto from(Place place, PlaceService placeService){
+    public static PlaceDetailsDto from(Place place, PlaceService placeService, Boolean isBookmarked){
         String firstImage = place.getFirstImage();
         if (firstImage == null || firstImage.isEmpty()) {
             firstImage = placeService.getFirstImage();
@@ -35,6 +36,7 @@ public class PlaceDetailsDto {
                 .mapY(place.getMapY())
                 .address(place.getAddress())
                 .overview(place.getOverview())
+                .isBookmarked(isBookmarked)
                 .build();
     }
 }

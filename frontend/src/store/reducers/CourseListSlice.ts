@@ -68,11 +68,7 @@ export const listBookmarkToggleAction = createAsyncThunk(
 
 export const listLikeToggleAction = createAsyncThunk(
   "course/listToggleLike",
-  async (courseId: number, { getState }) => {
-    const courseState = (await getState()) as RootState;
-    const courseList = courseState.course.courseList;
-    const course = courseList.find((course) => course.courseId === courseId);
-    const isLiked = course ? course.isLiked : false;
+  async ({ courseId, isLiked }: any) => {
     let resData: ToggleLikeApiResponse;
     if (isLiked) {
       resData = await toggleLikeApi(courseId, "DELETE");
@@ -127,10 +123,12 @@ export const CourseListSlice = createSlice({
     builder.addCase(listLikeToggleAction.pending, (state) => {});
     builder.addCase(listLikeToggleAction.fulfilled, (state, action) => {
       const { courseId, totalLikes } = action.payload;
-      const course = state.courseList.find((c) => c.courseId === courseId);
-      if (course) {
-        course.isLiked = !course.isLiked;
-        course.likeCount = totalLikes;
+      if (state.courseList.length > 0) {
+        const course = state.courseList.find((c) => c.courseId === courseId);
+        if (course) {
+          course.isLiked = !course.isLiked;
+          course.likeCount = totalLikes;
+        }
       }
     });
     builder.addCase(listLikeToggleAction.rejected, (state) => {});
