@@ -1,5 +1,5 @@
 import styles from "./CourseDetailNav.module.css";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import RoughMap from "../Course/RoughMap";
 import {
   BsBookmark,
@@ -16,16 +16,24 @@ import {
   detailLikeToggleAction,
 } from "@/src/store/reducers/CourseDetailSlice";
 import { openModal } from "@/src/store/reducers/modalSlice";
+import TagItem from "../UI/TagItem";
 
 const CourseDetailNav = () => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
-  const [formattedDate, setFormattedDate] = useState("");
 
   const dispatch = useAppDispatch();
   const { id: userId } = useAppSelector((state) => state.token);
   const course = useAppSelector((state) => state.courseDetail.course);
-  const { likeCount, places, courseId, isBookmarked, isLiked, createdDate } =
-    course;
+  const {
+    likeCount,
+    places,
+    courseId,
+    isBookmarked,
+    isLiked,
+    startDate,
+    endDate,
+    region,
+  } = course;
 
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
@@ -61,37 +69,34 @@ const CourseDetailNav = () => {
     }
   };
 
-  const getFomattedDate = useCallback((date: Date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    return `${year}-${month < 10 ? "0" + month : month}-${
-      day < 10 ? "0" + day : day
-    }`;
-  }, []);
-
-  useEffect(() => {
-    const FormattedDate = getFomattedDate(new Date(createdDate));
-    setFormattedDate(FormattedDate);
-  }, [createdDate]);
-
-  const RoughMapData = places?.map((place) => place.name).join(", ");
+  const RoughMapData = places?.map((place) => place.name).join(",");
 
   return (
     <div className={styles["title-nav"]}>
       <div className={styles["title-nav-left"]}>
+        <div className={styles["simple-info"]}>
+          <div className={styles.date}>
+            <TagItem size="M" text="기간" bgColor="Dsky" />
+            <p className={styles.text}>
+              {startDate} ~ {endDate}
+            </p>
+          </div>
+          <div className={styles.region}>
+            <TagItem size="M" text="지역" bgColor="LMarinBlue" />
+            <p className={styles.text}>{region}</p>
+          </div>
+        </div>
+      </div>
+      <div className={styles["title-nav-right"]}>
         <span className={styles.like}>
+          {/* TODO: 컴포넌트화 */}
           {isLiked ? (
             <BsHeartFill className={styles.heart} onClick={handleDetailLike} />
           ) : (
             <BsHeart className={styles.heart} onClick={handleDetailLike} />
           )}
-          <div>{likeCount}</div>
+          <div className={styles.likeCount}>{likeCount}</div>
         </span>
-      </div>
-      <div className={styles["title-nav-right"]}>
-        <span className={styles.dateinfo}>{formattedDate}</span>
         <div
           className={`${styles["item-nav"]} ${styles.roughmapBtn}`}
           onClick={toggleRoughMapHandler}

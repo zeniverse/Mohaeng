@@ -3,19 +3,16 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 0 2rem;
-  margin-bottom: 1rem;
+  padding: 0 1rem;
+  margin-bottom: 0.6rem;
 }
-.like {
-  font-size: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
+
+.title-nav-left {
+  display: fel;
 }
 
 .title-nav-right {
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   display: flex;
   gap: 1.4rem;
 }
@@ -45,24 +42,34 @@
   color: var(--color-blue);
 }
 
-.dateinfo {
+.like {
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  gap: 0.1rem;
+}
+.likeCount {
   font-size: 0.8rem;
-  color: var(--color-text-semi);
+  padding: 1px;
+  position: absolute;
+  bottom: 0;
+  transform: translateY(10px);
+  color: var(--color-text-basic);
 }
 
 .heart {
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   color: var(--color-red);
   transition: all 0.3s ease-in-out;
   cursor: pointer;
 }
 
 .heart:hover {
-  animation-name: grow-shrink;
-  animation-duration: 1.4s;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
+  scale: 107%;
+  transition: 200ms;
 }
 
 @keyframes grow-shrink {
@@ -75,4 +82,21 @@
   100% {
     transform: scale(1);
   }
+}
+
+.simple-info {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.date {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.region {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }

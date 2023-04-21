@@ -80,6 +80,7 @@ export interface ICourseDetail {
   title: string;
   content: string;
   nickname: string;
+  profileImgUrl: string;
   likeCount: number;
   courseDays: string;
   createdDate: string;

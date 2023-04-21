@@ -10,6 +10,7 @@ import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import ReviewTextArea from "./ReviewTextarea";
 import usePreventRefresh from "@/src/hooks/usePreventRefresh";
+import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 
 export default function CreateReview() {
   const router = useRouter();
@@ -27,13 +28,14 @@ export default function CreateReview() {
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   let rating = clicked.filter(Boolean).length;
+  const id = useRouterQuery("id");
 
   // * 새로고침 방지
   usePreventRefresh();
 
   // *비동기적으로 받아오는 별점 개수 업데이트 확인
   useEffect(() => {
-    console.log(rating);
+    // console.log(rating);
     setStar(star);
   }, [clicked]);
 
@@ -67,6 +69,7 @@ export default function CreateReview() {
     setImages(newImages);
   };
 
+  // * 이미지 삭제
   const handleDeletePreview = (index: number) => {
     const newImages = [...images];
     const newPreviews = [...previews];
@@ -104,20 +107,20 @@ export default function CreateReview() {
     try {
       const accessToken = await cookie.load("accessToken");
       const response = await axios
-        .post(`/api/review/${placeId}`, formData, {
+        .post(`/api/review/${id}`, formData, {
           headers: {
             "Access-Token": accessToken,
             "Content-Type": "multipart/form-data",
           },
         })
         .then((response) => {
-          console.log(response.data, "리뷰 작성 성공!");
+          // console.log(response.data, "리뷰 작성 성공!");
           appDispatch(getMyReview(accessToken));
           router.push(`/search?keyword=${name}`);
         });
     } catch (error) {
       router.push(`/search?keyword=${name}`);
-      console.log(error, "리뷰 작성 실패ㅠ");
+      console.log(error);
     }
   };
 
@@ -159,6 +162,7 @@ export default function CreateReview() {
               type="file"
               id="inputFile"
               multiple
+              accept="image/*"
               className={styles.imageForm}
               onChange={handleImageChange}
             />

@@ -60,7 +60,7 @@ export default function EditReview() {
             "Access-Token": accessToken,
           },
         });
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setReviewForm({
           ...res.data.data,
         });
@@ -172,13 +172,13 @@ export default function EditReview() {
           },
         })
         .then((response) => {
-          console.log(response.data, "리뷰 수정 성공!");
+          // console.log(response.data, "리뷰 수정 성공!");
           appDispatch(getMyReview(accessToken));
           router.push(`/search?keyword=${name}`);
         });
     } catch (error) {
       router.push(`/search?keyword=${name}`);
-      console.log(error, "리뷰 수정 실패ㅠ");
+      console.log(error);
     }
   };
 
@@ -228,6 +228,7 @@ export default function EditReview() {
               type="file"
               id="inputFile"
               multiple
+              accept="image/*"
               className={styles.imageForm}
               onChange={handleImageChange}
             />

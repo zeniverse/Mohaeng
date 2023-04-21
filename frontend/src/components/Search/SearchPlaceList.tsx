@@ -60,7 +60,6 @@ export default function SearchPlaceList(): JSX.Element {
         setPage(totalPages);
         const { content } = res.data.data;
         setSearchResult(content);
-        console.log(content);
       } catch (error) {
         console.log("Error", error);
       }
@@ -75,7 +74,7 @@ export default function SearchPlaceList(): JSX.Element {
       <section className={styles.section}>
         <h3 className={styles.h3}>검색하신 결과: {keyword} </h3>
         <ul className={styles.keywordList}>
-          {searchResult.length > 0 ? (
+          {searchResult?.length > 0 ? (
             <ListContainer>
               {searchResult?.map((place) => (
                 <SearchItem

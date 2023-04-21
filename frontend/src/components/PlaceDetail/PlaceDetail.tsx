@@ -11,14 +11,13 @@ import PlaceDetailMap from "@/src/components/PlaceDetail/PlaceDetailMap";
 import ReviewList from "@/src/components/Review/ReviewList";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 
-//ToDo: 새로고침 이슈
-
 interface PlaceInfo {
   placeId: number;
   name: string;
   areaCode: string;
   firstImage: string;
   contentId: string;
+  address: string;
   mapX: string;
   mapY: string;
   overview: string;
@@ -32,7 +31,6 @@ export default function PlaceDetail() {
   const router = useRouter();
   const { placeId, contentId } = router.query;
   const id = useRouterQuery("id");
-  console.log(id);
 
   const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
     placeId: 0,
@@ -40,6 +38,7 @@ export default function PlaceDetail() {
     areaCode: "",
     firstImage: "",
     contentId: "",
+    address: "",
     mapX: "",
     mapY: "",
     overview: "",
@@ -109,9 +108,6 @@ export default function PlaceDetail() {
           const { content } = res.data.data;
           setPlaceInfo({ ...placeInfo, ...content[0] });
           setBookMarked(res.data.data.isBookmarked);
-          console.log(content);
-        } else {
-          console.log(placeInfo);
         }
       } catch (error) {
         console.error(error);
@@ -148,11 +144,14 @@ export default function PlaceDetail() {
               alt={placeInfo.name}
             />
           </div>
-          <div className={styles.detailMap} id="map">
-            <PlaceDetailMap
-              latitude={placeInfo.mapY}
-              longitude={placeInfo.mapX}
-            />
+          <div className={styles.detailMap}>
+            <p className={styles.address}>{placeInfo.address}</p>
+            <div className={styles.map} id="map">
+              <PlaceDetailMap
+                latitude={placeInfo.mapY}
+                longitude={placeInfo.mapX}
+              />
+            </div>
           </div>
         </div>
         <div className={styles.detailDesc}>

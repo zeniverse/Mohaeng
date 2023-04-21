@@ -11,5 +11,4 @@ import java.util.List;
 public class PlaceDetailsResponse {
 
     private List<PlaceDetailsDto> content;
-    private Boolean isBookmarked;
 }
