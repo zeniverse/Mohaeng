@@ -12,6 +12,7 @@ import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import { useRouter } from "next/router";
+import { openModal } from "@/src/store/reducers/modalSlice";
 
 const PlaceItem = ({
   name,
@@ -32,7 +33,7 @@ const PlaceItem = ({
 
   const addBookmark = () => {
     if (!accessToken) {
-      router.push("/login");
+      dispatch(openModal({ modalType: "LoginModal", isOpen: true }));
       return;
     }
     const response = async () => {

@@ -82,18 +82,6 @@ function Header({}: Props) {
     );
   };
 
-  // * 로그아웃
-  // const handleLogout = () => {
-  //   cookie.remove("accessToken", { path: "/" });
-  //   dispatch(setToken(""));
-  //   dispatch(setNickname(""));
-  //   dispatch(setEmail(""));
-  //   dispatch(setImgUrl(""));
-  //   dispatch(setId(0));
-  //   setUser([]);
-  //   router.replace("/");
-  // };
-
   const ResetStatus = () => {
     dispatch(resetFilter());
 
@@ -155,15 +143,6 @@ function Header({}: Props) {
               반가워요, {nickName} 님! {view ? "⌃" : "⌄"}
               {view && <Dropdown />}
             </ul>
-            {/* 
-            <Link href="/mypage">반가워요, {nickName}님!</Link>
-            <button
-              id="login-btn"
-              className={styles["login-btn"]}
-              onClick={handleLogout}
-            >
-              로그아웃
-            </button> */}
           </>
         )}
       </div>
