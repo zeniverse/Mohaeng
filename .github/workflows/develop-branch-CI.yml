@@ -28,15 +28,12 @@ jobs:
         distribution: 'temurin'
         
     ## gradle caching
-    - name: Gradle Caching
+    - name: Cache Gradle packages
       uses: actions/cache@v3
       with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: ${{ runner.os }}-gradle
           
     ## create application-prod.properties
     - name: make application-prod.properties
@@ -62,8 +59,8 @@ jobs:
         gradle-version: 7.6
         arguments: build
         
-    - name: gradlew caches
-      run: .gradle/caches
+    - name: move to backend
+      run: cd backend
 
     - name: gradlew tasks
       run: ./gradlew tasks
