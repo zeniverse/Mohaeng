@@ -75,15 +75,13 @@ jib {
         image = "openjdk:17-alpine"
     }
     to {
-        image = "${docker.hub.id}/mohaeng"
+        image = "jihye219219/mohaeng"
         tags = ["${project.version.toString().toLowerCase()}"]
     }
     container {
         jvmFlags = ['-XX:+UseContainerSupport', '-Xms512m', '-Xdebug']
     }
 }
-
-
 
 test.onlyIf {
     !project.hasProperty('test')
