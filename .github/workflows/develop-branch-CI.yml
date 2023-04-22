@@ -58,6 +58,7 @@ jobs:
       with:
         gradle-version: 7.6
         arguments: build
+      env:
         working-directory: ./backend
 
     - name: gradlew tasks
