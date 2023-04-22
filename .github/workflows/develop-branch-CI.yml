@@ -64,6 +64,9 @@ jobs:
     - name: Grant execute permission for gradlew
       run : chmod +x gradlew
       
+    - name: move to root
+      run: cd ..
+      
     - name: Push to Dockerhub
       run: ./gradlew jib
         
