@@ -58,9 +58,7 @@ jobs:
       with:
         gradle-version: 7.6
         arguments: build
-        
-    - name: move to backend
-      run: cd backend
+        working-directory: ./backend
 
     - name: gradlew tasks
       run: ./gradlew tasks
