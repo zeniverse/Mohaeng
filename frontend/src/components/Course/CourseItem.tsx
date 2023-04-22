@@ -72,7 +72,7 @@ const CourseItem = ({
   ) => {
     e.stopPropagation();
     if (userId) {
-      dispatch(listLikeToggleAction(courseId));
+      dispatch(listLikeToggleAction({ courseId, isLiked }));
     } else {
       dispatch(
         openModal({
@@ -112,7 +112,7 @@ const CourseItem = ({
         <div className={styles["item-info-text"]}>
           <h3>{title}</h3>
           <p>{content}</p>
-          {courseDays && <TagItem text={courseDays} />}
+          {courseDays && <TagItem size="S" text={courseDays} />}
         </div>
       </div>
       <div className={styles["item-nav-container"]}>

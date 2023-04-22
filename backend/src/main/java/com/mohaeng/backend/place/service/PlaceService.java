@@ -272,23 +272,28 @@ public class PlaceService {
 
     public PlaceDetailsResponse getPlaceDetailsByContentId(String contentId, Member member) {
         Place currentPlace = null;
-        Boolean isBookmark = false;
+        Boolean isBookmark;
 
         List<Place> places = placeRepository.findByContentId(contentId);
         List<String> overviews = getPlaceOverview(contentId);
+
+        if (member != null){
+            isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, places.get(0));
+        } else {
+            isBookmark = false;
+        }
+
         List<PlaceDetailsDto> placeDetailsDtos = IntStream.range(0, places.size())
                 .mapToObj(i -> {
                     Place place = places.get(i);
                     String overview = overviews.get(i);
-                    return new PlaceDetailsDto(place.getId(), place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), place.getMapX(), place.getMapY(), place.getAddress(), overview);
+                    return new PlaceDetailsDto(place.getId(), place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), place.getMapX(), place.getMapY(), place.getAddress(), overview, isBookmark);
                 })
                 .collect(Collectors.toList());
 
-        if (member != null){
-            isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, places.get(0));
-        }
 
-        PlaceDetailsResponse response = new PlaceDetailsResponse(placeDetailsDtos, isBookmark);
+
+        PlaceDetailsResponse response = new PlaceDetailsResponse(placeDetailsDtos);
         return response;
     }
 
