@@ -57,9 +57,7 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         gradle-version: 7.6
-        arguments: build
-      env:
-        working-directory: ./backend
+        arguments: build --project-dir=backend
 
     - name: gradlew tasks
       run: ./gradlew tasks
