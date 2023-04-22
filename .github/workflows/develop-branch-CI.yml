@@ -61,9 +61,11 @@ jobs:
 
     - name: gradlew tasks
       run: ./gradlew tasks
+      working-directory: ./backend
       
     - name: Push to Dockerhub
       run: ./gradlew jib
+      working-directory: ./backend
         
     - name: Get Current Time
       uses: 1466587594/get-current-time@v2
