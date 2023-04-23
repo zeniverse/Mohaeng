@@ -41,7 +41,7 @@
   border: none;
   padding: 8px 10px 7px;
   font-size: 24px;
-  color: var(--color-text-semi);
+  color: var(--color-text-light);
   background-color: transparent;
   cursor: pointer;
 }

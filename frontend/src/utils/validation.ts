@@ -1,24 +1,24 @@
 import { IPlacesForm } from "./../interfaces/Course.type";
-export function validateTitle(title: string): string {
-  const MIN_LENGTH = 3;
-  const MAX_LENGTH = 15;
+export function validateTitle(title: string): boolean {
+  const MIN_LENGTH = 4;
+  const MAX_LENGTH = 20;
 
-  if (title.length < MIN_LENGTH || title.length > MAX_LENGTH) {
-    console.log("안맞음");
-    return "3자 이상 혹은 15자 이내로 작성해주세요.";
+  if (MIN_LENGTH <= title.length && MAX_LENGTH >= title.length) {
+    return true;
   }
 
-  return "";
+  return false;
 }
-export function validateContent(content: string): string {
-  const MIN_LENGTH = 10;
-  const MAX_LENGTH = 300;
 
-  if (content.length < MIN_LENGTH || content.length > MAX_LENGTH) {
-    return "10자 이상 혹은 300자 이내로 작성해주세요.";
+export function validateContent(content: string): boolean {
+  const MIN_LENGTH = 10;
+  const MAX_LENGTH = 200;
+
+  if (MIN_LENGTH <= content.length && MAX_LENGTH > content.length) {
+    return true;
   }
 
-  return "";
+  return false;
 }
 
 export function validateStartEndDate(

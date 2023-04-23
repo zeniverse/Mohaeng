@@ -1,4 +1,3 @@
-import { CourseDetailType } from "@/src/interfaces/Course";
 import {
   removeCourseApi,
   getCourseListApi,
@@ -51,6 +50,7 @@ export const removeCourseAction = createAsyncThunk(
 export const listBookmarkToggleAction = createAsyncThunk(
   "course/listToggleBookmark",
   async (courseId: number, { getState }) => {
+    // TODO: 개선 가능
     const courseState = (await getState()) as RootState;
     const courseList = courseState.course.courseList;
     const course = courseList.find((course) => course.courseId === courseId);

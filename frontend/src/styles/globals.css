@@ -9,7 +9,8 @@
   --color-border-semi: #b7b7b7;
   --color-border-light: #dddddd;
   --color-text-basic: #333333;
-  --color-text-semi: #b7b7b7;
+  --color-text-semi: #858585;
+  --color-text-light: #b7b7b7;
 }
 
 * {

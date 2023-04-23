@@ -4,13 +4,15 @@ import {
   setFormError,
   setFormValue,
 } from "@/src/store/reducers/CourseFormSlice";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./CourseInputForm.module.css";
 import {
+  validateContent,
   validateCourseDays,
   validateStartEndDate,
   validateTitle,
 } from "@/src/utils/validation";
+import useValidateInput from "@/src/hooks/useValidateInput";
 
 const DaysOptions: string[] = [
   "당일 치기",
@@ -56,6 +58,42 @@ const CourseInputForm = () => {
     content,
   } = course;
   const dispatch = useAppDispatch();
+  const [calcCourseDays, setCalcCourseDays] = useState("");
+
+  function getCourseDays(startDate: string, endDate: string) {
+    const diffInMs = Date.parse(endDate) - Date.parse(startDate);
+    const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24)); // 차이를 일(day) 단위로 계산
+
+    return setCalcCourseDays(DaysOptions[diffInDays]);
+  }
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      getCourseDays(startDate, endDate);
+      dispatch(
+        setFormValue({
+          name: "courseDays",
+          value: calcCourseDays.replace(/\s/g, ""),
+        })
+      );
+    }
+  }, [startDate, endDate, calcCourseDays]);
+
+  const {
+    value: enteredTitle,
+    isValid: enteredTitleIsValid,
+    hasError: titleInputHasError,
+    valueChangeHandler: titleChangedHandler,
+    inputBlurHandler: titleBlurHandler,
+  } = useValidateInput(validateTitle, title);
+
+  const {
+    value: enteredContent,
+    isValid: enteredContentIsValid,
+    hasError: contentInputHasError,
+    valueChangeHandler: contentChangedHandler,
+    inputBlurHandler: contentBlurHandler,
+  } = useValidateInput(validateContent, content);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -70,31 +108,10 @@ const CourseInputForm = () => {
     );
   };
 
-  // const handleBlur = (
-  //   e: React.FocusEvent<
-  //     HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-  //   >
-  // ) => {
-  //   const { name } = e.target;
-  //   console.log(name);
-  //   switch (name) {
-  //     case "title":
-  //       dispatch(setFormError({ name, error: validateTitle(course.title) }));
-  //       break;
-  //     case "startDate" || "endDate":
-  //       dispatch(
-  //         setFormError({
-  //           name,
-  //           error: validateStartEndDate(course.startDate, course.endDate),
-  //         })
-  //       );
-  //       break;
-  //     case "courseDays":
-  //       dispatch(
-  //         setFormError({ name, error: validateCourseDays(course.courseDays) })
-  //       );
-  //       break;
-  //   }
+  // const valueChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, checked } = e.target;
+  //   const newValue = checked;
+  //   dispatch(setFormValue({ name: name as keyof ICourseForm, value: newValue }));
   // };
 
   const toggleSwitchclassName = isPublished
@@ -123,26 +140,29 @@ const CourseInputForm = () => {
             />
           </div>
         </label>
-        {errors?.title && <p>{errors?.title}</p>}
         <div className={styles["input-group"]}>
           <label>
-            <span>제목</span>
+            <span className={styles["input-title"]}>코스 제목</span>
             <input
               type="text"
               name="title"
-              value={title}
-              onChange={handleInputChange}
+              value={enteredTitle}
+              onChange={titleChangedHandler}
+              onBlur={titleBlurHandler}
               placeholder={"제목을 작성해주세요"}
               required
             />
           </label>
+          {titleInputHasError && (
+            <p className={styles["error-text"]}>제목이 일치하지 않음.</p>
+          )}
         </div>
       </div>
       {errors?.startDate && <p>{errors?.startDate}</p>}
       <div className={styles["second-line"]}>
         <div className={styles["input-group"]}>
           <label>
-            <span>시작일자</span>
+            <span className={styles["input-title"]}>시작일자</span>
             <input
               type="date"
               name="startDate"
@@ -154,7 +174,7 @@ const CourseInputForm = () => {
         </div>
         <div className={styles["input-group"]}>
           <label>
-            <span>종료일자</span>
+            <span className={styles["input-title"]}>종료일자</span>
             <input
               type="date"
               name="endDate"
@@ -166,7 +186,7 @@ const CourseInputForm = () => {
         </div>
         <div className={`${styles["input-group"]} ${styles.region}`}>
           <label>
-            <span>지역</span>
+            <span className={styles["input-title"]}>지역</span>
             <select
               required
               name="region"
@@ -187,34 +207,34 @@ const CourseInputForm = () => {
         </div>
         <div className={styles["input-group"]}>
           <label>
-            <span>소요일</span>
-            <select
+            <span className={styles["input-title"]}>소요일</span>
+            <input
+              disabled
               required
-              name="courseDays"
-              value={courseDays}
-              onChange={handleInputChange}
-            >
-              <option value="" disabled>
-                선택해주세요.
-              </option>
-              {DaysOptions.map((option) => (
-                <option key={option} value={option.replace(/\s/g, "")}>
-                  {option}
-                </option>
-              ))}
-            </select>
+              value={calcCourseDays ? calcCourseDays : "자동"}
+            ></input>
           </label>
+          {/* {contentInputHasError && (
+            <p className={styles["error-text"]}>내용이 일치하지 않음.</p>
+          )} */}
         </div>
       </div>
       <div className={styles["input-group"]}>
         <label>
-          코스 설명
+          <span className={styles["input-title"]}>코스 설명</span>
           <textarea
             name="content"
-            value={content}
-            onChange={handleInputChange}
+            value={enteredContent}
+            onChange={contentChangedHandler}
+            onBlur={contentBlurHandler}
           />
         </label>
+        {contentInputHasError && (
+          <p className={styles["error-text"]}>내용이 일치하지 않음.</p>
+        )}
+        <p className={styles["valid-text-length"]}>
+          ({enteredContent.length}/200)
+        </p>
       </div>
     </form>
   );
