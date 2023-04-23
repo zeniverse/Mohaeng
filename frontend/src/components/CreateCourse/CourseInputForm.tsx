@@ -1,48 +1,20 @@
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { ICourseForm } from "@/src/interfaces/Course.type";
 import {
-  setFormError,
   setFormValue,
+  setIsFormValidFalse,
+  setIsFormValidTrue,
 } from "@/src/store/reducers/CourseFormSlice";
 import React, { useEffect, useState } from "react";
 import styles from "./CourseInputForm.module.css";
 import {
   validateContent,
-  validateCourseDays,
+  validateIsSelected,
   validateStartEndDate,
   validateTitle,
 } from "@/src/utils/validation";
 import useValidateInput from "@/src/hooks/useValidateInput";
-
-const DaysOptions: string[] = [
-  "당일 치기",
-  "1박 2일",
-  "2박 3일",
-  "3박 4일",
-  "4박 5일",
-  "5박 6일",
-  "6박 7일",
-  "기타",
-];
-const ResionOptions = [
-  "서울",
-  "부산",
-  "대구",
-  "인천",
-  "광주",
-  "대전",
-  "울산",
-  "세종",
-  "경기",
-  "강원",
-  "충북",
-  "충남",
-  "전남",
-  "전북",
-  "경남",
-  "경북",
-  "제주",
-];
+import { DaysOptions, ResionOptions } from "@/src/utils/input-options";
 
 const CourseInputForm = () => {
   const { course, errors } = useAppSelector((state) => {
@@ -59,25 +31,14 @@ const CourseInputForm = () => {
   } = course;
   const dispatch = useAppDispatch();
   const [calcCourseDays, setCalcCourseDays] = useState("");
+  const [dateIsValid, setDateIsValid] = useState(false);
 
   function getCourseDays(startDate: string, endDate: string) {
     const diffInMs = Date.parse(endDate) - Date.parse(startDate);
     const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24)); // 차이를 일(day) 단위로 계산
 
-    return setCalcCourseDays(DaysOptions[diffInDays]);
+    return diffInDays;
   }
-
-  useEffect(() => {
-    if (startDate && endDate) {
-      getCourseDays(startDate, endDate);
-      dispatch(
-        setFormValue({
-          name: "courseDays",
-          value: calcCourseDays.replace(/\s/g, ""),
-        })
-      );
-    }
-  }, [startDate, endDate, calcCourseDays]);
 
   const {
     value: enteredTitle,
@@ -88,6 +49,28 @@ const CourseInputForm = () => {
   } = useValidateInput(validateTitle, title);
 
   const {
+    value: enteredRegion,
+    isValid: enteredRegionIsValid,
+    hasError: regionInputHasError,
+    valueChangeHandler: regionChangedHandler,
+    inputBlurHandler: regionBlurHandler,
+  } = useValidateInput(validateIsSelected, region);
+  const {
+    value: enteredStartDate,
+    isValid: enteredStartDateIsValid,
+    hasError: startDateInputHasError,
+    valueChangeHandler: startDateChangedHandler,
+    inputBlurHandler: startDateBlurHandler,
+  } = useValidateInput(validateIsSelected, startDate);
+  const {
+    value: enteredEndDate,
+    isValid: enteredEndDateIsValid,
+    hasError: endDateInputHasError,
+    valueChangeHandler: endDateChangedHandler,
+    inputBlurHandler: endDateBlurHandler,
+  } = useValidateInput(validateIsSelected, endDate);
+
+  const {
     value: enteredContent,
     isValid: enteredContentIsValid,
     hasError: contentInputHasError,
@@ -95,24 +78,44 @@ const CourseInputForm = () => {
     inputBlurHandler: contentBlurHandler,
   } = useValidateInput(validateContent, content);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    const { name, value, type } = e.target;
-    const newValue =
-      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+  const checkedChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    const newValue = checked;
     dispatch(
       setFormValue({ name: name as keyof ICourseForm, value: newValue })
     );
   };
 
-  // const valueChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, checked } = e.target;
-  //   const newValue = checked;
-  //   dispatch(setFormValue({ name: name as keyof ICourseForm, value: newValue }));
-  // };
+  if (
+    enteredTitleIsValid &&
+    enteredRegionIsValid &&
+    enteredContentIsValid &&
+    dateIsValid
+  ) {
+    dispatch(setIsFormValidTrue());
+  } else {
+    dispatch(setIsFormValidFalse());
+  }
+
+  useEffect(() => {
+    if (enteredStartDate && enteredEndDate) {
+      const isValid = validateStartEndDate(enteredStartDate, enteredEndDate);
+      setDateIsValid(isValid);
+      if (isValid) {
+        const days =
+          DaysOptions[getCourseDays(enteredStartDate, enteredEndDate)];
+        dispatch(
+          setFormValue({
+            name: "courseDays",
+            value: calcCourseDays.replace(/\s/g, ""),
+          })
+        );
+        setCalcCourseDays(days);
+      } else {
+        setCalcCourseDays("");
+      }
+    }
+  }, [enteredStartDate, enteredEndDate]);
 
   const toggleSwitchclassName = isPublished
     ? `${styles["toggle-switch"]} ${styles.publish}`
@@ -134,7 +137,7 @@ const CourseInputForm = () => {
               type="checkbox"
               name="isPublished"
               checked={isPublished}
-              onChange={handleInputChange}
+              onChange={checkedChangeHandler}
               className={styles.input}
               required
             />
@@ -154,7 +157,9 @@ const CourseInputForm = () => {
             />
           </label>
           {titleInputHasError && (
-            <p className={styles["error-text"]}>제목이 일치하지 않음.</p>
+            <p className={styles["error-text"]}>
+              4자 이상 20자 이하로 작성해 주세요..
+            </p>
           )}
         </div>
       </div>
@@ -166,11 +171,18 @@ const CourseInputForm = () => {
             <input
               type="date"
               name="startDate"
-              value={startDate}
-              onChange={handleInputChange}
+              value={enteredStartDate}
+              onChange={startDateChangedHandler}
+              onBlur={startDateBlurHandler}
               required
             />
           </label>
+          {startDateInputHasError && (
+            <p className={styles["error-text"]}>선택해주세요.</p>
+          )}
+          {enteredStartDateIsValid && enteredEndDateIsValid && !dateIsValid && (
+            <p className={styles["error-text"]}>유효하지 않는 날짜 입니다.</p>
+          )}
         </div>
         <div className={styles["input-group"]}>
           <label>
@@ -178,11 +190,15 @@ const CourseInputForm = () => {
             <input
               type="date"
               name="endDate"
-              value={endDate}
-              onChange={handleInputChange}
+              value={enteredEndDate}
+              onChange={endDateChangedHandler}
+              onBlur={endDateBlurHandler}
               required
             />
           </label>
+          {endDateInputHasError && (
+            <p className={styles["error-text"]}>선택해주세요.</p>
+          )}
         </div>
         <div className={`${styles["input-group"]} ${styles.region}`}>
           <label>
@@ -190,8 +206,9 @@ const CourseInputForm = () => {
             <select
               required
               name="region"
-              value={region}
-              onChange={handleInputChange}
+              value={enteredRegion}
+              onChange={regionChangedHandler}
+              onBlur={regionBlurHandler}
               style={{ overflow: "auto" }}
             >
               <option value="" disabled>
@@ -204,6 +221,9 @@ const CourseInputForm = () => {
               ))}
             </select>
           </label>
+          {regionInputHasError && (
+            <p className={styles["error-text"]}>선택해주세요.</p>
+          )}
         </div>
         <div className={styles["input-group"]}>
           <label>
@@ -230,7 +250,9 @@ const CourseInputForm = () => {
           />
         </label>
         {contentInputHasError && (
-          <p className={styles["error-text"]}>내용이 일치하지 않음.</p>
+          <p className={styles["error-text"]}>
+            10자 이상 200자 이하로 작성해 주세요.
+          </p>
         )}
         <p className={styles["valid-text-length"]}>
           ({enteredContent.length}/200)
@@ -240,4 +262,4 @@ const CourseInputForm = () => {
   );
 };
 
-export default CourseInputForm;
+export default React.memo(CourseInputForm);

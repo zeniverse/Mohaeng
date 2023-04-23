@@ -27,7 +27,7 @@ interface CourseFormProps {
 const CourseForm = ({ isEditMode }: CourseFormProps) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { course } = useAppSelector(
+  const { course, isFormValid } = useAppSelector(
     (state) => state.courseForm ?? initialState
   );
   const accessToken = cookie.load("accessToken");
@@ -35,6 +35,7 @@ const CourseForm = ({ isEditMode }: CourseFormProps) => {
 
   const handleCourseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isFormValid) return window.alert("양식을 다시 확인해주세요");
     const editData = id ? { courseId: id, course } : null;
     if (!isEditMode) {
       await dispatch(createCourseAction(course));
@@ -89,4 +90,4 @@ const CourseForm = ({ isEditMode }: CourseFormProps) => {
   );
 };
 
-export default CourseForm;
+export default React.memo(CourseForm);

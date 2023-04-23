@@ -10,7 +10,7 @@ import PlaceId from "@/src/pages/place/[id]";
 
 interface CourseState {
   errors?: IFormErrors;
-  isValid: boolean;
+  isFormValid: boolean;
   course: ICourseOriginForm;
 }
 
@@ -29,7 +29,7 @@ export const initialState: CourseState = {
     isLiked: false,
     likeCount: 0,
   },
-  isValid: false,
+  isFormValid: false,
 };
 
 export const createCourseAction = createAsyncThunk(
@@ -114,18 +114,11 @@ export const CourseFormSlice = createSlice({
     addFormValue: (state, action) => {
       state.course = action.payload;
     },
-    setFormError: (
-      state,
-      action: PayloadAction<{
-        name: keyof ICourseForm;
-        error: string;
-      }>
-    ) => {
-      const { name, error } = action.payload;
-      state.errors = {
-        ...state.errors,
-        [name]: error,
-      };
+    setIsFormValidTrue(state) {
+      state.isFormValid = true;
+    },
+    setIsFormValidFalse(state) {
+      state.isFormValid = false;
     },
   },
   extraReducers: (builder) => {
@@ -147,6 +140,7 @@ export const {
   addPlaceObject,
   removePlace,
   addFormValue,
-  setFormError,
+  setIsFormValidTrue,
+  setIsFormValidFalse,
 } = CourseFormSlice.actions;
 export default CourseFormSlice.reducer;
