@@ -58,7 +58,7 @@
   text-align: center;
   font-size: medium;
   background-color: transparent;
-  color: var(--color-text-semi);
+  color: var(--color-text-light);
   cursor: pointer;
 }
 

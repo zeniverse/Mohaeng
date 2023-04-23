@@ -42,7 +42,7 @@
 }
 .create-date {
   font-size: 0.8rem;
-  color: var(--color-text-semi);
+  color: var(--color-text-light);
   margin-right: 1rem;
   font-style: italic;
   margin-bottom: 0.3rem;
