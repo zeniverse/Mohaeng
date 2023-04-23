@@ -56,12 +56,12 @@ export default function Dropdown() {
 
   return (
     <div className={styles.menu}>
-      <li className={styles.toli}>
-        <Link href="/mypage" onClick={ResetStatus}>
+      <Link href="/mypage" onClick={ResetStatus}>
+        <li className={styles.toli}>
           <FaUserCircle className={styles.mypage} />
           마이페이지
-        </Link>
-      </li>
+        </li>
+      </Link>
       <li className={styles.boli}>
         <p id="login-btn" onClick={handleLogout}>
           <MdLogout className={styles.logout} />

@@ -1,5 +1,8 @@
 .form {
   flex: 6;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   border: 3px solid var(--color-border-light);
   padding: 0.6rem 1.4rem;
   border-radius: 1rem;
@@ -12,7 +15,6 @@
 }
 .second-line {
   display: flex;
-  align-items: center;
   padding-bottom: 1rem;
   gap: 1.4rem;
   /* height: 100%; */
@@ -74,8 +76,8 @@
   width: 100%;
   margin-bottom: 4px;
 }
-.input-group span {
-  font-size: 14px;
+.input-title {
+  font-size: 1rem;
   color: #555;
   text-transform: capitalize;
   display: block;
@@ -110,4 +112,20 @@
 
 .input-group.region {
   width: 80%;
+}
+
+.error-text {
+  position: absolute;
+  top: 100%;
+  font-size: 0.8rem;
+  margin-left: 6px;
+  color: #b40e0e;
+}
+
+.valid-text-length {
+  position: absolute;
+  top: 100%;
+  font-size: 0.7rem;
+  right: 0;
+  color: var(--color-text-semi);
 }

@@ -31,7 +31,6 @@ export default function PlaceDetail() {
   const router = useRouter();
   const { placeId, contentId } = router.query;
   const id = useRouterQuery("id");
-
   const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
     placeId: 0,
     name: "",
@@ -145,7 +144,7 @@ export default function PlaceDetail() {
             />
           </div>
           <div className={styles.detailMap}>
-            <p className={styles.address}>{placeInfo.address}</p>
+            <p className={styles.address}>📍 {placeInfo.address}</p>
             <div className={styles.map} id="map">
               <PlaceDetailMap
                 latitude={placeInfo.mapY}
