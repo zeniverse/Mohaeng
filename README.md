@@ -8,7 +8,6 @@
 
 ## 📝 관련 링크
 
-(담당하신 부분 전부 현재 버전으로 바꿔주세요)
 
 [Github](https://github.com/Mohaeng2023/Mohaeng)
 
@@ -42,11 +41,10 @@
 
 ## 🌐 데이터베이스 구조
 
-(수정 후 추가)
+![image](https://user-images.githubusercontent.com/94662639/233760711-0f39d042-fb0a-4f3f-b346-18127d97092a.png)
 
 ## 💡 주요 기능
 
--담당 프론트엔드 분들 screenGif 프로그램 까셔서 녹화 움짤 + 기능 추가 작성 해주시면 됩니다.
 
 ### 메인페이지
 
