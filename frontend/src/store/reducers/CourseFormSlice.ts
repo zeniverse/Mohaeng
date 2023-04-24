@@ -1,12 +1,7 @@
 import { ICourseEditParam, IFormErrors } from "./../../interfaces/Course.type";
 import { createCourseApi, editCourseApi } from "@/src/services/courseService";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  ICourseForm,
-  ICourseOriginForm,
-  ICourseSubmitForm,
-} from "../../interfaces/Course.type";
-import PlaceId from "@/src/pages/place/[id]";
+import { ICourseForm, ICourseOriginForm } from "../../interfaces/Course.type";
 
 interface CourseState {
   errors?: IFormErrors;
@@ -46,8 +41,7 @@ export const createCourseAction = createAsyncThunk(
       thumbnailUrl: thumbnailUrl,
     };
 
-    const response = await createCourseApi(validData);
-    const resData = await response.data.data;
+    const resData = await createCourseApi(validData);
     return { formData, resData };
   }
 );
@@ -82,7 +76,6 @@ export const CourseFormSlice = createSlice({
         value: string | boolean;
       }>
     ) => {
-      ``;
       const { name, value } = action.payload;
       state.course = {
         ...state.course,

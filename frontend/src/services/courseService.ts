@@ -16,14 +16,20 @@ export const getCourseListApi = async (queryParams = {}) => {
 };
 
 export const createCourseApi = async (data: ICourseSubmitForm) => {
-  const accessToken = await cookie.load("accessToken");
-  return await axios.post(CourseApiConfig.course, data, {
-    headers: {
-      "Access-Token": accessToken,
-      withCredentials: true,
-    },
-  });
+  try {
+    const accessToken = await cookie.load("accessToken");
+    const response = await axios.post(CourseApiConfig.course, data, {
+      headers: {
+        "Access-Token": accessToken,
+        withCredentials: true,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
 };
+
 export const editCourseApi = async (
   courseId: number,
   data: ICourseSubmitForm
