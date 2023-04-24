@@ -14,7 +14,7 @@ import {
   validateTitle,
 } from "@/src/utils/validation";
 import useValidateInput from "@/src/hooks/useValidateInput";
-import { DaysOptions, ResionOptions } from "@/src/utils/input-options";
+import { ResionOptions } from "@/src/utils/input-options";
 
 const CourseInputForm = () => {
   const { course, errors } = useAppSelector((state) => {
@@ -34,11 +34,16 @@ const CourseInputForm = () => {
   const [calcCourseDays, setCalcCourseDays] = useState("");
   const [dateIsValid, setDateIsValid] = useState(false);
 
-  function getCourseDays(startDate: string, endDate: string) {
-    const diffInMs = Date.parse(endDate) - Date.parse(startDate);
-    const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24)); // 차이를 일(day) 단위로 계산
+  function calculateCoursePeriod(startDate: string, endDate: string) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
 
-    return diffInDays;
+    const diffInMs = end.getTime() - start.getTime();
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24)) + 1;
+    if (!diffInMs) return "당일 치기";
+    const nightCount = diffInDays - 1;
+
+    return `${nightCount}박 ${diffInDays}일`;
   }
 
   const {
@@ -91,8 +96,7 @@ const CourseInputForm = () => {
       const isValid = validateStartEndDate(enteredStartDate, enteredEndDate);
       setDateIsValid(isValid);
       if (isValid) {
-        const days =
-          DaysOptions[getCourseDays(enteredStartDate, enteredEndDate)];
+        const days = calculateCoursePeriod(enteredStartDate, enteredEndDate);
         dispatch(
           setFormValue({
             name: "courseDays",
@@ -228,7 +232,6 @@ const CourseInputForm = () => {
               value={enteredRegion}
               onChange={regionChangedHandler}
               onBlur={regionBlurHandler}
-              style={{ overflow: "auto" }}
             >
               <option value="" disabled>
                 선택해주세요.
