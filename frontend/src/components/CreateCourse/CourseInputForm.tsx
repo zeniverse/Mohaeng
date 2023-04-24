@@ -5,7 +5,7 @@ import {
   setIsFormValidFalse,
   setIsFormValidTrue,
 } from "@/src/store/reducers/CourseFormSlice";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./CourseInputForm.module.css";
 import {
   validateContent,
@@ -28,6 +28,7 @@ const CourseInputForm = () => {
     courseDays,
     region,
     content,
+    places,
   } = course;
   const dispatch = useAppDispatch();
   const [calcCourseDays, setCalcCourseDays] = useState("");
@@ -85,18 +86,6 @@ const CourseInputForm = () => {
       setFormValue({ name: name as keyof ICourseForm, value: newValue })
     );
   };
-
-  if (
-    enteredTitleIsValid &&
-    enteredRegionIsValid &&
-    enteredContentIsValid &&
-    dateIsValid
-  ) {
-    dispatch(setIsFormValidTrue());
-  } else {
-    dispatch(setIsFormValidFalse());
-  }
-
   useEffect(() => {
     if (enteredStartDate && enteredEndDate) {
       const isValid = validateStartEndDate(enteredStartDate, enteredEndDate);
@@ -107,7 +96,7 @@ const CourseInputForm = () => {
         dispatch(
           setFormValue({
             name: "courseDays",
-            value: calcCourseDays.replace(/\s/g, ""),
+            value: days.replace(/\s/g, ""),
           })
         );
         setCalcCourseDays(days);
@@ -116,6 +105,36 @@ const CourseInputForm = () => {
       }
     }
   }, [enteredStartDate, enteredEndDate]);
+
+  const setIsFormValidTrueCallback = useCallback(() => {
+    dispatch(setIsFormValidTrue());
+  }, [dispatch]);
+
+  const setIsFormValidFalseCallback = useCallback(() => {
+    dispatch(setIsFormValidFalse());
+  }, [dispatch]);
+
+  const isValid = useMemo(() => {
+    return (
+      enteredTitleIsValid &&
+      enteredRegionIsValid &&
+      enteredContentIsValid &&
+      dateIsValid
+    );
+  }, [
+    enteredTitleIsValid,
+    enteredRegionIsValid,
+    enteredContentIsValid,
+    dateIsValid,
+  ]);
+
+  useEffect(() => {
+    if (isValid) {
+      setIsFormValidTrueCallback();
+    } else {
+      setIsFormValidFalseCallback();
+    }
+  }, [isValid, setIsFormValidTrueCallback, setIsFormValidFalseCallback]);
 
   const toggleSwitchclassName = isPublished
     ? `${styles["toggle-switch"]} ${styles.publish}`
@@ -158,7 +177,7 @@ const CourseInputForm = () => {
           </label>
           {titleInputHasError && (
             <p className={styles["error-text"]}>
-              4자 이상 20자 이하로 작성해 주세요..
+              4자 이상 20자 이하로 작성해 주세요.
             </p>
           )}
         </div>
@@ -181,7 +200,7 @@ const CourseInputForm = () => {
             <p className={styles["error-text"]}>선택해주세요.</p>
           )}
           {enteredStartDateIsValid && enteredEndDateIsValid && !dateIsValid && (
-            <p className={styles["error-text"]}>유효하지 않는 날짜 입니다.</p>
+            <p className={styles["error-text"]}>유효하지 않은 날짜 입니다.</p>
           )}
         </div>
         <div className={styles["input-group"]}>
