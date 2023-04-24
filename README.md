@@ -41,7 +41,7 @@
 
 ## 🌐 데이터베이스 구조
 
-![image](https://user-images.githubusercontent.com/94662639/233760711-0f39d042-fb0a-4f3f-b346-18127d97092a.png)
+![image](https://user-images.githubusercontent.com/77098586/233893698-57a595b3-5a82-46b0-b66e-9eebfe7b5df1.png)
 
 ## 💡 주요 기능
 
