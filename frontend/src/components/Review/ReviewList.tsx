@@ -108,14 +108,14 @@ export default function ReviewList() {
     } else {
       router.push(
         {
-          pathname: `/review/create-review/[id]`,
+          pathname: `/review/[id]/create-review`,
           query: {
             placeId: placeId,
             reviewId: reviewId,
             name: name,
           },
         },
-        `/review/create-review/${placeId}`
+        `/review/${placeId}/create-review`
       );
     }
   };
