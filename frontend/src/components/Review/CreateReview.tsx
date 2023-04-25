@@ -1,6 +1,6 @@
 import styles from "./CreateReview.module.css";
 import { IoMdClose } from "react-icons/io";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import axios from "axios";
@@ -27,6 +27,7 @@ export default function CreateReview() {
   ]);
   const [content, setContent] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState("");
+  // const [hasError, setHasError] = useState(false);
   const [star, setStar] = useState<number>();
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -89,7 +90,7 @@ export default function CreateReview() {
       return false;
     } else if (content === "") {
       setErrorMsg("리뷰 내용을 입력해주세요");
-      return;
+      return false;
     } else if (content.length < 20) {
       setErrorMsg("리뷰 내용을 20자 이상 입력해주세요");
       return false;
@@ -140,7 +141,8 @@ export default function CreateReview() {
     }
   };
 
-  const handleChange = (e: { target: { value: any } }) => {
+  //* 리뷰 에러 메시지
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
     if (value.length <= 250) {
       setContent(value);
@@ -163,12 +165,14 @@ export default function CreateReview() {
 
           <div id="review" className={styles.form}>
             <ReviewTextArea value={content} onChange={handleChange} />
-            <p className={styles.textLength}>{content.length}/250</p>
-            {errorMsg && <p className={styles.errorMsg}>{errorMsg}</p>}
+            <div className={styles.contentCheck}>
+              {errorMsg && <p className={styles.errorMsg}>{errorMsg}</p>}
+              <p className={styles.contentLength}>{content.length}/250</p>
+            </div>
 
-            <p className={styles.boldTitle}>사진 추가하기</p>
+            <p className={styles.boldTitle}>사진 추가하기 (선택) </p>
             <label className={styles.chooseLabel} htmlFor="inputFile">
-              <div className={styles.chooseFile}>사진 선택</div>
+              <div className={styles.chooseFile}>사진 첨부</div>
             </label>
             <input
               type="file"

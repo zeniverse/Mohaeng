@@ -72,10 +72,16 @@
   font-size: 16px;
 }
 
-.textLength {
+.contentCheck {
+  display: flex;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
+
+.contentLength {
   margin-right: 8px;
   font-size: small;
-  text-align: right;
+  margin-left: auto;
   color: var(--color-border-dark);
 }
 
@@ -90,7 +96,7 @@
 }
 
 .chooseLabel {
-  width: 200px;
+  width: 8rem;
 }
 
 .chooseFile {
