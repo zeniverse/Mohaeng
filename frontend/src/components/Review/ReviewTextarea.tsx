@@ -19,7 +19,7 @@ export default function ReviewTextarea({
         className={styles.formTxtArea}
         name="review"
         id="review"
-        placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요!"
+        placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요! (20자 이상 200자 이하)"
         required={true}
         onChange={onChange}
       ></textarea>
