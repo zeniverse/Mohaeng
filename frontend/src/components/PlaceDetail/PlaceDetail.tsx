@@ -10,6 +10,8 @@ import PlaceBookmark from "@/src/components/Bookmark/PlaceBookmark";
 import PlaceDetailMap from "@/src/components/PlaceDetail/PlaceDetailMap";
 import ReviewList from "@/src/components/Review/ReviewList";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
+import { useDispatch } from "react-redux";
+import { openModal } from "@/src/store/reducers/modalSlice";
 
 interface PlaceInfo {
   placeId: number;
@@ -27,6 +29,7 @@ interface PlaceInfo {
 
 export default function PlaceDetail() {
   const accessToken = cookie.load("accessToken");
+  const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const router = useRouter();
   const { placeId, contentId } = router.query;
@@ -49,7 +52,12 @@ export default function PlaceDetail() {
 
   function handleCheckBookmark() {
     if (!accessToken) {
-      router.push("/login");
+      dispatch(
+        openModal({
+          modalType: "LoginModal",
+          isOpen: true,
+        })
+      );
     } else {
       handleBookmarkClick();
     }
