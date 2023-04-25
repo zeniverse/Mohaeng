@@ -1,6 +1,6 @@
 import styles from "./CreateReview.module.css";
 import { IoMdClose } from "react-icons/io";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import axios from "axios";
@@ -11,6 +11,8 @@ import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import ReviewTextArea from "./ReviewTextarea";
 import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
+
+// 텍스트 유효성 검사
 
 export default function CreateReview() {
   const router = useRouter();
@@ -24,6 +26,8 @@ export default function CreateReview() {
     false,
   ]);
   const [content, setContent] = useState<string>("");
+  const [errorMsg, setErrorMsg] = useState("");
+  // const [hasError, setHasError] = useState(false);
   const [star, setStar] = useState<number>();
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -85,7 +89,10 @@ export default function CreateReview() {
       alert("별점을 입력해주세요");
       return false;
     } else if (content === "") {
-      alert("리뷰 내용을 입력해주세요");
+      setErrorMsg("리뷰 내용을 입력해주세요");
+      return false;
+    } else if (content.length < 20) {
+      setErrorMsg("리뷰 내용을 20자 이상 입력해주세요");
       return false;
     }
     const formData = new FormData();
@@ -134,6 +141,14 @@ export default function CreateReview() {
     }
   };
 
+  //* 리뷰 에러 메시지
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = e.target;
+    if (value.length <= 250) {
+      setContent(value);
+    }
+  };
+
   return (
     <>
       <section className={styles.registerReviewContainer}>
@@ -149,14 +164,15 @@ export default function CreateReview() {
           </div>
 
           <div id="review" className={styles.form}>
-            <ReviewTextArea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
+            <ReviewTextArea value={content} onChange={handleChange} />
+            <div className={styles.contentCheck}>
+              {errorMsg && <p className={styles.errorMsg}>{errorMsg}</p>}
+              <p className={styles.contentLength}>{content.length}/250</p>
+            </div>
 
-            <p className={styles.boldTitle}>사진 추가하기</p>
-            <label htmlFor="inputFile">
-              <div className={styles.chooseFile}>사진 선택</div>
+            <p className={styles.boldTitle}>사진 추가하기 (선택) </p>
+            <label className={styles.chooseLabel} htmlFor="inputFile">
+              <div className={styles.chooseFile}>사진 첨부</div>
             </label>
             <input
               type="file"
