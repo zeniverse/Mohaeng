@@ -97,12 +97,14 @@ const CourseInputForm = () => {
       setDateIsValid(isValid);
       if (isValid) {
         const days = calculateCoursePeriod(enteredStartDate, enteredEndDate);
-        dispatch(
-          setFormValue({
-            name: "courseDays",
-            value: days.replace(/\s/g, ""),
-          })
-        );
+        if (days) {
+          dispatch(
+            setFormValue({
+              name: "courseDays",
+              value: days.replace(/\s/g, ""),
+            })
+          );
+        }
         setCalcCourseDays(days);
       } else {
         setCalcCourseDays("");
