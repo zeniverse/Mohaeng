@@ -12,6 +12,7 @@ import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { KeywordProps } from "@/src/interfaces/Keyword";
+import { openModal } from "@/src/store/reducers/modalSlice";
 
 export default function SearchItem({
   name,
@@ -33,7 +34,12 @@ export default function SearchItem({
 
   function handleClickBookmark() {
     if (!accessToken) {
-      router.push("/login");
+      dispatch(
+        openModal({
+          modalType: "LoginModal",
+          isOpen: true,
+        })
+      );
     } else {
       isBookmarked === true ? delBookmark() : addBookmark();
     }

@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import Pagebar from "../Pagenation/Pagebar";
-import usePreventRefresh from "@/src/hooks/usePreventRefresh";
+import { openModal } from "@/src/store/reducers/modalSlice";
 
 type ReviewListProps = {
   placeId: number;
@@ -99,18 +99,23 @@ export default function ReviewList() {
 
   const handleClickReviewBtn = () => {
     if (!accessToken && !currentUser) {
-      router.push("/login");
+      dispatch(
+        openModal({
+          modalType: "LoginModal",
+          isOpen: true,
+        })
+      );
     } else {
       router.push(
         {
-          pathname: `/review/create-review/[id]`,
+          pathname: `/review/[id]/create-review`,
           query: {
             placeId: placeId,
             reviewId: reviewId,
             name: name,
           },
         },
-        `/review/create-review/${placeId}`
+        `/review/${placeId}/create-review`
       );
     }
   };
