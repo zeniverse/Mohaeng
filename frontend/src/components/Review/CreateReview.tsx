@@ -140,6 +140,13 @@ export default function CreateReview() {
     }
   };
 
+  const handleChange = (e: { target: { value: any } }) => {
+    const { value } = e.target;
+    if (value.length <= 250) {
+      setContent(value);
+    }
+  };
+
   return (
     <>
       <section className={styles.registerReviewContainer}>
@@ -155,15 +162,12 @@ export default function CreateReview() {
           </div>
 
           <div id="review" className={styles.form}>
-            <ReviewTextArea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-            {errorMsg && <p>{errorMsg}</p>}
-            {/* <p className={styles.text}>{content.length}/300</p> */}
+            <ReviewTextArea value={content} onChange={handleChange} />
+            <p className={styles.textLength}>{content.length}/250</p>
+            {errorMsg && <p className={styles.errorMsg}>{errorMsg}</p>}
 
             <p className={styles.boldTitle}>사진 추가하기</p>
-            <label htmlFor="inputFile">
+            <label className={styles.chooseLabel} htmlFor="inputFile">
               <div className={styles.chooseFile}>사진 선택</div>
             </label>
             <input

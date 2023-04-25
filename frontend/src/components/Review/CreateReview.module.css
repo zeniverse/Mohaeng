@@ -65,16 +65,32 @@
 .formTxtArea {
   resize: none;
   height: 12rem;
-  margin-bottom: 1rem;
+  margin-bottom: 8px;
   padding: 1rem;
   border: 1px solid var(--color-border-light);
   border-radius: 12px;
   font-size: 16px;
 }
 
+.textLength {
+  margin-right: 8px;
+  font-size: small;
+  text-align: right;
+  color: var(--color-border-dark);
+}
+
+.errorMsg {
+  font-size: small;
+  color: var(--color-red);
+}
+
 .inputFileBox {
   display: flex;
   flex-direction: column;
+}
+
+.chooseLabel {
+  width: 200px;
 }
 
 .chooseFile {

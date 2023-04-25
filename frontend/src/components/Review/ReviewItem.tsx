@@ -136,7 +136,7 @@ export default function ReviewItem({
             </div>
           ) : (
             <div>
-              <p className={styles.reviewTxt}>{content.substring(0, 50)}...</p>
+              <p className={styles.reviewTxt}>{content.substring(0, 100)}...</p>
               <button onClick={toggleExpand} className={styles.showMoreBtn}>
                 더 보기
               </button>
