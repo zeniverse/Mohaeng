@@ -1,10 +1,11 @@
 .placeDetail {
   width: 100%;
   max-width: 70rem;
-  margin: 2rem 8rem 2rem;
+  margin: 2rem 8rem;
   padding: 2rem 3rem;
   background-color: var(--color-bg-lightgray);
   border-radius: 12px;
+  color: var(--color-text-basic);
 
   --color-icon: #cfcfcf;
 }
@@ -22,7 +23,7 @@
 
 .h2 {
   font-size: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 8px;
 }
 
 .rating,
@@ -74,7 +75,7 @@
 }
 
 .map {
-  height: 300px;
+  height: 350px;
 }
 
 .detailDesc {
@@ -86,8 +87,22 @@
   padding: 1rem;
 }
 
+.detailDesc::-webkit-scrollbar {
+  width: 8px;
+}
+
+.detailDesc::-webkit-scrollbar-thumb {
+  height: 10%;
+  background: var(--color-border-light);
+  border-radius: 10px;
+}
+
+.detailDesc::-webkit-scrollbar-track {
+  background: rgba(142, 243, 246, 0.161);
+}
+
 .detailDesc,
-.address,
+/* .address, */
 .map {
   border: 1px solid var(--color-border-light);
   background-color: var(--color-bg-white);
