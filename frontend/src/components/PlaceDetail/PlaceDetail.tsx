@@ -133,6 +133,10 @@ export default function PlaceDetail() {
         <div className={styles.detailHeader}>
           <div className={styles.headerTitle}>
             <h2 className={styles.h2}>{placeInfo.name}</h2>
+            <p>
+              {" "}
+              <FaMapMarkerAlt /> {placeInfo.address}
+            </p>
           </div>
           <div className={styles.bookMarkBox}>
             <p className={styles.bookMarkText}>북마크에 추가</p>
@@ -153,9 +157,9 @@ export default function PlaceDetail() {
             />
           </div>
           <div className={styles.detailMap}>
-            <p className={styles.address}>
+            {/* <p className={styles.address}>
               <FaMapMarkerAlt /> {placeInfo.address}
-            </p>
+            </p> */}
             <div className={styles.map} id="map">
               <PlaceDetailMap
                 latitude={placeInfo.mapY}
