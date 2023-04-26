@@ -2,11 +2,10 @@ import Link from "next/link";
 import axios from "axios";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import styles from "./UserBookmarkItem.module.css";
-import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
+import { BsBookmarkFill } from "react-icons/bs";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import cookie from "react-cookies";
-import { useSelector } from "react-redux";
 import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 
 export interface bookmarkState {

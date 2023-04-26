@@ -15,14 +15,12 @@ const SidebarLink = ({ currIdx, label }: myPageState) => {
   };
   return (
     <li className={styles["sidebar__list"]}>
-      {/* <Link href={href} style={{ textDecoration: "none" }} passHref> */}
       <button
         className={styles["sidebar__button"]}
         onClick={() => dispatch(setCurrIdx(currComponent))}
       >
         {label}
       </button>
-      {/* </Link> */}
     </li>
   );
 };

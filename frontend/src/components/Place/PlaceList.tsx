@@ -1,5 +1,4 @@
 import styles from "./PlaceList.module.css";
-
 import React, { useEffect, useState } from "react";
 import { Place } from "@/src/interfaces/Place";
 import PlaceItem from "./PlaceItem";
