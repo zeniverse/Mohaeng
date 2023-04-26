@@ -1,6 +1,6 @@
 import styles from "./CreateReview.module.css";
 import { IoMdClose } from "react-icons/io";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import axios from "axios";
@@ -27,6 +27,8 @@ export default function EditReview() {
 
   const [clicked, setClicked] = useState<boolean[]>(Array(5).fill(false));
   const [content, setContent] = useState<string>("");
+  const [errorMsg, setErrorMsg] = useState("");
+  // const [hasError, setHasError] = useState(false);
   const [star, setStar] = useState<number>();
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -123,11 +125,14 @@ export default function EditReview() {
 
   // * 리뷰 백엔드로 전송
   const submitReview = async () => {
-    if (rating == 0) {
+    if (rating === 0) {
       alert("별점을 입력해주세요");
       return false;
-    } else if (content == "") {
-      alert("리뷰 내용을 수정해주세요");
+    } else if (content === "") {
+      setErrorMsg("리뷰 내용을 입력해주세요");
+      return;
+    } else if (content.length < 20) {
+      setErrorMsg("리뷰 내용을 20자 이상 입력해주세요");
       return false;
     }
     const formData = new FormData();
@@ -192,6 +197,18 @@ export default function EditReview() {
     }
   };
 
+  // * 리뷰 에러메시지
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = e.target;
+    if (value.length <= 250) {
+      setContent(value);
+    }
+  };
+
+  useEffect(() => {
+    setContent(reviewForm.content);
+  }, [reviewForm]);
+
   return (
     <>
       <section className={styles.registerReviewContainer}>
@@ -208,21 +225,25 @@ export default function EditReview() {
 
           <div id="review" className={styles.form}>
             <label htmlFor="review" className={styles.boldTitle}>
-              리뷰내용
+              리뷰 내용
             </label>
             <textarea
-              defaultValue={reviewForm.content}
+              value={content}
               className={styles.formTxtArea}
               name="review"
               id="review"
               placeholder="방문한 곳은 어떠셨나요? 당신의 경험을 공유해보세요!"
               required={true}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={handleChange}
             ></textarea>
+            <div className={styles.contentCheck}>
+              {errorMsg && <p className={styles.errorMsg}>{errorMsg}</p>}
+              <p className={styles.contentLength}>{content.length}/250</p>
+            </div>
 
-            <p className={styles.boldTitle}>사진 추가하기</p>
+            <p className={styles.boldTitle}>사진 추가하기 (선택)</p>
             <label htmlFor="inputFile">
-              <div className={styles.chooseFile}>사진 선택</div>
+              <div className={styles.chooseFile}>사진 첨부</div>
             </label>
             <input
               type="file"

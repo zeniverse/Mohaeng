@@ -5,7 +5,7 @@ import {
   setIsFormValidFalse,
   setIsFormValidTrue,
 } from "@/src/store/reducers/CourseFormSlice";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./CourseInputForm.module.css";
 import {
   validateContent,
@@ -14,7 +14,7 @@ import {
   validateTitle,
 } from "@/src/utils/validation";
 import useValidateInput from "@/src/hooks/useValidateInput";
-import { DaysOptions, ResionOptions } from "@/src/utils/input-options";
+import { ResionOptions } from "@/src/utils/input-options";
 
 const CourseInputForm = () => {
   const { course, errors } = useAppSelector((state) => {
@@ -28,16 +28,22 @@ const CourseInputForm = () => {
     courseDays,
     region,
     content,
+    places,
   } = course;
   const dispatch = useAppDispatch();
   const [calcCourseDays, setCalcCourseDays] = useState("");
   const [dateIsValid, setDateIsValid] = useState(false);
 
-  function getCourseDays(startDate: string, endDate: string) {
-    const diffInMs = Date.parse(endDate) - Date.parse(startDate);
-    const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24)); // 차이를 일(day) 단위로 계산
+  function calculateCoursePeriod(startDate: string, endDate: string) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
 
-    return diffInDays;
+    const diffInMs = end.getTime() - start.getTime();
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24)) + 1;
+    if (!diffInMs) return "당일 치기";
+    const nightCount = diffInDays - 1;
+
+    return `${nightCount}박 ${diffInDays}일`;
   }
 
   const {
@@ -85,37 +91,56 @@ const CourseInputForm = () => {
       setFormValue({ name: name as keyof ICourseForm, value: newValue })
     );
   };
-
-  if (
-    enteredTitleIsValid &&
-    enteredRegionIsValid &&
-    enteredContentIsValid &&
-    dateIsValid
-  ) {
-    dispatch(setIsFormValidTrue());
-  } else {
-    dispatch(setIsFormValidFalse());
-  }
-
   useEffect(() => {
     if (enteredStartDate && enteredEndDate) {
       const isValid = validateStartEndDate(enteredStartDate, enteredEndDate);
       setDateIsValid(isValid);
       if (isValid) {
-        const days =
-          DaysOptions[getCourseDays(enteredStartDate, enteredEndDate)];
-        dispatch(
-          setFormValue({
-            name: "courseDays",
-            value: calcCourseDays.replace(/\s/g, ""),
-          })
-        );
+        const days = calculateCoursePeriod(enteredStartDate, enteredEndDate);
+        if (days) {
+          dispatch(
+            setFormValue({
+              name: "courseDays",
+              value: days.replace(/\s/g, ""),
+            })
+          );
+        }
         setCalcCourseDays(days);
       } else {
         setCalcCourseDays("");
       }
     }
   }, [enteredStartDate, enteredEndDate]);
+
+  const setIsFormValidTrueCallback = useCallback(() => {
+    dispatch(setIsFormValidTrue());
+  }, [dispatch]);
+
+  const setIsFormValidFalseCallback = useCallback(() => {
+    dispatch(setIsFormValidFalse());
+  }, [dispatch]);
+
+  const isValid = useMemo(() => {
+    return (
+      enteredTitleIsValid &&
+      enteredRegionIsValid &&
+      enteredContentIsValid &&
+      dateIsValid
+    );
+  }, [
+    enteredTitleIsValid,
+    enteredRegionIsValid,
+    enteredContentIsValid,
+    dateIsValid,
+  ]);
+
+  useEffect(() => {
+    if (isValid) {
+      setIsFormValidTrueCallback();
+    } else {
+      setIsFormValidFalseCallback();
+    }
+  }, [isValid, setIsFormValidTrueCallback, setIsFormValidFalseCallback]);
 
   const toggleSwitchclassName = isPublished
     ? `${styles["toggle-switch"]} ${styles.publish}`
@@ -158,7 +183,7 @@ const CourseInputForm = () => {
           </label>
           {titleInputHasError && (
             <p className={styles["error-text"]}>
-              4자 이상 20자 이하로 작성해 주세요..
+              4자 이상 20자 이하로 작성해 주세요.
             </p>
           )}
         </div>
@@ -181,7 +206,7 @@ const CourseInputForm = () => {
             <p className={styles["error-text"]}>선택해주세요.</p>
           )}
           {enteredStartDateIsValid && enteredEndDateIsValid && !dateIsValid && (
-            <p className={styles["error-text"]}>유효하지 않는 날짜 입니다.</p>
+            <p className={styles["error-text"]}>유효하지 않은 날짜 입니다.</p>
           )}
         </div>
         <div className={styles["input-group"]}>
@@ -209,7 +234,6 @@ const CourseInputForm = () => {
               value={enteredRegion}
               onChange={regionChangedHandler}
               onBlur={regionBlurHandler}
-              style={{ overflow: "auto" }}
             >
               <option value="" disabled>
                 선택해주세요.
