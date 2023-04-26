@@ -1,5 +1,4 @@
 import styles from "./CreateReview.module.css";
-import { IoMdClose } from "react-icons/io";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
