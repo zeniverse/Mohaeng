@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +40,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -129,6 +134,7 @@ public class PlaceService {
 //    List<String> excludedIds = Arrays.asList("2763773", "2784642", "2946071", "2930677", "2891338",
 //            "2725011", "2891349", "2777911", "2750886", "2946230",
 //            "2760807", "2930681");
+
     public String getOverview(String contentId) {
         String urlStr = getBaseUrl2().replace("contentId=", "contentId=" + contentId);
         String overviewText = "";
@@ -272,28 +278,24 @@ public class PlaceService {
 
     public PlaceDetailsResponse getPlaceDetailsByContentId(String contentId, Member member) {
         Place currentPlace = null;
-        Boolean isBookmark;
+        Boolean isBookmark = false;
 
         List<Place> places = placeRepository.findByContentId(contentId);
         List<String> overviews = getPlaceOverview(contentId);
-
-        if (member != null){
-            isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, places.get(0));
-        } else {
-            isBookmark = false;
-        }
 
         List<PlaceDetailsDto> placeDetailsDtos = IntStream.range(0, places.size())
                 .mapToObj(i -> {
                     Place place = places.get(i);
                     String overview = overviews.get(i);
-                    return new PlaceDetailsDto(place.getId(), place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), place.getMapX(), place.getMapY(), place.getAddress(), overview, isBookmark);
+                    return new PlaceDetailsDto(place.getId(), place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), place.getMapX(), place.getMapY(), place.getAddress(), overview);
                 })
                 .collect(Collectors.toList());
+        if (member != null){
+            isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, places.get(0));
+        }
 
 
-
-        PlaceDetailsResponse response = new PlaceDetailsResponse(placeDetailsDtos);
+        PlaceDetailsResponse response = new PlaceDetailsResponse(placeDetailsDtos,isBookmark);
         return response;
     }
 
