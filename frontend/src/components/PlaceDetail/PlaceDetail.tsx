@@ -12,6 +12,7 @@ import ReviewList from "@/src/components/Review/ReviewList";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/src/store/reducers/modalSlice";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 interface PlaceInfo {
   placeId: number;
@@ -152,7 +153,9 @@ export default function PlaceDetail() {
             />
           </div>
           <div className={styles.detailMap}>
-            <p className={styles.address}>📍 {placeInfo.address}</p>
+            <p className={styles.address}>
+              <FaMapMarkerAlt /> {placeInfo.address}
+            </p>
             <div className={styles.map} id="map">
               <PlaceDetailMap
                 latitude={placeInfo.mapY}
