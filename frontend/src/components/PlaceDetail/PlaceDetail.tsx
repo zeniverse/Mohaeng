@@ -134,7 +134,6 @@ export default function PlaceDetail() {
           <div className={styles.headerTitle}>
             <h2 className={styles.h2}>{placeInfo.name}</h2>
             <p>
-              {" "}
               <FaMapMarkerAlt /> {placeInfo.address}
             </p>
           </div>
