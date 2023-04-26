@@ -15,7 +15,6 @@ import {
   setImgUrl,
 } from "@/src/store/reducers/loginTokenSlice";
 
-//TODO: Edit 값에 아무것도 치지 않을시 0으로 수정되는 것이 아닌 기존 닉네임 값 반영 혹은 닉네임 수정해달라는 alert 띄우기
 
 interface Uploader {
   nickName: string;
