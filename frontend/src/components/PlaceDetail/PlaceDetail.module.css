@@ -5,6 +5,7 @@
   padding: 2rem 3rem;
   background-color: var(--color-bg-lightgray);
   border-radius: 12px;
+  color: var(--color-text-basic);
 
   --color-icon: #cfcfcf;
 }
@@ -87,17 +88,17 @@
 }
 
 .detailDesc::-webkit-scrollbar {
-  width: 8px; /* 스크롤바의 너비 */
+  width: 8px;
 }
 
 .detailDesc::-webkit-scrollbar-thumb {
-  height: 10%; /* 스크롤바의 길이 */
-  background: var(--color-border-light); /* 스크롤바의 색상 */
+  height: 10%;
+  background: var(--color-border-light);
   border-radius: 10px;
 }
 
 .detailDesc::-webkit-scrollbar-track {
-  background: rgba(137, 222, 251, 0.161); /*스크롤바 뒷 배경 색상*/
+  background: rgba(142, 243, 246, 0.161);
 }
 
 .detailDesc,
