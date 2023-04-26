@@ -1,7 +1,7 @@
 .placeDetail {
   width: 100%;
   max-width: 70rem;
-  margin: 2rem 8rem 2rem;
+  margin: 2rem 8rem;
   padding: 2rem 3rem;
   background-color: var(--color-bg-lightgray);
   border-radius: 12px;
@@ -84,6 +84,20 @@
   overflow-y: scroll;
   margin-bottom: 1rem;
   padding: 1rem;
+}
+
+.detailDesc::-webkit-scrollbar {
+  width: 8px; /* 스크롤바의 너비 */
+}
+
+.detailDesc::-webkit-scrollbar-thumb {
+  height: 10%; /* 스크롤바의 길이 */
+  background: var(--color-border-light); /* 스크롤바의 색상 */
+  border-radius: 10px;
+}
+
+.detailDesc::-webkit-scrollbar-track {
+  background: rgba(137, 222, 251, 0.161); /*스크롤바 뒷 배경 색상*/
 }
 
 .detailDesc,
