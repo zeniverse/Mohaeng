@@ -17,6 +17,7 @@ import {
 } from "@/src/store/reducers/CourseDetailSlice";
 import { openModal } from "@/src/store/reducers/modalSlice";
 import TagItem from "../UI/TagItem";
+import { kakaoShare } from "@/src/utils/kakao-share";
 
 const CourseDetailNav = () => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
@@ -25,6 +26,8 @@ const CourseDetailNav = () => {
   const { id: userId } = useAppSelector((state) => state.token);
   const course = useAppSelector((state) => state.courseDetail.course);
   const {
+    title,
+    content,
     likeCount,
     places,
     courseId,
@@ -59,6 +62,26 @@ const CourseDetailNav = () => {
   const handleDetailLike = () => {
     if (userId) {
       dispatch(detailLikeToggleAction(courseId));
+    } else {
+      dispatch(
+        openModal({
+          modalType: "LoginModal",
+          isOpen: true,
+        })
+      );
+    }
+  };
+  const handleKakaoShare = () => {
+    if (userId) {
+      const param = {
+        templateId: 93215,
+        title,
+        content,
+        thumbnailUrl: places[0].imgUrl,
+        likeCount,
+        courseId,
+      };
+      kakaoShare(param);
     } else {
       dispatch(
         openModal({
@@ -124,7 +147,7 @@ const CourseDetailNav = () => {
             <BsBookmark className={styles.unbookmark} />
           )}
         </div>
-        <div className={styles["item-nav"]}>
+        <div className={styles["item-nav"]} onClick={handleKakaoShare}>
           <BsShare />
         </div>
       </div>
