@@ -92,3 +92,4 @@ jobs:
             { "name": "IMAGE_NAME", "value": "mohaeng" },
             { "name": "IMAGE_TAG", "value": "1.0" },
           ]
+
