@@ -1,8 +1,6 @@
 "use client";
 import Link from "next/link";
 import styles from "./MyCourseItem.module.css";
-import { useState } from "react";
-import IsLikeState from "../UI/IsLikeState";
 import cookie from "react-cookies";
 import axios from "axios";
 import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
@@ -30,17 +28,7 @@ const MyCourseItem = (myCourse: MyCourseItemProps) => {
     }`;
   };
   const accessToken = cookie.load("accessToken");
-
   const appDispatch = useAppDispatch();
-
-  // const toggleSwitchclassName =
-  //   myCourse.courseStatus === "PUBLIC"
-  //     ? `${styles["toggle-switch"]} ${styles.publish}`
-  //     : `${styles["toggle-switch"]} ${styles.private}`;
-  // const textclassName =
-  //   myCourse.courseStatus === "PUBLIC"
-  //     ? `${styles["toggle-switch-text"]} ${styles.publish}`
-  //     : `${styles["toggle-switch-text"]} ${styles.private}`;
 
   const clickToggle = () => {
     var ispublish: boolean = true;

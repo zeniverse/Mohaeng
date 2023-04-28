@@ -1,5 +1,4 @@
 import styles from "./CreateReview.module.css";
-import { IoMdClose } from "react-icons/io";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -9,6 +8,7 @@ import ReviewRating from "./ReviewRating";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import usePreventRefresh from "@/src/hooks/usePreventRefresh";
+import { AiFillCloseCircle } from "react-icons/ai";
 
 export interface formData {
   reviewId: number;
@@ -90,7 +90,7 @@ export default function EditReview() {
     for (let i = 0; i < e.target.files!.length; i++) {
       const file = e.target.files![i];
 
-      if (newImages.length < 3) {
+      if (previews.length + reviewForm.imageUrls.length < 3) {
         newImages.push(file);
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -242,7 +242,7 @@ export default function EditReview() {
             </div>
 
             <p className={styles.boldTitle}>사진 추가하기 (선택)</p>
-            <label htmlFor="inputFile">
+            <label className={styles.chooseLabel} htmlFor="inputFile">
               <div className={styles.chooseFile}>사진 첨부</div>
             </label>
             <input
@@ -261,13 +261,14 @@ export default function EditReview() {
               {previews?.map((preview, index) => (
                 <div className={styles.imgBox} key={index}>
                   <Image
+                    className={styles.previewImg}
                     src={preview}
                     width={200}
                     height={200}
                     alt={`${preview}-${index}`}
                   />
-                  <IoMdClose
-                    className={styles.deleteImg}
+                  <AiFillCloseCircle
+                    className={styles.deleteImgBtn}
                     onClick={() => handleDeletePreview(index)}
                   />
                 </div>
@@ -275,13 +276,14 @@ export default function EditReview() {
               {reviewForm.imageUrls?.map((preview, index) => (
                 <div className={styles.imgBox} key={index}>
                   <Image
+                    className={styles.previewImg}
                     src={preview}
                     width={200}
                     height={200}
                     alt={`${preview}-${index}`}
                   />
-                  <IoMdClose
-                    className={styles.deleteImg}
+                  <AiFillCloseCircle
+                    className={styles.deleteImgBtn}
                     onClick={() => handleDeleteImage(index)}
                   />
                 </div>

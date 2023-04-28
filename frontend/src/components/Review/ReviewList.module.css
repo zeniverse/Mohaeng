@@ -2,6 +2,7 @@
   width: 100%;
   max-width: 70rem;
   margin: 2rem 8rem;
+  color: var(--color-text-basic);
 
   --color-icon: #cfcfcf;
 }
@@ -44,7 +45,7 @@
 }
 
 .reviewBtn:hover {
-  filter: brightness(105%);
+  filter: brightness(95%);
 }
 
 .reviewNav {
