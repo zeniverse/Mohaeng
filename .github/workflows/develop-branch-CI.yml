@@ -64,7 +64,7 @@ jobs:
       working-directory: ./backend
       
     - name: Push to Dockerhub
-      run: ./gradlew jib --image=jihye219219/mohaeng:latest --no-cache
+      run: ./gradlew clearCache jib --image=jihye219219/mohaeng:latest
       working-directory: ./backend
       env:
         DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
