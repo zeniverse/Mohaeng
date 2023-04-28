@@ -24,6 +24,13 @@ import cookie from "react-cookies";
 import { useRouter } from "next/router";
 import IsLikeState from "../UI/IsLikeState";
 import { openModal } from "@/src/store/reducers/modalSlice";
+import { kakaoShare } from "@/src/utils/kakao-share";
+
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
 
 const CourseItem = ({
   courseId,
@@ -87,6 +94,27 @@ const CourseItem = ({
     router.push(`/course/${courseId}`);
   };
 
+  const handleKakaoShare = () => {
+    if (userId) {
+      const param = {
+        templateId: 93215,
+        title,
+        content,
+        thumbnailUrl,
+        likeCount,
+        courseId,
+      };
+      kakaoShare(param);
+    } else {
+      dispatch(
+        openModal({
+          modalType: "LoginModal",
+          isOpen: true,
+        })
+      );
+    }
+  };
+
   return (
     <div className={styles["course-item-container"]}>
       <div className={styles["item-info-container"]} onClick={handleLinkClick}>
@@ -127,7 +155,10 @@ const CourseItem = ({
             <BsBookmark className={styles.unbookmark} />
           )}
         </div>
-        <div className={`${styles["item-nav"]} ${styles.center}`}>
+        <div
+          className={`${styles["item-nav"]} ${styles.center}`}
+          onClick={handleKakaoShare}
+        >
           <BsShare />
         </div>
         <div
