@@ -2,11 +2,10 @@ import Link from "next/link";
 import axios from "axios";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import styles from "./UserBookmarkItem.module.css";
-import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
+import { BsBookmarkFill } from "react-icons/bs";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import cookie from "react-cookies";
-import { useSelector } from "react-redux";
 import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 
 export interface bookmarkState {
@@ -23,6 +22,16 @@ export interface bookmarkState {
 }
 
 const UserBookmarkItem = (prop: bookmarkState) => {
+  const getFormattedDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    return `${year}-${month < 10 ? "0" + month : month}-${
+      day < 10 ? "0" + day : day
+    }`;
+  };
+
   const appDispatch = useAppDispatch();
   const accessToken = cookie.load("accessToken");
 
@@ -81,13 +90,17 @@ const UserBookmarkItem = (prop: bookmarkState) => {
           <BsBookmarkFill className={styles.bookmark} onClick={delBookmark} />
         </div>
         <h2>{prop.name}</h2>
-        <p>{prop.desc}</p>
+        {prop.isPlace === true ? (
+          <p>{prop.desc}</p>
+        ) : (
+          <p>{getFormattedDate(new Date(prop.createdDate))}</p>
+        )}
         {prop.isRating === true ? (
           <p>
             <FiveStarRating rating={prop.rating.toString()} />
           </p>
         ) : (
-          <p>{prop.createdDate}</p>
+          <p>{prop.desc}</p>
         )}
       </div>
     </div>

@@ -69,7 +69,7 @@ const PlaceItem = ({
 
   const delBookmark = () => {
     if (!accessToken) {
-      router.push("/login");
+      router.push("/");
       return;
     }
     const response = async () => {

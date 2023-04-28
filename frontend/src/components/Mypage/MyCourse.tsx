@@ -1,9 +1,6 @@
 import styles from "./MyCourse.module.css";
-import { useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { BiBookmark } from "react-icons/bi";
-import UserBookmarkItem from "./UserBookmarkItem";
 import MyCourseItem from "./MyCourseItem";
 
 const MyCourse = () => {
