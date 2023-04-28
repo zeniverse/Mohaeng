@@ -86,5 +86,3 @@ jobs:
         user: ${{ secrets.JENKINS_USER }}
         token: ${{ secrets.JENKINS_USER_TOKEN }}
         job: ${{ secrets.JEKINS_JOB }}
-
-
