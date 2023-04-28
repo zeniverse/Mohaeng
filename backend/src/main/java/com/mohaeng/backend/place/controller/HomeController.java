@@ -12,6 +12,6 @@ public class HomeController {
     @ResponseBody
     public String home() {
         log.info("Home Controller");
-        return "home";
+        return "home2";
     }
 }

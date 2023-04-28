@@ -64,7 +64,7 @@ jobs:
       working-directory: ./backend
       
     - name: Push to Dockerhub
-      run: ./gradlew jib
+      run: ./gradlew jib --image=jihye219219/mohaeng:latest --force
       working-directory: ./backend
         
     - name: Get Current Time
@@ -86,11 +86,5 @@ jobs:
         user: ${{ secrets.JENKINS_USER }}
         token: ${{ secrets.JENKINS_USER_TOKEN }}
         job: ${{ secrets.JEKINS_JOB }}
-      parameters: |
-        [
-          { "name": "IMAGE_STORAGE", "value": "jihye219219" },
-          { "name": "IMAGE_NAME", "value": "mohaeng" },
-          { "name": "IMAGE_TAG", "value": "1.0" },
-        ]
 
 
