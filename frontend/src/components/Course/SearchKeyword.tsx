@@ -6,12 +6,10 @@ import styles from "./SearchKeyword.module.css";
 
 const SearchKeyword = () => {
   const [searchValue, setSearchValue] = useState("");
+  const [isSearched, setIsSearched] = useState(false);
 
   const dispatch = useAppDispatch();
 
-  const handleSearch = () => {
-    dispatch(setKeyword(searchValue));
-  };
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
@@ -19,12 +17,23 @@ const SearchKeyword = () => {
   const resetHandler = () => {
     setSearchValue("");
     dispatch(clearKeyword());
+    setIsSearched(false);
   };
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleSearch = () => {
+    dispatch(setKeyword(searchValue));
+    !searchValue.trim() ? setIsSearched(false) : setIsSearched(true);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSearch();
     }
   };
+
+  const buttonClasses = `${styles["search-btn"]} ${
+    isSearched ? styles.searched : ""
+  }`;
+
   return (
     <div className={styles.keyword}>
       <h4>키워드 검색</h4>
@@ -35,7 +44,7 @@ const SearchKeyword = () => {
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
         />
-        <button className={styles["search-btn"]} onClick={handleSearch}>
+        <button className={buttonClasses} onClick={handleSearch}>
           검색
         </button>
         <ResetButton onClick={resetHandler} />

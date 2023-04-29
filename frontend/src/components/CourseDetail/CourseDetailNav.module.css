@@ -43,3 +43,11 @@
   align-items: center;
   gap: 0.6rem;
 }
+
+.unbookmark {
+  color: var(--color-icon);
+}
+
+.bookmark {
+  color: var(--color-blue);
+}
