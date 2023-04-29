@@ -12,7 +12,7 @@
 .course-length {
   display: inline-block;
   padding: 0.2rem 0.8rem;
-  color: var(--color-bg-white);
+  color: var(--color-white);
   background-color: var(--color-primary);
   border-radius: 50px;
   font-size: 1.4rem;

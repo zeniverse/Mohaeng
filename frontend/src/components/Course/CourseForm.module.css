@@ -41,8 +41,7 @@
 }
 .submit-btn {
   width: 200px;
-
-  background-color: #d9f8c4;
+  background-color: var(--color-green);
 }
 .btn:hover {
   transform: translateY(5px);
