@@ -31,7 +31,6 @@ interface IArea {
 
 const AreaSelector = () => {
   const [selectedArea, setSelectedArea] = useState("all");
-
   const dispatch = useAppDispatch();
 
   const areaClickHandler = (area: IArea) => {

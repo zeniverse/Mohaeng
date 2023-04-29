@@ -2,6 +2,9 @@
   display: flex;
   gap: 0.3rem;
 }
+.keyword h4 {
+  margin-bottom: 0.6rem;
+}
 
 .keyword input {
   background: #fafafa;

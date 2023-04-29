@@ -6,89 +6,32 @@
   padding: 0 1rem;
   margin-bottom: 0.6rem;
 }
-
-.title-nav-left {
-  display: fel;
-}
-
-.title-nav-right {
-  font-size: 1.7rem;
-  display: flex;
-  gap: 1.4rem;
-}
-.roughmapBtn {
-  position: relative;
-}
-.item-nav {
-  cursor: pointer;
-}
-.map-icon:hover {
-  color: var(--color-blue);
-  scale: 107%;
-  transition: 200ms;
-}
-.unbookmark {
-  color: var(--color-icon);
-}
-
-.unbookmark:hover,
-.bookmark:hover {
-  color: var(--color-blue);
-  scale: 107%;
-  transition: 200ms;
-}
-
-.bookmark {
-  color: var(--color-blue);
-}
-
-.like {
-  font-size: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  gap: 0.1rem;
-}
-.likeCount {
-  font-size: 0.8rem;
-  padding: 1px;
-  position: absolute;
-  bottom: 0;
-  transform: translateY(10px);
-  color: var(--color-text-basic);
-}
-
-.heart {
-  font-size: 1.8rem;
-  color: var(--color-red);
-  transition: all 0.3s ease-in-out;
-  cursor: pointer;
-}
-
-.heart:hover {
-  scale: 107%;
-  transition: 200ms;
-}
-
-@keyframes grow-shrink {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
 .simple-info {
   display: flex;
   gap: 1rem;
   align-items: center;
 }
+
+.detail-nav {
+  font-size: 1.7rem;
+  display: flex;
+  gap: 1.4rem;
+}
+
+.item-nav {
+  cursor: pointer;
+}
+
+.item-nav:hover > .icon {
+  color: var(--color-blue);
+  scale: 107%;
+  transition: 200ms;
+}
+
+.roughmapBtn {
+  position: relative;
+}
+
 .date {
   display: flex;
   align-items: center;

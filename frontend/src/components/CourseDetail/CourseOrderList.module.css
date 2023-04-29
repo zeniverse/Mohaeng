@@ -16,7 +16,7 @@
 .course-item {
   display: flex;
   width: 100%;
-  background-color: var(--color-bg-white);
+  background-color: var(--color-white);
   margin-bottom: 0.8rem;
   border-radius: 1rem;
   position: relative;
@@ -33,7 +33,7 @@
   border-top-left-radius: 1rem;
   font-size: 1.8rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--color-white);
 }
 
 .item-content {
@@ -77,11 +77,11 @@
   padding: 0.6rem;
   border-radius: 100%;
   border: 2px solid #ea5455;
-  background-color: var(--color-bg-white);
+  background-color: var(--color-white);
 }
 .remove-btn:hover {
   background-color: #ea5455;
-  color: #fff;
+  color: var(--color-white);
 }
 
 .course-list::-webkit-scrollbar {
