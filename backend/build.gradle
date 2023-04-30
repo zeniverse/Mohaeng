@@ -78,7 +78,7 @@ jib {
         image = "openjdk:17-alpine"
     }
     to {
-        image = "jihye219219/mohaeng"
+        image = "mohaeng/backend"
         tags = ["${project.version.toString().toLowerCase()}"]
     }
     container {
