@@ -18,7 +18,6 @@ import SearchBar from "../Search/SearchBar";
 import Image from "next/image";
 import { resetFilter, selectArea } from "@/src/store/reducers/FilterSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-// import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";

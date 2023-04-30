@@ -8,9 +8,8 @@ import styles from "./CourseDetailContent.module.css";
 import CourseOrderList from "./CourseOrderList";
 
 const CourseDetailContent = () => {
-  const handleClick = () => {};
   const courseDetail = useAppSelector((state) => state.courseDetail.course);
-  const { content, startDate, endDate, region, places } = courseDetail;
+  const { content, places } = courseDetail;
 
   return (
     <div className={styles["content-container"]}>

@@ -1,5 +1,4 @@
 import styles from "./CreateReview.module.css";
-import { IoMdClose } from "react-icons/io";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -11,6 +10,7 @@ import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import ReviewTextArea from "./ReviewTextarea";
 import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
+import { AiFillCloseCircle } from "react-icons/ai";
 
 // 텍스트 유효성 검사
 
@@ -190,13 +190,14 @@ export default function CreateReview() {
               {previews?.map((preview, index) => (
                 <div className={styles.imgBox} key={index}>
                   <Image
+                    className={styles.previewImg}
                     src={preview}
                     width={200}
                     height={200}
                     alt={`${preview}-${index}`}
                   />
-                  <IoMdClose
-                    className={styles.deleteImg}
+                  <AiFillCloseCircle
+                    className={styles.deleteImgBtn}
                     onClick={() => handleDeletePreview(index)}
                   />
                 </div>

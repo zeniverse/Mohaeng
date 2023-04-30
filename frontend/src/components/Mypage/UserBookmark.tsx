@@ -1,8 +1,7 @@
 import styles from "./UserBookmark.module.css";
-import { useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { BiBookmark } from "react-icons/bi";
 import UserBookmarkItem from "./UserBookmarkItem";
 
 const UserBookmark = () => {
@@ -60,12 +59,12 @@ const UserBookmark = () => {
                 id={bookmark.bookMarkId}
                 name={bookmark.courseTitle}
                 image={bookmark.imgUrl}
-                desc={bookmark.createdDate}
+                desc={bookmark.content}
                 rating={0}
                 realId={bookmark.courseId}
                 isRating={false}
                 isPlace={false}
-                createdDate={bookmark.content}
+                createdDate={bookmark.createdDate}
                 contentId=""
               />
             ))}

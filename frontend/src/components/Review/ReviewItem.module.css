@@ -3,7 +3,7 @@
   border-radius: 12px;
   padding: 30px 24px;
   border: 1px solid var(--color-border-light);
-  background-color: var(--color-bg-white);
+  background-color: var(--color-white);
 }
 
 .reviewer {
@@ -43,9 +43,11 @@
   display: flex;
   flex-direction: row;
 }
+
 .reviewImg {
   padding: 4px;
   margin-right: 0.5rem;
+  cursor: pointer;
 }
 
 .btnGroup {
@@ -82,7 +84,7 @@
   height: 30px;
   border: 1px solid var(--color-border-light);
   border-radius: 50px;
-  background-color: var(--color-bg-white);
+  background-color: var(--color-white);
   cursor: pointer;
 }
 

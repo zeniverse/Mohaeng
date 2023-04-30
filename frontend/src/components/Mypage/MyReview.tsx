@@ -1,6 +1,5 @@
 import styles from "./MyReview.module.css";
-import { useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import MyReviewItem from "./MyReviewItem";
 

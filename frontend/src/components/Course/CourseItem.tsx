@@ -24,6 +24,13 @@ import cookie from "react-cookies";
 import { useRouter } from "next/router";
 import IsLikeState from "../UI/IsLikeState";
 import { openModal } from "@/src/store/reducers/modalSlice";
+import { kakaoShare } from "@/src/utils/kakao-share";
+
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
 
 const CourseItem = ({
   courseId,
@@ -87,6 +94,27 @@ const CourseItem = ({
     router.push(`/course/${courseId}`);
   };
 
+  const handleKakaoShare = () => {
+    if (userId) {
+      const param = {
+        templateId: 93215,
+        title,
+        content,
+        thumbnailUrl,
+        likeCount,
+        courseId,
+      };
+      kakaoShare(param);
+    } else {
+      dispatch(
+        openModal({
+          modalType: "LoginModal",
+          isOpen: true,
+        })
+      );
+    }
+  };
+
   return (
     <div className={styles["course-item-container"]}>
       <div className={styles["item-info-container"]} onClick={handleLinkClick}>
@@ -120,27 +148,26 @@ const CourseItem = ({
           className={styles["item-nav"]}
           onClick={() => bookmarkHandler(courseId)}
         >
-          {/* TODO: CSS 손보기 컴포넌트 통일 */}
           {isBookmarked ? (
-            <BsBookmarkFill className={styles.bookmark} />
+            <BsBookmarkFill className={`${styles.bookmark} ${styles.icon}`} />
           ) : (
-            <BsBookmark className={styles.unbookmark} />
+            <BsBookmark className={`${styles.unbookmark} ${styles.icon}`} />
           )}
         </div>
-        <div className={`${styles["item-nav"]} ${styles.center}`}>
-          <BsShare />
+        <div
+          className={`${styles["item-nav"]} ${styles.center}`}
+          onClick={handleKakaoShare}
+        >
+          <BsShare className={styles.icon} />
         </div>
         <div
           className={`${styles["item-nav"]} ${styles.roughmapBtn}`}
           onClick={toggleRoughMapHandler}
         >
           {isRoughMapOpen ? (
-            <BsMapFill
-              className={styles["map-icon"]}
-              color="var(--color-blue)"
-            />
+            <BsMapFill className={styles.icon} color="var(--color-blue)" />
           ) : (
-            <BsMap className={styles["map-icon"]} />
+            <BsMap className={styles.icon} />
           )}
           {isRoughMapOpen && (
             <RoughMap RoughMapData={places} onClose={onClose} />

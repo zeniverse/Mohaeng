@@ -1,4 +1,4 @@
-import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { selectArea } from "@/src/store/reducers/FilterSlice";
 import { useState } from "react";
 import styles from "./AreaSelector.module.css";
@@ -30,12 +30,10 @@ interface IArea {
 }
 
 const AreaSelector = () => {
-  const [selectedArea, setSelectedArea] = useState("all");
-
+  const { area } = useAppSelector((state) => state.filter);
   const dispatch = useAppDispatch();
 
   const areaClickHandler = (area: IArea) => {
-    setSelectedArea(area.areaCode);
     dispatch(selectArea(area));
   };
 
@@ -43,15 +41,15 @@ const AreaSelector = () => {
     <div className={styles.container}>
       <h3>지역</h3>
       <div className={styles["selector-wrapper"]}>
-        {areas.map((area) => (
+        {areas.map((item) => (
           <button
-            key={area.areaCode}
-            onClick={() => areaClickHandler(area)}
+            key={item.areaCode}
+            onClick={() => areaClickHandler(item)}
             className={`${styles.button} ${
-              selectedArea === area.areaCode ? styles.active : ""
+              area.areaCode === item.areaCode ? styles.active : ""
             }`}
           >
-            {area.region}
+            {item.region}
           </button>
         ))}
       </div>

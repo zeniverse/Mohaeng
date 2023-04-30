@@ -20,16 +20,7 @@ const CourseInputForm = () => {
   const { course, errors } = useAppSelector((state) => {
     return state.courseForm;
   });
-  const {
-    title,
-    startDate,
-    endDate,
-    isPublished,
-    courseDays,
-    region,
-    content,
-    places,
-  } = course;
+  const { title, startDate, endDate, isPublished, region, content } = course;
   const dispatch = useAppDispatch();
   const [calcCourseDays, setCalcCourseDays] = useState("");
   const [dateIsValid, setDateIsValid] = useState(false);

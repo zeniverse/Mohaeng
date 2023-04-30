@@ -7,8 +7,6 @@ import {
   BsMapFill,
   BsMap,
   BsShare,
-  BsHeartFill,
-  BsHeart,
 } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import {
@@ -17,6 +15,8 @@ import {
 } from "@/src/store/reducers/CourseDetailSlice";
 import { openModal } from "@/src/store/reducers/modalSlice";
 import TagItem from "../UI/TagItem";
+import { kakaoShare } from "@/src/utils/kakao-share";
+import LIkeButton from "../UI/LIkeButton";
 
 const CourseDetailNav = () => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
@@ -25,6 +25,8 @@ const CourseDetailNav = () => {
   const { id: userId } = useAppSelector((state) => state.token);
   const course = useAppSelector((state) => state.courseDetail.course);
   const {
+    title,
+    content,
     likeCount,
     places,
     courseId,
@@ -69,45 +71,57 @@ const CourseDetailNav = () => {
     }
   };
 
+  const handleKakaoShare = () => {
+    if (userId) {
+      const param = {
+        templateId: 93215,
+        title,
+        content,
+        thumbnailUrl: places[0].imgUrl,
+        likeCount,
+        courseId,
+      };
+      kakaoShare(param);
+    } else {
+      dispatch(
+        openModal({
+          modalType: "LoginModal",
+          isOpen: true,
+        })
+      );
+    }
+  };
+
   const RoughMapData = places?.map((place) => place.name).join(",");
 
   return (
     <div className={styles["title-nav"]}>
-      <div className={styles["title-nav-left"]}>
-        <div className={styles["simple-info"]}>
-          <div className={styles.date}>
-            <TagItem size="M" text="기간" bgColor="Dsky" />
-            <p className={styles.text}>
-              {startDate} ~ {endDate}
-            </p>
-          </div>
-          <div className={styles.region}>
-            <TagItem size="M" text="지역" bgColor="LMarinBlue" />
-            <p className={styles.text}>{region}</p>
-          </div>
+      <div className={styles["simple-info"]}>
+        <div className={styles.date}>
+          <TagItem size="M" text="기간" bgColor="Dsky" />
+          <p className={styles.text}>
+            {startDate} ~ {endDate}
+          </p>
+        </div>
+        <div className={styles.region}>
+          <TagItem size="M" text="지역" bgColor="LMarinBlue" />
+          <p className={styles.text}>{region}</p>
         </div>
       </div>
-      <div className={styles["title-nav-right"]}>
-        <span className={styles.like}>
-          {/* TODO: 컴포넌트화 */}
-          {isLiked ? (
-            <BsHeartFill className={styles.heart} onClick={handleDetailLike} />
-          ) : (
-            <BsHeart className={styles.heart} onClick={handleDetailLike} />
-          )}
-          <div className={styles.likeCount}>{likeCount}</div>
-        </span>
+      <div className={styles["detail-nav"]}>
+        <LIkeButton
+          isLiked={isLiked}
+          likeCount={likeCount}
+          onClick={handleDetailLike}
+        />
         <div
           className={`${styles["item-nav"]} ${styles.roughmapBtn}`}
           onClick={toggleRoughMapHandler}
         >
           {isRoughMapOpen ? (
-            <BsMapFill
-              className={styles["map-icon"]}
-              color="var(--color-blue)"
-            />
+            <BsMapFill className={styles.icon} color="var(--color-blue)" />
           ) : (
-            <BsMap className={styles["map-icon"]} />
+            <BsMap className={styles.icon} />
           )}
           {isRoughMapOpen && (
             <RoughMap RoughMapData={RoughMapData} onClose={onClose} />
@@ -117,15 +131,14 @@ const CourseDetailNav = () => {
           className={styles["item-nav"]}
           onClick={() => bookmarkHandler(courseId)}
         >
-          {/* TODO: CSS 손보기 컴포넌트 통일 */}
           {isBookmarked ? (
-            <BsBookmarkFill className={styles.bookmark} />
+            <BsBookmarkFill className={`${styles.bookmark} ${styles.icon}`} />
           ) : (
-            <BsBookmark className={styles.unbookmark} />
+            <BsBookmark className={`${styles.unbookmark} ${styles.icon}`} />
           )}
         </div>
-        <div className={styles["item-nav"]}>
-          <BsShare />
+        <div className={styles["item-nav"]} onClick={handleKakaoShare}>
+          <BsShare className={styles.icon} />
         </div>
       </div>
     </div>
