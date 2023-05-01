@@ -32,7 +32,7 @@
 
 ## 💙💻 백엔드 기술 스택
 
-![image](https://user-images.githubusercontent.com/77098586/235479300-d2584c92-5554-4861-9fa4-4301f4037f34.png)
+![image](https://user-images.githubusercontent.com/77098586/235480978-3354c0e2-a7e2-4053-b82d-04173cba2733.png)
 
 ## ⚙ 인프라 기술 스택
 
