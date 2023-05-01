@@ -25,7 +25,6 @@ public class CourseLikesService {
     private final MemberRepository memberRepository;
     private final CourseRepository courseRepository;
 
-
     @Transactional
     public CourseLikesRes addLikes(Long courseId, String memberEmail) {
         // 1. 로그인 하지 않은 유저 확인
