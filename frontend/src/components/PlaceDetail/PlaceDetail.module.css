@@ -88,7 +88,7 @@
 }
 
 .detailDesc::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 .detailDesc::-webkit-scrollbar-thumb {
