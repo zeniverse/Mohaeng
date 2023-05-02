@@ -26,9 +26,17 @@
 
 ![image](https://user-images.githubusercontent.com/94662639/232201100-dd23a0f9-5b6d-4b21-8b12-984aea1aabbd.png)
 
-## 🧑🏻‍💻 사용 기술
+## 💚💻 프론트엔드 기술 스택
 
-![image](https://user-images.githubusercontent.com/94662639/232202389-3d32497b-1c6c-42f2-a17c-447ef2502510.png)
+![image](https://user-images.githubusercontent.com/77098586/235476885-1410b80c-65ce-4462-9433-a84e229ad8ee.png)
+
+## 💙💻 백엔드 기술 스택
+
+![image](https://user-images.githubusercontent.com/77098586/235480978-3354c0e2-a7e2-4053-b82d-04173cba2733.png)
+
+## ⚙ 인프라 기술 스택
+
+![image](https://user-images.githubusercontent.com/77098586/235480322-d988af8e-3fdc-4186-99b8-aaa49f4d4cbd.png)
 
 ## 📘 협업 툴
 
