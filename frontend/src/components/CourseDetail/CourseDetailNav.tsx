@@ -97,13 +97,13 @@ const CourseDetailNav = () => {
     <div className={styles["title-nav"]}>
       <div className={styles["simple-info"]}>
         <div className={styles.date}>
-          <TagItem size="M" text="기간" bgColor="Dsky" />
+          <TagItem size="S" text="기간" bgColor="Dsky" />
           <p className={styles.text}>
             {startDate} ~ {endDate}
           </p>
         </div>
         <div className={styles.region}>
-          <TagItem size="M" text="지역" bgColor="LMarinBlue" />
+          <TagItem size="S" text="지역" bgColor="LMarinBlue" />
           <p className={styles.text}>{region}</p>
         </div>
       </div>

@@ -1,5 +1,4 @@
 .like {
-  font-size: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,7 +7,7 @@
   gap: 0.1rem;
 }
 .likeCount {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   padding: 1px;
   position: absolute;
   bottom: 0;
@@ -17,7 +16,7 @@
 }
 
 .heart {
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   color: var(--color-red);
   transition: all 0.3s ease-in-out;
   cursor: pointer;
