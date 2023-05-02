@@ -54,7 +54,6 @@ const PlaceCardSlider = () => {
               placeId={place.placeId}
               contentId={place.contentId}
               name={place.name}
-              content={place.content}
               firstImage={place.firstImage}
               averageRating={place.averageRating}
             />
