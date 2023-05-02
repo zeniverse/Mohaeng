@@ -24,19 +24,19 @@
 
 ## 📙 기획 의도
 
-![image](https://user-images.githubusercontent.com/94662639/232201100-dd23a0f9-5b6d-4b21-8b12-984aea1aabbd.png)
+![image](https://user-images.githubusercontent.com/77098586/235631768-53d71059-5710-4fcd-a396-95563157278f.png)
 
 ## 💚💻 프론트엔드 기술 스택
 
-![image](https://user-images.githubusercontent.com/77098586/235476885-1410b80c-65ce-4462-9433-a84e229ad8ee.png)
+![image](https://user-images.githubusercontent.com/77098586/235626706-90476053-5877-416b-908c-d626b8171cb0.png)
 
 ## 💙💻 백엔드 기술 스택
 
-![image](https://user-images.githubusercontent.com/77098586/235480978-3354c0e2-a7e2-4053-b82d-04173cba2733.png)
+![image](https://user-images.githubusercontent.com/77098586/235626738-4b9b3937-f8b4-4a12-ab30-6636f416df69.png)
 
-## ⚙ 인프라 기술 스택
+## ⚙ 인프라 구조
 
-![image](https://user-images.githubusercontent.com/77098586/235480322-d988af8e-3fdc-4186-99b8-aaa49f4d4cbd.png)
+![image](https://user-images.githubusercontent.com/77098586/235627381-9151c744-a711-4293-935b-c736e221578c.png)
 
 ## 📘 협업 툴
 
