@@ -4,14 +4,18 @@ import styles from "./TagItem.module.css";
 const TagItem = ({
   text,
   bgColor,
+  color = "white",
   size = "M",
 }: {
   text: string;
   bgColor?: PaletteKeyTypes;
-  size?: "L" | "M" | "S";
+  color?: "black" | "white";
+  size?: "L" | "M" | "S" | "SS";
 }) => {
   const settingBgColor = bgColor ? palette[bgColor] : "var(--color-primary)";
-  const style = { backgroundColor: settingBgColor };
+  const settingColor =
+    color === "white" ? "var(--color-white)" : "var(--color-text-basic)";
+  const style = { backgroundColor: settingBgColor, color: settingColor };
   return (
     <>
       <div
