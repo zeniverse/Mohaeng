@@ -40,7 +40,7 @@
 
 ## 💡 인프라 구조
 
-![image](https://user-images.githubusercontent.com/77098586/235627381-9151c744-a711-4293-935b-c736e221578c.png)
+![image](https://user-images.githubusercontent.com/77098586/235634883-315a2754-f83d-4d22-8a6b-9464e0f06586.png)
 
 ## 📘 협업 툴
 
