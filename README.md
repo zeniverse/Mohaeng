@@ -28,13 +28,17 @@
 
 ## 💚💻 프론트엔드 기술 스택
 
-![image](https://user-images.githubusercontent.com/77098586/235626706-90476053-5877-416b-908c-d626b8171cb0.png)
+![image](https://user-images.githubusercontent.com/77098586/235633179-c5a5d4b8-6e58-4ec7-bb03-b934bc8f814b.png)
 
 ## 💙💻 백엔드 기술 스택
 
-![image](https://user-images.githubusercontent.com/77098586/235626738-4b9b3937-f8b4-4a12-ab30-6636f416df69.png)
+![image](https://user-images.githubusercontent.com/77098586/235633527-5128a6f3-5cc5-4ddb-81c7-d3bcdc20498a.png)
 
-## ⚙ 인프라 구조
+## ⚙ 인프라 기술 스택
+
+![image](https://user-images.githubusercontent.com/77098586/235634416-3e305cae-b59c-41cb-bcac-f3f084456aa3.png)
+
+## 💡 인프라 구조
 
 ![image](https://user-images.githubusercontent.com/77098586/235627381-9151c744-a711-4293-935b-c736e221578c.png)
 
