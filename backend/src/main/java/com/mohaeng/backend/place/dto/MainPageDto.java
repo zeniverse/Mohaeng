@@ -26,7 +26,7 @@ public class MainPageDto {
             firstImage = placeService.getFirstImage();
         }
         double averageRating = placeService.getAverageRatingForPlace(place.getId());
-        List<String> overviewList = placeService.getPlaceOverview(place.getContentId());
+//        List<String> overviewList = placeService.getPlaceOverview(place.getContentId());
 //        String overview = String.join(" ", overviewList);
 
         return MainPageDto.builder()
