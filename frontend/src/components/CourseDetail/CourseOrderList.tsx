@@ -3,6 +3,7 @@ import styles from "./CourseOrderList.module.css";
 import { AiOutlineMinus } from "react-icons/ai";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { removePlace } from "@/src/store/reducers/CourseFormSlice";
+import TagItem from "../UI/TagItem";
 
 const CourseOrderList = ({ places, mode }: any) => {
   const dispatch = useAppDispatch();
@@ -28,10 +29,9 @@ const CourseOrderList = ({ places, mode }: any) => {
               <p>이미지 준비 중</p>
             )}
             <div className={styles["item-content"]}>
-              <div className={styles["item-content-text"]}>
-                <p className={styles.name}>{place.name}</p>
-                <p className={styles.address}>주소: {place.address}</p>
-              </div>
+              <p className={styles.name}>{place.name}</p>
+              <TagItem color="black" size="SS" text="주소" bgColor="Lsky" />
+              <span className={styles.address}>{place.address}</span>
             </div>
             {mode === "write" && (
               <div className={styles["remove-btn-wrapper"]}>
