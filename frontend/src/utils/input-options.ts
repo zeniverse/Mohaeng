@@ -1,13 +1,3 @@
-export const DaysOptions: string[] = [
-  "당일 치기",
-  "1박 2일",
-  "2박 3일",
-  "3박 4일",
-  "4박 5일",
-  "5박 6일",
-  "6박 7일",
-  "기타",
-];
 export const ResionOptions = [
   "서울",
   "부산",
