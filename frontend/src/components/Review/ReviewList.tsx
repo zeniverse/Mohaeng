@@ -135,7 +135,9 @@ export default function ReviewList() {
 
           <aside className={styles.reviewNav}>
             <div className={styles.reviewInfo}>
-              <p> 총 {totalElements}건의 리뷰</p>
+              <p>
+                총 <strong>{totalElements}</strong>건의 리뷰
+              </p>
               <span>
                 <FiveStarRating rating={averageRating.toString()} />
               </span>
