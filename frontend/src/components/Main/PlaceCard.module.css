@@ -1,6 +1,7 @@
 .place-card-container {
   width: 240px;
   overflow: hidden;
+
   box-shadow: 0px 0px 15px -5px;
   transition: 0.3s;
   background-color: var(--color-white);
@@ -14,9 +15,10 @@
 }
 .place-image-container {
   display: flex;
+
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid gray;
+  margin-bottom: 0.4rem;
 }
 
 .place-image-container img {
@@ -36,7 +38,7 @@
 }
 
 .place-card-title {
-  margin: 0.2rem 0 0.5rem;
+  margin: 0.1rem 0;
 }
 
 .place-card-desc p {
