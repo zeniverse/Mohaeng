@@ -32,8 +32,6 @@ public class PlaceInitializer {
     @PostConstruct
     @Scheduled(cron = "0 0 0 * * ?")
     public void init() throws IOException {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
         placeService.saveInitImage();
         List<Place> places = Optional.of(placeRepository.findAll())
                 .filter(List::isEmpty)
@@ -52,10 +50,6 @@ public class PlaceInitializer {
                         placeRepository.save(oldPlace);
                     });
         });
-
-        stopWatch.stop();
-        long totalTimeMillis = stopWatch.getTotalTimeMillis();
-        System.out.println("total time : " + totalTimeMillis);
         placeRepository.flush();
     }
 
