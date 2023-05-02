@@ -25,6 +25,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
       <Head>
         <title>모두의 여행</title>
         <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Provider store={store}>
