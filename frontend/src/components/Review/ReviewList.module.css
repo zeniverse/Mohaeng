@@ -1,7 +1,11 @@
 .reviewSection {
-  width: 100%;
-  max-width: 70rem;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
   margin: 2rem 8rem;
+  padding: 2rem 3rem;
+  background-color: var(--color-bg-lightgray);
+  border-radius: 12px;
   color: var(--color-text-basic);
 
   --color-icon: #cfcfcf;
@@ -12,7 +16,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 2rem 3rem;
   background-color: var(--color-bg-lightgray);
   border-radius: 12px;
 }
