@@ -40,7 +40,7 @@ const UserInfo = () => {
           height={140}
         />
         <div>
-          <div className={styles["Name"]}>{id}</div>
+          {/* <div className={styles["Name"]}>{id}</div> */}
           <div className={styles["Nickname"]}>{nickName}</div>
           <div className={styles["Email"]}>{email}</div>
         </div>
