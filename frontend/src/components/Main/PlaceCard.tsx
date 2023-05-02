@@ -9,7 +9,6 @@ const PlaceCard = ({
   placeId,
   contentId,
   name,
-  content,
   firstImage,
   averageRating,
 }: ITopTenPlace) => {
@@ -38,9 +37,7 @@ const PlaceCard = ({
         <div className={styles["place-card-title"]}>
           <h3>{name}</h3>
         </div>
-        <div className={styles["place-card-desc"]}>
-          <p>{content}</p>
-        </div>
+        <div className={styles["place-card-desc"]}></div>
       </div>
     </div>
   );
