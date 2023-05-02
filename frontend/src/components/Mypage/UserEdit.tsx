@@ -134,7 +134,6 @@ const UserEdit = () => {
                 <input
                   className={styles["Input"]}
                   type="text"
-                  value={editName}
                   placeholder={nickname}
                   onChange={(e) => setEditName(e.target.value)}
                 />
