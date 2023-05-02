@@ -15,7 +15,6 @@ import {
   setImgUrl,
 } from "@/src/store/reducers/loginTokenSlice";
 
-
 interface Uploader {
   nickName: string;
 }
@@ -130,7 +129,6 @@ const UserEdit = () => {
             </label>
           </div>
           <div>
-            <div className={styles["Name"]}>{id}</div>
             <div className={styles["FormWrapper"]}>
               <label>
                 <input
