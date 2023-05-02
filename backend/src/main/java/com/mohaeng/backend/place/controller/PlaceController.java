@@ -155,18 +155,18 @@ public class PlaceController {
                 .collect(Collectors.toList());
 
         // getOverviews 메서드 호출
-        List<String> overviewsList = placeService.getOverviews(contentIds);
+//        List<String> overviewsList = placeService.getOverviews(contentIds);
 
         // 결과를 Map으로 변환
-        Map<String, String> overviews = new HashMap<>();
-        for (int i = 0; i < contentIds.size(); i++) {
-            String contentId = contentIds.get(i);
-            String overview = overviewsList.get(i);
-            overviews.put(contentId, overview);
-        }
+//        Map<String, String> overviews = new HashMap<>();
+//        for (int i = 0; i < contentIds.size(); i++) {
+//            String contentId = contentIds.get(i);
+//            String overview = overviewsList.get(i);
+//            overviews.put(contentId, overview);
+//        }
 
         List<MainPageDto> content = reviews.stream()
-                .map(review -> MainPageDto.Of(review.getPlace(), placeService, overviews))
+                .map(review -> MainPageDto.Of(review.getPlace(), placeService))
                 .collect(Collectors.toList());
         MainPageResponse response = MainPageResponse.from(content);
         return ResponseEntity.ok(BaseResponse.success("ok", response));
