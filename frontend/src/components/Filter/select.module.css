@@ -3,7 +3,7 @@
   position: relative;
   min-height: 1.5rem;
   border: 0.05em solid #777;
-  background-color: #fff;
+  background-color: var(--color-white);
   display: flex;
   align-items: center;
   gap: 0.5rem;

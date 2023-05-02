@@ -122,8 +122,10 @@ public class PlaceService {
                 if (address == null || address.isEmpty()) {
                     address = addr2;
                 }
-                Place place = new Place(name, address, areaCode, sigunguCode, contentId, firstImage, firstImage2, mapX, mapY);
-                places.add(place);
+                if (isValidPlace(address, areaCode, mapX, mapY, sigunguCode)) {
+                    Place place = new Place(name, address, areaCode, sigunguCode, contentId, firstImage, firstImage2, mapX, mapY);
+                    places.add(place);
+                }
             }
         }
         if (places.isEmpty()) {
@@ -131,9 +133,14 @@ public class PlaceService {
         }
         return places;
     }
-//    List<String> excludedIds = Arrays.asList("2763773", "2784642", "2946071", "2930677", "2891338",
-//            "2725011", "2891349", "2777911", "2750886", "2946230",
-//            "2760807", "2930681");
+
+    private boolean isValidPlace(String address, String areaCode, String mapX, String mapY, String sigunguCode) {
+        return address != null && !address.isEmpty() &&
+                areaCode != null && !areaCode.isEmpty() &&
+                !mapX.equals("0") && !mapY.equals("0") &&
+                sigunguCode != null && !sigunguCode.isEmpty();
+    }
+
 
     public String getOverview(String contentId) {
         String urlStr = getBaseUrl2().replace("contentId=", "contentId=" + contentId);

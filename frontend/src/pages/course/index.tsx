@@ -28,27 +28,21 @@ export default function Course() {
 
   return (
     <main className={styles.main}>
-      <div className={styles["course-container"]}>
-        <div className={styles["course-header-container"]}>
-          <h1>코스 목록</h1>
-        </div>
+      <h1>코스</h1>
+      <div className={styles["filter-container"]}>
         <AreaSelector />
-        <div className={styles["course-wrapper"]}>
-          <div className={styles["filter-wrapper"]}>
+        <div className={styles["course-filter-wrapper"]}>
+          <div className={styles.filter}>
             <SearchKeyword />
             <SelectSorting />
           </div>
-          <div className={styles.button}>
-            <button className={styles["write-btn"]} onClick={handleCreateClick}>
-              <BiPencil />
-              작성하기
-            </button>
-          </div>
-        </div>
-        <div className={styles["course-body-container"]}>
-          <CourseList />
+          <button className={styles["write-btn"]} onClick={handleCreateClick}>
+            <BiPencil />
+            코스 작성
+          </button>
         </div>
       </div>
+      <CourseList />
     </main>
   );
 }

@@ -1,7 +1,8 @@
 .dropdown-wrapper {
   position: relative;
 }
-.sort {
+.sort h4 {
+  margin-bottom: 0.6rem;
 }
 
 .dropdown-label {

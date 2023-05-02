@@ -65,7 +65,9 @@ export default function Place() {
         </div>
         <div className={styles["place-body-container"]}>
           <div className={styles["place-body-head"]}></div>
-          <AreaSelector />
+          <div className={styles["filter-wrapper"]}>
+            <AreaSelector />
+          </div>
           <PlaceList />
           <PageBar totalPage={totalPages} />
         </div>

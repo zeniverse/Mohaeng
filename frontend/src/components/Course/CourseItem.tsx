@@ -97,7 +97,6 @@ const CourseItem = ({
   const handleKakaoShare = () => {
     if (userId) {
       const param = {
-        templateId: 93215,
         title,
         content,
         thumbnailUrl,
@@ -148,30 +147,26 @@ const CourseItem = ({
           className={styles["item-nav"]}
           onClick={() => bookmarkHandler(courseId)}
         >
-          {/* TODO: CSS 손보기 컴포넌트 통일 */}
           {isBookmarked ? (
-            <BsBookmarkFill className={styles.bookmark} />
+            <BsBookmarkFill className={`${styles.bookmark} ${styles.icon}`} />
           ) : (
-            <BsBookmark className={styles.unbookmark} />
+            <BsBookmark className={`${styles.unbookmark} ${styles.icon}`} />
           )}
         </div>
         <div
           className={`${styles["item-nav"]} ${styles.center}`}
           onClick={handleKakaoShare}
         >
-          <BsShare />
+          <BsShare className={styles.icon} />
         </div>
         <div
           className={`${styles["item-nav"]} ${styles.roughmapBtn}`}
           onClick={toggleRoughMapHandler}
         >
           {isRoughMapOpen ? (
-            <BsMapFill
-              className={styles["map-icon"]}
-              color="var(--color-blue)"
-            />
+            <BsMapFill className={styles.icon} color="var(--color-blue)" />
           ) : (
-            <BsMap className={styles["map-icon"]} />
+            <BsMap className={styles.icon} />
           )}
           {isRoughMapOpen && (
             <RoughMap RoughMapData={places} onClose={onClose} />
