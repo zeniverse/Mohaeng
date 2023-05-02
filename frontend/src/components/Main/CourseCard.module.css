@@ -34,6 +34,12 @@
   margin: 0.2rem 0 0.5rem;
 }
 
+.course-card-title h3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .course-card-desc p {
   display: -webkit-box;
   height: 3.7rem;

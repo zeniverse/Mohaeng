@@ -13,7 +13,18 @@ const CourseDetailContent = () => {
 
   return (
     <div className={styles["content-container"]}>
-      <p className={styles.content}>{content}</p>
+      <div className={styles.content}>
+        {content?.split("\n").map((line, index) => {
+          return (
+            <div key={index}>
+              {line}
+              <br />
+            </div>
+          );
+        })}
+      </div>
+
+      {/* <p className={styles.content}>{formattedData}</p> */}
       <div className={styles.info}>
         {places && places.length > 0 && <KakaoMap mapData={places} />}
         {places && places.length > 0 && <CourseOrderList places={places} />}
