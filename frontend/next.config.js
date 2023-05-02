@@ -21,7 +21,7 @@ const nextConfig = {
     return [
       // {
       //   source: "/:path*",
-      //   destination: "http://3.24.141.151:8080/:path*",
+      //   destination: "http://3.24.141.151/:path*",
       // },
       // 코스 상세를 보려면 위 코드는 주석 처리하고 아래 코드는 주석을 풀어주세요.
       // 다른 url 경로 추가
