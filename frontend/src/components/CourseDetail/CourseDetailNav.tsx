@@ -74,7 +74,6 @@ const CourseDetailNav = () => {
   const handleKakaoShare = () => {
     if (userId) {
       const param = {
-        templateId: 93215,
         title,
         content,
         thumbnailUrl: places[0].imgUrl,
