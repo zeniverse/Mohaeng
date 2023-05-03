@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
 @Builder
 public class FindAllReviewResponse {
 
@@ -25,7 +26,6 @@ public class FindAllReviewResponse {
     private LocalDateTime createdDate;
     private List<String> imgUrl;
 
-
     @Builder
     public static FindAllReviewResponse of(Review review) {
         return new FindAllReviewResponse(
@@ -35,7 +35,7 @@ public class FindAllReviewResponse {
                 review.getRating(),
                 review.getContent(),
                 review.getCreatedDate(),
-        getAllImageName(review));
+                getAllImageName(review));
     }
 
     private static List<String> getAllImageName(Review review) {
