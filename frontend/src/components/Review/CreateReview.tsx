@@ -32,6 +32,7 @@ export default function CreateReview() {
   const [previews, setPreviews] = useState<string[]>([]);
   let rating = clicked.filter(Boolean).length;
   const id = useRouterQuery("id");
+  console.log(id);
 
   // * 새로고침 방지
   usePreventRefresh();
@@ -134,16 +135,17 @@ export default function CreateReview() {
           );
         });
     } catch (error) {
-      router.push(
-        {
-          pathname: `/place/[id]`,
-          query: {
-            placeId: placeId,
-            name: name,
-          },
-        },
-        `/place/${placeId}`
-      );
+      router.push(`/search?keyword=${name}`);
+      // router.push(
+      //   {
+      //     pathname: `/place/[id]`,
+      //     query: {
+      //       placeId: placeId,
+      //       name: name,
+      //     },
+      //   },
+      //   `/place/${placeId}`
+      // );
       console.log(error);
     }
   };

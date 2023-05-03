@@ -8,6 +8,7 @@ import { RootState } from "@/src/store/store";
 import { useRouter } from "next/router";
 import { openModal } from "@/src/store/reducers/modalSlice";
 import axios from "axios";
+import { setReview } from "@/src/store/reducers/reviewSlice";
 
 // 별점, 아이디, 작성일, 리뷰내용, 이미지
 // 유저일 경우 수정 삭제 버튼
@@ -20,6 +21,7 @@ type ReviewProps = {
   imgUrl: string[];
   rating: string;
   createdDate: string;
+  onDelete: (reviewId: number) => void;
 };
 
 export default function ReviewItem({
@@ -30,6 +32,7 @@ export default function ReviewItem({
   content,
   createdDate,
   imgUrl,
+  onDelete,
 }: ReviewProps) {
   const router = useRouter();
   const { placeId, name } = router.query;
@@ -40,34 +43,47 @@ export default function ReviewItem({
   const dispatch = useDispatch();
   const isUser = nickname === currentUser;
   const [isExpanded, setIsExpanded] = useState(false);
+  const page = useSelector((state: RootState) => state.page.page);
 
-  const deleteReview = async () => {
-    const confirmed = window.confirm("리뷰를 삭제하시겠습니까?");
-    if (confirmed) {
-      try {
-        const accessToken = await cookie.load("accessToken");
-        const response = await axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/review/detail/${reviewId}`,
-          {
-            headers: {
-              "Access-Token": accessToken,
-            },
-          }
-        );
-        router.push(
-          {
-            pathname: `/place/[id]`,
-            query: {
-              placeId: placeId,
-              name: name,
-            },
-          },
-          `/place/${placeId}`
-        );
-      } catch (error) {
-        console.error(error);
-      }
-    }
+  // const deleteReview = async () => {
+  //   const confirmed = window.confirm("리뷰를 삭제하시겠습니까?");
+  //   if (confirmed) {
+  //     try {
+  //       const accessToken = await cookie.load("accessToken");
+  //       const response = await axios.delete(
+  //         `${process.env.NEXT_PUBLIC_API_URL}/api/review/detail/${reviewId}`,
+  //         {
+  //           headers: {
+  //             "Access-Token": accessToken,
+  //           },
+  //         }
+  //       );
+  //       const res = await axios.get(`/api/review/${placeId}/rating`, {
+  //         params: {
+  //           page: page,
+  //         },
+  //         withCredentials: true,
+  //       });
+  //       dispatch(setReview(res.data.data));
+  //       // router.push(`/search?keyword=${name}`);
+  //       // router.push(
+  //       //   {
+  //       //     pathname: `/place/[id]`,
+  //       //     query: {
+  //       //       placeId: placeId,
+  //       //       name: name,
+  //       //     },
+  //       //   },
+  //       //   `/place/${placeId}`
+  //       // );
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  // };
+
+  const handleDelete = () => {
+    onDelete(reviewId);
   };
 
   const toggleExpand = () => {
@@ -112,7 +128,7 @@ export default function ReviewItem({
             >
               수정
             </button>
-            <button onClick={deleteReview} className={styles.btn}>
+            <button onClick={handleDelete} className={styles.btn}>
               삭제
             </button>
           </div>

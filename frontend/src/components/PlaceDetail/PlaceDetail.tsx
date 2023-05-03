@@ -17,6 +17,7 @@ import { RootState } from "@/src/store/store";
 import Pagebar from "../Pagenation/Pagebar";
 import ReviewItem from "../Review/ReviewItem";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
+import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 
 interface PlaceInfo {
   placeId: number;
@@ -74,7 +75,7 @@ export default function PlaceDetail() {
       if (bookMarked === false) {
         const res = await axios
           .post(
-            `/api/place/bookmark/${placeId}`,
+            `/api/place/bookmark/${id}`,
             {},
             {
               headers: {
@@ -88,7 +89,7 @@ export default function PlaceDetail() {
           });
       } else {
         const res = await axios
-          .delete(`/api/place/bookmark/${placeId}`, {
+          .delete(`/api/place/bookmark/${id}`, {
             headers: {
               "Access-Token": `${accessToken}`,
               withCredentials: true,
@@ -148,7 +149,6 @@ export default function PlaceDetail() {
   const currentUser = useSelector(
     (state: RootState) => state.nickName.nickName
   );
-  // const accessToken = useSelector((state: RootState) => state.token.token);
 
   // * 새로고침 방지
   // usePreventRefresh();
@@ -185,7 +185,9 @@ export default function PlaceDetail() {
         console.error(error);
       }
     }
-    fetchSelect();
+    if (id) {
+      fetchSelect();
+    }
   }, [selectedValue, page, id]);
 
   // * 리뷰 전체 조회
@@ -204,7 +206,7 @@ export default function PlaceDetail() {
         console.error(err);
       }
     };
-    if (id) {
+    if (id && id !== undefined) {
       fetchReview();
     }
   }, [page, id]);
@@ -228,6 +230,50 @@ export default function PlaceDetail() {
         },
         `/review/${placeId}/create-review`
       );
+      // localStorage.setItem("placeId", `${placeId}`);
+      // localStorage.setItem("name", `${name}`);
+    }
+  };
+
+  // useEffect(() => {
+  //   const prevPlaceId = localStorage.getItem("placeId");
+  //   const prevName = localStorage.getItem("name");
+  //   if (prevPlaceId && prevName) {
+  //     setPlaceId(prevPlaceId);
+  //     setName(prevName);
+  //   }
+  //   localStorage.removeItem("placeId");
+  //   localStorage.removeItem("name");
+  // }, []);
+
+  // * 리뷰 아이템 삭제
+  const handleDelete = async (reviewId: number) => {
+    const confirmed = window.confirm("리뷰를 삭제하시겠습니까?");
+    if (confirmed) {
+      try {
+        const response = await axios.delete(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/review/detail/${reviewId}`,
+          {
+            headers: {
+              "Access-Token": accessToken,
+            },
+          }
+        );
+        const res = await axios.get(`/api/review/${placeId}/rating`, {
+          params: {
+            page: page,
+          },
+          withCredentials: true,
+        });
+        dispatch(setReview(res.data.data));
+        appDispatch(getPlaceBookmark(accessToken));
+        appDispatch(getMyReview(accessToken));
+        setReviewData(
+          reviewData.filter((review) => review.reviewId !== reviewId)
+        );
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -273,6 +319,7 @@ export default function PlaceDetail() {
           <p className={styles.descInfo}>{placeInfo.overview}</p>
         </div>
       </section>
+
       <section className={styles.reviewSection}>
         <main className={styles.reviewContainer}>
           <div className={styles.reviewTitle}>
@@ -317,6 +364,7 @@ export default function PlaceDetail() {
                 content={review.content}
                 createdDate={review.createdDate}
                 imgUrl={review.imgUrl}
+                onDelete={handleDelete}
               />
             ))}
           </div>
