@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    Page<Review> findAllByPlaceId(Long id, Pageable pageable);
+    Page<Review> findAllByPlaceId(Long placeId, Pageable pageable);
     List<Review> findAllByPlaceId(Long placeId);
 
     @Query("SELECT AVG(CAST(r.rating AS double)) FROM Review r WHERE r.place.id = :place_id")
