@@ -15,8 +15,7 @@ const MyReview = () => {
             reviewId={review.reviewId}
             placeId={review.placeId}
             imgUrl={review.imgUrl}
-            title={review.title}
-            likeCount={review.likeCount}
+            name={review.name}
             createdDate={review.createdDate}
             content={review.content}
             rating={review.rating}
