@@ -23,10 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,7 +41,7 @@ public class ReviewService {
 
     public List<FindAllReviewResponse> getAllReview(Long id) {
         Place findPlace = placeRepository.findById(id)
-                .orElseThrow(() -> new PlaceNotFoundException("NOT_EXIST_PLACE"));
+                .orElseThrow(() -> new PlaceNotFoundException());
 
         return findPlace.getReviewList().stream()
                 .map(m -> FindAllReviewResponse.of(m))
@@ -54,7 +51,7 @@ public class ReviewService {
 
     public Page<Review> getAllReviewByPage(Long id, int page) {
         Place findPlace = placeRepository.findById(id)
-                .orElseThrow(() -> new PlaceNotFoundException("NOT_EXIST_PLACE"));
+                .orElseThrow(() -> new PlaceNotFoundException());
 
         Pageable pageable = PageRequest.of(page - 1, 4);
         Page<Review> reviews = reviewRepository.findAllByPlaceId(id, pageable);
@@ -75,7 +72,7 @@ public class ReviewService {
     @Transactional
     public void createReview(String email, Long placeId, CreateReviewRequest createReviewRequest, List<String> fileNameList) {
         Place findPlace = placeRepository.findById(placeId)
-                .orElseThrow(() -> new PlaceNotFoundException("NOT_EXIST_PLACE"));
+                .orElseThrow(() -> new PlaceNotFoundException());
         Member findMember = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberNotFoundException());
 
@@ -130,7 +127,7 @@ public class ReviewService {
     @Transactional
     public void updateReview(Long placeId, UpdateReviewRequest updateReviewRequest, List<String> fileNameList) {
         Place findPlace = placeRepository.findById(placeId)
-                .orElseThrow(() -> new PlaceNotFoundException("NOT_EXIST_PLACE"));
+                .orElseThrow(() -> new PlaceNotFoundException());
 
         Review review = reviewRepository.findById(placeId)
                 .orElseThrow(() -> new ReviewNotFoundException());
@@ -182,12 +179,25 @@ public class ReviewService {
                 .orElse(0.0);
     }
 
-
-
     public Review getReviewById(Long reviewId) {
         return reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException());
     }
+
+//    public List<FindAllReviewResponse> getReviewsById(Long reviewId) {
+//        Review review = reviewRepository.findById(reviewId)
+//                .orElseThrow(() -> new ReviewNotFoundException());
+//        FindAllReviewResponse findAllReviewResponse = new FindAllReviewResponse(review);
+//        List<FindAllReviewResponse> findAllReviewResponses = new ArrayList<>();
+//        findAllReviewResponses.add(findAllReviewResponse);
+//        return findAllReviewResponses;
+//    }
+
+//    public List<Review> getReviewById(Long reviewId) {
+//        Review review = reviewRepository.findById(reviewId)
+//                .orElseThrow(() -> new ReviewNotFoundException());
+//        return review;
+//    }
 
     public Page<Review> getAllReviewsByRating(Long placeId, int page) {
         Pageable pageable = PageRequest.of(page - 1 , 4, Sort.by("rating").descending());

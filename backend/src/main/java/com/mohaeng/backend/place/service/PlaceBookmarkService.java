@@ -57,8 +57,6 @@ public class PlaceBookmarkService {
         return PlaceBookmarkResponse.from(placeId, member.getId());
     }
 
-
-
     public boolean isExistPlaceBookmark(Long placeId, String memberEmail) {
         // 유저 확인 & 장소 확인
         Member member = isMember(memberEmail);
