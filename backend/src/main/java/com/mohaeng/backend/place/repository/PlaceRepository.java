@@ -17,6 +17,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceReposi
     Page<Place> findByNameContaining(String name, Pageable pageable);
     Page<Place> findByAreaCodeEquals(String areaCode, Pageable pageable);
     List<Place> findByContentId(String contentId);
+    List<Place> findById(String placeId);
 
     @Query("SELECT p " +
             "FROM Place p " +

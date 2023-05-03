@@ -72,10 +72,17 @@ public class PlaceController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/place/overview/{contentId}")
-    public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String contentId,
+//    @GetMapping("/place/overview/{contentId}")
+//    public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String contentId,
+//                                                                             HttpServletRequest request) {
+//        PlaceDetailsResponse response = placeService.getPlaceDetailsByContentId(contentId, isAccessMember(request));
+//        return ResponseEntity.ok().body(BaseResponse.success("OK",response));
+//    }
+
+    @GetMapping("/place/overview/{placeId}")
+    public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String placeId,
                                                                              HttpServletRequest request) {
-        PlaceDetailsResponse response = placeService.getPlaceDetailsByContentId(contentId, isAccessMember(request));
+        PlaceDetailsResponse response = placeService.getPlaceDetailsByPlaceId(placeId, isAccessMember(request));
         return ResponseEntity.ok().body(BaseResponse.success("OK",response));
     }
 
