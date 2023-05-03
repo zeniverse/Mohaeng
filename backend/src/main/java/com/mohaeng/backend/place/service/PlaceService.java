@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,10 +39,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -129,7 +124,7 @@ public class PlaceService {
             }
         }
         if (places.isEmpty()) {
-            throw new PlaceNotFoundException("No place found.");
+            throw new PlaceNotFoundException();
         }
         return places;
     }
@@ -283,12 +278,16 @@ public class PlaceService {
         return overviews;
     }
 
-    public PlaceDetailsResponse getPlaceDetailsByContentId(String contentId, Member member) {
+    public PlaceDetailsResponse getPlaceDetailsByPlaceId(String placeId, Member member) {
         Place currentPlace = null;
         Boolean isBookmark = false;
 
-        List<Place> places = placeRepository.findByContentId(contentId);
-        List<String> overviews = getPlaceOverview(contentId);
+        List<Place> places = placeRepository.findById(placeId);
+        List<String> overviews = places.stream()
+                .map(Place::getContentId)
+                .map(this::getPlaceOverview)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
 
         List<PlaceDetailsDto> placeDetailsDtos = IntStream.range(0, places.size())
                 .mapToObj(i -> {
@@ -326,5 +325,10 @@ public class PlaceService {
     public double getAverageRatingForPlace(Long placeId) {
         List<Review> placeReviews = reviewService.getAllReviewById(placeId);
         return Math.round(reviewService.getAverageRating(placeReviews) * 100.0) / 100.0;
+    }
+
+    public Place getPlaceById(Long id) {
+        return placeRepository.findById(id)
+                .orElseThrow(() -> new PlaceNotFoundException());
     }
 }
