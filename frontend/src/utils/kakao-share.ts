@@ -1,5 +1,4 @@
 interface IKakaoShare {
-  templateId: number;
   title: string;
   content: string;
   thumbnailUrl: string;
@@ -8,7 +7,6 @@ interface IKakaoShare {
 }
 
 export function kakaoShare({
-  templateId,
   title,
   content,
   thumbnailUrl,
@@ -23,7 +21,7 @@ export function kakaoShare({
     }
 
     kakao.Share.sendCustom({
-      templateId: templateId,
+      templateId: 93303,
       templateArgs: {
         title: title,
         desc: content,

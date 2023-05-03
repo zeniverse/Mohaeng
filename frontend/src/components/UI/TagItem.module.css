@@ -4,6 +4,12 @@
   color: #fff;
 }
 
+.tag-item-SS {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.8rem;
+  border-radius: 0.4rem;
+}
+
 .tag-item-S {
   padding: 0.3rem 0.5rem;
   font-size: 0.8rem;

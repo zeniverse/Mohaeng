@@ -77,12 +77,12 @@ const CourseDetailHead = () => {
 
   return (
     <div className={styles["detail-head-container"]}>
-      <h1 className={styles["title-wrapper"]}>
+      <h2 className={styles["title-wrapper"]}>
         <div className={styles["course-length"]}>
           {places && `${places.length}코스`}
         </div>
         {title}
-      </h1>
+      </h2>
       <div className={styles["detail-head-nav"]}>
         {profileImgUrl && nickname && (
           <div className={styles["user-info"]}>

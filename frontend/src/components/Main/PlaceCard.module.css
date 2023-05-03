@@ -1,6 +1,7 @@
 .place-card-container {
   width: 240px;
   overflow: hidden;
+
   box-shadow: 0px 0px 15px -5px;
   transition: 0.3s;
   background-color: var(--color-white);
@@ -16,7 +17,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid gray;
+  margin-bottom: 0.4rem;
 }
 
 .place-image-container img {
@@ -36,15 +37,5 @@
 }
 
 .place-card-title {
-  margin: 0.2rem 0 0.5rem;
-}
-
-.place-card-desc p {
-  display: -webkit-box;
-  height: 4rem;
-  line-height: 1.2;
-  height: 3.6em;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  margin: 0.1rem 0;
 }

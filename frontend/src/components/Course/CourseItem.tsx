@@ -97,7 +97,6 @@ const CourseItem = ({
   const handleKakaoShare = () => {
     if (userId) {
       const param = {
-        templateId: 93215,
         title,
         content,
         thumbnailUrl,
