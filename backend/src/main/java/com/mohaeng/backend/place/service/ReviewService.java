@@ -101,6 +101,8 @@ public class ReviewService {
         findMember.addReview(review);
         findPlace.addReview(review);
 
+        double averageRating = reviewRepository.getAverageRatingByPlaceId(placeId);
+        findPlace.updateRating(averageRating);
         if (fileNameList != null && !fileNameList.isEmpty()) {
             registerImage(fileNameList, review);
         }
@@ -127,6 +129,9 @@ public class ReviewService {
 
     @Transactional
     public void updateReview(Long placeId, UpdateReviewRequest updateReviewRequest, List<String> fileNameList) {
+        Place findPlace = placeRepository.findById(placeId)
+                .orElseThrow(() -> new PlaceNotFoundException("NOT_EXIST_PLACE"));
+
         Review review = reviewRepository.findById(placeId)
                 .orElseThrow(() -> new ReviewNotFoundException());
         review.update(updateReviewRequest.getTitle(), updateReviewRequest.getContent(), updateReviewRequest.getRating());
@@ -141,6 +146,9 @@ public class ReviewService {
         if (fileNameList != null) {
             registerImage(fileNameList, review);
         }
+
+        double averageRating = reviewRepository.getAverageRatingByPlaceId(placeId);
+        findPlace.updateRating(averageRating);
 //        registerImage(fileNameList, review); JPA 1차 캐시 문제 해결.
         entityManager.flush();
         entityManager.clear();
@@ -174,6 +182,8 @@ public class ReviewService {
                 .orElse(0.0);
     }
 
+
+
     public Review getReviewById(Long reviewId) {
         return reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException());
@@ -203,4 +213,5 @@ public class ReviewService {
         Pageable pageable = PageRequest.of(page - 1, 4, Sort.by("createdDate").descending());
         return reviewRepository.findAllByPlaceId(placeId, pageable);
     }
+
 }
