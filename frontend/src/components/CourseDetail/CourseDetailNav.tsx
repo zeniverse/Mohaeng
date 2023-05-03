@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import {
   detailBookmarkToggleAction,
   detailLikeToggleAction,
-} from "@/src/store/reducers/CourseDetailSlice";
+} from "@/src/store/reducers/courseDetailSlice";
 import { openModal } from "@/src/store/reducers/modalSlice";
 import TagItem from "../UI/TagItem";
 import { kakaoShare } from "@/src/utils/kakao-share";

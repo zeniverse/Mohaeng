@@ -2,7 +2,7 @@ import Image from "next/image";
 import styles from "./CourseOrderList.module.css";
 import { AiOutlineMinus } from "react-icons/ai";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-import { removePlace } from "@/src/store/reducers/CourseFormSlice";
+import { removePlace } from "@/src/store/reducers/courseFormSlice";
 import TagItem from "../UI/TagItem";
 
 const CourseOrderList = ({ places, mode }: any) => {

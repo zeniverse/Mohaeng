@@ -5,7 +5,7 @@ import Pagebar from "../Pagenation/Pagebar";
 import ListContainer from "../UI/ListContainer";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { setPage } from "@/src/store/reducers/pageSlice";
-import { getCourseListAction } from "@/src/store/reducers/CourseListSlice";
+import { getCourseListAction } from "@/src/store/thunks/courseThunks";
 
 interface CourseList {
   courseId: number;

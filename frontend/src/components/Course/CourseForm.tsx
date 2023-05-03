@@ -7,18 +7,18 @@ import {
   editCourseAction,
   initialState,
   resetFormValue,
-} from "@/src/store/reducers/CourseFormSlice";
+} from "@/src/store/reducers/courseFormSlice";
 import CoursePlaceInput from "@/src/components/CreateCourse/CoursePlaceInput";
 
 import KakaoMap from "@/src/components/KakaoMap/KakaoMap";
 
 import CourseOrderList from "@/src/components/CourseDetail/CourseOrderList";
 import { useRouter } from "next/router";
-import { resetFilter } from "@/src/store/reducers/FilterSlice";
+import { resetFilter } from "@/src/store/reducers/filterSlice";
 import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
 import cookie from "react-cookies";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
-import { getCourseListAction } from "@/src/store/reducers/CourseListSlice";
+import { getCourseListAction } from "@/src/store/thunks/courseThunks";
 
 interface CourseFormProps {
   isEditMode: boolean;

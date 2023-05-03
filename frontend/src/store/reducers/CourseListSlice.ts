@@ -1,13 +1,12 @@
-import {
-  removeCourseApi,
-  getCourseListApi,
-  toggleBookmarkApi,
-  toggleLikeApi,
-} from "@/src/services/courseService";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { ICoursePlaceName } from "../../interfaces/Course.type";
-import { RootState } from "../store";
-import { createCourseAction, editCourseAction } from "./CourseFormSlice";
+import {
+  getCourseListAction,
+  listBookmarkToggleAction,
+  listLikeToggleAction,
+  removeCourseAction,
+} from "../thunks/courseThunks";
+import { createCourseAction, editCourseAction } from "./courseFormSlice";
 
 interface CourseState {
   error?: string;
@@ -24,64 +23,8 @@ export interface ToggleLikeApiResponse {
 const initialState: CourseState = {
   courseList: [],
 };
-export const getCourseListAction = createAsyncThunk(
-  "course/getCourseListAction",
-  async (queryParams: any, { rejectWithValue }) => {
-    try {
-      const response = await getCourseListApi(queryParams);
-      return response.data.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-export const removeCourseAction = createAsyncThunk(
-  "course/removeCourseAction",
-  async (courseId: number, { rejectWithValue }) => {
-    try {
-      await removeCourseApi(courseId);
-      return courseId;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
 
-export const listBookmarkToggleAction = createAsyncThunk(
-  "course/listToggleBookmark",
-  async (courseId: number, { getState }) => {
-    // TODO: 개선 가능
-    const courseState = (await getState()) as RootState;
-    const courseList = courseState.course.courseList;
-    const course = courseList.find((course) => course.courseId === courseId);
-    const isBookmarked = course ? course.isBookmarked : false;
-    if (isBookmarked) {
-      await toggleBookmarkApi(courseId, "DELETE");
-      console.log("목록 북마크 제거");
-    } else {
-      await toggleBookmarkApi(courseId, "POST");
-      console.log("목록 북마크 추가");
-    }
-    return courseId;
-  }
-);
-
-export const listLikeToggleAction = createAsyncThunk(
-  "course/listToggleLike",
-  async ({ courseId, isLiked }: any) => {
-    let resData: ToggleLikeApiResponse;
-    if (isLiked) {
-      resData = await toggleLikeApi(courseId, "DELETE");
-      console.log("목록 좋아요 해제");
-    } else {
-      resData = await toggleLikeApi(courseId, "POST");
-      console.log("목록 좋아요 추가");
-    }
-    return resData;
-  }
-);
-
-export const CourseListSlice = createSlice({
+export const courseListSlice = createSlice({
   name: "course",
   initialState: initialState,
   reducers: {
@@ -143,5 +86,5 @@ export const CourseListSlice = createSlice({
   },
 });
 
-export const { addCourseToList } = CourseListSlice.actions;
-export default CourseListSlice.reducer;
+export const { addCourseToList } = courseListSlice.actions;
+export default courseListSlice.reducer;

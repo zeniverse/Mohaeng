@@ -5,11 +5,11 @@ import cookie from "react-cookies";
 import Image from "next/image";
 
 import styles from "./CourseDetailHead.module.css";
-import { getCourseDetailAction } from "@/src/store/reducers/CourseDetailSlice";
+import { getCourseDetailAction } from "@/src/store/reducers/courseDetailSlice";
 import { useRouter } from "next/router";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
-import { removeCourseAction } from "@/src/store/reducers/CourseListSlice";
-import { addFormValue } from "@/src/store/reducers/CourseFormSlice";
+import { removeCourseAction } from "@/src/store/thunks/courseThunks";
+import { addFormValue } from "@/src/store/reducers/courseFormSlice";
 
 const CourseDetailHead = () => {
   const [formattedDate, setFormattedDate] = useState("");

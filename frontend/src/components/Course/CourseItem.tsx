@@ -18,8 +18,8 @@ import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import {
   listBookmarkToggleAction,
   listLikeToggleAction,
-} from "@/src/store/reducers/CourseListSlice";
-import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
+} from "@/src/store/thunks/courseThunks";
+import { getCourseBookmark } from "@/src/store/reducers/courseBoomarkSlice";
 import cookie from "react-cookies";
 import { useRouter } from "next/router";
 import IsLikeState from "../UI/IsLikeState";

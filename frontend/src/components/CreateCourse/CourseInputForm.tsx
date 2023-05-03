@@ -4,7 +4,7 @@ import {
   setFormValue,
   setIsFormValidFalse,
   setIsFormValidTrue,
-} from "@/src/store/reducers/CourseFormSlice";
+} from "@/src/store/reducers/courseFormSlice";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./CourseInputForm.module.css";
 import {

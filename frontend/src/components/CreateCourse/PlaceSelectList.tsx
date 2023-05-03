@@ -3,7 +3,7 @@ import Image from "next/image";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import { addPlaceObject } from "@/src/store/reducers/CourseFormSlice";
+import { addPlaceObject } from "@/src/store/reducers/courseFormSlice";
 
 const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
   const [items, setItems] = useState([...places]);

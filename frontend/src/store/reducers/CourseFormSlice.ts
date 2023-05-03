@@ -1,4 +1,4 @@
-import { ICourseEditParam, IFormErrors } from "./../../interfaces/Course.type";
+import { ICourseEditParam, IFormErrors } from "../../interfaces/Course.type";
 import { createCourseApi, editCourseApi } from "@/src/services/courseService";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICourseForm, ICourseOriginForm } from "../../interfaces/Course.type";
@@ -65,7 +65,7 @@ export const editCourseAction = createAsyncThunk(
   }
 );
 
-export const CourseFormSlice = createSlice({
+export const courseFormSlice = createSlice({
   name: "courseform",
   initialState: initialState,
   reducers: {
@@ -135,5 +135,5 @@ export const {
   addFormValue,
   setIsFormValidTrue,
   setIsFormValidFalse,
-} = CourseFormSlice.actions;
-export default CourseFormSlice.reducer;
+} = courseFormSlice.actions;
+export default courseFormSlice.reducer;

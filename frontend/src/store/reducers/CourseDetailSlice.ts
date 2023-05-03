@@ -3,7 +3,7 @@ import { getCourseDetailApi } from "@/src/services/courseDetailService";
 import { toggleBookmarkApi, toggleLikeApi } from "@/src/services/courseService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { ToggleLikeApiResponse } from "./CourseListSlice";
+import { ToggleLikeApiResponse } from "./courseListSlice";
 
 interface CourseDetailState {
   error?: string;
@@ -76,7 +76,7 @@ export const getCourseDetailAction = createAsyncThunk(
   }
 );
 
-export const CourseDetailSlice = createSlice({
+export const courseDetailSlice = createSlice({
   name: "coursedetail",
   initialState: initialState,
   reducers: {},
@@ -106,5 +106,5 @@ export const CourseDetailSlice = createSlice({
   },
 });
 
-export const {} = CourseDetailSlice.actions;
-export default CourseDetailSlice.reducer;
+export const {} = courseDetailSlice.actions;
+export default courseDetailSlice.reducer;

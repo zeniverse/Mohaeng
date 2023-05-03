@@ -5,21 +5,21 @@ import nickNameReducer from "./reducers/loginTokenSlice";
 import emailReducer from "./reducers/loginTokenSlice";
 import idReducer from "./reducers/loginTokenSlice";
 import imgUrlReducer from "./reducers/loginTokenSlice";
-import CourseFormSlice from "./reducers/CourseFormSlice";
-import FilterSlice from "./reducers/FilterSlice";
-import CourseListSlice from "./reducers/CourseListSlice";
 import placeReducer from "./reducers/PlaceSlice";
 import mypageReducer from "./reducers/mypageSlice";
 import pageReducer from "./reducers/pageSlice";
 import searchPlaceReducer from "./reducers/searchPlaceSlice";
 import searchCourseReducer from "./reducers/searchCourseSlice";
-import courseBookmarkReducer from "./reducers/CourseBoomarkSlice";
 import placeBookmarkReducer from "./reducers/PlaceBookmarkSlice";
 import reviewDetailReducer from "./reducers/reviewDetailSlice";
 import reviewReducer from "./reducers/reviewSlice";
 import myCourseReducer from "./reducers/myCourseSlice";
-import CourseDetailSlice from "./reducers/CourseDetailSlice";
 import myReviewReducer from "./reducers/myReviewSlice";
+import filterSlice from "./reducers/filterSlice";
+import courseBookmarkReducer from "./reducers/courseBoomarkSlice";
+import courseDetailSlice from "./reducers/courseDetailSlice";
+import courseListSlice from "./reducers/courseListSlice";
+import courseFormSlice from "./reducers/courseFormSlice";
 
 const store = configureStore({
   reducer: {
@@ -29,9 +29,9 @@ const store = configureStore({
     email: emailReducer,
     id: idReducer,
     imgUrl: imgUrlReducer,
-    course: CourseListSlice,
-    courseForm: CourseFormSlice,
-    filter: FilterSlice,
+    course: courseListSlice,
+    courseForm: courseFormSlice,
+    filter: filterSlice,
     place: placeReducer,
     mypage: mypageReducer,
     page: pageReducer,
@@ -42,7 +42,7 @@ const store = configureStore({
     reviewDetail: reviewDetailReducer,
     review: reviewReducer,
     myCourse: myCourseReducer,
-    courseDetail: CourseDetailSlice,
+    courseDetail: courseDetailSlice,
     myReview: myReviewReducer,
   },
 });

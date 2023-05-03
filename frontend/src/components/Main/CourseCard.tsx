@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { IRecommandCourse } from "@/src/interfaces/Course.type";
-import { listLikeToggleAction } from "@/src/store/reducers/CourseListSlice";
+import { listLikeToggleAction } from "@/src/store/thunks/courseThunks";
 import { openModal } from "@/src/store/reducers/modalSlice";
 import Image from "next/image";
 import { useRouter } from "next/router";

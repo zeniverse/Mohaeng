@@ -3,10 +3,10 @@ import styles from "./CourseList.module.css";
 import React, { useEffect, useState } from "react";
 import CourseItem from "./CourseItem";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import { getCourseListAction } from "@/src/store/reducers/CourseListSlice";
 import { setPage } from "@/src/store/reducers/pageSlice";
 import Pagebar from "../Pagenation/Pagebar";
 import ListContainer from "../UI/ListContainer";
+import { getCourseListAction } from "@/src/store/thunks/courseThunks";
 
 const CourseList = () => {
   const { courseList, totalElements, totalPages } = useAppSelector(
