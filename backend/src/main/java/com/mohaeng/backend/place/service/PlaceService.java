@@ -169,7 +169,7 @@ public class PlaceService {
                                 }
                             }
                         }
-                        overviewText = overviewBuilder.toString();
+                        overviewText = overviewBuilder.toString().replaceAll("\\n|<br>|<br >|< br>|<br />|</br>|<br/>|<strong>|</ strong>|</strong>|&nbsp;", "");
                         break;
                     }
                 }
