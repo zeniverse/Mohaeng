@@ -16,8 +16,8 @@ import RoughMap from "./RoughMap";
 import TagItem from "../UI/TagItem";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import {
-  listBookmarkToggleAction,
-  listLikeToggleAction,
+  bookmarkToggleAction,
+  likeToggleAction,
 } from "@/src/store/thunks/courseThunks";
 import { getCourseBookmark } from "@/src/store/reducers/courseBoomarkSlice";
 import cookie from "react-cookies";
@@ -59,9 +59,15 @@ const CourseItem = ({
     setIsRoughMapOpen(false);
   };
 
-  const bookmarkHandler = (id: number) => {
+  const bookmarkHandler = () => {
     if (userId) {
-      dispatch(listBookmarkToggleAction(id)).then(() => {
+      dispatch(
+        bookmarkToggleAction({
+          courseId,
+          isBookmarked,
+          isDetailPage: false,
+        })
+      ).then(() => {
         dispatch(getCourseBookmark(accessToken));
       });
     } else {
@@ -79,7 +85,7 @@ const CourseItem = ({
   ) => {
     e.stopPropagation();
     if (userId) {
-      dispatch(listLikeToggleAction({ courseId, isLiked }));
+      dispatch(likeToggleAction({ courseId, isLiked, isDetailPage: false }));
     } else {
       dispatch(
         openModal({
@@ -143,10 +149,7 @@ const CourseItem = ({
         </div>
       </div>
       <div className={styles["item-nav-container"]}>
-        <div
-          className={styles["item-nav"]}
-          onClick={() => bookmarkHandler(courseId)}
-        >
+        <div className={styles["item-nav"]} onClick={bookmarkHandler}>
           {isBookmarked ? (
             <BsBookmarkFill className={`${styles.bookmark} ${styles.icon}`} />
           ) : (

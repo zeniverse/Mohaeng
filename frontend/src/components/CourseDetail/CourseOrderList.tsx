@@ -30,7 +30,7 @@ const CourseOrderList = ({ places, mode }: any) => {
             )}
             <div className={styles["item-content"]}>
               <p className={styles.name}>{place.name}</p>
-              <TagItem color="black" size="SS" text="주소" bgColor="Lsky" />
+              <TagItem color="black" size="SS" text="주소" bgColor="Mgrey" />
               <span className={styles.address}>{place.address}</span>
             </div>
             {mode === "write" && (

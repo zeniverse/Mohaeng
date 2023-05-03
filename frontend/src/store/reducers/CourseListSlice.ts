@@ -2,11 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ICoursePlaceName } from "../../interfaces/Course.type";
 import {
   getCourseListAction,
-  listBookmarkToggleAction,
-  listLikeToggleAction,
+  bookmarkToggleAction,
+  likeToggleAction,
   removeCourseAction,
+  createCourseAction,
+  editCourseAction,
 } from "../thunks/courseThunks";
-import { createCourseAction, editCourseAction } from "./courseFormSlice";
 
 interface CourseState {
   error?: string;
@@ -54,18 +55,20 @@ export const courseListSlice = createSlice({
       state.totalPages = totalPages;
     });
     builder.addCase(getCourseListAction.rejected, (state) => {});
-    builder.addCase(listBookmarkToggleAction.pending, (state) => {});
-    builder.addCase(listBookmarkToggleAction.fulfilled, (state, action) => {
-      const courseId = action.payload;
+    builder.addCase(bookmarkToggleAction.pending, (state) => {});
+    builder.addCase(bookmarkToggleAction.fulfilled, (state, action) => {
+      const { courseId, isDetailPage } = action.payload;
+      if (isDetailPage === undefined || isDetailPage === true) return;
       const course = state.courseList.find((c) => c.courseId === courseId);
       if (course) {
         course.isBookmarked = !course.isBookmarked;
       }
     });
-    builder.addCase(listBookmarkToggleAction.rejected, (state) => {});
-    builder.addCase(listLikeToggleAction.pending, (state) => {});
-    builder.addCase(listLikeToggleAction.fulfilled, (state, action) => {
-      const { courseId, totalLikes } = action.payload;
+    builder.addCase(bookmarkToggleAction.rejected, (state) => {});
+    builder.addCase(likeToggleAction.pending, (state) => {});
+    builder.addCase(likeToggleAction.fulfilled, (state, action) => {
+      const { courseId, totalLikes, isDetailPage } = action.payload;
+      if (isDetailPage === undefined || isDetailPage === true) return;
       if (state.courseList.length > 0) {
         const course = state.courseList.find((c) => c.courseId === courseId);
         if (course) {
@@ -74,7 +77,7 @@ export const courseListSlice = createSlice({
         }
       }
     });
-    builder.addCase(listLikeToggleAction.rejected, (state) => {});
+    builder.addCase(likeToggleAction.rejected, (state) => {});
     builder.addCase(removeCourseAction.pending, (state) => {});
     builder.addCase(removeCourseAction.fulfilled, (state, action) => {
       const newList = state.courseList?.filter(

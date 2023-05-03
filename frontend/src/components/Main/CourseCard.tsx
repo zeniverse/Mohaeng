@@ -1,16 +1,10 @@
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import { IRecommandCourse } from "@/src/interfaces/Course.type";
-import { listLikeToggleAction } from "@/src/store/thunks/courseThunks";
+import { likeToggleAction } from "@/src/store/thunks/courseThunks";
 import { openModal } from "@/src/store/reducers/modalSlice";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import IsLikeState from "../UI/IsLikeState";
 import styles from "./CourseCard.module.css";
-
-interface ICourseCardProps {
-  recommandCourse: IRecommandCourse[];
-  onUpdateCourse: (updatedCourse: IRecommandCourse) => void;
-}
 
 const CourseCard = ({
   courseId,
@@ -26,7 +20,7 @@ const CourseCard = ({
   ) => {
     e.stopPropagation();
     if (userId) {
-      dispatch(listLikeToggleAction({ courseId, isLiked }));
+      dispatch(likeToggleAction({ courseId, isLiked }));
       // isLiked를 토글하고 likeCount를 1증가 혹은 감소
       onUpdateCourse({
         courseId,
