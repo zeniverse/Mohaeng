@@ -180,4 +180,4 @@ const CourseItem = ({
   );
 };
 
-export default CourseItem;
+export default React.memo(CourseItem);

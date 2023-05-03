@@ -1,8 +1,8 @@
 import styles from "./PlaceSelectList.module.css";
 import Image from "next/image";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
-import { useEffect, useRef, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
+import React, { useEffect, useRef, useState } from "react";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { addPlaceObject } from "@/src/store/reducers/courseFormSlice";
 
 const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
@@ -23,13 +23,15 @@ const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
     function handleScroll() {
       if (listRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = listRef.current;
-        if (
-          Math.floor(scrollHeight) - scrollTop <= clientHeight &&
-          hasNext &&
-          !loading
-        ) {
+        if (scrollTop + clientHeight >= scrollHeight && hasNext && !loading) {
+          console.log("조건에 맞ㅇ음");
           setLoading(true);
           setPage((prevPage) => prevPage + 1);
+        } else {
+          console.log(Math.round(scrollHeight) - scrollTop === clientHeight);
+          console.log(hasNext);
+          console.log(!loading);
+          console.log("조건에 안맞음");
         }
       }
     }
@@ -47,16 +49,22 @@ const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
 
   useEffect(() => {
     if (page === 0) return;
+    console.log(`페이지 ${page}`);
     const lastItemIndex = items ? items.length - 1 : -1;
     const lastid = items[lastItemIndex]?.placeId;
     const lastRating = items[lastItemIndex]?.rating;
+    console.log(`마지막 itme index${lastItemIndex}`);
+    console.log(`item의 placeId${lastid}`);
+    console.log(`item의 lastRating${lastRating}`);
     async function fetchItems() {
       try {
+        console.log("실행");
         const placeSearchRes = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/course/placeSearch?keyword=${debouncedSearch}&lastId=${lastid}&lastRating=${lastRating}`
         );
         if (!placeSearchRes.ok) return;
         const placeSearchResult = await placeSearchRes.json();
+        console.log(placeSearchResult);
         setItems((prevItems) => [
           ...prevItems,
           ...placeSearchResult?.data.places,
@@ -104,6 +112,7 @@ const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
           </div>
         );
       })}
+      {!hasNext && <p>더 이상 검색 결과가 존재하지 않습니다.</p>}
     </div>
   );
 };

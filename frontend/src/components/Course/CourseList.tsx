@@ -9,9 +9,7 @@ import ListContainer from "../UI/ListContainer";
 import { getCourseListAction } from "@/src/store/thunks/courseThunks";
 
 const CourseList = () => {
-  const { courseList, totalElements, totalPages } = useAppSelector(
-    (state) => state.course
-  );
+  const { courseList, totalPages } = useAppSelector((state) => state.course);
   const { area, keyword, sort } = useAppSelector((state) => state.filter);
   const page = useAppSelector((state) => state.page.page);
   const dispatch = useAppDispatch();
@@ -57,4 +55,4 @@ const CourseList = () => {
   );
 };
 
-export default CourseList;
+export default React.memo(CourseList);
