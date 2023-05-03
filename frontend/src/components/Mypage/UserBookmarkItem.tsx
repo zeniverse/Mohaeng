@@ -69,8 +69,13 @@ const UserBookmarkItem = (prop: bookmarkState) => {
         <Link
           href={{
             pathname: "/place/[id]",
-            query: { id: prop.contentId },
+            query: {
+              contentId: prop.contentId,
+              placeId: prop.realId,
+              name: prop.name,
+            },
           }}
+          as={`/place/${prop.contentId}`}
         >
           <img src={prop.image} alt={prop.image} />
         </Link>
