@@ -114,12 +114,11 @@ export default function SearchItem({
       {
         pathname: `/place/[id]`,
         query: {
-          contentId: contentId,
           placeId: placeId,
           name: name,
         },
       },
-      `/place/${contentId}`
+      `/place/${placeId}`
     );
   };
 

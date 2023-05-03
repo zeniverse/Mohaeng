@@ -11,13 +11,12 @@ import ReviewTextArea from "./ReviewTextarea";
 import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 import { AiFillCloseCircle } from "react-icons/ai";
-
-// 텍스트 유효성 검사
+import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 
 export default function CreateReview() {
   const router = useRouter();
   const appDispatch = useAppDispatch();
-  const { placeId, contentId, name } = router.query;
+  const { placeId, name } = router.query;
   const [clicked, setClicked] = useState<boolean[]>([
     false,
     false,
@@ -121,12 +120,30 @@ export default function CreateReview() {
           },
         })
         .then((response) => {
-          // console.log(response.data, "리뷰 작성 성공!");
           appDispatch(getMyReview(accessToken));
-          router.push(`/search?keyword=${name}`);
+          appDispatch(getPlaceBookmark(accessToken));
+          router.push(
+            {
+              pathname: `/place/[id]`,
+              query: {
+                placeId: placeId,
+                name: name,
+              },
+            },
+            `/place/${placeId}`
+          );
         });
     } catch (error) {
-      router.push(`/search?keyword=${name}`);
+      router.push(
+        {
+          pathname: `/place/[id]`,
+          query: {
+            placeId: placeId,
+            name: name,
+          },
+        },
+        `/place/${placeId}`
+      );
       console.log(error);
     }
   };

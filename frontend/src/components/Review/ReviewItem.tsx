@@ -54,9 +54,16 @@ export default function ReviewItem({
             },
           }
         );
-        // console.log(response.status);
-        // console.log(response.data);
-        router.push(`/search?keyword=${name}`);
+        router.push(
+          {
+            pathname: `/place/[id]`,
+            query: {
+              placeId: placeId,
+              name: name,
+            },
+          },
+          `/place/${placeId}`
+        );
       } catch (error) {
         console.error(error);
       }
@@ -164,11 +171,4 @@ export default function ReviewItem({
       </div>
     </article>
   );
-}
-
-{
-  /* <button className={styles.likeBtn}>
-          <FaRegThumbsUp />
-          {likeCount}
-        </button> */
 }

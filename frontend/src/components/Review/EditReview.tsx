@@ -9,6 +9,7 @@ import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 
 export interface formData {
   reviewId: number;
@@ -179,10 +180,29 @@ export default function EditReview() {
         .then((response) => {
           // console.log(response.data, "리뷰 수정 성공!");
           appDispatch(getMyReview(accessToken));
-          router.push(`/search?keyword=${name}`);
+          appDispatch(getPlaceBookmark(accessToken));
+          router.push(
+            {
+              pathname: `/place/[id]`,
+              query: {
+                placeId: placeId,
+                name: name,
+              },
+            },
+            `/place/${placeId}`
+          );
         });
     } catch (error) {
-      router.push(`/search?keyword=${name}`);
+      router.push(
+        {
+          pathname: `/place/[id]`,
+          query: {
+            placeId: placeId,
+            name: name,
+          },
+        },
+        `/place/${placeId}`
+      );
       console.log(error);
     }
   };
