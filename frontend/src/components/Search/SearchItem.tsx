@@ -110,17 +110,7 @@ export default function SearchItem({
   };
 
   const handleClickBtn = () => {
-    router.push(
-      {
-        pathname: `/place/[id]`,
-        query: {
-          contentId: contentId,
-          placeId: placeId,
-          name: name,
-        },
-      },
-      `/place/${contentId}`
-    );
+    router.push(`/place/${placeId}`);
   };
 
   return (
