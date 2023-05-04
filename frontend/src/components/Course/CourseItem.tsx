@@ -50,7 +50,6 @@ const CourseItem = ({
 
   const { id: userId } = useAppSelector((state) => state.token);
   const dispatch = useAppDispatch();
-  const accessToken = cookie.load("accessToken");
   const router = useRouter();
 
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
@@ -74,9 +73,7 @@ const CourseItem = ({
           isBookmarked,
           isDetailPage: false,
         })
-      ).then(() => {
-        dispatch(getCourseBookmark(accessToken));
-      });
+      );
     } else {
       dispatch(
         openModal({
@@ -98,11 +95,7 @@ const CourseItem = ({
     setIsLikeHandlerRunning(true);
 
     if (userId) {
-      dispatch(
-        likeToggleAction({ courseId, isLiked, isDetailPage: false })
-      ).then(() => {
-        dispatch(getCourseBookmark(accessToken));
-      });
+      dispatch(likeToggleAction({ courseId, isLiked, isDetailPage: false }));
     } else {
       dispatch(
         openModal({

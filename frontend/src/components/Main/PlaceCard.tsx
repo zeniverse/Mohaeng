@@ -14,16 +14,7 @@ const PlaceCard = ({
   const router = useRouter();
 
   const handleCardClick = () => {
-    router.push(
-      {
-        pathname: `/place/[id]`,
-        query: {
-          placeId: placeId,
-          name: name,
-        },
-      },
-      `/place/${placeId}`
-    );
+    router.push(`/place/${placeId}`);
   };
   return (
     <div className={styles["place-card-container"]} onClick={handleCardClick}>
