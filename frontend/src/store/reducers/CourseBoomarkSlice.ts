@@ -35,7 +35,7 @@ export const getCourseBookmark = createAsyncThunk(
   }
 );
 
-export const courseBookmarkSlice = createSlice({
+export const CourseBookmarkSlice = createSlice({
   name: "courseBookmark",
   initialState,
   reducers: {},
@@ -53,4 +53,4 @@ export const courseBookmarkSlice = createSlice({
   },
 });
 
-export default courseBookmarkSlice.reducer;
+export default CourseBookmarkSlice.reducer;

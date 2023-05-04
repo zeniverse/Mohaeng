@@ -6,7 +6,7 @@ import { BsBookmarkFill } from "react-icons/bs";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import cookie from "react-cookies";
-import { getCourseBookmark } from "@/src/store/reducers/courseBoomarkSlice";
+import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 
 export interface bookmarkState {
   id: number;

@@ -19,7 +19,7 @@ import {
   bookmarkToggleAction,
   likeToggleAction,
 } from "@/src/store/thunks/courseThunks";
-import { getCourseBookmark } from "@/src/store/reducers/courseBoomarkSlice";
+import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import cookie from "react-cookies";
 import { useRouter } from "next/router";
 import IsLikeState from "../UI/IsLikeState";
