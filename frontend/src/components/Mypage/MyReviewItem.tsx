@@ -34,7 +34,7 @@ const MyReviewItem = (myReview: MyReviewItemProps) => {
             name: myReview.name,
           },
         }}
-        as={`/place/${myReview.contentId}`}
+        as={`/place/${myReview.placeId}`}
       >
         <img src={myReview.imgUrl} alt={myReview.name} className={styles.img} />
       </Link>

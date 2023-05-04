@@ -75,7 +75,7 @@ const UserBookmarkItem = (prop: bookmarkState) => {
               name: prop.name,
             },
           }}
-          as={`/place/${prop.contentId}`}
+          as={`/place/${prop.realId}`}
         >
           <img src={prop.image} alt={prop.image} />
         </Link>
