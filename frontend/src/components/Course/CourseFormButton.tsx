@@ -1,13 +1,10 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { resetFilter } from "@/src/store/reducers/filterSlice";
-import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
-import cookie from "react-cookies";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 import {
   createCourseAction,
   editCourseAction,
-  getCourseListAction,
 } from "@/src/store/thunks/courseThunks";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import {
@@ -24,7 +21,6 @@ const CourseFormButton = ({ isEditMode }: CourseFormProps) => {
   const { course, isFormValid } = useAppSelector(
     (state) => state.courseForm ?? initialState
   );
-  const accessToken = cookie.load("accessToken");
   const id = useRouterQuery("courseId");
 
   const handleCourseSubmit = async (e: React.FormEvent) => {
@@ -32,12 +28,10 @@ const CourseFormButton = ({ isEditMode }: CourseFormProps) => {
     if (!isFormValid) return window.alert("양식을 다시 확인해주세요");
     if (!isEditMode) {
       await dispatch(createCourseAction(course));
-      await router.push("/course");
+      await router.push(`/course`);
     } else {
       if (id) {
         await dispatch(editCourseAction({ formData: course, courseId: id }));
-        await dispatch(getCourseListAction({}));
-        await dispatch(getMyCourse(accessToken));
         await router.push(`/course/${id}`);
       }
     }

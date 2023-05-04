@@ -61,7 +61,7 @@ const CourseItem = ({
     setIsRoughMapOpen(false);
   };
 
-  const bookmarkHandler = () => {
+  const handleToggleBookmark = () => {
     if (isBookmarkHandlerRunning) {
       return; // 핸들러가 실행 중이면 새로운 이벤트 발생하지 않음
     }
@@ -104,7 +104,6 @@ const CourseItem = ({
         })
       );
     }
-
     setIsLikeHandlerRunning(false);
   };
 
@@ -161,7 +160,7 @@ const CourseItem = ({
         </div>
       </div>
       <div className={styles["item-nav-container"]}>
-        <div className={styles["item-nav"]} onClick={bookmarkHandler}>
+        <div className={styles["item-nav"]} onClick={handleToggleBookmark}>
           {isBookmarked ? (
             <BsBookmarkFill className={`${styles.bookmark} ${styles.icon}`} />
           ) : (

@@ -1,5 +1,5 @@
 import styles from "./CourseDetailNav.module.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import RoughMap from "../Course/RoughMap";
 import {
   BsBookmark,
@@ -20,6 +20,9 @@ import {
 
 const CourseDetailNav = () => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
+  const [isBookmarkHandlerRunning, setIsBookmarkHandlerRunning] =
+    useState(false);
+  const [isLikeHandlerRunning, setIsLikeHandlerRunning] = useState(false);
 
   const dispatch = useAppDispatch();
   const { id: userId } = useAppSelector((state) => state.token);
@@ -45,7 +48,11 @@ const CourseDetailNav = () => {
     setIsRoughMapOpen(false);
   };
 
-  const bookmarkHandler = () => {
+  const handleToggleBookmark = () => {
+    if (isBookmarkHandlerRunning) {
+      return;
+    }
+    setIsBookmarkHandlerRunning(true);
     if (userId) {
       dispatch(
         bookmarkToggleAction({ courseId, isBookmarked, isDetailPage: true })
@@ -58,9 +65,14 @@ const CourseDetailNav = () => {
         })
       );
     }
+    setIsBookmarkHandlerRunning(false);
   };
 
   const handleDetailLike = () => {
+    if (isLikeHandlerRunning) {
+      return; // 이벤트 핸들러가 실행 중인 경우 함수 실행하지 않음
+    }
+    setIsLikeHandlerRunning(true);
     if (userId) {
       dispatch(likeToggleAction({ courseId, isLiked, isDetailPage: true }));
     } else {
@@ -71,6 +83,7 @@ const CourseDetailNav = () => {
         })
       );
     }
+    setIsLikeHandlerRunning(false);
   };
 
   const handleKakaoShare = () => {
@@ -128,7 +141,7 @@ const CourseDetailNav = () => {
             <RoughMap RoughMapData={RoughMapData} onClose={onClose} />
           )}
         </div>
-        <div className={styles["item-nav"]} onClick={bookmarkHandler}>
+        <div className={styles["item-nav"]} onClick={handleToggleBookmark}>
           {isBookmarked ? (
             <BsBookmarkFill className={`${styles.bookmark} ${styles.icon}`} />
           ) : (
@@ -143,4 +156,4 @@ const CourseDetailNav = () => {
   );
 };
 
-export default CourseDetailNav;
+export default React.memo(CourseDetailNav);

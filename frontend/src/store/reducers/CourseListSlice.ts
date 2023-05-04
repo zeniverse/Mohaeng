@@ -58,7 +58,7 @@ export const courseListSlice = createSlice({
 
     builder.addCase(bookmarkToggleAction.pending, (state, action) => {
       const { courseId, isDetailPage } = action.meta.arg;
-      if (isDetailPage === undefined || isDetailPage === true) return;
+      if (isDetailPage || isDetailPage === undefined) return;
 
       const courseIndex = state.courseList.findIndex(
         (c) => c.courseId === courseId
@@ -69,15 +69,17 @@ export const courseListSlice = createSlice({
       }
     });
 
-    builder.addCase(bookmarkToggleAction.fulfilled, (state, action) => {});
+    builder.addCase(bookmarkToggleAction.fulfilled, (state, action) => {
+      // TODO: fulfilled와 rejected일때 수정
+    });
     builder.addCase(bookmarkToggleAction.rejected, (state) => {
       window.alert("북마크 실패");
     });
     builder.addCase(likeToggleAction.pending, (state) => {});
     builder.addCase(likeToggleAction.fulfilled, (state, action) => {
       const { courseId, totalLikes, isDetailPage } = action.payload;
+      if (isDetailPage || isDetailPage === undefined) return;
 
-      if (isDetailPage === undefined || isDetailPage === true) return;
       if (state.courseList.length > 0) {
         const courseIndex = state.courseList.findIndex(
           (c) => c.courseId === courseId
