@@ -5,20 +5,20 @@ import Image from "next/image";
 import axios from "axios";
 import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
-import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import ReviewTextArea from "./ReviewTextarea";
 import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { PlaceInfo } from "../PlaceDetail/PlaceDetail";
+// import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+// import { getMyReview } from "@/src/store/reducers/myReviewSlice";
+// import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 
 export default function CreateReview() {
   const accessToken = cookie.load("accessToken");
   const router = useRouter();
   const id = useRouterQuery("id");
-  const appDispatch = useAppDispatch();
+  // const appDispatch = useAppDispatch();
   const [clicked, setClicked] = useState<boolean[]>([
     false,
     false,
@@ -160,8 +160,8 @@ export default function CreateReview() {
           },
         })
         .then((response) => {
-          appDispatch(getMyReview(accessToken));
-          appDispatch(getPlaceBookmark(accessToken));
+          // appDispatch(getMyReview(accessToken));
+          // appDispatch(getPlaceBookmark(accessToken));
           router.push(`/place/${id}`);
         });
     } catch (error) {

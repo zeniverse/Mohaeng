@@ -72,31 +72,29 @@ export default function PlaceDetail() {
   const handleBookmarkClick = async () => {
     try {
       if (bookMarked === false) {
-        const res = await axios
-          .post(
-            `/api/place/bookmark/${id}`,
-            {},
-            {
-              headers: {
-                "Access-Token": `${accessToken}`,
-                withCredentials: true,
-              },
-            }
-          )
-          .then(() => {
-            appDispatch(getPlaceBookmark(accessToken));
-          });
-      } else {
-        const res = await axios
-          .delete(`/api/place/bookmark/${id}`, {
+        const res = await axios.post(
+          `/api/place/bookmark/${id}`,
+          {},
+          {
             headers: {
               "Access-Token": `${accessToken}`,
               withCredentials: true,
             },
-          })
-          .then(() => {
-            appDispatch(getPlaceBookmark(accessToken));
-          });
+          }
+        );
+        // .then(() => {
+        //   appDispatch(getPlaceBookmark(accessToken));
+        // });
+      } else {
+        const res = await axios.delete(`/api/place/bookmark/${id}`, {
+          headers: {
+            "Access-Token": `${accessToken}`,
+            withCredentials: true,
+          },
+        });
+        // .then(() => {
+        //   appDispatch(getPlaceBookmark(accessToken));
+        // });
       }
       setBookMarked(!bookMarked);
     } catch (error) {
