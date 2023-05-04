@@ -50,7 +50,6 @@ const CourseItem = ({
 
   const { id: userId } = useAppSelector((state) => state.token);
   const dispatch = useAppDispatch();
-  const accessToken = cookie.load("accessToken");
   const router = useRouter();
 
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
@@ -62,7 +61,7 @@ const CourseItem = ({
     setIsRoughMapOpen(false);
   };
 
-  const bookmarkHandler = () => {
+  const handleToggleBookmark = () => {
     if (isBookmarkHandlerRunning) {
       return; // 핸들러가 실행 중이면 새로운 이벤트 발생하지 않음
     }
@@ -74,9 +73,7 @@ const CourseItem = ({
           isBookmarked,
           isDetailPage: false,
         })
-      ).then(() => {
-        dispatch(getCourseBookmark(accessToken));
-      });
+      );
     } else {
       dispatch(
         openModal({
@@ -98,11 +95,7 @@ const CourseItem = ({
     setIsLikeHandlerRunning(true);
 
     if (userId) {
-      dispatch(
-        likeToggleAction({ courseId, isLiked, isDetailPage: false })
-      ).then(() => {
-        dispatch(getCourseBookmark(accessToken));
-      });
+      dispatch(likeToggleAction({ courseId, isLiked, isDetailPage: false }));
     } else {
       dispatch(
         openModal({
@@ -111,7 +104,6 @@ const CourseItem = ({
         })
       );
     }
-
     setIsLikeHandlerRunning(false);
   };
 
@@ -168,7 +160,7 @@ const CourseItem = ({
         </div>
       </div>
       <div className={styles["item-nav-container"]}>
-        <div className={styles["item-nav"]} onClick={bookmarkHandler}>
+        <div className={styles["item-nav"]} onClick={handleToggleBookmark}>
           {isBookmarked ? (
             <BsBookmarkFill className={`${styles.bookmark} ${styles.icon}`} />
           ) : (

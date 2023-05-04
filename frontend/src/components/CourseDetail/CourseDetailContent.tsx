@@ -33,4 +33,4 @@ const CourseDetailContent = () => {
   );
 };
 
-export default CourseDetailContent;
+export default React.memo(CourseDetailContent);

@@ -1,7 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import { useCallback, useEffect, useState } from "react";
-import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
-import cookie from "react-cookies";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 
 import styles from "./CourseDetailHead.module.css";
@@ -42,10 +40,7 @@ const CourseDetailHead = () => {
   const handleRemoveCourse = () => {
     if (confirm(`${title} 코스를 정말 삭제하시겠습니까?`)) {
       if (id) {
-        const accessToken = cookie.load("accessToken");
-        dispatch(removeCourseAction(id)).then(() =>
-          dispatch(getMyCourse(accessToken))
-        );
+        dispatch(removeCourseAction(id));
 
         router.push("/course");
       }
@@ -123,4 +118,4 @@ const CourseDetailHead = () => {
   );
 };
 
-export default CourseDetailHead;
+export default React.memo(CourseDetailHead);

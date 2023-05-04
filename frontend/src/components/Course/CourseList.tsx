@@ -14,6 +14,7 @@ const CourseList = () => {
   const page = useAppSelector((state) => state.page.page);
   const dispatch = useAppDispatch();
   const { region } = area;
+
   useEffect(() => {
     dispatch(setPage(page));
     dispatch(

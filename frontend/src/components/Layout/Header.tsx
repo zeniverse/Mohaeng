@@ -83,6 +83,7 @@ function Header({}: Props) {
 
   const ResetStatus = () => {
     dispatch(resetFilter());
+    dispatch;
 
     const currComponent: myPageState = {
       currIdx: 0,

@@ -45,7 +45,7 @@ export const courseDetailSlice = createSlice({
     builder.addCase(bookmarkToggleAction.pending, (state) => {});
     builder.addCase(bookmarkToggleAction.fulfilled, (state, action) => {
       const { courseId, isDetailPage } = action.payload;
-      if (isDetailPage === undefined || isDetailPage === false) return;
+      if (!isDetailPage || isDetailPage === undefined) return;
       if (state.course.courseId === courseId) {
         state.course.isBookmarked = !state.course.isBookmarked;
       } else return;
@@ -54,7 +54,7 @@ export const courseDetailSlice = createSlice({
     builder.addCase(likeToggleAction.pending, (state) => {});
     builder.addCase(likeToggleAction.fulfilled, (state, action) => {
       const { courseId, totalLikes, isDetailPage } = action.payload;
-      if (isDetailPage === undefined || isDetailPage === false) return;
+      if (!isDetailPage || isDetailPage === undefined) return;
       if (state.course.courseId === courseId) {
         state.course.isLiked = !state.course.isLiked;
         state.course.likeCount = totalLikes;
