@@ -1,8 +1,6 @@
 import styles from "./SearchPlaceList.module.css";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-
 import axios from "axios";
 import cookie from "react-cookies";
 import { Keyword } from "@/src/interfaces/Keyword";
