@@ -19,10 +19,6 @@ export interface MyCourseItemProps {
 }
 
 const MyCourseItem = (myCourse: MyCourseItemProps) => {
-  useEffect(() => {
-    appDispatch(getMyCourse(accessToken));
-  }, []);
-
   const getFormattedDate = (date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
