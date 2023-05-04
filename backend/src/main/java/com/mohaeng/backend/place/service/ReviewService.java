@@ -189,22 +189,7 @@ public class ReviewService {
         return reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException());
     }
-
-//    public List<FindAllReviewResponse> getReviewsById(Long reviewId) {
-//        Review review = reviewRepository.findById(reviewId)
-//                .orElseThrow(() -> new ReviewNotFoundException());
-//        FindAllReviewResponse findAllReviewResponse = new FindAllReviewResponse(review);
-//        List<FindAllReviewResponse> findAllReviewResponses = new ArrayList<>();
-//        findAllReviewResponses.add(findAllReviewResponse);
-//        return findAllReviewResponses;
-//    }
-
-//    public List<Review> getReviewById(Long reviewId) {
-//        Review review = reviewRepository.findById(reviewId)
-//                .orElseThrow(() -> new ReviewNotFoundException());
-//        return review;
-//    }
-
+    
     public Page<Review> getAllReviewsByRating(Long placeId, int page) {
         Pageable pageable = PageRequest.of(page - 1 , 4, Sort.by("rating").descending());
         return reviewRepository.findAllByPlaceId(placeId, pageable);
