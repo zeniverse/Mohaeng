@@ -7,28 +7,26 @@ import { useRouter } from "next/router";
 
 const PlaceCard = ({
   placeId,
-  contentId,
   name,
   firstImage,
   averageRating,
 }: ITopTenPlace) => {
   const router = useRouter();
 
-  const handleClickBtn = () => {
+  const handleCardClick = () => {
     router.push(
       {
         pathname: `/place/[id]`,
         query: {
           placeId: placeId,
-          contentId: contentId,
           name: name,
         },
       },
-      `/place/${contentId}`
+      `/place/${placeId}`
     );
   };
   return (
-    <div className={styles["place-card-container"]} onClick={handleClickBtn}>
+    <div className={styles["place-card-container"]} onClick={handleCardClick}>
       <div className={styles["place-image-container"]}>
         <Image src={firstImage} alt={name} width={700} height={700} priority />
       </div>

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import { setSort } from "@/src/store/reducers/FilterSlice";
+import { setSort } from "@/src/store/reducers/filterSlice";
 import React, { useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import styles from "./SelectSorting.module.css";

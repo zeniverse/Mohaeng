@@ -1,13 +1,13 @@
-import {
-  removeCourseApi,
-  getCourseListApi,
-  toggleBookmarkApi,
-  toggleLikeApi,
-} from "@/src/services/courseService";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { ICoursePlaceName } from "../../interfaces/Course.type";
-import { RootState } from "../store";
-import { createCourseAction, editCourseAction } from "./CourseFormSlice";
+import {
+  getCourseListAction,
+  bookmarkToggleAction,
+  likeToggleAction,
+  removeCourseAction,
+  createCourseAction,
+  editCourseAction,
+} from "../thunks/courseThunks";
 
 interface CourseState {
   error?: string;
@@ -24,64 +24,8 @@ export interface ToggleLikeApiResponse {
 const initialState: CourseState = {
   courseList: [],
 };
-export const getCourseListAction = createAsyncThunk(
-  "course/getCourseListAction",
-  async (queryParams: any, { rejectWithValue }) => {
-    try {
-      const response = await getCourseListApi(queryParams);
-      return response.data.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-export const removeCourseAction = createAsyncThunk(
-  "course/removeCourseAction",
-  async (courseId: number, { rejectWithValue }) => {
-    try {
-      await removeCourseApi(courseId);
-      return courseId;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
 
-export const listBookmarkToggleAction = createAsyncThunk(
-  "course/listToggleBookmark",
-  async (courseId: number, { getState }) => {
-    // TODO: 개선 가능
-    const courseState = (await getState()) as RootState;
-    const courseList = courseState.course.courseList;
-    const course = courseList.find((course) => course.courseId === courseId);
-    const isBookmarked = course ? course.isBookmarked : false;
-    if (isBookmarked) {
-      await toggleBookmarkApi(courseId, "DELETE");
-      console.log("목록 북마크 제거");
-    } else {
-      await toggleBookmarkApi(courseId, "POST");
-      console.log("목록 북마크 추가");
-    }
-    return courseId;
-  }
-);
-
-export const listLikeToggleAction = createAsyncThunk(
-  "course/listToggleLike",
-  async ({ courseId, isLiked }: any) => {
-    let resData: ToggleLikeApiResponse;
-    if (isLiked) {
-      resData = await toggleLikeApi(courseId, "DELETE");
-      console.log("목록 좋아요 해제");
-    } else {
-      resData = await toggleLikeApi(courseId, "POST");
-      console.log("목록 좋아요 추가");
-    }
-    return resData;
-  }
-);
-
-export const CourseListSlice = createSlice({
+export const courseListSlice = createSlice({
   name: "course",
   initialState: initialState,
   reducers: {
@@ -111,18 +55,21 @@ export const CourseListSlice = createSlice({
       state.totalPages = totalPages;
     });
     builder.addCase(getCourseListAction.rejected, (state) => {});
-    builder.addCase(listBookmarkToggleAction.pending, (state) => {});
-    builder.addCase(listBookmarkToggleAction.fulfilled, (state, action) => {
-      const courseId = action.payload;
+    builder.addCase(bookmarkToggleAction.pending, (state) => {});
+    builder.addCase(bookmarkToggleAction.fulfilled, (state, action) => {
+      const { courseId, isDetailPage } = action.payload;
+      if (isDetailPage === undefined || isDetailPage === true) return;
       const course = state.courseList.find((c) => c.courseId === courseId);
       if (course) {
         course.isBookmarked = !course.isBookmarked;
       }
     });
-    builder.addCase(listBookmarkToggleAction.rejected, (state) => {});
-    builder.addCase(listLikeToggleAction.pending, (state) => {});
-    builder.addCase(listLikeToggleAction.fulfilled, (state, action) => {
-      const { courseId, totalLikes } = action.payload;
+    builder.addCase(bookmarkToggleAction.rejected, (state) => {});
+    builder.addCase(likeToggleAction.pending, (state) => {});
+    builder.addCase(likeToggleAction.fulfilled, (state, action) => {
+      const { courseId, totalLikes, isDetailPage } = action.payload;
+
+      if (isDetailPage === undefined || isDetailPage === true) return;
       if (state.courseList.length > 0) {
         const course = state.courseList.find((c) => c.courseId === courseId);
         if (course) {
@@ -131,7 +78,7 @@ export const CourseListSlice = createSlice({
         }
       }
     });
-    builder.addCase(listLikeToggleAction.rejected, (state) => {});
+    builder.addCase(likeToggleAction.rejected, (state) => {});
     builder.addCase(removeCourseAction.pending, (state) => {});
     builder.addCase(removeCourseAction.fulfilled, (state, action) => {
       const newList = state.courseList?.filter(
@@ -143,5 +90,5 @@ export const CourseListSlice = createSlice({
   },
 });
 
-export const { addCourseToList } = CourseListSlice.actions;
-export default CourseListSlice.reducer;
+export const { addCourseToList } = courseListSlice.actions;
+export default courseListSlice.reducer;
