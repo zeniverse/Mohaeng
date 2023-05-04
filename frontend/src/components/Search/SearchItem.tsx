@@ -8,11 +8,11 @@ import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { useState } from "react";
-// import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-// import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { KeywordProps } from "@/src/interfaces/Keyword";
 import { openModal } from "@/src/store/reducers/modalSlice";
+// import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+// import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 
 export default function SearchItem({
   name,
