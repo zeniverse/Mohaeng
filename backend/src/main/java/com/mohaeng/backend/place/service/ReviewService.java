@@ -2,6 +2,7 @@ package com.mohaeng.backend.place.service;
 
 import com.mohaeng.backend.Image.AmazonS3Service;
 import com.mohaeng.backend.exception.notfound.MemberNotFoundException;
+import com.mohaeng.backend.exception.notfound.PlaceNotFoundException;
 import com.mohaeng.backend.exception.notfound.ReviewNotFoundException;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.repository.MemberRepository;
@@ -11,19 +12,24 @@ import com.mohaeng.backend.place.domain.ReviewImage;
 import com.mohaeng.backend.place.dto.request.CreateReviewRequest;
 import com.mohaeng.backend.place.dto.request.UpdateReviewRequest;
 import com.mohaeng.backend.place.dto.response.FindAllReviewResponse;
-import com.mohaeng.backend.place.exception.PlaceNotFoundException;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.repository.ReviewImageRepository;
 import com.mohaeng.backend.place.repository.ReviewRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,7 +50,7 @@ public class ReviewService {
                 .orElseThrow(() -> new PlaceNotFoundException());
 
         return findPlace.getReviewList().stream()
-                .map(m -> FindAllReviewResponse.of(m))
+                .map(m -> FindAllReviewResponse.of(m,findPlace))
                 .collect(Collectors.toList());
     }
 
