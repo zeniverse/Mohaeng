@@ -11,6 +11,7 @@ import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
+import { PlaceInfo } from "../PlaceDetail/PlaceDetail";
 
 export interface formData {
   reviewId: number;
@@ -22,29 +23,13 @@ export interface formData {
   imageUrls: string[];
 }
 
-interface PlaceInfo {
-  placeId: number;
-  name: string;
-  areaCode: string;
-  firstImage: string;
-  contentId: string;
-  address: string;
-  mapX: string;
-  mapY: string;
-  overview: string;
-  rating: string;
-  review: string;
-}
-
 export default function EditReview() {
   const router = useRouter();
   const appDispatch = useAppDispatch();
   const { reviewId } = router.query;
-
   const [clicked, setClicked] = useState<boolean[]>(Array(5).fill(false));
   const [content, setContent] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState("");
-  // const [hasError, setHasError] = useState(false);
   const [star, setStar] = useState<number>();
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -236,7 +221,6 @@ export default function EditReview() {
           },
         })
         .then((response) => {
-          // console.log(response.data, "리뷰 수정 성공!");
           appDispatch(getMyReview(accessToken));
           appDispatch(getPlaceBookmark(accessToken));
           router.push(`/place/${id}`);

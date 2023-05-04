@@ -3,16 +3,10 @@ import cookie from "react-cookies";
 import Image from "next/image";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { useRouter } from "next/router";
-import { openModal } from "@/src/store/reducers/modalSlice";
-import axios from "axios";
-import { setReview } from "@/src/store/reducers/reviewSlice";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
-
-// 별점, 아이디, 작성일, 리뷰내용, 이미지
-// 유저일 경우 수정 삭제 버튼
 
 type ReviewProps = {
   reviewId: number;
@@ -36,55 +30,12 @@ export default function ReviewItem({
   onDelete,
 }: ReviewProps) {
   const router = useRouter();
-  // const { placeId, name } = router.query;
-  // const [user, setUser] = useState();
   const currentUser = useSelector(
     (state: RootState) => state.nickName.nickName
   );
-  const dispatch = useDispatch();
   const isUser = nickname === currentUser;
   const [isExpanded, setIsExpanded] = useState(false);
-  const page = useSelector((state: RootState) => state.page.page);
-
   const id = useRouterQuery("id");
-  console.log(id);
-
-  // const deleteReview = async () => {
-  //   const confirmed = window.confirm("리뷰를 삭제하시겠습니까?");
-  //   if (confirmed) {
-  //     try {
-  //       const accessToken = await cookie.load("accessToken");
-  //       const response = await axios.delete(
-  //         `${process.env.NEXT_PUBLIC_API_URL}/api/review/detail/${reviewId}`,
-  //         {
-  //           headers: {
-  //             "Access-Token": accessToken,
-  //           },
-  //         }
-  //       );
-  //       const res = await axios.get(`/api/review/${placeId}/rating`, {
-  //         params: {
-  //           page: page,
-  //         },
-  //         withCredentials: true,
-  //       });
-  //       dispatch(setReview(res.data.data));
-  //       // router.push(`/search?keyword=${name}`);
-  //       // router.push(
-  //       //   {
-  //       //     pathname: `/place/[id]`,
-  //       //     query: {
-  //       //       placeId: placeId,
-  //       //       name: name,
-  //       //     },
-  //       //   },
-  //       //   `/place/${placeId}`
-  //       // );
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  // };
 
   const handleDelete = () => {
     onDelete(reviewId);

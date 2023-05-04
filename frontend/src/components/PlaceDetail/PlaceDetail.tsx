@@ -19,7 +19,7 @@ import ReviewItem from "../Review/ReviewItem";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 
-interface PlaceInfo {
+export interface PlaceInfo {
   placeId: number;
   name: string;
   areaCode: string;
@@ -38,9 +38,7 @@ export default function PlaceDetail() {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const router = useRouter();
-  const { placeId } = router.query;
   const id = useRouterQuery("id");
-  console.log(id);
   const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
     placeId: 0,
     name: "",
@@ -209,6 +207,7 @@ export default function PlaceDetail() {
     }
   }, [page, id]);
 
+  // * 리뷰 작성 버튼 클릭
   const handleClickReviewBtn = () => {
     if (!accessToken && !currentUser) {
       dispatch(
@@ -219,7 +218,7 @@ export default function PlaceDetail() {
       );
     } else {
       if (id) {
-        router.push(`/review/${id}/create-review`);
+        router.push(`/review/create-review/${id}`);
       } else {
         console.log("placeId is undefined");
       }

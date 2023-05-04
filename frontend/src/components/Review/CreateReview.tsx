@@ -12,26 +12,13 @@ import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
-
-interface PlaceInfo {
-  placeId: number;
-  name: string;
-  areaCode: string;
-  firstImage: string;
-  contentId: string;
-  address: string;
-  mapX: string;
-  mapY: string;
-  overview: string;
-  rating: string;
-  review: string;
-}
+import { PlaceInfo } from "../PlaceDetail/PlaceDetail";
 
 export default function CreateReview() {
   const accessToken = cookie.load("accessToken");
   const router = useRouter();
+  const id = useRouterQuery("id");
   const appDispatch = useAppDispatch();
-  const { placeId, name } = router.query;
   const [clicked, setClicked] = useState<boolean[]>([
     false,
     false,
@@ -41,13 +28,11 @@ export default function CreateReview() {
   ]);
   const [content, setContent] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState("");
-  // const [hasError, setHasError] = useState(false);
   const [star, setStar] = useState<number>();
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   let rating = clicked.filter(Boolean).length;
-  const id = useRouterQuery("id");
-  console.log(id);
+
   const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
     placeId: 0,
     name: "",
@@ -175,23 +160,12 @@ export default function CreateReview() {
           },
         })
         .then((response) => {
-          console.log(response.data);
           appDispatch(getMyReview(accessToken));
           appDispatch(getPlaceBookmark(accessToken));
           router.push(`/place/${id}`);
         });
     } catch (error) {
-      router.push(`/search?keyword=${name}`);
-      // router.push(
-      //   {
-      //     pathname: `/place/[id]`,
-      //     query: {
-      //       placeId: placeId,
-      //       name: name,
-      //     },
-      //   },
-      //   `/place/${placeId}`
-      // );
+      router.push(`/place/${id}`);
       console.log(error);
     }
   };
