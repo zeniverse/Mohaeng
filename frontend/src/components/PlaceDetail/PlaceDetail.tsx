@@ -38,8 +38,9 @@ export default function PlaceDetail() {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const router = useRouter();
-  const { placeId, name } = router.query;
+  const { placeId } = router.query;
   const id = useRouterQuery("id");
+  console.log(id);
   const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
     placeId: 0,
     name: "",
@@ -150,9 +151,6 @@ export default function PlaceDetail() {
     (state: RootState) => state.nickName.nickName
   );
 
-  // * 새로고침 방지
-  // usePreventRefresh();
-
   // 정렬
   const handleChangeOption = (e: {
     target: { value: SetStateAction<string> };
@@ -220,31 +218,13 @@ export default function PlaceDetail() {
         })
       );
     } else {
-      router.push(
-        {
-          pathname: `/review/[id]/create-review`,
-          query: {
-            placeId: placeId,
-            name: name,
-          },
-        },
-        `/review/${placeId}/create-review`
-      );
-      // localStorage.setItem("placeId", `${placeId}`);
-      // localStorage.setItem("name", `${name}`);
+      if (id) {
+        router.push(`/review/${id}/create-review`);
+      } else {
+        console.log("placeId is undefined");
+      }
     }
   };
-
-  // useEffect(() => {
-  //   const prevPlaceId = localStorage.getItem("placeId");
-  //   const prevName = localStorage.getItem("name");
-  //   if (prevPlaceId && prevName) {
-  //     setPlaceId(prevPlaceId);
-  //     setName(prevName);
-  //   }
-  //   localStorage.removeItem("placeId");
-  //   localStorage.removeItem("name");
-  // }, []);
 
   // * 리뷰 아이템 삭제
   const handleDelete = async (reviewId: number) => {
@@ -259,7 +239,7 @@ export default function PlaceDetail() {
             },
           }
         );
-        const res = await axios.get(`/api/review/${placeId}/rating`, {
+        const res = await axios.get(`/api/review/${id}/rating`, {
           params: {
             page: page,
           },

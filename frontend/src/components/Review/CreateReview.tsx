@@ -13,7 +13,22 @@ import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 
+interface PlaceInfo {
+  placeId: number;
+  name: string;
+  areaCode: string;
+  firstImage: string;
+  contentId: string;
+  address: string;
+  mapX: string;
+  mapY: string;
+  overview: string;
+  rating: string;
+  review: string;
+}
+
 export default function CreateReview() {
+  const accessToken = cookie.load("accessToken");
   const router = useRouter();
   const appDispatch = useAppDispatch();
   const { placeId, name } = router.query;
@@ -33,6 +48,45 @@ export default function CreateReview() {
   let rating = clicked.filter(Boolean).length;
   const id = useRouterQuery("id");
   console.log(id);
+  const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
+    placeId: 0,
+    name: "",
+    areaCode: "",
+    firstImage: "",
+    contentId: "",
+    address: "",
+    mapX: "",
+    mapY: "",
+    overview: "",
+    rating: "",
+    review: "",
+  });
+
+  // * 상세 데이터중 placeId, name 가져오기
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const headers: { [key: string]: string } = {};
+        if (accessToken) {
+          headers["Access-Token"] = accessToken;
+          headers.withCredentials = "true";
+        }
+        const res = await axios.get(`/api/place/overview/${id}`, {
+          headers,
+        });
+        if (Object.keys(res.data.data.content[0]).length > 0) {
+          const { content } = res.data.data;
+          setPlaceInfo({ ...placeInfo, ...content[0] });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
 
   // * 새로고침 방지
   usePreventRefresh();
@@ -121,18 +175,10 @@ export default function CreateReview() {
           },
         })
         .then((response) => {
+          console.log(response.data);
           appDispatch(getMyReview(accessToken));
           appDispatch(getPlaceBookmark(accessToken));
-          router.push(
-            {
-              pathname: `/place/[id]`,
-              query: {
-                placeId: placeId,
-                name: name,
-              },
-            },
-            `/place/${placeId}`
-          );
+          router.push(`/place/${id}`);
         });
     } catch (error) {
       router.push(`/search?keyword=${name}`);
@@ -174,7 +220,7 @@ export default function CreateReview() {
         <h2 className={styles.h2}>리뷰 작성</h2>
         <article className={styles.registerReview}>
           <p className={styles.boldTitle}>선택한 여행지</p>
-          <h3 className={styles.reviewTitle}>{name}</h3>
+          <h3 className={styles.reviewTitle}>{placeInfo.name}</h3>
 
           <div className={styles.ratingBox}>
             <strong className={styles.ratingTitle}>별점</strong>

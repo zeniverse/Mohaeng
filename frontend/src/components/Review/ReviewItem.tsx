@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { openModal } from "@/src/store/reducers/modalSlice";
 import axios from "axios";
 import { setReview } from "@/src/store/reducers/reviewSlice";
+import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 
 // 별점, 아이디, 작성일, 리뷰내용, 이미지
 // 유저일 경우 수정 삭제 버튼
@@ -35,7 +36,7 @@ export default function ReviewItem({
   onDelete,
 }: ReviewProps) {
   const router = useRouter();
-  const { placeId, name } = router.query;
+  // const { placeId, name } = router.query;
   // const [user, setUser] = useState();
   const currentUser = useSelector(
     (state: RootState) => state.nickName.nickName
@@ -44,6 +45,9 @@ export default function ReviewItem({
   const isUser = nickname === currentUser;
   const [isExpanded, setIsExpanded] = useState(false);
   const page = useSelector((state: RootState) => state.page.page);
+
+  const id = useRouterQuery("id");
+  console.log(id);
 
   // const deleteReview = async () => {
   //   const confirmed = window.confirm("리뷰를 삭제하시겠습니까?");
@@ -112,17 +116,12 @@ export default function ReviewItem({
           <div className={styles.btnGroup}>
             <button
               onClick={() =>
-                router.push(
-                  {
-                    pathname: `/review/edit-review/[id]`,
-                    query: {
-                      placeId: placeId,
-                      reviewId: reviewId,
-                      name: name,
-                    },
+                router.push({
+                  pathname: `/review/edit-review/${id}`,
+                  query: {
+                    reviewId: reviewId,
                   },
-                  `/review/edit-review/${reviewId}`
-                )
+                })
               }
               className={styles.btn}
             >

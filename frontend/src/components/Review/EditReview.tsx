@@ -10,6 +10,7 @@ import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
+import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 
 export interface formData {
   reviewId: number;
@@ -21,10 +22,24 @@ export interface formData {
   imageUrls: string[];
 }
 
+interface PlaceInfo {
+  placeId: number;
+  name: string;
+  areaCode: string;
+  firstImage: string;
+  contentId: string;
+  address: string;
+  mapX: string;
+  mapY: string;
+  overview: string;
+  rating: string;
+  review: string;
+}
+
 export default function EditReview() {
   const router = useRouter();
   const appDispatch = useAppDispatch();
-  const { placeId, reviewId, name } = router.query;
+  const { reviewId } = router.query;
 
   const [clicked, setClicked] = useState<boolean[]>(Array(5).fill(false));
   const [content, setContent] = useState<string>("");
@@ -45,6 +60,49 @@ export default function EditReview() {
 
   const accessToken = cookie.load("accessToken");
   let rating = clicked.filter(Boolean).length;
+
+  const id = useRouterQuery("id");
+  console.log(id);
+
+  const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
+    placeId: 0,
+    name: "",
+    areaCode: "",
+    firstImage: "",
+    contentId: "",
+    address: "",
+    mapX: "",
+    mapY: "",
+    overview: "",
+    rating: "",
+    review: "",
+  });
+
+  // * 상세 데이터중 placeId, name 가져오기
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const headers: { [key: string]: string } = {};
+        if (accessToken) {
+          headers["Access-Token"] = accessToken;
+          headers.withCredentials = "true";
+        }
+        const res = await axios.get(`/api/place/overview/${id}`, {
+          headers,
+        });
+        if (Object.keys(res.data.data.content[0]).length > 0) {
+          const { content } = res.data.data;
+          setPlaceInfo({ ...placeInfo, ...content[0] });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
 
   // * 새로고침 방지
   usePreventRefresh();
@@ -181,28 +239,10 @@ export default function EditReview() {
           // console.log(response.data, "리뷰 수정 성공!");
           appDispatch(getMyReview(accessToken));
           appDispatch(getPlaceBookmark(accessToken));
-          router.push(
-            {
-              pathname: `/place/[id]`,
-              query: {
-                placeId: placeId,
-                name: name,
-              },
-            },
-            `/place/${placeId}`
-          );
+          router.push(`/place/${id}`);
         });
     } catch (error) {
-      router.push(
-        {
-          pathname: `/place/[id]`,
-          query: {
-            placeId: placeId,
-            name: name,
-          },
-        },
-        `/place/${placeId}`
-      );
+      router.push(`/place/${id}`);
       console.log(error);
     }
   };
@@ -235,7 +275,7 @@ export default function EditReview() {
         <h2 className={styles.h2}>리뷰 수정</h2>
         <article className={styles.registerReview}>
           <p className={styles.boldTitle}>선택한 여행지</p>
-          <h3 className={styles.reviewTitle}>{name}</h3>
+          <h3 className={styles.reviewTitle}>{placeInfo.name}</h3>
 
           <div className={styles.ratingBox}>
             <strong className={styles.ratingTitle}>별점</strong>
