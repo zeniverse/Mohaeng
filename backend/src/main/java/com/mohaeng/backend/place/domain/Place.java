@@ -144,4 +144,8 @@ public class Place {
         this.name = place.name;
         this.address = place.address;
     }
+
+    public void updateRating(double rating) {
+        this.rating = rating;
+    }
 }

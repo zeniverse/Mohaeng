@@ -150,15 +150,12 @@ export default function PlaceDetail() {
             <Image
               className={styles.img}
               src={placeInfo.firstImage}
-              width={500}
-              height={350}
+              width={1000}
+              height={1000}
               alt={placeInfo.name}
             />
           </div>
           <div className={styles.detailMap}>
-            {/* <p className={styles.address}>
-              <FaMapMarkerAlt /> {placeInfo.address}
-            </p> */}
             <div className={styles.map} id="map">
               <PlaceDetailMap
                 latitude={placeInfo.mapY}

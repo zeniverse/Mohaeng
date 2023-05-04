@@ -1,6 +1,7 @@
 package com.mohaeng.backend.place.service;
 
 import com.mohaeng.backend.Image.AmazonS3Service;
+import com.mohaeng.backend.exception.notfound.PlaceNotFoundException;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
@@ -9,7 +10,6 @@ import com.mohaeng.backend.place.dto.PlaceDTO;
 import com.mohaeng.backend.place.dto.PlaceDetailsDto;
 import com.mohaeng.backend.place.dto.PlaceRatingDto;
 import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
-import com.mohaeng.backend.place.exception.PlaceNotFoundException;
 import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,11 +39,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -129,7 +126,7 @@ public class PlaceService {
             }
         }
         if (places.isEmpty()) {
-            throw new PlaceNotFoundException("No place found.");
+            throw new PlaceNotFoundException();
         }
         return places;
     }
@@ -169,7 +166,7 @@ public class PlaceService {
                                 }
                             }
                         }
-                        overviewText = overviewBuilder.toString();
+                        overviewText = overviewBuilder.toString().replaceAll("\\n|<br>|<br >|< br>|<br />|</br>|<br/>|<strong>|</ strong>|</strong>|&nbsp;", "");
                         break;
                     }
                 }
@@ -283,12 +280,16 @@ public class PlaceService {
         return overviews;
     }
 
-    public PlaceDetailsResponse getPlaceDetailsByContentId(String contentId, Member member) {
+    public PlaceDetailsResponse getPlaceDetailsByPlaceId(String placeId, Member member) {
         Place currentPlace = null;
         Boolean isBookmark = false;
 
-        List<Place> places = placeRepository.findByContentId(contentId);
-        List<String> overviews = getPlaceOverview(contentId);
+        List<Place> places = placeRepository.findById(placeId);
+        List<String> overviews = places.stream()
+                .map(Place::getContentId)
+                .map(this::getPlaceOverview)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
 
         List<PlaceDetailsDto> placeDetailsDtos = IntStream.range(0, places.size())
                 .mapToObj(i -> {
@@ -326,5 +327,10 @@ public class PlaceService {
     public double getAverageRatingForPlace(Long placeId) {
         List<Review> placeReviews = reviewService.getAllReviewById(placeId);
         return Math.round(reviewService.getAverageRating(placeReviews) * 100.0) / 100.0;
+    }
+
+    public Place getPlaceById(Long id) {
+        return placeRepository.findById(id)
+                .orElseThrow(() -> new PlaceNotFoundException());
     }
 }
