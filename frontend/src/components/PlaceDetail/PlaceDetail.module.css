@@ -28,11 +28,6 @@
   margin-bottom: 8px;
 }
 
-.rating,
-.review {
-  font-size: 16px;
-}
-
 .bookMarkBox {
   display: flex;
   justify-content: center;
