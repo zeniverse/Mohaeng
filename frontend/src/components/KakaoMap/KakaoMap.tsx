@@ -1,15 +1,14 @@
 import ReactDOMServer from "react-dom/server";
 import { PositionsProps } from "@/src/interfaces/Course";
-import { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import CustomOverlayContent from "./CustomOverlayContent";
-import styles from "./KakaoMap.module.css";
 
 declare global {
   interface Window {
     kakao: any;
   }
 }
-export default function KakaoMap({ mapData }: PositionsProps) {
+export default React.memo(function KakaoMap({ mapData }: PositionsProps) {
   useEffect(() => {
     const { kakao } = window;
 
@@ -93,4 +92,4 @@ export default function KakaoMap({ mapData }: PositionsProps) {
       <p id="result" />
     </>
   );
-}
+});

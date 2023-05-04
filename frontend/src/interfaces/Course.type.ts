@@ -53,8 +53,8 @@ export interface ICourseOriginForm extends ICourseForm {
 }
 
 export interface ICourseEditParam {
+  formData: ICourseOriginForm;
   courseId: number;
-  course: ICourseOriginForm;
 }
 
 export interface ICourseSubmitForm extends ICourseForm {

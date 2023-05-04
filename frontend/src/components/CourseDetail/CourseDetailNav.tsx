@@ -9,14 +9,14 @@ import {
   BsShare,
 } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import {
-  detailBookmarkToggleAction,
-  detailLikeToggleAction,
-} from "@/src/store/reducers/CourseDetailSlice";
 import { openModal } from "@/src/store/reducers/modalSlice";
 import TagItem from "../UI/TagItem";
 import { kakaoShare } from "@/src/utils/kakao-share";
 import LIkeButton from "../UI/LIkeButton";
+import {
+  bookmarkToggleAction,
+  likeToggleAction,
+} from "@/src/store/thunks/courseThunks";
 
 const CourseDetailNav = () => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
@@ -45,9 +45,11 @@ const CourseDetailNav = () => {
     setIsRoughMapOpen(false);
   };
 
-  const bookmarkHandler = (id: number) => {
+  const bookmarkHandler = () => {
     if (userId) {
-      dispatch(detailBookmarkToggleAction(id));
+      dispatch(
+        bookmarkToggleAction({ courseId, isBookmarked, isDetailPage: true })
+      );
     } else {
       dispatch(
         openModal({
@@ -60,7 +62,7 @@ const CourseDetailNav = () => {
 
   const handleDetailLike = () => {
     if (userId) {
-      dispatch(detailLikeToggleAction(courseId));
+      dispatch(likeToggleAction({ courseId, isLiked, isDetailPage: true }));
     } else {
       dispatch(
         openModal({
@@ -126,10 +128,7 @@ const CourseDetailNav = () => {
             <RoughMap RoughMapData={RoughMapData} onClose={onClose} />
           )}
         </div>
-        <div
-          className={styles["item-nav"]}
-          onClick={() => bookmarkHandler(courseId)}
-        >
+        <div className={styles["item-nav"]} onClick={bookmarkHandler}>
           {isBookmarked ? (
             <BsBookmarkFill className={`${styles.bookmark} ${styles.icon}`} />
           ) : (

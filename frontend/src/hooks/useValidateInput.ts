@@ -1,7 +1,7 @@
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { useCallback, useMemo, useState } from "react";
 import { ICourseForm } from "../interfaces/Course.type";
-import { setFormValue } from "../store/reducers/CourseFormSlice";
+import { setFormValue } from "../store/reducers/courseFormSlice";
 
 const useValidateInput = (
   validation: (value: string) => boolean,

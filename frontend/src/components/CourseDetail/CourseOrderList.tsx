@@ -2,8 +2,9 @@ import Image from "next/image";
 import styles from "./CourseOrderList.module.css";
 import { AiOutlineMinus } from "react-icons/ai";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-import { removePlace } from "@/src/store/reducers/CourseFormSlice";
+import { removePlace } from "@/src/store/reducers/courseFormSlice";
 import TagItem from "../UI/TagItem";
+import React from "react";
 
 const CourseOrderList = ({ places, mode }: any) => {
   const dispatch = useAppDispatch();
@@ -30,7 +31,7 @@ const CourseOrderList = ({ places, mode }: any) => {
             )}
             <div className={styles["item-content"]}>
               <p className={styles.name}>{place.name}</p>
-              <TagItem color="black" size="SS" text="주소" bgColor="Lsky" />
+              <TagItem color="black" size="SS" text="주소" bgColor="Mgrey" />
               <span className={styles.address}>{place.address}</span>
             </div>
             {mode === "write" && (
@@ -50,4 +51,4 @@ const CourseOrderList = ({ places, mode }: any) => {
   );
 };
 
-export default CourseOrderList;
+export default React.memo(CourseOrderList);
