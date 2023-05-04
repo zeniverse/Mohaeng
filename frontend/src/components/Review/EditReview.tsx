@@ -47,7 +47,6 @@ export default function EditReview() {
   let rating = clicked.filter(Boolean).length;
 
   const id = useRouterQuery("id");
-  console.log(id);
 
   const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
     placeId: 0,
