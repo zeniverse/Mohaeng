@@ -30,13 +30,17 @@ public class PlaceInitializer {
     private final PlaceService placeService;
 
     @PostConstruct
-    @Scheduled(cron = "0 0 0 * * ?")
     public void init() throws IOException {
         placeService.saveInitImage();
-        List<Place> places = Optional.of(placeRepository.findAll())
-                .filter(List::isEmpty)
-                .map(list -> getPlacesOrThrow())
-                .orElseGet(placeRepository::findAll);
+        long count = placeRepository.count();
+        if (count == 0) {
+            updatePlaces();
+        }
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void updatePlaces() {
+        List<Place> places = getPlacesOrThrow();
         placeRepository.saveAll(places);
 
         Map<String, Place> oldPlacesMap = places.stream()
