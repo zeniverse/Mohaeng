@@ -68,6 +68,7 @@ export const courseListSlice = createSlice({
     builder.addCase(likeToggleAction.pending, (state) => {});
     builder.addCase(likeToggleAction.fulfilled, (state, action) => {
       const { courseId, totalLikes, isDetailPage } = action.payload;
+
       if (isDetailPage === undefined || isDetailPage === true) return;
       if (state.courseList.length > 0) {
         const course = state.courseList.find((c) => c.courseId === courseId);

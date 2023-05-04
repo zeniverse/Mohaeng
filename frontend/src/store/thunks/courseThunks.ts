@@ -53,6 +53,7 @@ export const likeToggleAction = createAsyncThunk(
   "course/ToggleLike",
   async ({ courseId, isLiked, isDetailPage }: ILikeToggleParams) => {
     let resData: ToggleLikeApiResponse;
+
     if (isLiked) {
       resData = await toggleLikeApi(courseId, "DELETE");
     } else {
@@ -65,6 +66,7 @@ export const likeToggleAction = createAsyncThunk(
 export const bookmarkToggleAction = createAsyncThunk(
   "course/toggleBookmark",
   async ({ courseId, isBookmarked, isDetailPage }: IBookmarkToggleParams) => {
+    console.log("bookmarkToggleAction 시작");
     if (isBookmarked) {
       await toggleBookmarkApi(courseId, "DELETE");
     } else {

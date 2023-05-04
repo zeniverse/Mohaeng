@@ -44,6 +44,9 @@ const CourseItem = ({
   places,
 }: CourseListProps) => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
+  const [isBookmarkHandlerRunning, setIsBookmarkHandlerRunning] =
+    useState(false);
+  const [isLikeHandlerRunning, setIsLikeHandlerRunning] = useState(false);
 
   const { id: userId } = useAppSelector((state) => state.token);
   const dispatch = useAppDispatch();
@@ -60,6 +63,10 @@ const CourseItem = ({
   };
 
   const bookmarkHandler = () => {
+    if (isBookmarkHandlerRunning) {
+      return; // 핸들러가 실행 중이면 새로운 이벤트 발생하지 않음
+    }
+    setIsBookmarkHandlerRunning(true);
     if (userId) {
       dispatch(
         bookmarkToggleAction({
@@ -78,14 +85,24 @@ const CourseItem = ({
         })
       );
     }
+    setIsBookmarkHandlerRunning(false);
   };
 
   const handleToggleLike = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
+    if (isLikeHandlerRunning) {
+      return; // 이벤트 핸들러가 실행 중인 경우 함수 실행하지 않음
+    }
+    setIsLikeHandlerRunning(true);
+
     if (userId) {
-      dispatch(likeToggleAction({ courseId, isLiked, isDetailPage: false }));
+      dispatch(
+        likeToggleAction({ courseId, isLiked, isDetailPage: false })
+      ).then(() => {
+        dispatch(getCourseBookmark(accessToken));
+      });
     } else {
       dispatch(
         openModal({
@@ -94,6 +111,8 @@ const CourseItem = ({
         })
       );
     }
+
+    setIsLikeHandlerRunning(false);
   };
 
   const handleLinkClick = () => {

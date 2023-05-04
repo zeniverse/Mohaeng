@@ -21,7 +21,6 @@ const CourseCard = ({
     e.stopPropagation();
     if (userId) {
       dispatch(likeToggleAction({ courseId, isLiked }));
-      // isLiked를 토글하고 likeCount를 1증가 혹은 감소
       onUpdateCourse({
         courseId,
         title,
