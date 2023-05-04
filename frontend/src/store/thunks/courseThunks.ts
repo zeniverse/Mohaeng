@@ -8,7 +8,6 @@ import {
   editCourseApi,
 } from "@/src/services/courseService";
 import { ToggleLikeApiResponse } from "../reducers/courseListSlice";
-import { RootState } from "../store";
 import { getCourseDetailApi } from "@/src/services/courseDetailService";
 import {
   ICourseEditParam,
@@ -87,26 +86,30 @@ export const getCourseDetailAction = createAsyncThunk(
   }
 );
 
-async function validateCourseData(
+async function convertCourseOriginToSubmitForm(
   params: ICourseOriginForm
 ): Promise<ICourseSubmitForm> {
-  const { places, ...rest } = params;
-  const validPlace = places.find((place) => place.imgUrl.trim() !== "");
-  const thumbnailUrl = validPlace?.imgUrl ?? "";
+  const { places, thumbnailUrl, ...rest } = params;
   const extractedPlaceIds = places.map((place) => place.placeId);
+  const foundPlaceObj = places.find(
+    (place) =>
+      place.imgUrl.startsWith("http://tong.visitkorea.or.kr") ||
+      place.imgUrl.startsWith("https://cdn.visitkorea.or.kr")
+  );
 
+  const thumbnailUrlFormat = foundPlaceObj?.imgUrl || places[0].imgUrl;
   return {
     ...rest,
     placeIds: extractedPlaceIds,
-    thumbnailUrl,
+    thumbnailUrl: thumbnailUrlFormat,
   };
 }
+
 export const createCourseAction = createAsyncThunk(
   "course/createCourseAction",
   async (formData: ICourseOriginForm, { rejectWithValue }) => {
     try {
-      const validData = await validateCourseData(formData);
-
+      const validData = await convertCourseOriginToSubmitForm(formData);
       const resData = await createCourseApi(validData);
       return { formData, resData };
     } catch (error) {
@@ -119,7 +122,7 @@ export const editCourseAction = createAsyncThunk(
   "course/editCourseAction",
   async ({ formData, courseId }: ICourseEditParam, { rejectWithValue }) => {
     try {
-      const validData = await validateCourseData(formData);
+      const validData = await convertCourseOriginToSubmitForm(formData);
       await editCourseApi(courseId, validData);
       return formData;
     } catch (error) {

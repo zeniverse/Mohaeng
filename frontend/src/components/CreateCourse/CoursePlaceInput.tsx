@@ -38,7 +38,6 @@ const CoursePlaceInput = () => {
           { params: { keyword: debouncedSearch } }
         );
         const placeSearchResult = placeSearchRes.data;
-        console.log(placeSearchResult);
         setPlaces(placeSearchResult.data.places);
       } catch (error) {
         console.error("Error fetching places:", error);
