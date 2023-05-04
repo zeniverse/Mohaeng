@@ -1,6 +1,6 @@
+import styles from "./SearchBar.module.css";
 import { BsSearch } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
-import styles from "./SearchBar.module.css";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";

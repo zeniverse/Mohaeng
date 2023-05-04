@@ -5,13 +5,13 @@ import Image from "next/image";
 import axios from "axios";
 import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
-import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 import { PlaceInfo } from "../PlaceDetail/PlaceDetail";
+// import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+// import { getMyReview } from "@/src/store/reducers/myReviewSlice";
+// import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 
 export interface formData {
   reviewId: number;
@@ -24,13 +24,15 @@ export interface formData {
 }
 
 export default function EditReview() {
+  // const appDispatch = useAppDispatch();
+  const accessToken = cookie.load("accessToken");
   const router = useRouter();
-  const appDispatch = useAppDispatch();
   const { reviewId } = router.query;
+  const id = useRouterQuery("id");
+
   const [clicked, setClicked] = useState<boolean[]>(Array(5).fill(false));
   const [content, setContent] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState("");
-  const [star, setStar] = useState<number>();
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [reviewForm, setReviewForm] = useState<formData>({
@@ -42,11 +44,7 @@ export default function EditReview() {
     createdDate: "",
     imageUrls: [],
   });
-
-  const accessToken = cookie.load("accessToken");
   let rating = clicked.filter(Boolean).length;
-
-  const id = useRouterQuery("id");
 
   const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
     placeId: 0,
@@ -220,8 +218,8 @@ export default function EditReview() {
           },
         })
         .then((response) => {
-          appDispatch(getMyReview(accessToken));
-          appDispatch(getPlaceBookmark(accessToken));
+          // appDispatch(getMyReview(accessToken));
+          // appDispatch(getPlaceBookmark(accessToken));
           router.push(`/place/${id}`);
         });
     } catch (error) {
