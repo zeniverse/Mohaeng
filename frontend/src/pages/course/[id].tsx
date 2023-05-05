@@ -4,7 +4,7 @@ import CourseDetailNav from "@/src/components/CourseDetail/CourseDetailNav";
 import CourseDetailContent from "@/src/components/CourseDetail/CourseDetailContent";
 import CourseDetailHead from "@/src/components/CourseDetail/CourseDetailHead";
 
-export default function CourseDetail() {
+function CourseDetail() {
   return (
     <>
       <div className={styles["course-id-container"]}>
@@ -15,3 +15,5 @@ export default function CourseDetail() {
     </>
   );
 }
+
+export default CourseDetail;

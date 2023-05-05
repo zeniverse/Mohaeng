@@ -16,7 +16,7 @@ import axios from "axios";
 import cookie from "react-cookies";
 import SearchBar from "../Search/SearchBar";
 import Image from "next/image";
-import { resetFilter, selectArea } from "@/src/store/reducers/FilterSlice";
+import { resetFilter, selectArea } from "@/src/store/reducers/filterSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
@@ -83,6 +83,7 @@ function Header({}: Props) {
 
   const ResetStatus = () => {
     dispatch(resetFilter());
+    dispatch;
 
     const currComponent: myPageState = {
       currIdx: 0,

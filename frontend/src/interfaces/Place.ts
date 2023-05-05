@@ -9,7 +9,6 @@ export interface Place {
 
 export type ITopTenPlace = {
   placeId: number;
-  contentId: string;
   name: string;
   firstImage: string;
   averageRating: string;

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import { selectArea } from "@/src/store/reducers/FilterSlice";
+import { selectArea } from "@/src/store/reducers/filterSlice";
 import { useState } from "react";
 import styles from "./AreaSelector.module.css";
 

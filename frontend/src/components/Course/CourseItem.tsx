@@ -16,9 +16,9 @@ import RoughMap from "./RoughMap";
 import TagItem from "../UI/TagItem";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import {
-  listBookmarkToggleAction,
-  listLikeToggleAction,
-} from "@/src/store/reducers/CourseListSlice";
+  bookmarkToggleAction,
+  likeToggleAction,
+} from "@/src/store/thunks/courseThunks";
 import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import cookie from "react-cookies";
 import { useRouter } from "next/router";
@@ -44,10 +44,12 @@ const CourseItem = ({
   places,
 }: CourseListProps) => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
+  const [isBookmarkHandlerRunning, setIsBookmarkHandlerRunning] =
+    useState(false);
+  const [isLikeHandlerRunning, setIsLikeHandlerRunning] = useState(false);
 
   const { id: userId } = useAppSelector((state) => state.token);
   const dispatch = useAppDispatch();
-  const accessToken = cookie.load("accessToken");
   const router = useRouter();
 
   const toggleRoughMapHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
@@ -59,11 +61,19 @@ const CourseItem = ({
     setIsRoughMapOpen(false);
   };
 
-  const bookmarkHandler = (id: number) => {
+  const handleToggleBookmark = () => {
+    if (isBookmarkHandlerRunning) {
+      return; // 핸들러가 실행 중이면 새로운 이벤트 발생하지 않음
+    }
+    setIsBookmarkHandlerRunning(true);
     if (userId) {
-      dispatch(listBookmarkToggleAction(id)).then(() => {
-        dispatch(getCourseBookmark(accessToken));
-      });
+      dispatch(
+        bookmarkToggleAction({
+          courseId,
+          isBookmarked,
+          isDetailPage: false,
+        })
+      );
     } else {
       dispatch(
         openModal({
@@ -72,14 +82,20 @@ const CourseItem = ({
         })
       );
     }
+    setIsBookmarkHandlerRunning(false);
   };
 
   const handleToggleLike = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
+    if (isLikeHandlerRunning) {
+      return; // 이벤트 핸들러가 실행 중인 경우 함수 실행하지 않음
+    }
+    setIsLikeHandlerRunning(true);
+
     if (userId) {
-      dispatch(listLikeToggleAction({ courseId, isLiked }));
+      dispatch(likeToggleAction({ courseId, isLiked, isDetailPage: false }));
     } else {
       dispatch(
         openModal({
@@ -88,6 +104,7 @@ const CourseItem = ({
         })
       );
     }
+    setIsLikeHandlerRunning(false);
   };
 
   const handleLinkClick = () => {
@@ -143,10 +160,7 @@ const CourseItem = ({
         </div>
       </div>
       <div className={styles["item-nav-container"]}>
-        <div
-          className={styles["item-nav"]}
-          onClick={() => bookmarkHandler(courseId)}
-        >
+        <div className={styles["item-nav"]} onClick={handleToggleBookmark}>
           {isBookmarked ? (
             <BsBookmarkFill className={`${styles.bookmark} ${styles.icon}`} />
           ) : (
@@ -177,4 +191,4 @@ const CourseItem = ({
   );
 };
 
-export default CourseItem;
+export default React.memo(CourseItem);

@@ -1,6 +1,7 @@
 import { useDebounce } from "@/src/hooks/useDebounce";
+import axios from "axios";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./CoursePlaceInput.module.css";
 import PlaceSelectList from "./PlaceSelectList";
 
@@ -22,8 +23,7 @@ const CoursePlaceInput = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const ChangePlaceHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type } = e.target;
-    setSearch(value);
+    setSearch(e.target.value);
   };
 
   const debouncedSearch = useDebounce(search, 500);
@@ -33,10 +33,11 @@ const CoursePlaceInput = () => {
       setIsLoading(true);
       setPlaces([]);
       try {
-        const placeSearchRes = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/course/placeSearch?keyword=${debouncedSearch}`
+        const placeSearchRes = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/course/placeSearch`,
+          { params: { keyword: debouncedSearch } }
         );
-        const placeSearchResult = await placeSearchRes.json();
+        const placeSearchResult = placeSearchRes.data;
         setPlaces(placeSearchResult.data.places);
       } catch (error) {
         console.error("Error fetching places:", error);
@@ -63,11 +64,14 @@ const CoursePlaceInput = () => {
           placeholder={"검색할 장소를 입력해주세요"}
         />
       </label>
-      <PlaceSelectList
-        places={places}
-        isLoading={isLoading}
-        debouncedSearch={debouncedSearch}
-      />
+      {isLoading && <p>불러오는 중</p>}
+      {!isLoading && places.length > 0 && (
+        <PlaceSelectList
+          places={places}
+          isLoading={isLoading}
+          debouncedSearch={debouncedSearch}
+        />
+      )}
     </div>
   );
 };

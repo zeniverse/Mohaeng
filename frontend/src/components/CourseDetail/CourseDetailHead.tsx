@@ -1,15 +1,15 @@
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import { useCallback, useEffect, useState } from "react";
-import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
-import cookie from "react-cookies";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 
 import styles from "./CourseDetailHead.module.css";
-import { getCourseDetailAction } from "@/src/store/reducers/CourseDetailSlice";
 import { useRouter } from "next/router";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
-import { removeCourseAction } from "@/src/store/reducers/CourseListSlice";
-import { addFormValue } from "@/src/store/reducers/CourseFormSlice";
+import {
+  getCourseDetailAction,
+  removeCourseAction,
+} from "@/src/store/thunks/courseThunks";
+import { addFormValue } from "@/src/store/reducers/courseFormSlice";
 
 const CourseDetailHead = () => {
   const [formattedDate, setFormattedDate] = useState("");
@@ -26,6 +26,7 @@ const CourseDetailHead = () => {
       dispatch(getCourseDetailAction(id));
     }
   }, [id]);
+
   const getFomattedDate = useCallback((date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
@@ -39,10 +40,7 @@ const CourseDetailHead = () => {
   const handleRemoveCourse = () => {
     if (confirm(`${title} 코스를 정말 삭제하시겠습니까?`)) {
       if (id) {
-        const accessToken = cookie.load("accessToken");
-        dispatch(removeCourseAction(id)).then(() =>
-          dispatch(getMyCourse(accessToken))
-        );
+        dispatch(removeCourseAction(id));
 
         router.push("/course");
       }
@@ -77,12 +75,12 @@ const CourseDetailHead = () => {
 
   return (
     <div className={styles["detail-head-container"]}>
-      <h2 className={styles["title-wrapper"]}>
+      <div className={styles["title-wrapper"]}>
         <div className={styles["course-length"]}>
           {places && `${places.length}코스`}
         </div>
-        {title}
-      </h2>
+        <h2 className={styles.title}>{title}</h2>
+      </div>
       <div className={styles["detail-head-nav"]}>
         {profileImgUrl && nickname && (
           <div className={styles["user-info"]}>
@@ -120,4 +118,4 @@ const CourseDetailHead = () => {
   );
 };
 
-export default CourseDetailHead;
+export default React.memo(CourseDetailHead);

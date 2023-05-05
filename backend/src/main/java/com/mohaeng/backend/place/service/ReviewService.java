@@ -189,7 +189,7 @@ public class ReviewService {
         return reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException());
     }
-    
+
     public Page<Review> getAllReviewsByRating(Long placeId, int page) {
         Pageable pageable = PageRequest.of(page - 1 , 4, Sort.by("rating").descending());
         return reviewRepository.findAllByPlaceId(placeId, pageable);

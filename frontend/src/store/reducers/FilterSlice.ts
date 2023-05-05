@@ -1,5 +1,3 @@
-import { initialState } from "./CourseFormSlice";
-import { Keyword } from "@/src/interfaces/Keyword";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface IArea {
@@ -19,7 +17,7 @@ const initialFilterState: IFilter = {
   keyword: "",
 };
 
-export const FilterSlice = createSlice({
+export const filterSlice = createSlice({
   name: "filter",
   initialState: initialFilterState,
   reducers: {
@@ -45,5 +43,5 @@ export const FilterSlice = createSlice({
 });
 
 export const { selectArea, setKeyword, setSort, clearKeyword, resetFilter } =
-  FilterSlice.actions;
-export default FilterSlice.reducer;
+  filterSlice.actions;
+export default filterSlice.reducer;
