@@ -11,7 +11,7 @@ const CustomOverlayContent = ({ title, id }: objProps) => {
   return (
     <div className={styles.spot}>
       {/* TODO: place/id로 이동 */}
-      <Link className={styles.link} href={`/place/${id}`}>
+      <Link className={styles.link} href={`/place/${id}`} target="_blank">
         <span className={styles.title}>{title}</span>
       </Link>
     </div>
