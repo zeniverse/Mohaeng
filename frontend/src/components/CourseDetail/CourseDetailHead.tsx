@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 
 import styles from "./CourseDetailHead.module.css";
@@ -118,4 +118,4 @@ const CourseDetailHead = () => {
   );
 };
 
-export default React.memo(CourseDetailHead);
+export default CourseDetailHead;

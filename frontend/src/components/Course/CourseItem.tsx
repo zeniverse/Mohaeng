@@ -73,7 +73,9 @@ const CourseItem = ({
           isBookmarked,
           isDetailPage: false,
         })
-      );
+      ).then(() => {
+        setIsBookmarkHandlerRunning(false);
+      });
     } else {
       dispatch(
         openModal({
@@ -81,8 +83,8 @@ const CourseItem = ({
           isOpen: true,
         })
       );
+      setIsBookmarkHandlerRunning(false);
     }
-    setIsBookmarkHandlerRunning(false);
   };
 
   const handleToggleLike = (
@@ -95,7 +97,11 @@ const CourseItem = ({
     setIsLikeHandlerRunning(true);
 
     if (userId) {
-      dispatch(likeToggleAction({ courseId, isLiked, isDetailPage: false }));
+      dispatch(
+        likeToggleAction({ courseId, isLiked, isDetailPage: false })
+      ).then(() => {
+        setIsLikeHandlerRunning(false);
+      });
     } else {
       dispatch(
         openModal({
@@ -103,8 +109,8 @@ const CourseItem = ({
           isOpen: true,
         })
       );
+      setIsLikeHandlerRunning(false);
     }
-    setIsLikeHandlerRunning(false);
   };
 
   const handleLinkClick = () => {
@@ -154,8 +160,8 @@ const CourseItem = ({
           />
         </div>
         <div className={styles["item-info-text"]}>
-          <h3>{title}</h3>
-          <p>{content}</p>
+          <h3 className={styles.title}>{title}</h3>
+          <p className={styles.content}>{content}</p>
           {courseDays && <TagItem size="S" text={courseDays} />}
         </div>
       </div>

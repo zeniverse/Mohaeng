@@ -34,7 +34,7 @@ const SelectSorting = () => {
 
   return (
     <div className={styles.sort}>
-      <h4>정렬</h4>
+      {/* <h5>정렬</h5> */}
       <div className={styles["dropdown-wrapper"]}>
         <button className={styles["dropdown-label"]} onClick={handleDropdown}>
           {selectedSortName}

@@ -16,6 +16,7 @@ const PlaceList = () => {
     <ListContainer>
       {places?.map((place: content) => (
         <PlaceItem
+          key={place.placeId}
           name={place.name}
           firstImage={place.firstImage}
           contentId={place.contentId}

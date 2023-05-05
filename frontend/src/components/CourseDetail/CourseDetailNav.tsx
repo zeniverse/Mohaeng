@@ -1,5 +1,5 @@
 import styles from "./CourseDetailNav.module.css";
-import React, { useState } from "react";
+import { useState } from "react";
 import RoughMap from "../Course/RoughMap";
 import {
   BsBookmark,
@@ -156,4 +156,4 @@ const CourseDetailNav = () => {
   );
 };
 
-export default React.memo(CourseDetailNav);
+export default CourseDetailNav;
