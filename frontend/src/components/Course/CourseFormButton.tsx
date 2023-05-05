@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { resetFilter } from "@/src/store/reducers/filterSlice";
+import { resetFilter } from "@/src/store/reducers/FilterSlice";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 import {
   createCourseAction,
@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import {
   initialState,
   resetFormValue,
-} from "@/src/store/reducers/courseFormSlice";
+} from "@/src/store/reducers/CourseFormSlice";
 import { CourseFormProps } from "./CourseForm";
 
 import styles from "./CourseFormButton.module.css";

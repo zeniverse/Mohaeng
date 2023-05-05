@@ -15,11 +15,11 @@ import reviewDetailReducer from "./reducers/reviewDetailSlice";
 import reviewReducer from "./reducers/reviewSlice";
 import myCourseReducer from "./reducers/myCourseSlice";
 import myReviewReducer from "./reducers/myReviewSlice";
-import filterSlice from "./reducers/filterSlice";
+import FilterSlice from "./reducers/FilterSlice";
 import CourseBookmarkReducer from "./reducers/CourseBoomarkSlice";
-import courseDetailSlice from "./reducers/courseDetailSlice";
-import courseListSlice from "./reducers/courseListSlice";
-import courseFormSlice from "./reducers/courseFormSlice";
+import CourseDetailSlice from "./reducers/CourseDetailSlice";
+import CourseListSlice from "./reducers/CourseListSlice";
+import CourseFormSlice from "./reducers/CourseFormSlice";
 
 const store = configureStore({
   reducer: {
@@ -29,9 +29,9 @@ const store = configureStore({
     email: emailReducer,
     id: idReducer,
     imgUrl: imgUrlReducer,
-    course: courseListSlice,
-    courseForm: courseFormSlice,
-    filter: filterSlice,
+    course: CourseListSlice,
+    courseForm: CourseFormSlice,
+    filter: FilterSlice,
     place: placeReducer,
     mypage: mypageReducer,
     page: pageReducer,
@@ -42,7 +42,7 @@ const store = configureStore({
     reviewDetail: reviewDetailReducer,
     review: reviewReducer,
     myCourse: myCourseReducer,
-    courseDetail: courseDetailSlice,
+    courseDetail: CourseDetailSlice,
     myReview: myReviewReducer,
   },
 });

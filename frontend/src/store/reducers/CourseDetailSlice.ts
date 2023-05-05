@@ -31,7 +31,7 @@ const initialState: CourseDetailState = {
   },
 };
 
-export const courseDetailSlice = createSlice({
+export const CourseDetailSlice = createSlice({
   name: "coursedetail",
   initialState: initialState,
   reducers: {},
@@ -64,5 +64,5 @@ export const courseDetailSlice = createSlice({
   },
 });
 
-export const {} = courseDetailSlice.actions;
-export default courseDetailSlice.reducer;
+export const {} = CourseDetailSlice.actions;
+export default CourseDetailSlice.reducer;

@@ -3,7 +3,7 @@ import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import React, { useState, KeyboardEvent } from "react";
 import ResetButton from "@/src/components/UI/ResetButton";
 import styles from "./SearchKeyword.module.css";
-import { clearKeyword, setKeyword } from "@/src/store/reducers/filterSlice";
+import { clearKeyword, setKeyword } from "@/src/store/reducers/FilterSlice";
 
 const SearchKeyword = () => {
   const [searchValue, setSearchValue] = useState("");

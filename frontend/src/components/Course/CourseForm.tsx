@@ -2,7 +2,7 @@ import styles from "./CourseForm.module.css";
 import React from "react";
 import CourseInputForm from "@/src/components/CreateCourse/CourseInputForm";
 import { useAppSelector } from "@/src/hooks/useReduxHooks";
-import { initialState } from "@/src/store/reducers/courseFormSlice";
+import { initialState } from "@/src/store/reducers/CourseFormSlice";
 import CoursePlaceInput from "@/src/components/CreateCourse/CoursePlaceInput";
 
 import KakaoMap from "@/src/components/KakaoMap/KakaoMap";

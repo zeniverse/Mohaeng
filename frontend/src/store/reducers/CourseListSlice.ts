@@ -25,7 +25,7 @@ const initialState: CourseState = {
   courseList: [],
 };
 
-export const courseListSlice = createSlice({
+export const CourseListSlice = createSlice({
   name: "course",
   initialState: initialState,
   reducers: {
@@ -105,5 +105,5 @@ export const courseListSlice = createSlice({
   },
 });
 
-export const { addCourseToList } = courseListSlice.actions;
-export default courseListSlice.reducer;
+export const { addCourseToList } = CourseListSlice.actions;
+export default CourseListSlice.reducer;

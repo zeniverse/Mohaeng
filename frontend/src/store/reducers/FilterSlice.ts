@@ -17,7 +17,7 @@ const initialFilterState: IFilter = {
   keyword: "",
 };
 
-export const filterSlice = createSlice({
+export const FilterSlice = createSlice({
   name: "filter",
   initialState: initialFilterState,
   reducers: {
@@ -43,5 +43,5 @@ export const filterSlice = createSlice({
 });
 
 export const { selectArea, setKeyword, setSort, clearKeyword, resetFilter } =
-  filterSlice.actions;
-export default filterSlice.reducer;
+  FilterSlice.actions;
+export default FilterSlice.reducer;
