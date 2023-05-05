@@ -9,11 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StopWatch;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,19 +30,18 @@ public class PlaceInitializer {
     private final PlaceService placeService;
 
     @PostConstruct
+    @Scheduled(cron = "5 0 0 * * *")
     public void init() throws IOException {
+        log.info("init method start");
         placeService.saveInitImage();
-        long count = placeRepository.count();
-        if (count == 0) {
-            updatePlaces();
-        }
+        updatePlaces();
     }
 
-    @Scheduled(cron = "0 0 0 * * ?")
     public void updatePlaces() {
         List<Place> places = getPlacesOrThrow();
-        placeRepository.saveAll(places);
-
+        if (placeRepository.count() == 0) {
+            placeRepository.saveAll(places);
+        }
         Map<String, Place> oldPlacesMap = places.stream()
                 .collect(Collectors.toMap(Place::getContentId, Function.identity()));
         List<Place> newPlaces = getPlacesOrThrow();
@@ -51,10 +50,9 @@ public class PlaceInitializer {
                     .filter(oldPlace -> !newPlace.equals(oldPlace))
                     .ifPresent(oldPlace -> {
                         oldPlace.update(newPlace);
-                        placeRepository.save(oldPlace);
+                        placeRepository.saveAndFlush(oldPlace);
                     });
         });
-        placeRepository.flush();
     }
 
     private List<Place> getPlacesOrThrow() {
