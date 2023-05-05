@@ -33,14 +33,14 @@ export default function DeleteMemberModal() {
           withCredentials: true,
         });
       }
-
+    };
+    response().then(() => {
       cookie.remove("accessToken", { path: "/" });
       dispatch(setToken(""));
       dispatch(setNickname(""));
       dispatch(setEmail(""));
       dispatch(setId(0));
-    };
-    response();
+    });
     handleModalClose();
     router.replace("/");
   };

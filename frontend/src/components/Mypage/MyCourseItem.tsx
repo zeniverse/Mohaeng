@@ -5,6 +5,7 @@ import cookie from "react-cookies";
 import axios from "axios";
 import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { useEffect } from "react";
 
 export interface MyCourseItemProps {
   courseId: number;

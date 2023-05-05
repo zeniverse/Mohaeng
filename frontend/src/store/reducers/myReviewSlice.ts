@@ -5,9 +5,8 @@ interface myReviewData {
   reviewId: number;
   placeId: number;
   contendId: string;
-  title: string;
+  name: string;
   content: string;
-  likeCount: number;
   rating: string;
   imgUrl: string;
   createdDate: string;
