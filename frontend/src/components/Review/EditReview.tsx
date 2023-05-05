@@ -5,10 +5,13 @@ import Image from "next/image";
 import axios from "axios";
 import cookie from "react-cookies";
 import ReviewRating from "./ReviewRating";
-import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import usePreventRefresh from "@/src/hooks/usePreventRefresh";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { useRouterQuery } from "@/src/hooks/useRouterQuery";
+import { PlaceInfo } from "../PlaceDetail/PlaceDetail";
+// import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+// import { getMyReview } from "@/src/store/reducers/myReviewSlice";
+// import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 
 export interface formData {
   reviewId: number;
@@ -21,15 +24,15 @@ export interface formData {
 }
 
 export default function EditReview() {
+  // const appDispatch = useAppDispatch();
+  const accessToken = cookie.load("accessToken");
   const router = useRouter();
-  const appDispatch = useAppDispatch();
-  const { placeId, reviewId, name } = router.query;
+  const { reviewId } = router.query;
+  const id = useRouterQuery("id");
 
   const [clicked, setClicked] = useState<boolean[]>(Array(5).fill(false));
   const [content, setContent] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState("");
-  // const [hasError, setHasError] = useState(false);
-  const [star, setStar] = useState<number>();
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [reviewForm, setReviewForm] = useState<formData>({
@@ -41,9 +44,47 @@ export default function EditReview() {
     createdDate: "",
     imageUrls: [],
   });
-
-  const accessToken = cookie.load("accessToken");
   let rating = clicked.filter(Boolean).length;
+
+  const [placeInfo, setPlaceInfo] = useState<PlaceInfo>({
+    placeId: 0,
+    name: "",
+    areaCode: "",
+    firstImage: "",
+    contentId: "",
+    address: "",
+    mapX: "",
+    mapY: "",
+    overview: "",
+    rating: "",
+    review: "",
+  });
+
+  // * 상세 데이터중 placeId, name 가져오기
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const headers: { [key: string]: string } = {};
+        if (accessToken) {
+          headers["Access-Token"] = accessToken;
+          headers.withCredentials = "true";
+        }
+        const res = await axios.get(`/api/place/overview/${id}`, {
+          headers,
+        });
+        if (Object.keys(res.data.data.content[0]).length > 0) {
+          const { content } = res.data.data;
+          setPlaceInfo({ ...placeInfo, ...content[0] });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
 
   // * 새로고침 방지
   usePreventRefresh();
@@ -177,12 +218,12 @@ export default function EditReview() {
           },
         })
         .then((response) => {
-          // console.log(response.data, "리뷰 수정 성공!");
-          appDispatch(getMyReview(accessToken));
-          router.push(`/search?keyword=${name}`);
+          // appDispatch(getMyReview(accessToken));
+          // appDispatch(getPlaceBookmark(accessToken));
+          router.push(`/place/${id}`);
         });
     } catch (error) {
-      router.push(`/search?keyword=${name}`);
+      router.push(`/place/${id}`);
       console.log(error);
     }
   };
@@ -215,7 +256,7 @@ export default function EditReview() {
         <h2 className={styles.h2}>리뷰 수정</h2>
         <article className={styles.registerReview}>
           <p className={styles.boldTitle}>선택한 여행지</p>
-          <h3 className={styles.reviewTitle}>{name}</h3>
+          <h3 className={styles.reviewTitle}>{placeInfo.name}</h3>
 
           <div className={styles.ratingBox}>
             <strong className={styles.ratingTitle}>별점</strong>

@@ -1,7 +1,7 @@
-import { ICourseEditParam, IFormErrors } from "./../../interfaces/Course.type";
-import { createCourseApi, editCourseApi } from "@/src/services/courseService";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IFormErrors } from "../../interfaces/Course.type";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICourseForm, ICourseOriginForm } from "../../interfaces/Course.type";
+import { createCourseAction } from "../thunks/courseThunks";
 
 interface CourseState {
   errors?: IFormErrors;
@@ -26,44 +26,6 @@ export const initialState: CourseState = {
   },
   isFormValid: false,
 };
-
-export const createCourseAction = createAsyncThunk(
-  "course/createUserAction",
-  async (formData: ICourseOriginForm) => {
-    const { places, ...rest } = formData;
-    const validPlace = places.find((place) => place.imgUrl.trim() !== "");
-    const thumbnailUrl = validPlace?.imgUrl ?? "";
-    const extractedPlaceIds = places.map((place) => place.placeId);
-
-    const validData = {
-      ...rest,
-      placeIds: extractedPlaceIds,
-      thumbnailUrl: thumbnailUrl,
-    };
-
-    const resData = await createCourseApi(validData);
-    return { formData, resData };
-  }
-);
-
-export const editCourseAction = createAsyncThunk(
-  "course/editCourseAction",
-  async (formData: ICourseEditParam) => {
-    const { courseId, course } = formData;
-    const { places, ...rest } = course;
-    const validPlace = places.find((place) => place.imgUrl.trim() !== "");
-    const thumbnailUrl = validPlace?.imgUrl ?? "";
-    const extractedPlaceIds = places.map((place) => place.placeId);
-
-    const validData = {
-      ...rest,
-      placeIds: extractedPlaceIds,
-      thumbnailUrl: thumbnailUrl,
-    };
-    const response = await editCourseApi(courseId, validData);
-    return formData;
-  }
-);
 
 export const CourseFormSlice = createSlice({
   name: "courseform",

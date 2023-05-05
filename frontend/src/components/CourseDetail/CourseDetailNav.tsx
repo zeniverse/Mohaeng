@@ -9,17 +9,20 @@ import {
   BsShare,
 } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import {
-  detailBookmarkToggleAction,
-  detailLikeToggleAction,
-} from "@/src/store/reducers/CourseDetailSlice";
 import { openModal } from "@/src/store/reducers/modalSlice";
 import TagItem from "../UI/TagItem";
 import { kakaoShare } from "@/src/utils/kakao-share";
 import LIkeButton from "../UI/LIkeButton";
+import {
+  bookmarkToggleAction,
+  likeToggleAction,
+} from "@/src/store/thunks/courseThunks";
 
 const CourseDetailNav = () => {
   const [isRoughMapOpen, setIsRoughMapOpen] = useState(false);
+  const [isBookmarkHandlerRunning, setIsBookmarkHandlerRunning] =
+    useState(false);
+  const [isLikeHandlerRunning, setIsLikeHandlerRunning] = useState(false);
 
   const dispatch = useAppDispatch();
   const { id: userId } = useAppSelector((state) => state.token);
@@ -45,9 +48,15 @@ const CourseDetailNav = () => {
     setIsRoughMapOpen(false);
   };
 
-  const bookmarkHandler = (id: number) => {
+  const handleToggleBookmark = () => {
+    if (isBookmarkHandlerRunning) {
+      return;
+    }
+    setIsBookmarkHandlerRunning(true);
     if (userId) {
-      dispatch(detailBookmarkToggleAction(id));
+      dispatch(
+        bookmarkToggleAction({ courseId, isBookmarked, isDetailPage: true })
+      );
     } else {
       dispatch(
         openModal({
@@ -56,11 +65,16 @@ const CourseDetailNav = () => {
         })
       );
     }
+    setIsBookmarkHandlerRunning(false);
   };
 
   const handleDetailLike = () => {
+    if (isLikeHandlerRunning) {
+      return; // 이벤트 핸들러가 실행 중인 경우 함수 실행하지 않음
+    }
+    setIsLikeHandlerRunning(true);
     if (userId) {
-      dispatch(detailLikeToggleAction(courseId));
+      dispatch(likeToggleAction({ courseId, isLiked, isDetailPage: true }));
     } else {
       dispatch(
         openModal({
@@ -69,6 +83,7 @@ const CourseDetailNav = () => {
         })
       );
     }
+    setIsLikeHandlerRunning(false);
   };
 
   const handleKakaoShare = () => {
@@ -126,10 +141,7 @@ const CourseDetailNav = () => {
             <RoughMap RoughMapData={RoughMapData} onClose={onClose} />
           )}
         </div>
-        <div
-          className={styles["item-nav"]}
-          onClick={() => bookmarkHandler(courseId)}
-        >
+        <div className={styles["item-nav"]} onClick={handleToggleBookmark}>
           {isBookmarked ? (
             <BsBookmarkFill className={`${styles.bookmark} ${styles.icon}`} />
           ) : (

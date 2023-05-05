@@ -1,6 +1,6 @@
 .course-orderlist-container {
-  padding: 1rem;
-  flex-basis: 38%;
+  padding: 0.4rem;
+  flex-basis: 42%;
   background-color: var(--color-bg-gray);
   border-radius: 1rem;
 }

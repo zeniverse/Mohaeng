@@ -3,19 +3,19 @@ import styles from "./CourseList.module.css";
 import React, { useEffect, useState } from "react";
 import CourseItem from "./CourseItem";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import { getCourseListAction } from "@/src/store/reducers/CourseListSlice";
 import { setPage } from "@/src/store/reducers/pageSlice";
 import Pagebar from "../Pagenation/Pagebar";
 import ListContainer from "../UI/ListContainer";
+import { getCourseListAction } from "@/src/store/thunks/courseThunks";
+import SelectSorting from "./SelectSorting";
 
 const CourseList = () => {
-  const { courseList, totalElements, totalPages } = useAppSelector(
-    (state) => state.course
-  );
+  const { courseList, totalPages } = useAppSelector((state) => state.course);
   const { area, keyword, sort } = useAppSelector((state) => state.filter);
   const page = useAppSelector((state) => state.page.page);
   const dispatch = useAppDispatch();
   const { region } = area;
+
   useEffect(() => {
     dispatch(setPage(page));
     dispatch(
@@ -30,6 +30,9 @@ const CourseList = () => {
 
   return (
     <>
+      <div className={styles.sort}>
+        <SelectSorting />
+      </div>
       {courseList?.length > 0 ? (
         <ListContainer>
           {courseList.map((course) => (
@@ -57,4 +60,4 @@ const CourseList = () => {
   );
 };
 
-export default CourseList;
+export default React.memo(CourseList);

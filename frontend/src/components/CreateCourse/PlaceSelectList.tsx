@@ -1,8 +1,8 @@
 import styles from "./PlaceSelectList.module.css";
 import Image from "next/image";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
-import { useEffect, useRef, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
+import React, { useEffect, useRef, useState } from "react";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { addPlaceObject } from "@/src/store/reducers/CourseFormSlice";
 
 const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
@@ -23,13 +23,11 @@ const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
     function handleScroll() {
       if (listRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = listRef.current;
-        if (
-          Math.floor(scrollHeight) - scrollTop <= clientHeight &&
-          hasNext &&
-          !loading
-        ) {
+        if (scrollTop + clientHeight >= scrollHeight && hasNext && !loading) {
           setLoading(true);
           setPage((prevPage) => prevPage + 1);
+        } else {
+          // TODO: 해야 함
         }
       }
     }
@@ -104,6 +102,7 @@ const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
           </div>
         );
       })}
+      {!hasNext && <p>더 이상 검색 결과가 존재하지 않습니다.</p>}
     </div>
   );
 };

@@ -1,16 +1,16 @@
-import { useAppSelector } from "@/src/hooks/useReduxHooks";
-import { useRouter } from "next/router";
+import { RootState } from "@/src/store/store";
 import React from "react";
+import { useSelector } from "react-redux";
 import KakaoMap from "../KakaoMap/KakaoMap";
-import TagItem from "../UI/TagItem";
 
 import styles from "./CourseDetailContent.module.css";
 import CourseOrderList from "./CourseOrderList";
 
 const CourseDetailContent = () => {
-  const courseDetail = useAppSelector((state) => state.courseDetail.course);
+  const courseDetail = useSelector(
+    (state: RootState) => state.courseDetail.course
+  );
   const { content, places } = courseDetail;
-
   return (
     <div className={styles["content-container"]}>
       <div className={styles.content}>
