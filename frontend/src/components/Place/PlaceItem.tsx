@@ -109,7 +109,7 @@ const PlaceItem = ({
             name: name,
           },
         }}
-        as={`/place/${contentId}`}
+        as={`/place/${placeId}`}
       >
         <div className={styles["item-image"]}>
           <Image
