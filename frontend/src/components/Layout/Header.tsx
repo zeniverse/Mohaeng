@@ -16,7 +16,6 @@ import axios from "axios";
 import cookie from "react-cookies";
 import SearchBar from "../Search/SearchBar";
 import Image from "next/image";
-import { resetFilter, selectArea } from "@/src/store/reducers/FilterSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
@@ -24,6 +23,7 @@ import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
 import Dropdown from "../Mypage/Dropdown";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
+import { resetFilter, selectArea } from "@/src/store/reducers/FilterSlice";
 
 type User = {
   id: number;
