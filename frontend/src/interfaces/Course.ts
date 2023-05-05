@@ -56,12 +56,12 @@ export interface CourseDetailPlaces {
 }
 
 export interface kakaoPlaces {
-  placeId?: number;
+  placeId: number;
   name: string;
   mapX: string;
   mapY: string;
-  imgUrl?: string;
-  address?: string;
+  imgUrl: string;
+  address: string;
 }
 
 export interface PositionsProps {
