@@ -7,7 +7,7 @@ import {
   createCourseApi,
   editCourseApi,
 } from "@/src/services/courseService";
-import { ToggleLikeApiResponse } from "../reducers/courseListSlice";
+import { ToggleLikeApiResponse } from "../reducers/CourseListSlice";
 import { getCourseDetailApi } from "@/src/services/courseDetailService";
 import {
   ICourseEditParam,

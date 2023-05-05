@@ -9,7 +9,7 @@ import {
   getCourseDetailAction,
   removeCourseAction,
 } from "@/src/store/thunks/courseThunks";
-import { addFormValue } from "@/src/store/reducers/courseFormSlice";
+import { addFormValue } from "@/src/store/reducers/CourseFormSlice";
 
 const CourseDetailHead = () => {
   const [formattedDate, setFormattedDate] = useState("");

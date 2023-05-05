@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import useDetectClose from "@/src/hooks/useDetectClose";
 import { FaUserCircle } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
-import { resetFilter } from "@/src/store/reducers/filterSlice";
+import { resetFilter } from "@/src/store/reducers/FilterSlice";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 type User = {
   id: number;
