@@ -6,9 +6,9 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  box-shadow: 7px 4px 14px -5px var(--color-border-light);
-  -webkit-box-shadow: 7px 4px 14px -5px var(--color-border-light);
-  -moz-box-shadow: 7px 4px 14px -5px var(--color-border-light);
+  box-shadow: 7px 4px 14px 0px var(--color-border-light);
+  -webkit-box-shadow: 7px 4px 14px 0px var(--color-border-light);
+  -moz-box-shadow: 7px 4px 14px 0px var(--color-border-light);
   color: var(--color-text-basic);
 }
 
