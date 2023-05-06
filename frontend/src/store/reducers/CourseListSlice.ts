@@ -76,7 +76,7 @@ export const CourseListSlice = createSlice({
       window.alert("북마크 실패");
     });
     builder.addCase(likeToggleAction.pending, (state, action) => {
-      const { courseId, isDetailPage } = action.meta.arg;
+      const { courseId, isDetailPage, isLiked } = action.meta.arg;
 
       if (isDetailPage || isDetailPage === undefined) return;
 
@@ -85,10 +85,13 @@ export const CourseListSlice = createSlice({
           (c) => c.courseId === courseId
         );
         if (courseIndex !== -1) {
-          state.courseList[courseIndex].isLiked =
-            !state.courseList[courseIndex].isLiked;
-          state.courseList[courseIndex].likeCount =
-            state.courseList[courseIndex].likeCount + 1;
+          if (isLiked) {
+            state.courseList[courseIndex].isLiked = false;
+            state.courseList[courseIndex].likeCount -= 1;
+          } else {
+            state.courseList[courseIndex].isLiked = true;
+            state.courseList[courseIndex].likeCount += 1;
+          }
         }
       }
     });
