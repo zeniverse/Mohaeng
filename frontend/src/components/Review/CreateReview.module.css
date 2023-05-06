@@ -3,6 +3,7 @@
   max-width: 70rem;
   margin: 1rem 8rem;
   --color-icon: #cfcfcf;
+  color: var(--color-text-basic);
 }
 
 .h2 {

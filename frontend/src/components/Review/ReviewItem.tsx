@@ -1,5 +1,4 @@
 import styles from "./ReviewItem.module.css";
-import cookie from "react-cookies";
 import Image from "next/image";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import { useState } from "react";
@@ -60,7 +59,7 @@ export default function ReviewItem({
             <FiveStarRating rating={rating.toString()} />
           </div>
           <p className={styles.reviewerId}>
-            {nickname} | {createdDate}
+            {nickname}&nbsp;|&nbsp;{createdDate}
           </p>
         </div>
         {isUser ? (
@@ -124,8 +123,8 @@ export default function ReviewItem({
                   <div className={styles.reviewImg} key={index}>
                     <Image
                       src={imgUrl}
-                      width={200}
-                      height={180}
+                      width={230}
+                      height={200}
                       alt={`img-${index}`}
                     />
                   </div>
