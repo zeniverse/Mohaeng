@@ -97,6 +97,10 @@ const nextConfig = {
         source: "/api/user/:path*",
         destination: `${process.env.NEXT_PUBLIC_API_URL}/api/user/:path*`,
       },
+      {
+        source: "/api/course/:path*",
+        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/course/:path*`,
+      },
     ];
   },
 };
