@@ -122,6 +122,7 @@ export default function ReviewItem({
                 {imgUrl.map((imgUrl, index) => (
                   <div className={styles.reviewImg} key={index}>
                     <Image
+                      className={styles.reviewImgUrl}
                       src={imgUrl}
                       width={230}
                       height={200}

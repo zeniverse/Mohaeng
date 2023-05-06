@@ -79,6 +79,18 @@
   color: var(--color-primary);
 }
 
+@media (max-width: 920px) {
+  .reviewImgBox {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .reviewImgUrl {
+    width: 150px;
+    height: 150px;
+  }
+}
+
 /* .likeBtn {
   width: 60px;
   height: 30px;
