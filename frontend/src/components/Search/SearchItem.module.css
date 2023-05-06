@@ -56,11 +56,11 @@
 .title {
   display: block;
   width: 180px;
-  margin-top: 4px;
+  margin-top: 6px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: medium;
+  font-size: 1.1rem;
   text-align: left;
   font-weight: 700;
 }
