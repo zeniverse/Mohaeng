@@ -11,8 +11,12 @@ const SearchKeyword = () => {
 
   const dispatch = useAppDispatch();
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+    if (!e.target.value.trim()) {
+      dispatch(clearKeyword());
+      setIsSearched(false);
+    }
   };
 
   const resetHandler = () => {
@@ -20,6 +24,7 @@ const SearchKeyword = () => {
     dispatch(clearKeyword());
     setIsSearched(false);
   };
+
   const handleSearch = () => {
     dispatch(setKeyword(searchValue));
     !searchValue.trim() ? setIsSearched(false) : setIsSearched(true);

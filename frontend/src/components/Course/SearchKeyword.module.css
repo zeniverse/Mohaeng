@@ -1,3 +1,6 @@
+.keyword {
+  width: 100%;
+}
 .input-box {
   display: flex;
   gap: 0.3rem;
@@ -7,6 +10,7 @@
 }
 
 .keyword input {
+  width: 360px;
   background: #fafafa;
   -webkit-box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.08);
   -moz-box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.08);

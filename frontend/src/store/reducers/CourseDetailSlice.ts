@@ -54,11 +54,19 @@ export const CourseDetailSlice = createSlice({
     builder.addCase(likeToggleAction.pending, (state) => {});
     builder.addCase(likeToggleAction.fulfilled, (state, action) => {
       const { courseId, totalLikes, isDetailPage } = action.payload;
-      if (!isDetailPage || isDetailPage === undefined) return;
+      if (!isDetailPage || isDetailPage === undefined) return state;
       if (state.course.courseId === courseId) {
-        state.course.isLiked = !state.course.isLiked;
-        state.course.likeCount = totalLikes;
-      } else return;
+        return {
+          ...state,
+          course: {
+            ...state.course,
+            isLiked: !state.course.isLiked,
+            likeCount: totalLikes,
+          },
+        };
+      } else {
+        return state;
+      }
     });
     builder.addCase(likeToggleAction.rejected, (state) => {});
   },

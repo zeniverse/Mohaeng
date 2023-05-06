@@ -7,6 +7,7 @@ import { setPage } from "@/src/store/reducers/pageSlice";
 import Pagebar from "../Pagenation/Pagebar";
 import ListContainer from "../UI/ListContainer";
 import { getCourseListAction } from "@/src/store/thunks/courseThunks";
+import SelectSorting from "./SelectSorting";
 
 const CourseList = () => {
   const { courseList, totalPages } = useAppSelector((state) => state.course);
@@ -29,6 +30,9 @@ const CourseList = () => {
 
   return (
     <>
+      <div className={styles.sort}>
+        <SelectSorting />
+      </div>
       {courseList?.length > 0 ? (
         <ListContainer>
           {courseList.map((course) => (
