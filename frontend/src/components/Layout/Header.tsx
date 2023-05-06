@@ -61,10 +61,6 @@ function Header({}: Props) {
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
         dispatch(setImgUrl(imgUrl));
-        appDispatch(getCourseBookmark(accessToken));
-        appDispatch(getPlaceBookmark(accessToken));
-        appDispatch(getMyCourse(accessToken));
-        appDispatch(getMyReview(accessToken));
         setUser(nickName);
       }
     };
