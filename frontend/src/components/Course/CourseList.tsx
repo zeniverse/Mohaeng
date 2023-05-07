@@ -30,9 +30,11 @@ const CourseList = () => {
 
   return (
     <>
-      <div className={styles.sort}>
-        <SelectSorting />
-      </div>
+      {courseList?.length > 0 && (
+        <div className={styles.sort}>
+          <SelectSorting />
+        </div>
+      )}
       {courseList?.length > 0 ? (
         <ListContainer>
           {courseList.map((course) => (
@@ -51,7 +53,9 @@ const CourseList = () => {
           ))}
         </ListContainer>
       ) : (
-        <p>데이터가 존재하지 않습니다. 코스를 등록해주세요.</p>
+        <p>
+          등록된 코스가 없습니다. 자신만의 여행 코스를 작성하여 공유해 보세요!
+        </p>
       )}
       {totalPages !== 0 && totalPages ? (
         <Pagebar totalPage={totalPages} />
