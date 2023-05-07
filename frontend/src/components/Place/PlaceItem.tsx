@@ -101,15 +101,16 @@ const PlaceItem = ({
   return (
     <div className={styles["place-item-container"]}>
       <Link
-        href={{
-          pathname: "/place/[id]",
-          query: {
-            contentId: contentId,
-            placeId: placeId,
-            name: name,
-          },
-        }}
-        as={`/place/${placeId}`}
+        href={`/place/${placeId}`}
+        // href={{
+        //   pathname: "/place/[id]",
+        //   query: {
+        //     contentId: contentId,
+        //     placeId: placeId,
+        //     name: name,
+        //   },
+        // }}
+        // as={`/place/${placeId}`}
       >
         <div className={styles["item-image"]}>
           <Image

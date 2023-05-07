@@ -67,15 +67,16 @@ const UserBookmarkItem = (prop: bookmarkState) => {
     <div key={prop.id} className={styles["bookmark-item"]}>
       {prop.isPlace === true ? (
         <Link
-          href={{
-            pathname: "/place/[id]",
-            query: {
-              contentId: prop.contentId,
-              placeId: prop.realId,
-              name: prop.name,
-            },
-          }}
-          as={`/place/${prop.realId}`}
+          href={`/place/${prop.realId}`}
+          // href={{
+          //   pathname: "/place/[id]",
+          //   query: {
+          //     contentId: prop.contentId,
+          //     placeId: prop.realId,
+          //     name: prop.name,
+          //   },
+          // }}
+          // as={`/place/${prop.realId}`}
         >
           <img src={prop.image} alt={prop.image} />
         </Link>

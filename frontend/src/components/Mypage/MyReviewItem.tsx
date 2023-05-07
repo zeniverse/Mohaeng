@@ -26,15 +26,16 @@ const MyReviewItem = (myReview: MyReviewItemProps) => {
   return (
     <div key={myReview.reviewId} className={styles["myReview-item"]}>
       <Link
-        href={{
-          pathname: "/place/[id]",
-          query: {
-            contentId: myReview.contentId,
-            placeId: myReview.placeId,
-            name: myReview.name,
-          },
-        }}
-        as={`/place/${myReview.placeId}`}
+        href={`/place/${myReview.placeId}`}
+        // href={{
+        //   pathname: "/place/[id]",
+        //   query: {
+        //     contentId: myReview.contentId,
+        //     placeId: myReview.placeId,
+        //     name: myReview.name,
+        //   },
+        // }}
+        // as={`/place/${myReview.placeId}`}
       >
         <img src={myReview.imgUrl} alt={myReview.name} className={styles.img} />
       </Link>
