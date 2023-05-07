@@ -72,7 +72,7 @@ export interface IPlacesForm {
   mapY: string;
   imgUrl: string;
   rating: string;
-  address?: string;
+  address: string;
 }
 
 export interface ICourseDetail {

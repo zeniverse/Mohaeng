@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 
 import styles from "./CourseDetailHead.module.css";
@@ -9,7 +9,7 @@ import {
   getCourseDetailAction,
   removeCourseAction,
 } from "@/src/store/thunks/courseThunks";
-import { addFormValue } from "@/src/store/reducers/courseFormSlice";
+import { addFormValue } from "@/src/store/reducers/CourseFormSlice";
 
 const CourseDetailHead = () => {
   const [formattedDate, setFormattedDate] = useState("");
@@ -118,4 +118,4 @@ const CourseDetailHead = () => {
   );
 };
 
-export default React.memo(CourseDetailHead);
+export default CourseDetailHead;

@@ -32,10 +32,7 @@ export default function Course() {
       <div className={styles["filter-container"]}>
         <AreaSelector />
         <div className={styles["course-filter-wrapper"]}>
-          <div className={styles.filter}>
-            <SearchKeyword />
-            <SelectSorting />
-          </div>
+          <SearchKeyword />
           <button className={styles["write-btn"]} onClick={handleCreateClick}>
             <BiPencil />
             코스 작성

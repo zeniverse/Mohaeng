@@ -23,7 +23,7 @@ export default React.memo(function KakaoMap({ mapData }: PositionsProps) {
     };
     const mapOption = {
       center: center(), // 지도의 중심좌표
-      level: 8, // 지도의 확대 레벨
+      level: 9, // 지도의 확대 레벨
     };
 
     var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
@@ -50,7 +50,7 @@ export default React.memo(function KakaoMap({ mapData }: PositionsProps) {
       });
 
       const content = ReactDOMServer.renderToString(
-        <CustomOverlayContent title={position.name} />
+        <CustomOverlayContent title={position.name} id={position.placeId} />
       );
 
       const customOverlay = new kakao.maps.CustomOverlay({

@@ -25,7 +25,7 @@ const initialState: CourseState = {
   courseList: [],
 };
 
-export const courseListSlice = createSlice({
+export const CourseListSlice = createSlice({
   name: "course",
   initialState: initialState,
   reducers: {
@@ -75,7 +75,26 @@ export const courseListSlice = createSlice({
     builder.addCase(bookmarkToggleAction.rejected, (state) => {
       window.alert("북마크 실패");
     });
-    builder.addCase(likeToggleAction.pending, (state) => {});
+    builder.addCase(likeToggleAction.pending, (state, action) => {
+      const { courseId, isDetailPage, isLiked } = action.meta.arg;
+
+      if (isDetailPage || isDetailPage === undefined) return;
+
+      if (state.courseList.length > 0) {
+        const courseIndex = state.courseList.findIndex(
+          (c) => c.courseId === courseId
+        );
+        if (courseIndex !== -1) {
+          if (isLiked) {
+            state.courseList[courseIndex].isLiked = false;
+            state.courseList[courseIndex].likeCount -= 1;
+          } else {
+            state.courseList[courseIndex].isLiked = true;
+            state.courseList[courseIndex].likeCount += 1;
+          }
+        }
+      }
+    });
     builder.addCase(likeToggleAction.fulfilled, (state, action) => {
       const { courseId, totalLikes, isDetailPage } = action.payload;
       if (isDetailPage || isDetailPage === undefined) return;
@@ -85,14 +104,26 @@ export const courseListSlice = createSlice({
           (c) => c.courseId === courseId
         );
         if (courseIndex !== -1) {
-          state.courseList[courseIndex].isLiked =
-            !state.courseList[courseIndex].isLiked;
           state.courseList[courseIndex].likeCount = totalLikes;
         }
       }
     });
-    builder.addCase(likeToggleAction.rejected, (state) => {
-      console.log("좋아요 실패");
+    builder.addCase(likeToggleAction.rejected, (state, action) => {
+      const { courseId, isDetailPage } = action.meta.arg;
+      if (isDetailPage || isDetailPage === undefined) return state;
+
+      if (state.courseList.length > 0) {
+        const courseIndex = state.courseList.findIndex(
+          (c) => c.courseId === courseId
+        );
+        if (courseIndex !== -1) {
+          state.courseList[courseIndex].isLiked =
+            !state.courseList[courseIndex].isLiked;
+          state.courseList[courseIndex].likeCount =
+            state.courseList[courseIndex].likeCount - 1;
+        }
+      }
+      window.alert("좋아요 실패");
     });
     builder.addCase(removeCourseAction.pending, (state) => {});
     builder.addCase(removeCourseAction.fulfilled, (state, action) => {
@@ -105,5 +136,5 @@ export const courseListSlice = createSlice({
   },
 });
 
-export const { addCourseToList } = courseListSlice.actions;
-export default courseListSlice.reducer;
+export const { addCourseToList } = CourseListSlice.actions;
+export default CourseListSlice.reducer;

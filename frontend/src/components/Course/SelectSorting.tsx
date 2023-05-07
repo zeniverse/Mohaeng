@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
-import { setSort } from "@/src/store/reducers/filterSlice";
+import { setSort } from "@/src/store/reducers/FilterSlice";
 import React, { useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import styles from "./SelectSorting.module.css";
@@ -34,7 +34,7 @@ const SelectSorting = () => {
 
   return (
     <div className={styles.sort}>
-      <h4>정렬</h4>
+      {/* <h5>정렬</h5> */}
       <div className={styles["dropdown-wrapper"]}>
         <button className={styles["dropdown-label"]} onClick={handleDropdown}>
           {selectedSortName}

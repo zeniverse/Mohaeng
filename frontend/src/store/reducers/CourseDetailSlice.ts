@@ -31,7 +31,7 @@ const initialState: CourseDetailState = {
   },
 };
 
-export const courseDetailSlice = createSlice({
+export const CourseDetailSlice = createSlice({
   name: "coursedetail",
   initialState: initialState,
   reducers: {},
@@ -54,15 +54,23 @@ export const courseDetailSlice = createSlice({
     builder.addCase(likeToggleAction.pending, (state) => {});
     builder.addCase(likeToggleAction.fulfilled, (state, action) => {
       const { courseId, totalLikes, isDetailPage } = action.payload;
-      if (!isDetailPage || isDetailPage === undefined) return;
+      if (!isDetailPage || isDetailPage === undefined) return state;
       if (state.course.courseId === courseId) {
-        state.course.isLiked = !state.course.isLiked;
-        state.course.likeCount = totalLikes;
-      } else return;
+        return {
+          ...state,
+          course: {
+            ...state.course,
+            isLiked: !state.course.isLiked,
+            likeCount: totalLikes,
+          },
+        };
+      } else {
+        return state;
+      }
     });
     builder.addCase(likeToggleAction.rejected, (state) => {});
   },
 });
 
-export const {} = courseDetailSlice.actions;
-export default courseDetailSlice.reducer;
+export const {} = CourseDetailSlice.actions;
+export default CourseDetailSlice.reducer;

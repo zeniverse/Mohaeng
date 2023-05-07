@@ -16,7 +16,7 @@ import axios from "axios";
 import cookie from "react-cookies";
 import SearchBar from "../Search/SearchBar";
 import Image from "next/image";
-import { resetFilter, selectArea } from "@/src/store/reducers/filterSlice";
+import { resetFilter, selectArea } from "@/src/store/reducers/FilterSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
@@ -48,7 +48,7 @@ function Header({}: Props) {
   // * 로그인 정보 조회
   useEffect(() => {
     const response = async () => {
-      // console.log("ACcess = " + accessToken);
+      console.log("ACcess = " + accessToken);
       if (accessToken) {
         const userRes = await axios.get(`/loginInfo`, {
           headers: {

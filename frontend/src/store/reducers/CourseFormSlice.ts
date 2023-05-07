@@ -27,7 +27,7 @@ export const initialState: CourseState = {
   isFormValid: false,
 };
 
-export const courseFormSlice = createSlice({
+export const CourseFormSlice = createSlice({
   name: "courseform",
   initialState: initialState,
   reducers: {
@@ -97,5 +97,5 @@ export const {
   addFormValue,
   setIsFormValidTrue,
   setIsFormValidFalse,
-} = courseFormSlice.actions;
-export default courseFormSlice.reducer;
+} = CourseFormSlice.actions;
+export default CourseFormSlice.reducer;
