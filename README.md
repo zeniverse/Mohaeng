@@ -36,7 +36,7 @@
 
 ## ⚙ 인프라 기술 스택
 
-![image](https://user-images.githubusercontent.com/77098586/235634416-3e305cae-b59c-41cb-bcac-f3f084456aa3.png)
+![image](https://user-images.githubusercontent.com/77098586/236680931-15e830b3-0166-43f8-8cf7-b4909beba8c7.png)
 
 ## 💡 인프라 구조
 
