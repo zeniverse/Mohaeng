@@ -115,6 +115,11 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    @Transactional
+    public void deleteMember(Member member) {
+        member.updateDeletedDate();
+    }
+
     public Member saveMember(String token) throws IOException {
         KakaoUserDto kakaoUser = findProfile(token);
         Member member = memberRepository.findByEmail(kakaoUser.getEmail()).
