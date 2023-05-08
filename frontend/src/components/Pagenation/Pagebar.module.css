@@ -63,3 +63,12 @@
     border-radius: 8px;
   }
 }
+
+@media (max-width: 412px) {
+  .pagination button {
+    padding: 8px 8px;
+  }
+  .prevNextButton {
+    margin: 0;
+  }
+}
