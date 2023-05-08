@@ -104,57 +104,61 @@ function Header({}: Props) {
 
   return (
     <header className={styles.header}>
-      <nav>
-        <div className={styles.nav}>
-          <Link href="/" onClick={ResetStatus}>
-            <img src="/assets/logo.png" alt="logo" className={styles.logo} />
+      <nav className={styles.nav}>
+        <Link href="/" onClick={ResetStatus}>
+          <img src="/assets/logo.png" alt="logo" className={styles.logo} />
+        </Link>
+
+        <SearchBar />
+
+        <div className={styles.menu}>
+          <Link href="/place" onClick={ResetStatus}>
+            여행지
           </Link>
+          <Link href="/course" onClick={handleClickCourse}>
+            코스
+          </Link>
+        </div>
 
-          <SearchBar />
-
-          <div className={styles.menu}>
-            <Link href="/place" onClick={ResetStatus}>
-              여행지
-            </Link>
-            <Link href="/course" onClick={handleClickCourse}>
-              코스
-            </Link>
-          </div>
+        <div className={styles.btn}>
+          {!nickName ? (
+            <>
+              <button
+                id="login-btn"
+                className={styles["login-btn"]}
+                onClick={handleOpenLoginModal}
+              >
+                로그인
+              </button>
+            </>
+          ) : (
+            <>
+              <ul
+                className={styles["dropdown-container"]}
+                onClick={() => {
+                  setView(!view);
+                }}
+              >
+                <div className={styles["kakao-profile"]}>
+                  <div className={styles["kakao-profile-img-box"]}>
+                    <Image
+                      className={styles["kakao-profile-img"]}
+                      src={imgUrl}
+                      alt="카카오프로필"
+                      width={45}
+                      height={45}
+                    />
+                  </div>
+                  <div className={styles["kakao-profile-info"]}>
+                    반가워요, {nickName} 님! {view ? "⌃" : "⌄"}
+                    {view && <Dropdown />}
+                  </div>
+                </div>
+              </ul>
+            </>
+          )}
         </div>
       </nav>
-
-      <div className={styles.btn}>
-        {!nickName ? (
-          <>
-            <button
-              id="login-btn"
-              className={styles["login-btn"]}
-              onClick={handleOpenLoginModal}
-            >
-              로그인
-            </button>
-          </>
-        ) : (
-          <>
-            <ul
-              className={styles.dropdownContainer}
-              onClick={() => {
-                setView(!view);
-              }}
-            >
-              <Image
-                className={styles["kakao-profile-img"]}
-                src={imgUrl}
-                alt="카카오프로필"
-                width={45}
-                height={45}
-              />
-              반가워요, {nickName} 님! {view ? "⌃" : "⌄"}
-              {view && <Dropdown />}
-            </ul>
-          </>
-        )}
-      </div>
     </header>
   );
 }
