@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   max-width: 100%;
+  min-width: 317px;
   margin: 2rem 8rem;
   padding: 2rem 3rem;
   background-color: var(--color-bg-lightgray);
@@ -196,7 +197,7 @@
 @media (max-width: 768px) {
   .placeDetail {
     width: auto;
-    margin: 2rem 2rem;
+    margin: 1rem 0 0 0;
     padding: 1rem;
   }
 
@@ -230,7 +231,8 @@
 
   .reviewSection {
     width: auto;
-    margin: 2rem 2rem;
+    margin: 1rem 0 0 0;
+    padding: 0;
   }
 
   .reviewContainer {
