@@ -130,9 +130,9 @@ export default function PlaceDetail() {
     }
   }, [id]);
 
+  // * 리뷰 데이터
   const [reviewData, setReviewData] = useState<ReviewData[]>([]);
   const [selectedValue, setSelectedValue] = useState("highrating");
-
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
     (state: RootState) => state.review.totalPages
@@ -262,7 +262,8 @@ export default function PlaceDetail() {
           <div className={styles.headerTitle}>
             <h2 className={styles.h2}>{placeInfo.name}</h2>
             <p>
-              <FaMapMarkerAlt /> {placeInfo.address}
+              <FaMapMarkerAlt />
+              &nbsp;{placeInfo.address}
             </p>
           </div>
           <div className={styles.bookMarkBox}>
@@ -296,7 +297,7 @@ export default function PlaceDetail() {
           </div>
         </div>
         <div className={styles.detailDesc}>
-          <p className={styles.descTitle}>세부 설명 </p>
+          <p className={styles.descTitle}>세부 설명</p>
           <p className={styles.descInfo}>{placeInfo.overview}</p>
         </div>
       </section>
@@ -315,7 +316,7 @@ export default function PlaceDetail() {
           <aside className={styles.reviewNav}>
             <div className={styles.reviewInfo}>
               <p>
-                총 <strong>{totalElements}</strong>건의 리뷰
+                총&nbsp;<strong>{totalElements}</strong>건의 리뷰
               </p>
               <span>
                 <FiveStarRating rating={averageRating.toString()} />
