@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   max-width: 100%;
+  min-width: 317px;
   margin: 2rem 8rem;
   padding: 2rem 3rem;
   background-color: var(--color-bg-lightgray);
@@ -193,10 +194,10 @@
   border: 3px solid var(--color-border-light);
 }
 
-@media (max-width: 920px) {
+@media (max-width: 768px) {
   .placeDetail {
     width: auto;
-    margin: 2rem 2rem;
+    margin: 1rem 0 0 0;
     padding: 1rem;
   }
 
@@ -209,6 +210,7 @@
   .h2 {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
+    text-align: center;
   }
 
   .detailContent {
@@ -229,7 +231,8 @@
 
   .reviewSection {
     width: auto;
-    margin: 2rem 2rem;
+    margin: 1rem 0 0 0;
+    padding: 0;
   }
 
   .reviewContainer {
@@ -249,7 +252,6 @@
   .reviewBtn {
     width: 100%;
     margin-top: 1rem;
-    font-size: small;
   }
 
   .reviewNav {

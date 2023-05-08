@@ -48,3 +48,27 @@
 .prevNextButton:hover {
   background-color: #f3f3f3;
 }
+
+@media (max-width: 768px) {
+  .pagination {
+    margin: 10px 0;
+  }
+
+  .pagination li {
+    margin: 5px 0;
+  }
+
+  .pagination button {
+    padding: 8px 10px;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 412px) {
+  .pagination button {
+    padding: 8px 8px;
+  }
+  .prevNextButton {
+    margin: 0;
+  }
+}
