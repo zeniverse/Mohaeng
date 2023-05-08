@@ -39,7 +39,6 @@ export default function Place() {
   }, [areaCode]);
 
   useEffect(() => {
-    console.log("AreaCode is " + areaCode);
     const response = async () => {
       await axios
         .get(`/api/places`, {

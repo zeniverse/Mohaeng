@@ -41,9 +41,8 @@ const SearchKeyword = () => {
   }`;
 
   return (
-    <div className={styles.keyword}>
-      <h4>키워드 검색</h4>
-      <div className={styles["input-box"]}>
+    <>
+      <div className={styles.keyword}>
         <input
           type="text"
           value={searchValue}
@@ -55,7 +54,7 @@ const SearchKeyword = () => {
         </button>
         <ResetButton onClick={resetHandler} />
       </div>
-    </div>
+    </>
   );
 };
 
