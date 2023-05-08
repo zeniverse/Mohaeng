@@ -68,6 +68,7 @@
 }
 
 .dropdown-container {
+  height: 70px;
   display: flex;
   flex-direction: row;
   margin: 0.5rem 1rem;
@@ -88,7 +89,7 @@
 }
 
 .kakao-profile-img-box {
-  height: 75px;
+  height: 72px;
   display: flex;
   justify-content: center;
   align-items: center;
