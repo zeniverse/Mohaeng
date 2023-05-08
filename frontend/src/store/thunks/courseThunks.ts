@@ -31,6 +31,7 @@ export const getCourseListAction = createAsyncThunk(
   async (queryParams: any, { rejectWithValue }) => {
     try {
       const response = await getCourseListApi(queryParams);
+      console.log(response.data);
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
