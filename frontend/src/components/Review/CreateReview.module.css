@@ -196,42 +196,6 @@
   background-color: var(--color-icon);
 }
 
-/* @media screen and (max-width: 768px) {
-  .registerReviewContainer {
-    margin: 2rem;
-  }
-  .h2 {
-    font-size: 1.5rem;
-  }
-  .registerReview {
-    padding: 1rem;
-  }
-  .reviewTitle {
-    margin-bottom: 1rem;
-  }
-  .ratingBox {
-    margin-bottom: 1rem;
-  }
-  .ratingDesc {
-    margin-left: 0;
-  }
-  .formTxtArea {
-    height: 8rem;
-  }
-  .imgContainer {
-    flex-wrap: wrap;
-  }
-  .imgBox {
-    margin: 0.5rem;
-  }
-  .postBtn,
-  .cancelBtn {
-    width: 100%;
-    margin-right: 0;
-    margin-bottom: 1rem;
-  }
-} */
-
 @media screen and (max-width: 768px) {
   .registerReviewContainer {
     width: auto;
