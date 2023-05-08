@@ -278,8 +278,8 @@ export default function PlaceDetail() {
               <Image
                 className={styles.img}
                 src={placeInfo.firstImage}
-                width={1000}
-                height={1000}
+                width={700}
+                height={700}
                 alt={placeInfo.name}
                 priority
               />
