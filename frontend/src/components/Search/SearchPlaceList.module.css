@@ -26,3 +26,13 @@
 .noResult {
   text-align: center;
 }
+
+@media (max-width: 768px) {
+  .keywordList {
+    padding: 0;
+  }
+
+  .h3 {
+    margin-left: 0;
+  }
+}
