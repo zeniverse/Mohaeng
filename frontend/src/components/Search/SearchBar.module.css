@@ -53,7 +53,7 @@
 
 @media screen and (max-width: 768px) {
   .search-bar {
-    width: 100%;
+    width: 23rem;
   }
 
   .search-input {
@@ -67,4 +67,7 @@
 }
 
 @media screen and (max-width: 412px) {
+  .search-bar {
+    width: 100%;
+  }
 }
