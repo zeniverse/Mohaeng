@@ -110,6 +110,7 @@ export default function PlaceDetail() {
         if (accessToken) {
           headers["Access-Token"] = accessToken;
           headers.withCredentials = "true";
+          headers["Cache-Control"] = "no-cache";
         }
         const res = await axios.get(`/api/place/overview/${id}`, {
           headers,
