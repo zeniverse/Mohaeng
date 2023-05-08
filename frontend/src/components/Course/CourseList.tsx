@@ -27,16 +27,12 @@ const CourseList = () => {
       })
     );
   }, [dispatch, region, page, keyword, sort]);
+  console.log(courseList);
 
   return (
     <>
-      {courseList?.length > 0 && (
-        <div className={styles.sort}>
-          <SelectSorting />
-        </div>
-      )}
       {courseList?.length > 0 ? (
-        <ListContainer>
+        <div className={styles["course-list"]}>
           {courseList.map((course) => (
             <CourseItem
               key={course.courseId}
@@ -51,12 +47,13 @@ const CourseList = () => {
               places={course.places}
             />
           ))}
-        </ListContainer>
+        </div>
       ) : (
         <p>
           등록된 코스가 없습니다. 자신만의 여행 코스를 작성하여 공유해 보세요!
         </p>
       )}
+
       {totalPages !== 0 && totalPages ? (
         <Pagebar totalPage={totalPages} />
       ) : null}
