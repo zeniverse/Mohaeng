@@ -107,6 +107,14 @@
 }
 
 @media screen and (max-width: 768px) {
+  .header {
+    width: 100%;
+  }
+
+  .logo {
+    width: 50%;
+  }
+
   .nav {
     flex-direction: column;
     justify-content: center;
@@ -114,13 +122,13 @@
   }
 
   .menu {
-    margin-top: 20px;
-    margin-left: 0; /* 추가 */
+    margin-top: 1rem;
+    margin-left: 1rem; /* 추가 */
     width: 100%; /* 추가 */
   }
 
   .menu a {
-    font-size: medium;
+    margin: 0 auto;
   }
 
   .btn {
@@ -133,7 +141,12 @@
     top: 1rem;
   }
 
+  .kakao-profile {
+    font-size: medium;
+  }
+
   .dropdown-container {
+    /* top: 11rem; */
     display: flex;
     flex-direction: column;
   }
