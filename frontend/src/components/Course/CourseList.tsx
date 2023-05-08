@@ -27,7 +27,6 @@ const CourseList = () => {
       })
     );
   }, [dispatch, region, page, keyword, sort]);
-  console.log(courseList);
 
   return (
     <>

@@ -50,7 +50,6 @@ export const CourseListSlice = createSlice({
     builder.addCase(getCourseListAction.pending, (state) => {});
     builder.addCase(getCourseListAction.fulfilled, (state, action) => {
       const { courseList, totalElements, totalPages } = action.payload;
-      console.log(courseList);
       state.courseList = courseList;
       state.totalElements = totalElements;
       state.totalPages = totalPages;

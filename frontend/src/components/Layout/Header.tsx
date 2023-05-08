@@ -49,7 +49,6 @@ function Header({}: Props) {
   // * 로그인 정보 조회
   useEffect(() => {
     const response = async () => {
-      console.log("ACcess = " + accessToken);
       if (accessToken) {
         const userRes = await axios.get(`/loginInfo`, {
           headers: {
