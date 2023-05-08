@@ -1,6 +1,7 @@
 .registerReviewContainer {
-  width: 100%;
-  max-width: 70rem;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
   margin: 1rem 8rem;
   --color-icon: #cfcfcf;
   color: var(--color-text-basic);
@@ -195,7 +196,7 @@
   background-color: var(--color-icon);
 }
 
-@media screen and (max-width: 768px) {
+/* @media screen and (max-width: 768px) {
   .registerReviewContainer {
     margin: 2rem;
   }
@@ -229,38 +230,51 @@
     margin-right: 0;
     margin-bottom: 1rem;
   }
-}
+} */
 
-/* For screens between 768px and 1024px */
-@media screen and (min-width: 768px) and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
   .registerReviewContainer {
-    margin: 2rem;
+    width: auto;
+    margin: 2rem 2rem;
+    padding: 1rem;
   }
+
   .h2 {
     font-size: 1.8rem;
   }
+
   .registerReview {
     padding: 1.5rem;
   }
+
   .ratingBox {
     margin-bottom: 1.5rem;
   }
+
   .ratingDesc {
     margin-left: 0.5rem;
   }
+
   .formTxtArea {
     height: 10rem;
   }
+
   .imgContainer {
     flex-wrap: wrap;
   }
+
   .imgBox {
     margin: 1rem;
   }
+
   .postBtn,
   .cancelBtn {
     width: 100%;
-    margin-right: 0;
+    margin-right: 1rem;
     margin-bottom: 1rem;
+  }
+
+  .postBtn {
+    margin-left: 1rem;
   }
 }
