@@ -2,21 +2,21 @@ import styles from "./PlaceDetail.module.css";
 import Image from "next/image";
 import axios from "axios";
 import cookie from "react-cookies";
+import PlaceBookmark from "@/src/components/Bookmark/PlaceBookmark";
+import PlaceDetailMap from "@/src/components/PlaceDetail/PlaceDetailMap";
+import Pagebar from "../Pagenation/Pagebar";
+import ReviewItem from "../Review/ReviewItem";
+import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import { SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
-import PlaceBookmark from "@/src/components/Bookmark/PlaceBookmark";
-import PlaceDetailMap from "@/src/components/PlaceDetail/PlaceDetailMap";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "@/src/store/reducers/modalSlice";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import { RootState } from "@/src/store/store";
-import Pagebar from "../Pagenation/Pagebar";
-import ReviewItem from "../Review/ReviewItem";
-import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 
 export interface PlaceInfo {
@@ -274,13 +274,16 @@ export default function PlaceDetail() {
         </div>
         <div className={styles.detailContent}>
           <div className={styles.imgBox}>
-            <Image
-              className={styles.img}
-              src={placeInfo.firstImage}
-              width={1000}
-              height={1000}
-              alt={placeInfo.name}
-            />
+            {placeInfo.firstImage && (
+              <Image
+                className={styles.img}
+                src={placeInfo.firstImage}
+                width={700}
+                height={700}
+                alt={placeInfo.name}
+                priority
+              />
+            )}
           </div>
           <div className={styles.detailMap}>
             <div className={styles.map} id="map">

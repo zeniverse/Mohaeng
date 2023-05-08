@@ -12,17 +12,15 @@
   margin-right: 2rem;
   padding: 0 1rem 1rem 1rem;
   font-size: 20px;
+  border-bottom: 3px solid transparent;
 }
 
 .activetab {
+  transition: all ease-in-out 0.3s;
   font-weight: 700;
   border-bottom: 3px solid var(--color-blue);
 }
 
 .subtab {
   color: var(--color-text-semi);
-}
-
-.subtab:hover {
-  border-bottom: 3px solid var(--color-text-semi);
 }

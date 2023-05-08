@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MyPageService {
     private final CourseBookmarkRepository courseBookmarkRepository;
-    private final CourseRepository courseRepository;
     private final MemberRepository memberRepository;
     private final PlaceBookmarkRepository placeBookmarkRepository;
     private final ReviewRepository reviewRepository;
@@ -121,7 +120,7 @@ public class MyPageService {
         return false;
     }
 
-    public void deleteMember(Member member){
+    public void updateDeletedDate(Member member){
         memberRepository.delete(member);
     }
 
