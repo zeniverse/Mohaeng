@@ -28,3 +28,24 @@
   position: absolute;
   bottom: 0;
 }
+
+/* MEDIA QUERIES (tablets) */
+@media screen and (max-width: 1024px) {
+  .contentWrapper {
+    margin: 1.8rem 1.8rem 6rem;
+  }
+}
+
+/* MEDIA QUERIES (middle) */
+@media screen and (max-width: 800px) {
+  .contentWrapper {
+    margin: 1.5rem 1.5rem 3.5rem;
+  }
+}
+
+/* MEDIA QUERIES (phones) */
+@media screen and (max-width: 600px) {
+  .contentWrapper {
+    margin: 1.1rem 1.1rem 2rem;
+  }
+}

@@ -22,8 +22,8 @@ import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
 import Dropdown from "../Mypage/Dropdown";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
-import { resetFilter, selectArea } from "@/src/store/reducers/FilterSlice";
-import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
+import { getCourseListAction } from "@/src/store/thunks/courseThunks";
+import { resetFilter } from '@/src/store/reducers/FilterSlice';
 
 type User = {
   id: number;
@@ -36,7 +36,7 @@ type Props = {};
 
 function Header({}: Props) {
   const [user, setUser] = useState<User[]>([]);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const appDispatch = useAppDispatch();
   const router = useRouter();
   const userid = useSelector((state: RootState) => state.id.id);
@@ -48,7 +48,6 @@ function Header({}: Props) {
   // * 로그인 정보 조회
   useEffect(() => {
     const response = async () => {
-      console.log("ACcess = " + accessToken);
       if (accessToken) {
         const userRes = await axios.get(`/loginInfo`, {
           headers: {
@@ -79,7 +78,6 @@ function Header({}: Props) {
 
   const ResetStatus = () => {
     dispatch(resetFilter());
-    dispatch;
 
     const currComponent: myPageState = {
       currIdx: 0,
@@ -87,6 +85,16 @@ function Header({}: Props) {
     };
 
     dispatch(setCurrIdx(currComponent));
+  };
+
+  const handleClickCourse = () => {
+    dispatch(resetFilter());
+    const currComponent: myPageState = {
+      currIdx: 0,
+      label: "회원정보",
+    };
+    dispatch(setCurrIdx(currComponent));
+    dispatch(getCourseListAction({}));
   };
 
   return (
@@ -103,7 +111,7 @@ function Header({}: Props) {
             <Link href="/place" onClick={ResetStatus}>
               여행지
             </Link>
-            <Link href="/course" onClick={ResetStatus}>
+            <Link href="/course" onClick={handleClickCourse}>
               코스
             </Link>
           </div>

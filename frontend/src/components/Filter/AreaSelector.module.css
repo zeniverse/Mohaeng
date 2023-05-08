@@ -44,3 +44,44 @@
   background-color: var(--color-blue);
   color: var(--color-white);
 }
+
+/* MEDIA QUERIES (tablets) */
+@media screen and (max-width: 1024px) {
+  .button {
+    font-size: 0.8rem;
+  }
+}
+
+/* MEDIA QUERIES (middle) */
+@media screen and (max-width: 800px) {
+  .button {
+    font-size: 0.7rem;
+  }
+}
+
+/* 데스크톱에서만 보이는 스타일 */
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+}
+
+/* 모바일에서만 보이는 스타일 */
+@media (max-width: 767px) {
+  .container {
+    margin-bottom: 0.4rem;
+  }
+  .desktop-only {
+    display: none;
+  }
+  .mobile-only {
+    display: block;
+  }
+}
+
+.select {
+  display: block;
+  width: 100%;
+  padding: 10px 10px;
+  font-size: 1em;
+}
