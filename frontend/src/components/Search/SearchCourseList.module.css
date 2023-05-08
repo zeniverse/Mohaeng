@@ -16,12 +16,12 @@
 
 .div {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-left: 2rem;
+  margin-top: 1rem;
 }
 
-.review {
-  font-size: 0.9rem;
-  text-align: left;
+.noResult {
+  text-align: center;
 }
