@@ -53,7 +53,7 @@
   }
 
   .myReview-item div {
-    width: 400px;
+    width: 80%;
   }
 
   .publicButton {
@@ -67,6 +67,7 @@
   }
 
   .myReview-item div {
+    width: 50%;
     gap: 0;
   }
 
