@@ -24,3 +24,24 @@
 .subtab {
   color: var(--color-text-semi);
 }
+
+/* MEDIA QUERIES (tablets) */
+@media screen and (max-width: 1024px) {
+  .tabmenu {
+    padding-left: 3rem;
+  }
+}
+
+/* MEDIA QUERIES (middle) */
+@media screen and (max-width: 800px) {
+  .tabmenu {
+    padding-left: 2rem;
+  }
+}
+
+/* MEDIA QUERIES (phones) */
+@media screen and (max-width: 600px) {
+  .tabmenu {
+    padding-left: 1rem;
+  }
+}

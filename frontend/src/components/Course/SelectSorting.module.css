@@ -53,11 +53,11 @@
   .dropdown-label {
     width: 82px;
     font-size: 0.8rem;
-    padding: 0.3rem 0.3rem 0.3rem 0.5rem;
+    padding: 0.4rem 0.3rem 0.4rem 0.5rem;
   }
   .dropdown-content {
     min-width: 82px;
-    padding: 0.2rem 0px;
+    padding: 0.3rem 0px;
     font-size: 0.8rem;
   }
   .sort-item {
