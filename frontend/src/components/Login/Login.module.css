@@ -42,3 +42,19 @@
   font-size: small;
   color: var(--color-desc);
 }
+
+@media screen and (max-width: 600px) {
+  .loginContainer {
+    width: 80%;
+    padding: 0;
+  }
+
+  .kakaoBtn {
+    width: 100%;
+    margin: 0;
+  }
+
+  .kakaoLogin {
+    width: 100%;
+  }
+}
