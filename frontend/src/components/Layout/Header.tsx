@@ -23,7 +23,9 @@ import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
 import Dropdown from "../Mypage/Dropdown";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import { getCourseListAction } from "@/src/store/thunks/courseThunks";
-import { resetFilter } from '@/src/store/reducers/FilterSlice';
+import { MdOutlineArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
+import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
+import { resetFilter } from "@/src/store/reducers/FilterSlice";
 
 type User = {
   id: number;
@@ -35,10 +37,11 @@ type User = {
 type Props = {};
 
 function Header({}: Props) {
+  const [activeLink, setActiveLink] = useState<string | null>(null);
   const [user, setUser] = useState<User[]>([]);
   const dispatch = useAppDispatch();
-  const appDispatch = useAppDispatch();
   const router = useRouter();
+
   const userid = useSelector((state: RootState) => state.id.id);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
@@ -60,6 +63,10 @@ function Header({}: Props) {
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
         dispatch(setImgUrl(imgUrl));
+        dispatch(getCourseBookmark(accessToken));
+        dispatch(getPlaceBookmark(accessToken));
+        dispatch(getMyCourse(accessToken));
+        dispatch(getMyReview(accessToken));
         setUser(nickName);
       }
     };
@@ -77,6 +84,7 @@ function Header({}: Props) {
   };
 
   const ResetStatus = () => {
+    setActiveLink(null);
     dispatch(resetFilter());
 
     const currComponent: myPageState = {
@@ -87,7 +95,19 @@ function Header({}: Props) {
     dispatch(setCurrIdx(currComponent));
   };
 
+  const handleClickPlace = () => {
+    setActiveLink("place");
+    dispatch(resetFilter());
+
+    const currComponent: myPageState = {
+      currIdx: 0,
+      label: "회원정보",
+    };
+
+    dispatch(setCurrIdx(currComponent));
+  };
   const handleClickCourse = () => {
+    setActiveLink("course");
     dispatch(resetFilter());
     const currComponent: myPageState = {
       currIdx: 0,
@@ -99,23 +119,32 @@ function Header({}: Props) {
 
   return (
     <header className={styles.header}>
-      <nav className={styles.nav}>
+      <div className={styles["header-container"]}>
         <Link href="/" onClick={ResetStatus}>
-          <img src="/assets/logo.png" alt="logo" className={styles.logo} />
+          <img src="/assets/logo3.png" alt="logo" className={styles.logo} />
         </Link>
-
         <SearchBar />
-
-        <div className={styles.menu}>
-          <Link href="/place" onClick={ResetStatus}>
-            여행지
-          </Link>
-          <Link href="/course" onClick={handleClickCourse}>
-            코스
-          </Link>
-        </div>
-
-        <div className={styles.btn}>
+        <div className={styles["desktop-only"]}>
+          <div className={styles.nav}>
+            <Link
+              href="/place"
+              onClick={handleClickPlace}
+              className={`${styles.link} ${
+                activeLink === "place" ? styles.active : ""
+              }`}
+            >
+              여행지
+            </Link>
+            <Link
+              href="/course"
+              onClick={handleClickCourse}
+              className={`${styles.link} ${
+                activeLink === "course" ? styles.active : ""
+              }`}
+            >
+              코스
+            </Link>
+          </div>
           {!nickName ? (
             <>
               <button
@@ -145,15 +174,20 @@ function Header({}: Props) {
                     />
                   </div>
                   <div className={styles["kakao-profile-info"]}>
-                    반가워요, {nickName} 님! {view ? "⌃" : "⌄"}
-                    {view && <Dropdown />}
+                    {nickName}
+                    {view ? (
+                      <MdOutlineArrowDropUp />
+                    ) : (
+                      <MdOutlineArrowDropDown />
+                    )}
                   </div>
                 </div>
+                {view && <Dropdown />}
               </ul>
             </>
           )}
         </div>
-      </nav>
+      </div>
     </header>
   );
 }
