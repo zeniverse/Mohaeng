@@ -98,6 +98,11 @@ const PlaceItem = ({
         });
     });
   };
+
+  const handleClickBtn = () => {
+    router.push(`/place/${placeId}`);
+  };
+
   return (
     <div className={styles["place-item-container"]}>
       <Link
@@ -121,7 +126,7 @@ const PlaceItem = ({
           />
         </div>
       </Link>
-      <div className={styles.keywordInfo}>
+      <div className={styles.keywordInfo} onClick={handleClickBtn}>
         <div className={styles.keywordDesc}>
           <p className={styles.title}>{name}</p>
           <FiveStarRating rating={averageRating.toString()} />

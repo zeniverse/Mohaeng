@@ -196,27 +196,27 @@
 
 @media screen and (max-width: 1024px) {
   .placeDetail {
-    margin: 1rem 0 0 0;
-    padding: 1rem;
+    margin: 1rem;
+    padding: 2rem;
   }
 
   .reviewSection {
     width: auto;
-    margin: 1rem 0 0 0;
-    padding: 1rem;
+    margin: 1rem;
+    padding: 2rem;
   }
 }
 
 @media screen and (max-width: 800px) {
   .placeDetail {
     width: auto;
-    margin: 1rem 0 0 0;
+    margin: 1rem 0 0;
     padding: 1rem;
   }
 
   .reviewSection {
     width: auto;
-    margin: 1rem 0 0 0;
+    margin: 1rem 0 0;
     padding: 1rem;
   }
 
