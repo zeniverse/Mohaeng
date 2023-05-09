@@ -3,7 +3,7 @@
   flex-direction: column;
   max-width: 100%;
   min-width: 317px;
-  margin: 2rem 8rem;
+  margin: 2rem;
   padding: 2rem 3rem;
   background-color: var(--color-bg-lightgray);
   border-radius: 12px;
@@ -119,7 +119,7 @@
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  margin: 2rem 8rem;
+  margin: 2rem;
   padding: 2rem 3rem;
   background-color: var(--color-bg-lightgray);
   border-radius: 12px;
