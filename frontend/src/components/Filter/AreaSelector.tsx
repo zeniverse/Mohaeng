@@ -63,9 +63,7 @@ const AreaSelector = () => {
           </button>
         ))}
       </div>
-      <div
-        className={`${styles["input-group"]} ${styles.region} ${styles["mobile-only"]}`}
-      >
+      <div className={` ${styles.region} ${styles["mobile-only"]}`}>
         <select
           name="region"
           value={area.region}

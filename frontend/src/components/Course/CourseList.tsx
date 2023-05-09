@@ -31,7 +31,7 @@ const CourseList = () => {
   return (
     <>
       {courseList?.length > 0 ? (
-        <div className={styles["course-list"]}>
+        <ListContainer>
           {courseList.map((course) => (
             <CourseItem
               key={course.courseId}
@@ -46,7 +46,7 @@ const CourseList = () => {
               places={course.places}
             />
           ))}
-        </div>
+        </ListContainer>
       ) : (
         <p>
           등록된 코스가 없습니다. 자신만의 여행 코스를 작성하여 공유해 보세요!

@@ -68,7 +68,7 @@ export default function Place() {
             <AreaSelector />
           </div>
           <PlaceList />
-          <PageBar totalPage={totalPages} />
+          {totalPages && <PageBar totalPage={totalPages} />}
         </div>
       </div>
     </main>
