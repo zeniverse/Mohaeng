@@ -3,7 +3,7 @@
   flex-direction: column;
   max-width: 100%;
   min-width: 317px;
-  margin: 2rem 8rem;
+  margin: 2rem;
   padding: 2rem 3rem;
   background-color: var(--color-bg-lightgray);
   border-radius: 12px;
@@ -119,7 +119,7 @@
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  margin: 2rem 8rem;
+  margin: 2rem;
   padding: 2rem 3rem;
   background-color: var(--color-bg-lightgray);
   border-radius: 12px;
@@ -194,10 +194,29 @@
   border: 3px solid var(--color-border-light);
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 1024px) {
+  .placeDetail {
+    margin: 1rem;
+    padding: 2rem;
+  }
+
+  .reviewSection {
+    width: auto;
+    margin: 1rem;
+    padding: 2rem;
+  }
+}
+
+@media screen and (max-width: 800px) {
   .placeDetail {
     width: auto;
-    margin: 1rem 0 0 0;
+    margin: 1rem 0 0;
+    padding: 1rem;
+  }
+
+  .reviewSection {
+    width: auto;
+    margin: 1rem 0 0;
     padding: 1rem;
   }
 
@@ -233,12 +252,6 @@
     font-size: small;
   }
 
-  .reviewSection {
-    width: auto;
-    margin: 1rem 0 0 0;
-    padding: 0;
-  }
-
   .reviewContainer {
     padding: 1rem;
   }
@@ -272,5 +285,13 @@
 
   .select {
     width: 100%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .reviewSection {
+    width: auto;
+    margin: 1rem 0 0 0;
+    padding: 0;
   }
 }
