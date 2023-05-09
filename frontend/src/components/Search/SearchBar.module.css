@@ -51,17 +51,23 @@
   color: var(--color-text-basic);
 }
 
-@media screen and (max-width: 920px) {
+@media screen and (max-width: 768px) {
   .search-bar {
-    width: 100%;
+    width: 23rem;
   }
 
   .search-input {
     max-width: 100%;
-    margin-left: 50px;
+    margin-left: 60px;
   }
 
   .clear-icon {
     display: block;
+  }
+}
+
+@media screen and (max-width: 412px) {
+  .search-bar {
+    width: 100%;
   }
 }
