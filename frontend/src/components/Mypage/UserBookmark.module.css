@@ -37,20 +37,6 @@
   overflow-x: hidden;
 }
 
-/* .bookmark-container::-webkit-scrollbar {
-  width: 12px;
-  border-radius: 1rem;
-}
-
-.bookmark-container::-webkit-scrollbar-thumb {
-  background: var(--color-border-semi);
-  border-radius: 10px;
-}
-
-.bookmark-container::-webkit-scrollbar-track {
-  background: rgba(178, 178, 178, 0.161);
-} */
-
 @media screen and (max-width: 1024px) {
   .tabContainer {
     width: 100%;
