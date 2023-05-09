@@ -21,12 +21,12 @@
 }
 .desktop-only {
   display: flex;
-  gap: 3rem;
+  gap: 3.6rem;
 }
 
 .nav {
   display: flex;
-  gap: 3rem;
+  gap: 3.6rem;
 }
 
 .link {
