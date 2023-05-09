@@ -111,7 +111,7 @@ const UserEdit = () => {
           <div>
             <input
               type="file"
-              accept="image/jpg,impge/png,image/jpeg,image/gif"
+              accept="image/*"
               name="profile_img"
               onChange={changeProfile}
               className={styles["NoneInput"]}

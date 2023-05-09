@@ -73,7 +73,7 @@ const MyCourseItem = (myCourse: MyCourseItemProps) => {
           alt={myCourse.title}
         />
       </Link>
-      <div>
+      <div className={styles.courseItemInfo}>
         <button className={styles.publicButton} onClick={clickToggle}>
           {myCourse.courseStatus === "PUBLIC" ? (
             <p className={styles.public}>공개</p>

@@ -42,9 +42,12 @@
 .reviewImgBox {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .reviewImg {
+  flex: 1 0 auto;
   padding: 4px;
   margin-right: 0.5rem;
   cursor: pointer;
