@@ -37,8 +37,8 @@
 }
 
 .item-image:hover img {
-  scale: 105%;
   transition: all ease 0.3s;
+  transform: scale(1.1);
 }
 
 .keywordInfo {
