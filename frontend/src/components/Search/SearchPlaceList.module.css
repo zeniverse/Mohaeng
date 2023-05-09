@@ -23,9 +23,16 @@
   justify-content: center;
   align-items: center;
   margin-left: 2rem;
-  margin-top: 1rem;
+  margin-top: 10rem;
+  margin-bottom: 40rem;
 }
 
 .noResult {
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  .h3 {
+    margin-left: 0;
+  }
 }

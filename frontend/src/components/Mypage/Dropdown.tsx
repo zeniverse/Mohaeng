@@ -62,11 +62,9 @@ export default function Dropdown() {
           마이페이지
         </li>
       </Link>
-      <li className={styles.boli}>
-        <p id="login-btn" onClick={handleLogout}>
-          <MdLogout className={styles.logout} />
-          로그아웃
-        </p>
+      <li className={styles.boli} onClick={handleLogout}>
+        <MdLogout className={styles.logout} />
+        로그아웃
       </li>
     </div>
   );

@@ -24,10 +24,7 @@ const Pagebar = (totalPage: totalPageProps) => {
   useEffect(() => {
     const array = [];
     for (let i = 1; i <= 10; i++) {
-      const pageNumber = pagePer * 10 + i;
-      if (pageNumber <= maxPage) {
-        array.push(pageNumber);
-      }
+      array.push(pagePer * 10 + i);
     }
     setPageNumber(array);
     dispatch(setPage(pagePer * 10 + 1));

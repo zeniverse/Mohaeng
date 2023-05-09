@@ -11,9 +11,11 @@
   list-style: none;
   align-items: center;
   gap: 0.4rem;
+  color: var(--color-text-basic);
 }
 .page-item {
   width: 34px;
+  height: 34px;
   padding: 0.3rem;
   text-align: center;
   cursor: pointer;
@@ -29,7 +31,8 @@
 }
 
 .button {
-  padding: 0.9rem;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -54,33 +57,10 @@
   }
   .page-item {
     width: 28px;
+    height: 28px;
     padding: 0.2rem;
   }
   .button {
     padding: 0.7rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .pagination {
-    margin: 10px 0;
-  }
-
-  .pagination li {
-    margin: 5px 0;
-  }
-
-  .pagination button {
-    padding: 8px 10px;
-    border-radius: 8px;
-  }
-}
-
-@media (max-width: 412px) {
-  .pagination button {
-    padding: 8px 8px;
-  }
-  .prevNextButton {
-    margin: 0;
   }
 }

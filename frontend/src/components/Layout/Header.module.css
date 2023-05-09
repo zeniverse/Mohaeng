@@ -1,37 +1,50 @@
 /* 기본 스타일 */
 .header {
+  height: 80px;
+  width: 100%;
+  background-color: var(--color-white);
+  color: var(--color-white);
+  border-bottom: 1px solid var(--color-border-light);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100%;
   position: relative;
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  padding: 10px 20px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  z-index: 1;
+  margin: 0 auto;
+  padding: 0 10rem;
+}
+.desktop-only {
+  display: flex;
+  gap: 3rem;
 }
 
 .nav {
   display: flex;
-  /* justify-content: space-between;
-  align-items: center; */
-  /* flex-wrap: wrap;  */
+  gap: 3rem;
 }
 
-.menu {
+.link {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 4rem;
-}
-
-.menu a {
-  margin-right: 4rem;
-  color: var(--color-blue);
-  text-decoration: none;
+  gap: 4rem;
+  color: var(--color-text-basic);
   font-weight: bold;
-  font-size: large;
+  font-size: 1.1rem;
   text-align: center;
-  white-space: nowrap;
+}
+.link.active {
+  color: var(--color-primary);
+  font-weight: bold;
+}
+.link a {
+  width: 50px;
 }
 
 .menu a:hover {
@@ -39,115 +52,96 @@
 }
 
 .logo {
-  width: 200px;
-  height: 80px;
-  margin-right: 100px;
-}
-
-.btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 40px;
+  margin-right: 1rem;
 }
 
 .login-btn {
-  position: absolute;
-  right: 1rem;
-  background-color: #ff0232;
-  color: white;
+  background-color: #4bbfed;
+  color: var(--color-white);
   font-weight: bold;
+  right: 0;
   border: none;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 2px;
   cursor: pointer;
 }
 
 .login-btn:hover {
-  background-color: #ff5461;
+  background-color: rgb(27, 178, 238);
   color: #fff;
 }
 
 .dropdown-container {
-  height: 70px;
-  display: flex;
-  flex-direction: row;
-  margin: 0.5rem 1rem;
-  position: absolute;
-  top: 10px;
-  right: 1rem;
-  z-index: 1;
+  height: 100%;
+  position: relative;
   padding: 10px;
   cursor: pointer;
-  justify-content: space-between;
-  font-size: large;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .kakao-profile {
   display: flex;
-  flex-direction: row;
-  margin-top: 10px;
+  align-items: center;
+  gap: 0.8rem;
 }
 
 .kakao-profile-img-box {
-  height: 72px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 3rem;
 }
 
 .kakao-profile-img {
   border-radius: 50%;
-  margin-right: 1rem;
 }
 
 .kakao-profile-info {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--color-text-basic);
 }
 
-@media screen and (max-width: 768px) {
-  .header {
-    width: 100%;
+/* MEDIA QUERIES (tablets) */
+@media screen and (max-width: 1024px) {
+  .header-container {
+    padding: 0 2rem;
   }
-
-  .logo {
-    width: 50%;
+  .desktop-only {
+    display: none;
   }
-
   .nav {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    gap: 0.6rem;
   }
-
-  .menu {
-    margin-top: 1rem;
-    margin-left: 1rem; /* 추가 */
-    width: 100%; /* 추가 */
+  .logo {
+    height: 40px;
+    margin-right: 1rem;
   }
+}
 
-  .menu a {
-    margin: 0 auto;
+/* MEDIA QUERIES (middle) */
+@media screen and (max-width: 800px) {
+  .header-container {
+    padding: 0 1.3rem;
   }
+}
 
-  .btn {
-    flex-direction: column;
-    align-items: flex-start; /* 추가 */
-    margin-top: 20px; /* 추가 */
+/* MEDIA QUERIES (phones) */
+@media screen and (max-width: 600px) {
+  .desktop-only {
+    display: none;
   }
-
-  .login-btn {
-    top: 1rem;
+  .header-container {
+    padding: 0 0.4rem;
   }
-
-  .kakao-profile {
-    font-size: medium;
+  .nav {
+    gap: 0.6rem;
   }
-
-  .dropdown-container {
-    /* top: 11rem; */
-    display: flex;
-    flex-direction: column;
+  .logo {
+    height: 30px;
+    margin-right: 0.4rem;
   }
 }
