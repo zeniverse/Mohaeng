@@ -79,15 +79,32 @@
   color: var(--color-primary);
 }
 
-@media (max-width: 920px) {
-  .reviewImgBox {
-    display: flex;
-    flex-direction: column;
+@media (max-width: 768px) {
+  .reviewBox {
+    padding: 1rem;
   }
 
-  .reviewImgUrl {
-    width: 150px;
-    height: 150px;
+  .reviewer {
+    font-size: small;
+  }
+
+  .userImg {
+    margin-right: 1rem;
+    border-radius: 50%;
+  }
+
+  .reviewContent {
+    margin-left: 0;
+  }
+
+  .reviewImgBox {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn {
+    font-size: small;
   }
 }
 
