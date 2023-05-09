@@ -6,12 +6,11 @@
 }
 
 .keywordList {
-  padding: 0 2rem 0 2rem;
+  margin-top: 1.4rem;
 }
 
 .h3 {
   margin-left: 4rem;
-  margin-bottom: 1rem;
 }
 
 .div {
@@ -24,4 +23,25 @@
 
 .noResult {
   text-align: center;
+}
+
+/* MEDIA QUERIES (tablets) */
+@media screen and (max-width: 1024px) {
+  .h3 {
+    margin-left: 3rem;
+  }
+}
+
+/* MEDIA QUERIES (middle) */
+@media screen and (max-width: 800px) {
+  .h3 {
+    margin-left: 2rem;
+  }
+}
+
+/* MEDIA QUERIES (phones) */
+@media screen and (max-width: 600px) {
+  .h3 {
+    margin-left: 0;
+  }
 }

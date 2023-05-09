@@ -24,7 +24,10 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
       `}</style>
       <Head>
         <title>모두의 여행</title>
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

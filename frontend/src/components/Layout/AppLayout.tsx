@@ -5,13 +5,9 @@ import Header from "./Header";
 const AppLayout = (props: { children: React.ReactNode }) => {
   return (
     <>
-      <div className={styles.Container}>
-        <Header />
-        <div className={styles.contentWrapper}>{props.children}</div>
-        <footer className={styles.footer}>
-          <Footer />
-        </footer>
-      </div>
+      <Header />
+      <div className={styles["content-container"]}>{props.children}</div>
+      <Footer />
     </>
   );
 };
