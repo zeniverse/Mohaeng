@@ -14,9 +14,9 @@ const SidebarLink = ({ currIdx, label }: myPageState) => {
     label: label,
   };
   return (
-    <li className={styles["sidebar__list"]}>
+    <li className={styles["sidebar-list"]}>
       <button
-        className={styles["sidebar__button"]}
+        className={styles["sidebar-button"]}
         onClick={() => dispatch(setCurrIdx(currComponent))}
       >
         {label}
@@ -38,11 +38,13 @@ const Sidebar = () => {
 
   return (
     <nav className={styles.sidebar}>
-      <ul>
-        <div className={styles["ProfileWrapper"]}>
-          <img src={imageUrl} className={styles["Avatar"]} />
+      <ul className={styles.sidebarLists}>
+        <div className={styles.profileWrapper}>
+          <div className={styles.avatarBox}>
+            <img src={imageUrl} className={styles.avatar} />
+          </div>
           <div>
-            <div className={styles["Nickname"]}>{nickName}</div>
+            <div className={styles.nickName}>{nickName}</div>
           </div>
         </div>
         {links.map((link) => (

@@ -11,8 +11,6 @@ import { useState } from "react";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { KeywordProps } from "@/src/interfaces/Keyword";
 import { openModal } from "@/src/store/reducers/modalSlice";
-// import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-// import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 
 export default function SearchItem({
   name,

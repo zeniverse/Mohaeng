@@ -98,20 +98,14 @@ const PlaceItem = ({
         });
     });
   };
+
+  const handleClickBtn = () => {
+    router.push(`/place/${placeId}`);
+  };
+
   return (
     <div className={styles["place-item-container"]}>
-      <Link
-        href={`/place/${placeId}`}
-        // href={{
-        //   pathname: "/place/[id]",
-        //   query: {
-        //     contentId: contentId,
-        //     placeId: placeId,
-        //     name: name,
-        //   },
-        // }}
-        // as={`/place/${placeId}`}
-      >
+      <Link href={`/place/${placeId}`}>
         <div className={styles["item-image"]}>
           <Image
             src={firstImage}
@@ -123,7 +117,7 @@ const PlaceItem = ({
         </div>
       </Link>
       <div className={styles.keywordInfo}>
-        <div className={styles.keywordDesc}>
+        <div className={styles.keywordDesc} onClick={handleClickBtn}>
           <p className={styles.title}>{name}</p>
           <FiveStarRating rating={averageRating.toString()} />
           <p className={styles.review}>{review}건의 리뷰</p>

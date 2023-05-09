@@ -41,12 +41,11 @@ const MyReviewItem = (myReview: MyReviewItemProps) => {
       </Link>
       <div>
         <h2>{myReview.name}</h2>
-
         <p>{getFormattedDate(new Date(myReview.createdDate))}</p>
-        <p>{myReview.content}</p>
         <p>
           <FiveStarRating rating={myReview.rating} />
         </p>
+        <p>{myReview.content}</p>
       </div>
     </div>
   );
