@@ -31,7 +31,7 @@
 
 .keywordItem:hover img {
   transition: all ease 0.3s;
-  scale: 105%;
+  transform: scale(1.1);
 }
 
 .img {
