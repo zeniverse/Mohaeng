@@ -5,6 +5,7 @@
 }
 
 .container h3 {
+  display: none;
   margin-bottom: 0.6rem;
 }
 
@@ -13,17 +14,15 @@
   grid-template-columns: repeat(9, 1fr);
   grid-template-rows: repeat(2, 50px);
   width: 100%;
-  /* border: 2px solid var(--color-border-semi); */
+  padding: 0.5rem;
 }
 
 .button {
   font-size: 1rem;
   box-sizing: border-box;
-  padding: 0.6rem 1rem;
   background-color: var(--color-white);
   border: none;
   border-radius: 3rem;
-  /* border-right: 1px solid var(--color-border-semi); */
   font-family: var(--primary-font);
   cursor: pointer;
 }
@@ -31,10 +30,10 @@
 /* .button:nth-child(-n + 9) {
 } */
 
-.button:nth-child(9),
+/* .button:nth-child(9),
 .button:nth-child(18) {
   border-radius: 3rem;
-}
+} */
 
 .button:hover {
   background-color: var(--color-border-light);
