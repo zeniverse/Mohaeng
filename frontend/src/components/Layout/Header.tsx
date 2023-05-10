@@ -39,19 +39,29 @@ type Props = {};
 
 function Header({}: Props) {
   const [activeLink, setActiveLink] = useState<string | null>(null);
-  const [logoSrc, setLogoSrc] = useState("/assets/logo3.png");
-
+  const [logoSrc, setLogoSrc] = useState("");
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 600) {
-        setLogoSrc("/assets/logo_mobile.png");
-      } else {
-        setLogoSrc("/assets/logo3.png");
+      const newLogoSrc =
+        window.innerWidth <= 600
+          ? "/assets/logo_mobile.png"
+          : "/assets/logo3.png";
+      if (newLogoSrc !== logoSrc) {
+        setLogoSrc(newLogoSrc);
       }
     };
+
+    // 처음 한 번 실행
+    handleResize();
+
+    // 윈도우 리사이즈 이벤트 발생 시 handleResize 실행
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+
+    // 컴포넌트가 unmount될 때 이벤트 리스너 삭제
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [logoSrc]);
 
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -134,13 +144,15 @@ function Header({}: Props) {
     <header className={styles.header}>
       <div className={styles["header-container"]}>
         <div className={styles["logo-img"]}>
-          <Image
-            src={logoSrc}
-            alt="logo"
-            layout="fill"
-            className={styles.logo}
-            onClick={handleClickLogo}
-          />
+          {logoSrc && (
+            <Image
+              src={logoSrc}
+              alt="logo"
+              layout="fill"
+              className={styles.logo}
+              onClick={handleClickLogo}
+            />
+          )}
         </div>
         <SearchBar />
         <div className={styles["desktop-only"]}>
