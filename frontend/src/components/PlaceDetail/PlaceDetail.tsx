@@ -267,7 +267,11 @@ export default function PlaceDetail() {
             </p>
           </div>
           <div className={styles.bookMarkBox}>
-            <p className={styles.bookMarkText}>북마크에 추가</p>
+            {bookMarked === false ? (
+              <p className={styles.bookMarkText}>북마크에 추가</p>
+            ) : (
+              <p className={styles.bookMarkText}>북마크 취소</p>
+            )}
             <PlaceBookmark
               bookMarked={bookMarked}
               onToggle={handleCheckBookmark}
