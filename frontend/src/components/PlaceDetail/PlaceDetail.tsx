@@ -308,6 +308,7 @@ export default function PlaceDetail() {
             <div className={styles.titleBox}>
               <h2 className={styles.h2}>리뷰</h2>
             </div>
+
             <button className={styles.reviewBtn} onClick={handleClickReviewBtn}>
               리뷰 작성
             </button>
