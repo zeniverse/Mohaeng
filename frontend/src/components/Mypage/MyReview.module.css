@@ -22,13 +22,13 @@
 
 @media screen and (max-width: 800px) {
   .review-container {
-    width: 100%;
+    width: 500px;
   }
 }
 
 @media screen and (max-width: 600px) {
   .review-container {
-    min-width: 100%;
+    width: 100%;
     height: 400px;
     padding: 0.5rem;
   }
