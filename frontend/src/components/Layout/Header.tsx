@@ -25,6 +25,8 @@ import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import { getCourseListAction } from "@/src/store/thunks/courseThunks";
 import { MdOutlineArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 import { FiMenu } from "react-icons/fi";
+import { getCourseBookmark } from '@/src/store/reducers/CourseBoomarkSlice';
+import { resetFilter } from '@/src/store/reducers/FilterSlice';
 
 type User = {
   id: number;
