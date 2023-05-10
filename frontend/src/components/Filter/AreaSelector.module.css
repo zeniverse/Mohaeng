@@ -13,7 +13,7 @@
   grid-template-columns: repeat(9, 1fr);
   grid-template-rows: repeat(2, 50px);
   width: 100%;
-  border: 2px solid var(--color-border-semi);
+  /* border: 2px solid var(--color-border-semi); */
 }
 
 .button {
@@ -22,26 +22,27 @@
   padding: 0.6rem 1rem;
   background-color: var(--color-white);
   border: none;
-  border-right: 1px solid var(--color-border-semi);
+  border-radius: 3rem;
+  /* border-right: 1px solid var(--color-border-semi); */
   font-family: var(--primary-font);
   cursor: pointer;
 }
 
-.button:nth-child(-n + 9) {
-  border-bottom: 1px solid var(--color-border-semi);
-}
+/* .button:nth-child(-n + 9) {
+} */
 
 .button:nth-child(9),
 .button:nth-child(18) {
-  border-right: none;
+  border-radius: 3rem;
 }
+
 .button:hover {
-  background-color: var(--color-primary);
+  background-color: var(--color-border-light);
   color: var(--color-white);
 }
 
 .button.active {
-  background-color: var(--color-blue);
+  background-color: var(--color-navy);
   color: var(--color-white);
 }
 
