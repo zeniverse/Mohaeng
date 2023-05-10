@@ -59,7 +59,7 @@ public class CourseLikesService {
 
         // 4. 해당 CourseLikes 찾아서, deletedDate update & Course likeCount 감소
         CourseLikes courseLikes = courseLikesRepository.findByMemberAndCourse(member, course);
-        courseLikes.updateDeleteDate();
+        courseLikes.updateDeletedDate();
         course.cancelLikeCount();
 
         Long totalLikes = getTotalLikes(course);
