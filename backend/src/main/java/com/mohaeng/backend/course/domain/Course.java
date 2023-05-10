@@ -41,8 +41,6 @@ public class Course extends BaseTimeEntity {
 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private LocalDateTime deletedDate;
-
     private String content;
     private Integer likeCount;
     @Enumerated(EnumType.STRING)
