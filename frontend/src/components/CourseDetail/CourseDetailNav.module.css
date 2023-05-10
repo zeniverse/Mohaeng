@@ -45,10 +45,6 @@
   gap: 0.4rem;
 }
 
-.unbookmark {
-  color: var(--color-icon);
-}
-
 .bookmark {
   color: var(--color-blue);
 }

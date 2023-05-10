@@ -23,7 +23,7 @@ const RecommendedSection = ({
   return (
     <section className={styles["recommended-container"]} style={style}>
       <div className={styles["recommended-container-title"]}>
-        <h2>{title}</h2>
+        <h3>{title}</h3>
         {linkUrl && (
           <Link href={linkUrl}>
             <div className={styles["link-button"]}>더보기</div>

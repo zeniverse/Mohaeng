@@ -50,13 +50,35 @@ const CourseCardSlider = () => {
     setRecommandCourse(updatedCourses);
   };
 
+  const breakpoints = {
+    // when window width is <= 640px
+    640: {
+      slidesPerView: 1,
+      slidesPerGroup: 1,
+    },
+    // when window width is <= 768px
+    768: {
+      slidesPerView: 2,
+      slidesPerGroup: 1,
+    },
+    // when window width is <= 1024px
+    1024: {
+      slidesPerView: 3,
+      slidesPerGroup: 2,
+    },
+    // when window width is <= 1200px
+    1200: {
+      slidesPerView: 4,
+      slidesPerGroup: 3,
+    },
+  };
+
   return (
     <Swiper
       modules={[Navigation]}
       spaceBetween={0}
-      slidesPerView={4}
-      slidesPerGroup={3}
       navigation
+      breakpoints={breakpoints}
     >
       {recommandCourse.length > 0 &&
         recommandCourse?.map((course, idx) => (
@@ -65,6 +87,8 @@ const CourseCardSlider = () => {
               key={course.courseId}
               courseId={course.courseId}
               title={course.title}
+              region={course.region}
+              courseDays={course.courseDays}
               content={course.content}
               thumbnailUrl={course.thumbnailUrl}
               likeCount={course.likeCount}

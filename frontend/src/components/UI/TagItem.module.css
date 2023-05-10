@@ -1,18 +1,19 @@
 .tag-item {
   display: inline-block;
+
   padding: 0.3rem 0.5rem;
   color: #fff;
 }
 
 .tag-item-SS {
   padding: 0.2rem 0.4rem;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   border-radius: 0.4rem;
 }
 
 .tag-item-S {
   padding: 0.3rem 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   border-radius: 0.4rem;
 }
 .tag-item-M {
@@ -24,4 +25,11 @@
   padding: 0.5rem 0.7rem;
   font-size: 1rem;
   border-radius: 0.6rem;
+}
+
+.text {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  font-family: var(--primary-font);
 }
