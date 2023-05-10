@@ -3,7 +3,7 @@ export const palette = {
   white: "var(--color-white)",
   black: "var(--color-black)",
   primary: "var(--color-primary)",
-  MMint: "#07c1c1",
+  MMint: "#02bebe",
   Dgreen: "#7AA874",
   Lsky: "#B4E4FF",
   Msky: "#62CDFF",

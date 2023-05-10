@@ -26,6 +26,7 @@ import Dropdown from "../Mypage/Dropdown";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import { getCourseListAction } from "@/src/store/thunks/courseThunks";
 import { MdOutlineArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
+import { FiMenu } from "react-icons/fi";
 
 type User = {
   id: number;
@@ -38,11 +39,23 @@ type Props = {};
 
 function Header({}: Props) {
   const [activeLink, setActiveLink] = useState<string | null>(null);
-  const [user, setUser] = useState<User[]>([]);
+  const [logoSrc, setLogoSrc] = useState("/assets/logo3.png");
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 600) {
+        setLogoSrc("/assets/logo_mobile.png");
+      } else {
+        setLogoSrc("/assets/logo3.png");
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const userid = useSelector((state: RootState) => state.id.id);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
   const imgUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
@@ -67,7 +80,6 @@ function Header({}: Props) {
         dispatch(getPlaceBookmark(accessToken));
         dispatch(getMyCourse(accessToken));
         dispatch(getMyReview(accessToken));
-        setUser(nickName);
       }
     };
     response();
@@ -83,7 +95,8 @@ function Header({}: Props) {
     );
   };
 
-  const ResetStatus = () => {
+  const handleClickLogo = () => {
+    router.push("/");
     setActiveLink(null);
     dispatch(resetFilter());
 
@@ -120,9 +133,15 @@ function Header({}: Props) {
   return (
     <header className={styles.header}>
       <div className={styles["header-container"]}>
-        <Link href="/" onClick={ResetStatus}>
-          <img src="/assets/logo3.png" alt="logo" className={styles.logo} />
-        </Link>
+        <div className={styles["logo-img"]}>
+          <Image
+            src={logoSrc}
+            alt="logo"
+            layout="fill"
+            className={styles.logo}
+            onClick={handleClickLogo}
+          />
+        </div>
         <SearchBar />
         <div className={styles["desktop-only"]}>
           <div className={styles.nav}>
@@ -186,6 +205,9 @@ function Header({}: Props) {
               </ul>
             </>
           )}
+        </div>
+        <div className={`${styles["mobile-only"]} ${styles.menu}`}>
+          <FiMenu />
         </div>
       </div>
     </header>

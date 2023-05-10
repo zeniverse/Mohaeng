@@ -52,8 +52,14 @@
 }
 
 .logo {
+  cursor: pointer;
+}
+
+.logo-img {
+  aspect-ratio: 13/3;
+  position: relative;
   height: 40px;
-  margin-right: 1rem;
+  margin-right: 2rem;
 }
 
 .login-btn {
@@ -68,7 +74,7 @@
 }
 
 .login-btn:hover {
-  background-color: rgb(27, 178, 238);
+  background-color: #66c9c9;
   color: #fff;
 }
 
@@ -116,9 +122,8 @@
   .nav {
     gap: 0.6rem;
   }
-  .logo {
-    height: 40px;
-    margin-right: 1rem;
+  .logo-img {
+    margin-right: 0.7rem;
   }
 }
 
@@ -129,19 +134,46 @@
   }
 }
 
-/* MEDIA QUERIES (phones) */
-@media screen and (max-width: 600px) {
+/* 데스크톱에서만 보이는 스타일 */
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+}
+
+/* 모바일에서만 보이는 스타일 */
+@media (max-width: 767px) {
+  .container {
+    margin-bottom: 0.4rem;
+  }
   .desktop-only {
     display: none;
   }
+  .mobile-only {
+    display: block;
+  }
+}
+
+/* MEDIA QUERIES (phones) */
+@media screen and (max-width: 600px) {
   .header-container {
     padding: 0 0.4rem;
   }
   .nav {
     gap: 0.6rem;
   }
-  .logo {
-    height: 30px;
-    margin-right: 0.4rem;
+
+  .logo-img {
+    aspect-ratio: 2/1;
+    height: 42px;
+    margin-right: 0.2rem;
   }
+}
+
+.menu {
+  color: var(--color-text-basic);
+  font-size: 1.7rem;
+  cursor: pointer;
+  margin-left: 0.8rem;
+  margin-right: 0.4rem;
 }
