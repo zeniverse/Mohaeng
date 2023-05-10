@@ -32,6 +32,8 @@ const CourseCard = ({
         content,
         thumbnailUrl,
         isLiked: !isLiked,
+        region: region,
+        courseDays: courseDays,
         likeCount: isLiked ? likeCount - 1 : likeCount + 1,
       });
     } else {
@@ -47,7 +49,6 @@ const CourseCard = ({
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { id: userId } = useAppSelector((state) => state.token);
-
   const handleCourseCard = () => {
     router.push(`/course/${courseId}`);
   };
@@ -55,33 +56,33 @@ const CourseCard = ({
   return (
     <div className={styles["course-card-container"]} onClick={handleCourseCard}>
       <div className={styles["course-image-container"]}>
-        {region ||
-          (courseDays && (
-            <div className={styles["card-tag"]}>
-              {region && (
-                <TagItem
-                  color="MMint"
-                  size="SS"
-                  text={region}
-                  bgColor="white"
-                  icon={<FaMapMarkerAlt />}
-                />
-              )}
-              {courseDays && (
-                <TagItem
-                  color="Dpink"
-                  size="SS"
-                  text="1박2일"
-                  bgColor="white"
-                />
-              )}
-            </div>
-          ))}
+        <div className={styles["card-tag"]}>
+          {region && (
+            <TagItem
+              color="MMint"
+              size="SS"
+              text={region}
+              bgColor="white"
+              isBorder={true}
+              icon={<FaMapMarkerAlt />}
+            />
+          )}
+          {courseDays && (
+            <TagItem
+              color="Dpink"
+              size="SS"
+              text={courseDays}
+              isBorder={true}
+              bgColor="white"
+            />
+          )}
+        </div>
+
         <Image
           src={thumbnailUrl}
           alt={title}
-          width={700}
-          height={700}
+          width={320}
+          height={320}
           priority
         />
         <IsLikeState
