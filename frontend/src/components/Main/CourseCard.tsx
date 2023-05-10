@@ -5,10 +5,15 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import IsLikeState from "../UI/IsLikeState";
 import styles from "./CourseCard.module.css";
+import TagItem from "../UI/TagItem";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import React from "react";
 
 const CourseCard = ({
   courseId,
   title,
+  region,
+  courseDays,
   content,
   thumbnailUrl,
   likeCount,
@@ -27,6 +32,8 @@ const CourseCard = ({
         content,
         thumbnailUrl,
         isLiked: !isLiked,
+        region: region,
+        courseDays: courseDays,
         likeCount: isLiked ? likeCount - 1 : likeCount + 1,
       });
     } else {
@@ -42,7 +49,6 @@ const CourseCard = ({
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { id: userId } = useAppSelector((state) => state.token);
-
   const handleCourseCard = () => {
     router.push(`/course/${courseId}`);
   };
@@ -50,11 +56,33 @@ const CourseCard = ({
   return (
     <div className={styles["course-card-container"]} onClick={handleCourseCard}>
       <div className={styles["course-image-container"]}>
+        <div className={styles["card-tag"]}>
+          {region && (
+            <TagItem
+              color="MMint"
+              size="SS"
+              text={region}
+              bgColor="white"
+              isBorder={true}
+              icon={<FaMapMarkerAlt />}
+            />
+          )}
+          {courseDays && (
+            <TagItem
+              color="Dpink"
+              size="SS"
+              text={courseDays}
+              isBorder={true}
+              bgColor="white"
+            />
+          )}
+        </div>
+
         <Image
           src={thumbnailUrl}
           alt={title}
-          width={700}
-          height={700}
+          width={320}
+          height={320}
           priority
         />
         <IsLikeState
@@ -64,12 +92,8 @@ const CourseCard = ({
         />
       </div>
       <div className={styles["course-card-content"]}>
-        <div className={styles["course-card-title"]}>
-          <h3>{title}</h3>
-        </div>
-        <div className={styles["course-card-desc"]}>
-          <p>{content}</p>
-        </div>
+        <span className={styles["card-title"]}>{title}</span>
+        <p className={styles["card-desc"]}>{content}</p>
       </div>
     </div>
   );

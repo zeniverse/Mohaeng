@@ -3,6 +3,7 @@
   height: 100%;
   margin: 0 auto;
   display: inline-block;
+  padding-top: 1.2rem;
 }
 
 /* HEADER */
@@ -14,7 +15,7 @@
 }
 
 .place-header-container h1 {
-  margin-bottom: 2.4rem;
+  margin-bottom: 1.6rem;
 }
 
 /* BODY */

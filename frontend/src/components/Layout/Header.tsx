@@ -16,16 +16,17 @@ import axios from "axios";
 import cookie from "react-cookies";
 import SearchBar from "../Search/SearchBar";
 import Image from "next/image";
-import { resetFilter, selectArea } from "@/src/store/reducers/FilterSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
-import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
 import Dropdown from "../Mypage/Dropdown";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import { getCourseListAction } from "@/src/store/thunks/courseThunks";
 import { MdOutlineArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
+import { FiMenu } from "react-icons/fi";
+import { getCourseBookmark } from '@/src/store/reducers/CourseBoomarkSlice';
+import { resetFilter } from '@/src/store/reducers/FilterSlice';
 
 type User = {
   id: number;
@@ -38,11 +39,33 @@ type Props = {};
 
 function Header({}: Props) {
   const [activeLink, setActiveLink] = useState<string | null>(null);
-  const [user, setUser] = useState<User[]>([]);
+  const [logoSrc, setLogoSrc] = useState("");
+  useEffect(() => {
+    const handleResize = () => {
+      const newLogoSrc =
+        window.innerWidth <= 600
+          ? "/assets/logo_mobile.png"
+          : "/assets/logo3.png";
+      if (newLogoSrc !== logoSrc) {
+        setLogoSrc(newLogoSrc);
+      }
+    };
+
+    // 처음 한 번 실행
+    handleResize();
+
+    // 윈도우 리사이즈 이벤트 발생 시 handleResize 실행
+    window.addEventListener("resize", handleResize);
+
+    // 컴포넌트가 unmount될 때 이벤트 리스너 삭제
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [logoSrc]);
+
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const userid = useSelector((state: RootState) => state.id.id);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
   const imgUrl = useSelector((state: RootState) => state.imgUrl.imgUrl);
@@ -67,7 +90,6 @@ function Header({}: Props) {
         dispatch(getPlaceBookmark(accessToken));
         dispatch(getMyCourse(accessToken));
         dispatch(getMyReview(accessToken));
-        setUser(nickName);
       }
     };
     response();
@@ -83,7 +105,8 @@ function Header({}: Props) {
     );
   };
 
-  const ResetStatus = () => {
+  const handleClickLogo = () => {
+    router.push("/");
     setActiveLink(null);
     dispatch(resetFilter());
 
@@ -120,9 +143,17 @@ function Header({}: Props) {
   return (
     <header className={styles.header}>
       <div className={styles["header-container"]}>
-        <Link href="/" onClick={ResetStatus}>
-          <img src="/assets/logo3.png" alt="logo" className={styles.logo} />
-        </Link>
+        <div className={styles["logo-img"]}>
+          {logoSrc && (
+            <Image
+              src={logoSrc}
+              alt="logo"
+              layout="fill"
+              className={styles.logo}
+              onClick={handleClickLogo}
+            />
+          )}
+        </div>
         <SearchBar />
         <div className={styles["desktop-only"]}>
           <div className={styles.nav}>
@@ -186,6 +217,9 @@ function Header({}: Props) {
               </ul>
             </>
           )}
+        </div>
+        <div className={`${styles["mobile-only"]} ${styles.menu}`}>
+          <FiMenu />
         </div>
       </div>
     </header>

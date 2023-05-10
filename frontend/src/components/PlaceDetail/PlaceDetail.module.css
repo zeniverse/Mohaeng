@@ -3,9 +3,9 @@
   flex-direction: column;
   max-width: 100%;
   min-width: 317px;
-  margin: 2rem;
+  margin: 0 2rem;
   padding: 2rem 3rem;
-  background-color: var(--color-bg-lightgray);
+  background-color: transparent;
   border-radius: 12px;
   color: var(--color-text-basic);
 
@@ -17,6 +17,8 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 3rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--color-border-light);
 }
 
 .h2 {
@@ -101,7 +103,7 @@
 .detailDesc,
 .map {
   border: 1px solid var(--color-border-light);
-  background-color: var(--color-white);
+
   border-radius: 8px;
 }
 
@@ -119,9 +121,9 @@
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  margin: 2rem;
+  margin: 0 2rem;
   padding: 2rem 3rem;
-  background-color: var(--color-bg-lightgray);
+  background-color: transparent;
   border-radius: 12px;
   color: var(--color-text-basic);
 
@@ -133,18 +135,41 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: var(--color-bg-lightgray);
+  background-color: transparent;
   border-radius: 12px;
 }
 
 .reviewTitle {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
-.h2 {
-  font-size: 32px;
+.titleBox {
+  display: flex;
+  flex-direction: row;
+}
+
+.reviewH2 {
+  font-size: 28px;
+  margin-right: 0.5rem;
+}
+
+.reviewInfo {
+  display: flex;
+  width: 9rem;
+  margin-right: 1rem;
+  font-size: small;
+}
+
+.reviewCount {
+  font-size: 28px;
+  color: var(--color-primary);
+  margin-right: 0.5rem;
+}
+
+.reviewAverage {
+  margin: 0 0 1.5rem;
+  font-size: 28px;
 }
 
 .reviewBtn {
@@ -156,7 +181,7 @@
   padding: 1rem;
   background-color: var(--color-primary);
   border: none;
-  border-radius: 50px;
+  border-radius: 12px;
   text-decoration: none;
   text-align: center;
   font-size: medium;
@@ -165,17 +190,18 @@
 }
 
 .reviewBtn:hover {
-  filter: brightness(95%);
+  transition: all ease-in-out 0.1s;
+  box-shadow: 1px 7px 14px 0px var(--color-icon);
+  -webkit-box-shadow: 1px 7px 14px 0px var(--color-icon);
+  -moz-box-shadow: 1px 7px 14px 0px var(--color-icon);
 }
 
 .reviewNav {
   display: flex;
+  justify-content: space-between;
   margin-bottom: 2rem;
-}
-
-.reviewInfo {
-  width: 9rem;
-  margin-right: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--color-border-light);
 }
 
 .select {
@@ -184,14 +210,18 @@
   appearance: none;
   width: 120px;
   height: 50px;
-  border-radius: 50px;
+  border-radius: 12px;
   text-align: center;
   border: 1px solid var(--color-border-light);
   cursor: pointer;
 }
 
 .select:hover {
+  transition: all ease-in-out 0.1s;
   border: 3px solid var(--color-border-light);
+  box-shadow: 1px 7px 14px 0px var(--color-icon);
+  -webkit-box-shadow: 1px 7px 14px 0px var(--color-icon);
+  -moz-box-shadow: 1px 7px 14px 0px var(--color-icon);
 }
 
 @media screen and (max-width: 1024px) {
@@ -214,6 +244,10 @@
     padding: 1rem;
   }
 
+  .map {
+    height: 300px;
+  }
+
   .reviewSection {
     width: auto;
     margin: 1rem 0 0;
@@ -222,13 +256,13 @@
 
   .detailHeader {
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     margin-bottom: 1rem;
   }
 
   .h2 {
     font-size: 1.5rem;
-    margin-bottom: 0.5rem;
     text-align: center;
   }
 
@@ -257,31 +291,40 @@
   }
 
   .reviewTitle {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
   }
 
-  .h2 {
+  .reviewH2 {
+    font-size: 24px;
+  }
+
+  .reviewCount {
+    font-size: 24px;
+  }
+
+  .reviewAverage {
     font-size: 24px;
   }
 
   .reviewBtn {
     width: 100%;
-    margin-top: 1rem;
   }
 
   .reviewNav {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+    gap: 10rem;
     margin-bottom: 1rem;
   }
 
-  .reviewInfo {
+  /* .reviewInfo {
     width: 100%;
     margin-right: 0;
     margin-bottom: 1rem;
-  }
+  } */
 
   .select {
     width: 100%;
@@ -293,5 +336,35 @@
     width: auto;
     margin: 1rem 0 0 0;
     padding: 0;
+  }
+
+  .detailHeader {
+    text-align: center;
+  }
+
+  .map {
+    height: 200px;
+  }
+
+  .reviewH2 {
+    font-size: 20px;
+  }
+
+  .reviewCount {
+    font-size: 20px;
+  }
+
+  .reviewAverage {
+    font-size: 20px;
+  }
+
+  .reviewNav {
+    gap: 5rem;
+    margin-bottom: 1rem;
+  }
+
+  .reviewBtn {
+    width: 100%;
+    font-size: small;
   }
 }

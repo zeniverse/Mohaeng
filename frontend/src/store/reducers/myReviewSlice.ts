@@ -29,7 +29,6 @@ export const getMyReview = createAsyncThunk(
       },
       withCredentials: true,
     });
-    console.log(response.data.data);
     return response.data.data;
   }
 );

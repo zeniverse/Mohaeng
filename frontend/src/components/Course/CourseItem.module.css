@@ -21,7 +21,7 @@
 
 .item-nav-container {
   flex: 1;
-  color: black;
+  color: var(--color-text-basic);
   background-color: white;
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
@@ -108,7 +108,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: var(--color-text-basic);
+  color: var(--color-black);
   font-size: 1.3rem;
 }
 
@@ -125,10 +125,6 @@
 
 .roughmapBtn {
   position: relative;
-}
-
-.unbookmark {
-  color: var(--color-icon);
 }
 
 .bookmark {

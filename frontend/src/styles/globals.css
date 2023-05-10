@@ -3,16 +3,19 @@
   --color-bg-gray: #ebebeb;
   --color-bg-lightgray: #f9f9f9;
   --color-white: #ffffff;
+  --color-black: #000;
   --color-red: #f20000;
   --color-blue: #004aad;
   --color-green: #d9f8c4;
   --color-border-dark: #7d7d7d;
   --color-border-semi: #b7b7b7;
+  --color-border-semilight: #cacaca;
   --color-border-light: #dddddd;
   --color-text-basic: #333333;
   --color-text-semi: #858585;
   --color-text-light: #b7b7b7;
   --color-icon: #cfcfcf;
+  --color-navy: #13294b;
 }
 
 * {
