@@ -29,7 +29,7 @@
 /* MEDIA QUERIES (phones) */
 @media screen and (max-width: 600px) {
   .swiper-slide {
-    padding: 0.7rem 0.5rem !important;
+    padding: 0.7rem 0.5rem 1.4rem !important;
   }
   .swiper-button-next {
     display: none !important;
@@ -37,4 +37,33 @@
   .swiper-button-prev {
     display: none !important;
   }
+}
+
+@media screen and (min-width: 640px) {
+  .swiper .swiper-pagination {
+    display: none !important;
+  }
+}
+
+.swiper .swiper-pagination {
+  display: flex;
+  justify-content: center;
+  position: absolute !important;
+  bottom: 0 !important;
+  right: 0;
+  left: 0;
+  z-index: 4 !important;
+  bottom: 0px;
+  gap: 0.3rem;
+  background: transparent !important;
+}
+.swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  background-color: var(--color-white) !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: var(--color-primary) !important;
 }

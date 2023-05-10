@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import { Navigation } from "swiper";
+import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import cookie from "react-cookies";
 import PlaceCard from "@/src/components/Main/PlaceCard";
@@ -41,7 +41,12 @@ const PlaceCardSlider = () => {
     640: {
       slidesPerView: 1,
       slidesPerGroup: 1,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
     },
+
     // when window width is <= 768px
     768: {
       slidesPerView: 2,
@@ -61,11 +66,11 @@ const PlaceCardSlider = () => {
 
   return (
     <Swiper
-      modules={[Navigation]}
+      modules={[Navigation, Pagination]}
+      pagination={{ clickable: true }}
       spaceBetween={0}
       navigation
       breakpoints={breakpoints}
-
       // onSwiper={(swiper) => console.log(swiper)}
       // onSlideChange={() => console.log("slide change")}
     >
