@@ -311,7 +311,7 @@ export default function PlaceDetail() {
         <main className={styles.reviewContainer}>
           <div className={styles.reviewTitle}>
             <div className={styles.titleBox}>
-              <h2 className={styles.h2}>리뷰</h2>
+              <h2 className={styles.reviewH2}>리뷰</h2>
             </div>
             <div className={styles.reviewInfo}>
               <p className={styles.reviewCount}>

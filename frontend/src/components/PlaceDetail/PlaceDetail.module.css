@@ -149,7 +149,7 @@
   flex-direction: row;
 }
 
-.h2 {
+.reviewH2 {
   font-size: 28px;
   margin-right: 0.5rem;
 }
@@ -263,7 +263,6 @@
 
   .h2 {
     font-size: 1.5rem;
-    margin: 0 0 0.5rem;
     text-align: center;
   }
 
@@ -292,31 +291,40 @@
   }
 
   .reviewTitle {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
   }
 
-  .h2 {
+  .reviewH2 {
+    font-size: 24px;
+  }
+
+  .reviewCount {
+    font-size: 24px;
+  }
+
+  .reviewAverage {
     font-size: 24px;
   }
 
   .reviewBtn {
     width: 100%;
-    margin-top: 1rem;
   }
 
   .reviewNav {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+    gap: 10rem;
     margin-bottom: 1rem;
   }
 
-  .reviewInfo {
+  /* .reviewInfo {
     width: 100%;
     margin-right: 0;
     margin-bottom: 1rem;
-  }
+  } */
 
   .select {
     width: 100%;
@@ -336,5 +344,27 @@
 
   .map {
     height: 200px;
+  }
+
+  .reviewH2 {
+    font-size: 20px;
+  }
+
+  .reviewCount {
+    font-size: 20px;
+  }
+
+  .reviewAverage {
+    font-size: 20px;
+  }
+
+  .reviewNav {
+    gap: 5rem;
+    margin-bottom: 1rem;
+  }
+
+  .reviewBtn {
+    width: 100%;
+    font-size: small;
   }
 }
