@@ -80,6 +80,9 @@
 }
 
 .select {
+  -webkit-appearance: none; /* for chrome */
+  -moz-appearance: none; /*for firefox*/
+  appearance: none;
   display: block;
   width: 100%;
   font-size: 1em;
