@@ -2,21 +2,21 @@ import styles from "./PlaceDetail.module.css";
 import Image from "next/image";
 import axios from "axios";
 import cookie from "react-cookies";
+import PlaceBookmark from "@/src/components/Bookmark/PlaceBookmark";
+import PlaceDetailMap from "@/src/components/PlaceDetail/PlaceDetailMap";
+import Pagebar from "../Pagenation/Pagebar";
+import ReviewItem from "../Review/ReviewItem";
+import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import { SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
-import PlaceBookmark from "@/src/components/Bookmark/PlaceBookmark";
-import PlaceDetailMap from "@/src/components/PlaceDetail/PlaceDetailMap";
 import { useRouterQuery } from "@/src/hooks/useRouterQuery";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "@/src/store/reducers/modalSlice";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import { RootState } from "@/src/store/store";
-import Pagebar from "../Pagenation/Pagebar";
-import ReviewItem from "../Review/ReviewItem";
-import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 
 export interface PlaceInfo {
@@ -110,6 +110,7 @@ export default function PlaceDetail() {
         if (accessToken) {
           headers["Access-Token"] = accessToken;
           headers.withCredentials = "true";
+          headers["Cache-Control"] = "no-cache";
         }
         const res = await axios.get(`/api/place/overview/${id}`, {
           headers,
@@ -129,9 +130,9 @@ export default function PlaceDetail() {
     }
   }, [id]);
 
+  // * 리뷰 데이터
   const [reviewData, setReviewData] = useState<ReviewData[]>([]);
   const [selectedValue, setSelectedValue] = useState("highrating");
-
   const page = useSelector((state: RootState) => state.page.page);
   const totalPages: number = useSelector(
     (state: RootState) => state.review.totalPages
@@ -261,7 +262,8 @@ export default function PlaceDetail() {
           <div className={styles.headerTitle}>
             <h2 className={styles.h2}>{placeInfo.name}</h2>
             <p>
-              <FaMapMarkerAlt /> {placeInfo.address}
+              <FaMapMarkerAlt />
+              &nbsp;{placeInfo.address}
             </p>
           </div>
           <div className={styles.bookMarkBox}>
@@ -274,13 +276,16 @@ export default function PlaceDetail() {
         </div>
         <div className={styles.detailContent}>
           <div className={styles.imgBox}>
-            <Image
-              className={styles.img}
-              src={placeInfo.firstImage}
-              width={1000}
-              height={1000}
-              alt={placeInfo.name}
-            />
+            {placeInfo.firstImage && (
+              <Image
+                className={styles.img}
+                src={placeInfo.firstImage}
+                width={700}
+                height={700}
+                alt={placeInfo.name}
+                priority
+              />
+            )}
           </div>
           <div className={styles.detailMap}>
             <div className={styles.map} id="map">
@@ -292,7 +297,7 @@ export default function PlaceDetail() {
           </div>
         </div>
         <div className={styles.detailDesc}>
-          <p className={styles.descTitle}>세부 설명 </p>
+          <p className={styles.descTitle}>세부 설명</p>
           <p className={styles.descInfo}>{placeInfo.overview}</p>
         </div>
       </section>
@@ -311,7 +316,7 @@ export default function PlaceDetail() {
           <aside className={styles.reviewNav}>
             <div className={styles.reviewInfo}>
               <p>
-                총 <strong>{totalElements}</strong>건의 리뷰
+                총&nbsp;<strong>{totalElements}</strong>건의 리뷰
               </p>
               <span>
                 <FiveStarRating rating={averageRating.toString()} />

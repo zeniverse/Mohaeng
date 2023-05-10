@@ -15,7 +15,7 @@
 }
 .swiper-slide {
   display: flex !important;
-  padding: 1.3rem 1rem !important;
+  padding: 1rem 1rem !important;
   justify-content: center !important;
 }
 
@@ -24,4 +24,17 @@
 }
 .swiper-button-prev {
   transform: translateX(-18%) !important;
+}
+
+/* MEDIA QUERIES (phones) */
+@media screen and (max-width: 600px) {
+  .swiper-slide {
+    padding: 0.7rem 0.5rem !important;
+  }
+  .swiper-button-next {
+    display: none !important;
+  }
+  .swiper-button-prev {
+    display: none !important;
+  }
 }

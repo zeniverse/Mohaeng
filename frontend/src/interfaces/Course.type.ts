@@ -72,7 +72,7 @@ export interface IPlacesForm {
   mapY: string;
   imgUrl: string;
   rating: string;
-  address?: string;
+  address: string;
 }
 
 export interface ICourseDetail {
@@ -107,6 +107,8 @@ export interface IRecommandCourse {
   title: string;
   content: string;
   thumbnailUrl: string;
+  region: string;
+  courseDays: string;
   likeCount: number;
   isBookmarked: boolean;
   isLiked: boolean;

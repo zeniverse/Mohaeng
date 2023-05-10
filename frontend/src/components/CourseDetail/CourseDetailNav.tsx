@@ -56,7 +56,7 @@ const CourseDetailNav = () => {
     if (userId) {
       dispatch(
         bookmarkToggleAction({ courseId, isBookmarked, isDetailPage: true })
-      );
+      ).then(() => setIsBookmarkHandlerRunning(false));
     } else {
       dispatch(
         openModal({
@@ -64,8 +64,8 @@ const CourseDetailNav = () => {
           isOpen: true,
         })
       );
+      setIsBookmarkHandlerRunning(false);
     }
-    setIsBookmarkHandlerRunning(false);
   };
 
   const handleDetailLike = () => {
@@ -74,7 +74,9 @@ const CourseDetailNav = () => {
     }
     setIsLikeHandlerRunning(true);
     if (userId) {
-      dispatch(likeToggleAction({ courseId, isLiked, isDetailPage: true }));
+      dispatch(
+        likeToggleAction({ courseId, isLiked, isDetailPage: true })
+      ).then(() => setIsLikeHandlerRunning(false));
     } else {
       dispatch(
         openModal({
@@ -82,8 +84,8 @@ const CourseDetailNav = () => {
           isOpen: true,
         })
       );
+      setIsLikeHandlerRunning(false);
     }
-    setIsLikeHandlerRunning(false);
   };
 
   const handleKakaoShare = () => {

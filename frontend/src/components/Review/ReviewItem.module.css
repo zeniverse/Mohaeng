@@ -42,9 +42,12 @@
 .reviewImgBox {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .reviewImg {
+  flex: 1 0 auto;
   padding: 4px;
   margin-right: 0.5rem;
   cursor: pointer;
@@ -79,7 +82,36 @@
   color: var(--color-primary);
 }
 
-.likeBtn {
+@media (max-width: 768px) {
+  .reviewBox {
+    padding: 1rem;
+  }
+
+  .reviewer {
+    font-size: small;
+  }
+
+  .userImg {
+    margin-right: 1rem;
+    border-radius: 50%;
+  }
+
+  .reviewContent {
+    margin-left: 0;
+  }
+
+  .reviewImgBox {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn {
+    font-size: small;
+  }
+}
+
+/* .likeBtn {
   width: 60px;
   height: 30px;
   border: 1px solid var(--color-border-light);
@@ -91,4 +123,4 @@
 .likeBtn:hover {
   color: var(--color-red);
   border-color: var(--color-red);
-}
+} */

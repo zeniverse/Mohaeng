@@ -1,8 +1,6 @@
 package com.mohaeng.backend.course.service;
 
-import com.mohaeng.backend.course.domain.Course;
-import com.mohaeng.backend.course.domain.CoursePlace;
-import com.mohaeng.backend.course.domain.CourseStatus;
+import com.mohaeng.backend.course.domain.*;
 import com.mohaeng.backend.course.dto.*;
 import com.mohaeng.backend.course.dto.request.*;
 import com.mohaeng.backend.course.dto.response.*;
@@ -168,8 +166,46 @@ public class CourseService {
         // 2. 작성자와 요청자가 같은지 확인
         isWriter(memberEmail, course.getMember());
 
-        // 3. course soft delete 처리
+        // 3-1. course 좋아요 & 북마크 soft delete 처리
+        List<CourseLikes> likesAllByCourse = courseLikesRepository.findAllByCourse(course);
+        for (CourseLikes courseLikes : likesAllByCourse) {
+            courseLikes.updateDeletedDate();
+        }
+
+        List<CourseBookmark> bookmarksAllByCourse1 = courseBookmarkRepository.findAllByCourse(course);
+        for (CourseBookmark courseBookmark : bookmarksAllByCourse1) {
+            courseBookmark.updateDeletedDate();
+        }
+
+        // 3-2. course soft delete 처리
         course.updateDeletedDate(course.getCoursePlaces());
+    }
+
+    @Transactional
+    public void deleteCourse(String memberEmail, List<Long> courseIds) {
+
+        for (Long courseId : courseIds) {
+            // 1. 코스 존재 여부 확인
+            Course course = isCourse(courseId);
+
+            // 2. 비공개 처리가 되는 코스 삭제
+            if (course.getCourseStatus().equals(CourseStatus.PRIVATE)) {
+                continue;
+            }
+
+            // 3. 작성자와 요청자가 같은지 확인
+            isWriter(memberEmail, course.getMember());
+
+            // 3-1. course 좋아요 & 북마크 soft delete 처리
+            List<CourseLikes> likesAllByCourse = courseLikesRepository.findAllByCourse(course);
+            likesAllByCourse.forEach(CourseLikes::updateDeletedDate);
+
+            List<CourseBookmark> bookmarksAllByCourse = courseBookmarkRepository.findAllByCourse(course);
+            bookmarksAllByCourse.forEach(CourseBookmark::updateDeletedDate);
+
+            // 4. course soft delete 처리
+            course.updateDeletedDate(course.getCoursePlaces());
+        }
     }
 
 

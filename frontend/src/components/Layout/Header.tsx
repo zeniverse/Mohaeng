@@ -24,6 +24,8 @@ import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
 import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
 import Dropdown from "../Mypage/Dropdown";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
+import { getCourseListAction } from "@/src/store/thunks/courseThunks";
+import { MdOutlineArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 
 type User = {
   id: number;
@@ -35,10 +37,11 @@ type User = {
 type Props = {};
 
 function Header({}: Props) {
+  const [activeLink, setActiveLink] = useState<string | null>(null);
   const [user, setUser] = useState<User[]>([]);
-  const dispatch = useDispatch();
-  const appDispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
+
   const userid = useSelector((state: RootState) => state.id.id);
   const nickName = useSelector((state: RootState) => state.nickName.nickName);
   const accessToken = cookie.load("accessToken");
@@ -48,7 +51,6 @@ function Header({}: Props) {
   // * 로그인 정보 조회
   useEffect(() => {
     const response = async () => {
-      console.log("ACcess = " + accessToken);
       if (accessToken) {
         const userRes = await axios.get(`/loginInfo`, {
           headers: {
@@ -61,10 +63,10 @@ function Header({}: Props) {
         dispatch(setEmail(email));
         dispatch(setNickname(nickName));
         dispatch(setImgUrl(imgUrl));
-        appDispatch(getCourseBookmark(accessToken));
-        appDispatch(getPlaceBookmark(accessToken));
-        appDispatch(getMyCourse(accessToken));
-        appDispatch(getMyReview(accessToken));
+        dispatch(getCourseBookmark(accessToken));
+        dispatch(getPlaceBookmark(accessToken));
+        dispatch(getMyCourse(accessToken));
+        dispatch(getMyReview(accessToken));
         setUser(nickName);
       }
     };
@@ -82,8 +84,8 @@ function Header({}: Props) {
   };
 
   const ResetStatus = () => {
+    setActiveLink(null);
     dispatch(resetFilter());
-    dispatch;
 
     const currComponent: myPageState = {
       currIdx: 0,
@@ -93,58 +95,98 @@ function Header({}: Props) {
     dispatch(setCurrIdx(currComponent));
   };
 
+  const handleClickPlace = () => {
+    setActiveLink("place");
+    dispatch(resetFilter());
+
+    const currComponent: myPageState = {
+      currIdx: 0,
+      label: "회원정보",
+    };
+
+    dispatch(setCurrIdx(currComponent));
+  };
+  const handleClickCourse = () => {
+    setActiveLink("course");
+    dispatch(resetFilter());
+    const currComponent: myPageState = {
+      currIdx: 0,
+      label: "회원정보",
+    };
+    dispatch(setCurrIdx(currComponent));
+    dispatch(getCourseListAction({}));
+  };
+
   return (
     <header className={styles.header}>
-      <nav>
-        <div className={styles.nav}>
-          <Link href="/" onClick={ResetStatus}>
-            <img src="/assets/logo.png" alt="logo" className={styles.logo} />
-          </Link>
-
-          <SearchBar />
-
-          <div className={styles.menu}>
-            <Link href="/place" onClick={ResetStatus}>
+      <div className={styles["header-container"]}>
+        <Link href="/" onClick={ResetStatus}>
+          <img src="/assets/logo3.png" alt="logo" className={styles.logo} />
+        </Link>
+        <SearchBar />
+        <div className={styles["desktop-only"]}>
+          <div className={styles.nav}>
+            <Link
+              href="/place"
+              onClick={handleClickPlace}
+              className={`${styles.link} ${
+                activeLink === "place" ? styles.active : ""
+              }`}
+            >
               여행지
             </Link>
-            <Link href="/course" onClick={ResetStatus}>
+            <Link
+              href="/course"
+              onClick={handleClickCourse}
+              className={`${styles.link} ${
+                activeLink === "course" ? styles.active : ""
+              }`}
+            >
               코스
             </Link>
           </div>
+          {!nickName ? (
+            <>
+              <button
+                id="login-btn"
+                className={styles["login-btn"]}
+                onClick={handleOpenLoginModal}
+              >
+                로그인
+              </button>
+            </>
+          ) : (
+            <>
+              <ul
+                className={styles["dropdown-container"]}
+                onClick={() => {
+                  setView(!view);
+                }}
+              >
+                <div className={styles["kakao-profile"]}>
+                  <div className={styles["kakao-profile-img-box"]}>
+                    <Image
+                      className={styles["kakao-profile-img"]}
+                      src={imgUrl}
+                      alt="카카오프로필"
+                      width={45}
+                      height={45}
+                    />
+                  </div>
+                  <div className={styles["kakao-profile-info"]}>
+                    {nickName}
+                    {view ? (
+                      <MdOutlineArrowDropUp />
+                    ) : (
+                      <MdOutlineArrowDropDown />
+                    )}
+                  </div>
+                </div>
+                {view && <Dropdown />}
+              </ul>
+            </>
+          )}
         </div>
-      </nav>
-
-      <div className={styles.btn}>
-        {!nickName ? (
-          <>
-            <button
-              id="login-btn"
-              className={styles["login-btn"]}
-              onClick={handleOpenLoginModal}
-            >
-              로그인
-            </button>
-          </>
-        ) : (
-          <>
-            <ul
-              className={styles.dropdownContainer}
-              onClick={() => {
-                setView(!view);
-              }}
-            >
-              <Image
-                className={styles["kakao-profile-img"]}
-                src={imgUrl}
-                alt="카카오프로필"
-                width={45}
-                height={45}
-              />
-              반가워요, {nickName} 님! {view ? "⌃" : "⌄"}
-              {view && <Dropdown />}
-            </ul>
-          </>
-        )}
       </div>
     </header>
   );

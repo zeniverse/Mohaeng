@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { selectArea } from "@/src/store/reducers/FilterSlice";
-import { useState } from "react";
+import { ResionOptions } from "@/src/utils/input-options";
 import styles from "./AreaSelector.module.css";
 
 const areas = [
@@ -37,10 +37,20 @@ const AreaSelector = () => {
     dispatch(selectArea(area));
   };
 
+  const regionChangedHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedRegion = e.target.value;
+    const selectedArea = areas.find((item) => item.region === selectedRegion);
+    if (selectedArea) {
+      dispatch(selectArea(selectedArea));
+    }
+  };
+
   return (
     <div className={styles.container}>
       <h3>지역</h3>
-      <div className={styles["selector-wrapper"]}>
+      <div
+        className={`${styles["selector-wrapper"]} ${styles["desktop-only"]}`}
+      >
         {areas.map((item) => (
           <button
             key={item.areaCode}
@@ -52,6 +62,23 @@ const AreaSelector = () => {
             {item.region}
           </button>
         ))}
+      </div>
+      <div className={` ${styles.region} ${styles["mobile-only"]}`}>
+        <select
+          name="region"
+          value={area.region}
+          onChange={regionChangedHandler}
+          className={styles.select}
+        >
+          <option value="" disabled>
+            지역 선택
+          </option>
+          {areas.map((item) => (
+            <option key={item.areaCode} value={item.region}>
+              {item.region}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );

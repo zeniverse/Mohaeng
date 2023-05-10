@@ -39,7 +39,6 @@ export default function Place() {
   }, [areaCode]);
 
   useEffect(() => {
-    console.log("AreaCode is " + areaCode);
     const response = async () => {
       await axios
         .get(`/api/places`, {
@@ -69,7 +68,7 @@ export default function Place() {
             <AreaSelector />
           </div>
           <PlaceList />
-          <PageBar totalPage={totalPages} />
+          {totalPages && <PageBar totalPage={totalPages} />}
         </div>
       </div>
     </main>

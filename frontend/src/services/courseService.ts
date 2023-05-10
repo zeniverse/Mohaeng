@@ -3,9 +3,8 @@ import { ICourseSubmitForm } from "../interfaces/Course.type";
 import CourseApiConfig from "./ApiConfig";
 import cookie from "react-cookies";
 
-const accessToken = cookie.load("accessToken");
-
 export const getCourseListApi = async (queryParams = {}) => {
+  const accessToken = cookie.load("accessToken");
   return axios.get(CourseApiConfig.course, {
     params: queryParams,
     headers: {
@@ -17,6 +16,7 @@ export const getCourseListApi = async (queryParams = {}) => {
 };
 
 export const createCourseApi = async (data: ICourseSubmitForm) => {
+  const accessToken = cookie.load("accessToken");
   try {
     const response = await axios.post(CourseApiConfig.course, data, {
       headers: {
@@ -34,6 +34,7 @@ export const editCourseApi = async (
   courseId: number,
   data: ICourseSubmitForm
 ) => {
+  const accessToken = cookie.load("accessToken");
   return await axios.put(`${CourseApiConfig.course}/${courseId}`, data, {
     headers: {
       "Access-Token": accessToken,
@@ -43,6 +44,7 @@ export const editCourseApi = async (
 };
 
 export const removeCourseApi = async (courseId: number) => {
+  const accessToken = cookie.load("accessToken");
   try {
     const config = {
       headers: {
@@ -64,6 +66,7 @@ export const toggleBookmarkApi = async (
   courseId: number,
   method: "POST" | "DELETE"
 ) => {
+  const accessToken = cookie.load("accessToken");
   try {
     const config = {
       method: method,
@@ -87,6 +90,7 @@ export const toggleLikeApi = async (
   courseId: number,
   method: "POST" | "DELETE"
 ) => {
+  const accessToken = cookie.load("accessToken");
   try {
     const config = {
       method: method,

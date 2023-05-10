@@ -33,31 +33,28 @@ const SelectSorting = () => {
   };
 
   return (
-    <div className={styles.sort}>
-      {/* <h5>정렬</h5> */}
-      <div className={styles["dropdown-wrapper"]}>
-        <button className={styles["dropdown-label"]} onClick={handleDropdown}>
-          {selectedSortName}
-          <MdOutlineKeyboardArrowDown />
-        </button>
-        {isDropdownOpen && (
-          <div className={styles["dropdown-content"]}>
-            <ul>
-              {sortOptions
-                .filter((option) => option.name !== selectedSortName) // 현재 선택된 옵션을 제외한 리스트 필터링
-                .map((option) => (
-                  <li
-                    key={option.name}
-                    className={styles["sort-item"]}
-                    onClick={() => handleOptionClick(option)}
-                  >
-                    {option.name}
-                  </li>
-                ))}
-            </ul>
-          </div>
-        )}
-      </div>
+    <div className={styles["dropdown-wrapper"]}>
+      <button className={styles["dropdown-label"]} onClick={handleDropdown}>
+        {selectedSortName}
+        <MdOutlineKeyboardArrowDown />
+      </button>
+      {isDropdownOpen && (
+        <div className={styles["dropdown-content"]}>
+          <ul>
+            {sortOptions
+              .filter((option) => option.name !== selectedSortName) // 현재 선택된 옵션을 제외한 리스트 필터링
+              .map((option) => (
+                <li
+                  key={option.name}
+                  className={styles["sort-item"]}
+                  onClick={() => handleOptionClick(option)}
+                >
+                  {option.name}
+                </li>
+              ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
