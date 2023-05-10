@@ -18,6 +18,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { ReviewData, setReview } from "@/src/store/reducers/reviewSlice";
 import { RootState } from "@/src/store/store";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
+import { BsThreeDots } from "react-icons/bs";
 
 export interface PlaceInfo {
   placeId: number;
@@ -310,23 +311,18 @@ export default function PlaceDetail() {
         <main className={styles.reviewContainer}>
           <div className={styles.reviewTitle}>
             <div className={styles.titleBox}>
-              <h2 className={styles.h2}>리뷰</h2>
+              <h2 className={styles.reviewH2}>리뷰</h2>
             </div>
-
-            <button className={styles.reviewBtn} onClick={handleClickReviewBtn}>
-              리뷰 작성
-            </button>
-          </div>
-
-          <aside className={styles.reviewNav}>
             <div className={styles.reviewInfo}>
-              <p>
-                총&nbsp;<strong>{totalElements}</strong>건의 리뷰
+              <p className={styles.reviewCount}>
+                <strong>{totalElements}</strong>
               </p>
-              <span>
-                <FiveStarRating rating={averageRating.toString()} />
-              </span>
             </div>
+          </div>
+          <span className={styles.reviewAverage}>
+            <FiveStarRating rating={averageRating.toString()} />
+          </span>
+          <aside className={styles.reviewNav}>
             <select
               className={styles.select}
               value={selectedValue}
@@ -339,6 +335,9 @@ export default function PlaceDetail() {
                 최신순
               </option>
             </select>
+            <button className={styles.reviewBtn} onClick={handleClickReviewBtn}>
+              리뷰 작성
+            </button>
           </aside>
           <div className={styles.reviewList}>
             {reviewData?.map((review) => (
