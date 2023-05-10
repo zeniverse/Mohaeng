@@ -5,10 +5,15 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import IsLikeState from "../UI/IsLikeState";
 import styles from "./CourseCard.module.css";
+import TagItem from "../UI/TagItem";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import React from "react";
 
 const CourseCard = ({
   courseId,
   title,
+  region,
+  courseDays,
   content,
   thumbnailUrl,
   likeCount,
@@ -50,6 +55,28 @@ const CourseCard = ({
   return (
     <div className={styles["course-card-container"]} onClick={handleCourseCard}>
       <div className={styles["course-image-container"]}>
+        {region ||
+          (courseDays && (
+            <div className={styles["card-tag"]}>
+              {region && (
+                <TagItem
+                  color="MMint"
+                  size="SS"
+                  text={region}
+                  bgColor="white"
+                  icon={<FaMapMarkerAlt />}
+                />
+              )}
+              {courseDays && (
+                <TagItem
+                  color="Dpink"
+                  size="SS"
+                  text="1박2일"
+                  bgColor="white"
+                />
+              )}
+            </div>
+          ))}
         <Image
           src={thumbnailUrl}
           alt={title}
@@ -64,12 +91,8 @@ const CourseCard = ({
         />
       </div>
       <div className={styles["course-card-content"]}>
-        <div className={styles["course-card-title"]}>
-          <h3>{title}</h3>
-        </div>
-        <div className={styles["course-card-desc"]}>
-          <p>{content}</p>
-        </div>
+        <span className={styles["card-title"]}>{title}</span>
+        <p className={styles["card-desc"]}>{content}</p>
       </div>
     </div>
   );

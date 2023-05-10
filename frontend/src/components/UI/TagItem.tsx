@@ -6,15 +6,21 @@ const TagItem = ({
   bgColor,
   color = "white",
   size = "M",
+  icon,
 }: {
   text: string;
   bgColor?: PaletteKeyTypes;
-  color?: "black" | "white";
+  color?: "black" | "white" | PaletteKeyTypes;
   size?: "L" | "M" | "S" | "SS";
+  icon?: any;
 }) => {
   const settingBgColor = bgColor ? palette[bgColor] : "var(--color-primary)";
   const settingColor =
-    color === "white" ? "var(--color-white)" : "var(--color-text-basic)";
+    color === "white"
+      ? "var(--color-white)"
+      : color === "black"
+      ? "var(--color-text-basic)"
+      : palette[color];
   const style = { backgroundColor: settingBgColor, color: settingColor };
   return (
     <>
@@ -22,7 +28,10 @@ const TagItem = ({
         className={`${styles["tag-item"]} ${styles[`tag-item-${size}`]}`}
         style={style}
       >
-        <span className={styles.text}>{text}</span>
+        <span className={styles.text}>
+          {icon}
+          {text}
+        </span>
       </div>
     </>
   );

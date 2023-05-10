@@ -92,7 +92,7 @@ const CourseInputForm = () => {
           dispatch(
             setFormValue({
               name: "courseDays",
-              value: days.replace(/\s/g, ""),
+              value: days,
             })
           );
         }

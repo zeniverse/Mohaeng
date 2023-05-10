@@ -90,10 +90,6 @@ public class Member extends BaseTimeEntity {
         this.courseBookMarkList.remove(courseBookmark);
     }
 
-    public void updateDeletedDate() {
-        updateDeletedDate(LocalDateTime.now());
-    }
-
     public void setOauthAccessToken(String oauthAccessToken) {
         this.oauthAccessToken = oauthAccessToken;
     }

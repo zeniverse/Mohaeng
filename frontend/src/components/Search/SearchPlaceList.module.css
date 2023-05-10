@@ -6,16 +6,11 @@
 }
 
 .keywordList {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  width: 100%;
-  list-style: none;
+  margin-top: 1.4rem;
 }
 
 .h3 {
   margin-left: 4rem;
-  margin-bottom: 1rem;
 }
 
 .div {
@@ -23,15 +18,29 @@
   justify-content: center;
   align-items: center;
   margin-left: 2rem;
-  margin-top: 10rem;
-  margin-bottom: 40rem;
+  margin-top: 1rem;
 }
 
 .noResult {
   text-align: center;
 }
 
-@media (max-width: 768px) {
+/* MEDIA QUERIES (tablets) */
+@media screen and (max-width: 1024px) {
+  .h3 {
+    margin-left: 3rem;
+  }
+}
+
+/* MEDIA QUERIES (middle) */
+@media screen and (max-width: 800px) {
+  .h3 {
+    margin-left: 2rem;
+  }
+}
+
+/* MEDIA QUERIES (phones) */
+@media screen and (max-width: 600px) {
   .h3 {
     margin-left: 0;
   }

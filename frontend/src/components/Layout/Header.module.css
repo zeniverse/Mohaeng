@@ -57,13 +57,13 @@
 }
 
 .login-btn {
-  background-color: #4bbfed;
+  background-color: var(--color-primary);
   color: var(--color-white);
   font-weight: bold;
   right: 0;
   border: none;
-  padding: 10px 20px;
-  border-radius: 2px;
+  padding: 8px 18px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
