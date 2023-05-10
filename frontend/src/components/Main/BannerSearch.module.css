@@ -19,3 +19,16 @@
   object-position: bottom;
   box-shadow: 3px 4px 3px rgba(0, 0, 0, 0.2);
 }
+/* MEDIA QUERIES (tablets) */
+@media screen and (max-width: 1024px) {
+  .banner-search-container {
+    height: 240px;
+  }
+}
+
+/* MEDIA QUERIES (phones) */
+@media screen and (max-width: 600px) {
+  .banner-search-container {
+    height: 180px;
+  }
+}

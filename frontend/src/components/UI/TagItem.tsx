@@ -7,21 +7,30 @@ const TagItem = ({
   color = "white",
   size = "M",
   icon,
+  isBorder = false,
 }: {
   text: string;
   bgColor?: PaletteKeyTypes;
   color?: "black" | "white" | PaletteKeyTypes;
   size?: "L" | "M" | "S" | "SS";
   icon?: any;
+  isBorder?: boolean;
 }) => {
   const settingBgColor = bgColor ? palette[bgColor] : "var(--color-primary)";
+  const settingBorder = isBorder
+    ? "1px solid var(--color-border-semilight)"
+    : "";
   const settingColor =
     color === "white"
       ? "var(--color-white)"
       : color === "black"
       ? "var(--color-text-basic)"
       : palette[color];
-  const style = { backgroundColor: settingBgColor, color: settingColor };
+  const style = {
+    backgroundColor: settingBgColor,
+    color: settingColor,
+    border: settingBorder,
+  };
   return (
     <>
       <div
