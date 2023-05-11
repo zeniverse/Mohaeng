@@ -6,13 +6,13 @@
   aspect-ratio: 13/3;
   position: relative;
   height: 42px;
-  margin-right: 2rem;
+  margin-right: 1rem;
 }
 
 /* MEDIA QUERIES (tablets) */
 @media screen and (max-width: 1024px) {
-  .logo-img {
-    margin-right: 0.7rem;
+  .logo-wrapper {
+    margin-right: 0.5rem;
   }
 }
 
@@ -20,6 +20,6 @@
 @media screen and (max-width: 600px) {
   .logo-wrapper {
     aspect-ratio: 2/1;
-    margin-right: 0.2rem;
+    margin-right: 0rem;
   }
 }

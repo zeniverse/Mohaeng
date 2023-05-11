@@ -5,6 +5,7 @@
   background-color: var(--color-white);
   color: var(--color-white);
   border-bottom: 1px solid var(--color-border-light);
+  gap: 1rem;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -73,6 +74,5 @@
   color: var(--color-text-basic);
   font-size: 1.7rem;
   cursor: pointer;
-  margin-left: 0.8rem;
   margin-right: 0.4rem;
 }
