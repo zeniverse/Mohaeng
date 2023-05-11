@@ -16,4 +16,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("SELECT COALESCE(AVG(CAST(r.rating AS double)), 0) FROM Review r WHERE r.place.id = :place_id")
     double getAverageRatingByPlaceId(@Param("place_id") Long placeId);
+
+    @Query("SELECT r.place.id, COALESCE(AVG(CAST(r.rating AS double)), 0) FROM Review r GROUP BY r.place.id")
+    List<Object[]> getAverageRatingsByPlaceId();
 }
