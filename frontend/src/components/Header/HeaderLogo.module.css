@@ -1,0 +1,25 @@
+.logo {
+  cursor: pointer;
+}
+
+.logo-wrapper {
+  aspect-ratio: 13/3;
+  position: relative;
+  height: 42px;
+  margin-right: 2rem;
+}
+
+/* MEDIA QUERIES (tablets) */
+@media screen and (max-width: 1024px) {
+  .logo-img {
+    margin-right: 0.7rem;
+  }
+}
+
+/* MEDIA QUERIES (phones) */
+@media screen and (max-width: 600px) {
+  .logo-wrapper {
+    aspect-ratio: 2/1;
+    margin-right: 0.2rem;
+  }
+}

@@ -1,0 +1,32 @@
+.dropdown-container {
+  height: 100%;
+  position: relative;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kakao-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.kakao-profile-img-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.kakao-profile-img {
+  border-radius: 50%;
+}
+
+.kakao-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--color-text-basic);
+}

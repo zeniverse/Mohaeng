@@ -1,31 +1,27 @@
-/* AppLayout.module.css */
-@import "./Footer.module.css";
-@import "./Header.module.css";
-
 .content-container {
   min-height: 100vh;
   max-width: 1256px;
-  padding: 1rem 2rem 4rem;
+  padding: 1rem var(--explore_padding-inline) 4rem;
   margin: 0 auto;
 }
 
 /* MEDIA QUERIES (tablets) */
 @media screen and (max-width: 1024px) {
   .content-container {
-    padding: 1.8rem 2rem 6rem;
+    padding: 1.8rem var(--explore_padding-inline) 6rem;
   }
 }
 
 /* MEDIA QUERIES (middle) */
 @media screen and (max-width: 800px) {
   .content-container {
-    padding: 1.5rem 1.3rem 3.5rem;
+    padding: 1.5rem var(--explore_padding-inline) 3.5rem;
   }
 }
 
 /* MEDIA QUERIES (phones) */
 @media screen and (max-width: 600px) {
   .content-container {
-    padding: 1.1rem 1rem 2rem;
+    padding: 1.1rem var(--explore_padding-inline) 2rem;
   }
 }
