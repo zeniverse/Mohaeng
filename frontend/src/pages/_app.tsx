@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import "../styles/globals_media.css";
 import "../styles/slider.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
