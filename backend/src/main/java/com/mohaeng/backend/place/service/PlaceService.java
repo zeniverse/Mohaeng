@@ -333,13 +333,13 @@ public class PlaceService {
                 .orElseThrow(PlaceNotFoundException::new);
     }
 
-    public void updateAllPlaceRatings() {
-        List<Object[]> averageRatings = reviewRepository.getAverageRatingsByPlaceId();
-        for (Object[] averageRating : averageRatings) {
-            Long placeId = (Long) averageRating[0];
-            double avgRating = (double) averageRating[1];
-            Place place = placeRepository.findById(placeId).orElseThrow(PlaceNotFoundException::new);
-            place.updateRating(avgRating);
-        }
-    }
+//    public void updateAllPlaceRatings() {
+//        List<Object[]> averageRatings = reviewRepository.getAverageRatingsByPlaceId();
+//        for (Object[] averageRating : averageRatings) {
+//            Long placeId = (Long) averageRating[0];
+//            double avgRating = (double) averageRating[1];
+//            Place place = placeRepository.findById(placeId).orElseThrow(PlaceNotFoundException::new);
+//            place.updateRating(avgRating);
+//        }
+//    }
 }
