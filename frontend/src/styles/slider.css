@@ -8,6 +8,10 @@
   border-radius: 50% !important;
   border: 1px solid black !important;
 }
+.swiper-button-next.swiper-button-disabled,
+.swiper-button-prev.swiper-button-disabled {
+  opacity: 0 !important;
+}
 
 .swiper-button-next:after,
 .swiper-button-prev:after {

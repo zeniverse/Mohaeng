@@ -1,0 +1,35 @@
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  right: -300px; /* 시작 위치 */
+  width: 50vw;
+  height: 100vh;
+  background-color: var(--color-white);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(-300px); /* 이동 거리 */
+  padding: 1rem 0.5rem;
+}
+
+.menu-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  height: 32px;
+}
+.logo {
+  cursor: pointer;
+  width: 120px;
+  height: 100%;
+  object-fit: fill;
+  object-position: center;
+}

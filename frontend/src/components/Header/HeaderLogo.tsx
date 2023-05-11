@@ -53,7 +53,8 @@ const HeaderLogo = ({ setActiveLink }: any) => {
         <Image
           src={logoSrc}
           alt="logo"
-          layout="fill"
+          width={200}
+          height={80}
           className={styles.logo}
           onClick={handleClickLogo}
         />

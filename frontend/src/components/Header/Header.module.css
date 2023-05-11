@@ -3,9 +3,7 @@
   height: 80px;
   width: 100%;
   background-color: var(--color-white);
-  color: var(--color-white);
   border-bottom: 1px solid var(--color-border-light);
-  gap: 1rem;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -23,12 +21,6 @@
   padding: 0 var(--explore_padding-inline);
 }
 
-.desktop-only {
-  display: flex;
-  gap: 3.6rem;
-  margin-left: 2rem;
-}
-
 .login-btn {
   background-color: var(--color-primary);
   color: var(--color-white);
@@ -44,8 +36,19 @@
   background-color: #66c9c9;
   color: #fff;
 }
-.menu a:hover {
-  transform: scale(1.1);
+
+.profile-wrapper {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.desktop-only {
+  display: flex;
+  gap: 3.6rem;
+  margin-left: 2rem;
 }
 
 .mobile-only {
@@ -68,11 +71,14 @@
 
 /* MEDIA QUERIES (phones) */
 @media screen and (max-width: 600px) {
+  .header-container {
+    gap: 0.6rem;
+  }
 }
 
 .menu {
   color: var(--color-text-basic);
   font-size: 1.7rem;
   cursor: pointer;
-  margin-right: 0.4rem;
+  margin: 0 0.4rem;
 }
