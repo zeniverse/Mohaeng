@@ -23,7 +23,7 @@ const CourseInputForm = () => {
   const { title, startDate, endDate, isPublished, region, content } = course;
   const dispatch = useAppDispatch();
   const [calcCourseDays, setCalcCourseDays] = useState("");
-  const [dateIsValid, setDateIsValid] = useState(false);
+  const [dateIsValid, setDateIsValid] = useState(true);
 
   function calculateCoursePeriod(startDate: string, endDate: string) {
     const start = new Date(startDate);
