@@ -121,6 +121,8 @@
   font-size: 0.8rem;
   margin-left: 6px;
   color: var(--color-red);
+  display: flex;
+  align-items: center;
 }
 
 .valid-text-length {
@@ -129,4 +131,10 @@
   font-size: 0.7rem;
   right: 0;
   color: var(--color-text-semi);
+}
+
+.valid-title-length {
+  font-size: 0.7rem;
+  color: var(--color-text-semi);
+  margin-left: 0.3rem;
 }

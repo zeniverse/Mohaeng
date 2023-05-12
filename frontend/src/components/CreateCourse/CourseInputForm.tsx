@@ -173,9 +173,14 @@ const CourseInputForm = () => {
             />
           </label>
           {titleInputHasError && (
-            <p className={styles["error-text"]}>
-              4자 이상 20자 이하로 작성해 주세요.
-            </p>
+            <>
+              <p className={styles["error-text"]}>
+                4자 이상 20자 이하로 작성해 주세요.
+                <p className={styles["valid-title-length"]}>
+                  ({enteredTitle.length}/20)
+                </p>
+              </p>
+            </>
           )}
         </div>
       </div>
