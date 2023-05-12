@@ -194,7 +194,9 @@ export default function CreateReview() {
         <h2 className={styles.h2}>리뷰 작성</h2>
         <article className={styles.registerReview}>
           <p className={styles.boldTitle}>선택한 여행지</p>
-          <h3 className={styles.reviewTitle}>{placeInfo.name}</h3>
+          {placeInfo.name && (
+            <h3 className={styles.reviewTitle}>{placeInfo.name}</h3>
+          )}
 
           <div className={styles.ratingBox}>
             <strong className={styles.ratingTitle}>별점</strong>
