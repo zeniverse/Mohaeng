@@ -34,9 +34,6 @@ public class Review extends BaseTimeEntity {
     private String title;
     private String content;
     private String rating;
-    private int totalPages;
-    private long totalElements;
-
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdDate;
 

@@ -10,6 +10,8 @@
 @media screen and (max-width: 1024px) {
   .list-container {
     grid-template-columns: repeat(3, 1fr);
+    row-gap: 2.4rem;
+    column-gap: 2.2rem;
     padding: 0;
   }
 }
@@ -18,8 +20,8 @@
 @media screen and (max-width: 800px) {
   .list-container {
     grid-template-columns: repeat(2, 1fr);
+    row-gap: 2.2rem;
     column-gap: 2rem;
-    row-gap: 1.8rem;
   }
 }
 
@@ -27,6 +29,7 @@
 @media screen and (max-width: 600px) {
   .list-container {
     grid-template-columns: repeat(1, 1fr);
+    column-gap: 2rem;
     row-gap: 1.6rem;
   }
 }

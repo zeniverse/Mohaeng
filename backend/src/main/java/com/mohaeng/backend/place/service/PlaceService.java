@@ -12,6 +12,7 @@ import com.mohaeng.backend.place.dto.PlaceRatingDto;
 import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
 import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
+import com.mohaeng.backend.place.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,6 +61,7 @@ public class PlaceService {
     private final MemberRepository memberRepository;
     private final AmazonS3Service amazonS3Service;
     private final ReviewService reviewService;
+    private final ReviewRepository reviewRepository;
 
     @Value("${API_KEY}")
     private String API_KEY;
@@ -90,8 +92,6 @@ public class PlaceService {
         fileUrl = fileUrls.get(0);
     }
 
-
-    //    @Scheduled(cron = "0 0 5 * * ?") #TODO
     public List<Place> getPlaces() throws IOException, ParserConfigurationException, SAXException {
         Document doc = getXmlDocument(getBaseUrl());
         List<Place> places = new ArrayList<>();
@@ -281,7 +281,6 @@ public class PlaceService {
     }
 
     public PlaceDetailsResponse getPlaceDetailsByPlaceId(String placeId, Member member) {
-        Place currentPlace = null;
         Boolean isBookmark = false;
 
         List<Place> places = placeRepository.findById(placeId);
@@ -289,7 +288,7 @@ public class PlaceService {
                 .map(Place::getContentId)
                 .map(this::getPlaceOverview)
                 .flatMap(List::stream)
-                .collect(Collectors.toList());
+                .toList();
 
         List<PlaceDetailsDto> placeDetailsDtos = IntStream.range(0, places.size())
                 .mapToObj(i -> {
@@ -331,6 +330,16 @@ public class PlaceService {
 
     public Place getPlaceById(Long id) {
         return placeRepository.findById(id)
-                .orElseThrow(() -> new PlaceNotFoundException());
+                .orElseThrow(PlaceNotFoundException::new);
     }
+
+//    public void updateAllPlaceRatings() {
+//        List<Object[]> averageRatings = reviewRepository.getAverageRatingsByPlaceId();
+//        for (Object[] averageRating : averageRatings) {
+//            Long placeId = (Long) averageRating[0];
+//            double avgRating = (double) averageRating[1];
+//            Place place = placeRepository.findById(placeId).orElseThrow(PlaceNotFoundException::new);
+//            place.updateRating(avgRating);
+//        }
+//    }
 }

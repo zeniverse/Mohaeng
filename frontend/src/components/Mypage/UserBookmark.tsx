@@ -1,16 +1,28 @@
 import styles from "./UserBookmark.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import UserBookmarkItem from "./UserBookmarkItem";
+import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import cookie from "react-cookies";
+import { getCourseBookmark } from "@/src/store/reducers/CourseBoomarkSlice";
+import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 
 const UserBookmark = () => {
+  const appDispatch = useAppDispatch();
+  const accessToken = cookie.load("accessToken");
+
   const courseBookmark = useSelector(
     (state: RootState) => state.courseBookmark.data
   );
   const placeBookmark = useSelector(
     (state: RootState) => state.placeBookmark.data
   );
+
+  useEffect(() => {
+    appDispatch(getCourseBookmark(accessToken));
+    appDispatch(getPlaceBookmark(accessToken));
+  }, []);
 
   const [activeTab, setActiveTab] = useState("place");
 
