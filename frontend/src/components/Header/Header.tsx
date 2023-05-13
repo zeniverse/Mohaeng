@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Header.module.css";
 import axios from "axios";
 import cookie from "react-cookies";
@@ -12,7 +12,7 @@ import {
   setImgUrl,
 } from "@/src/store/reducers/loginTokenSlice";
 import { RootState } from "@/src/store/store";
-import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 
 import { FiMenu } from "react-icons/fi";
 import { MdOutlineArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
@@ -27,11 +27,13 @@ type Props = {};
 
 function Header({}: Props) {
   const [activeLink, setActiveLink] = useState<string | null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [view, setView] = useState(false);
+
   const dispatch = useAppDispatch();
 
-  const id = useSelector((state: RootState) => state.nickName.nickName);
+  const id = useAppSelector((state) => state.nickName.nickName);
+  const imgUrl = useAppSelector((state) => state.imgUrl.imgUrl);
+  const nickName = useAppSelector((state) => state.nickName.nickName);
 
   // * 로그인 정보 조회
   useEffect(() => {
@@ -69,17 +71,10 @@ function Header({}: Props) {
       openModal({
         modalType: "HeaderSideMenu",
         isOpen: true,
-        opacity: 0.4,
+        opacity: 0.3,
+        translateX: 100,
       })
     );
-  };
-
-  const openMobileMenu = () => {
-    setMobileMenuOpen(true);
-  };
-
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
   };
 
   return (
@@ -97,7 +92,7 @@ function Header({}: Props) {
                   setView(!view);
                 }}
               >
-                <UserProfile />
+                <UserProfile url={imgUrl} nickName={nickName} />
                 {view ? <MdOutlineArrowDropUp /> : <MdOutlineArrowDropDown />}
               </div>
               {view && <Dropdown />}
@@ -119,11 +114,10 @@ function Header({}: Props) {
           onClick={handleOpenMenuModal}
         >
           <FiMenu />
-          {mobileMenuOpen && <HeaderSideMenu />}
         </div>
       </div>
     </header>
   );
 }
 
-export default Header;
+export default React.memo(Header);

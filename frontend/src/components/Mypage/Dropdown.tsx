@@ -5,6 +5,7 @@ import {
   setNickname,
   setToken,
   setImgUrl,
+  resetLog,
 } from "@/src/store/reducers/loginTokenSlice";
 import cookie from "react-cookies";
 import Link from "next/link";
@@ -26,11 +27,7 @@ export default function Dropdown() {
 
   const handleLogout = () => {
     cookie.remove("accessToken", { path: "/" });
-    dispatch(setToken(""));
-    dispatch(setNickname(""));
-    dispatch(setEmail(""));
-    dispatch(setImgUrl(""));
-    dispatch(setId(0));
+    dispatch(resetLog());
     router.replace("/");
     window.alert("로그아웃되었습니다!");
   };

@@ -24,6 +24,7 @@
   font-size: 15px;
   color: var(--color-text-basic);
   font-weight: bold;
+  cursor: pointer;
 }
 
 .menu p {

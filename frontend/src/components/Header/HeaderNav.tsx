@@ -3,11 +3,28 @@ import { resetFilter } from "@/src/store/reducers/FilterSlice";
 import { myPageState, setCurrIdx } from "@/src/store/reducers/mypageSlice";
 import { getCourseListAction } from "@/src/store/thunks/courseThunks";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./HeaderNav.module.css";
 
 const HeaderNav = ({ activeLink, setActiveLink }: any) => {
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    // 로컬 스토리지에서 값을 가져와서 activeLink 상태를 초기화합니다.
+    const storedActiveLink = localStorage.getItem("activeLink");
+    if (storedActiveLink) {
+      setActiveLink(storedActiveLink);
+    }
+  }, []);
+
+  useEffect(() => {
+    // activeLink 상태가 변경될 때마다 로컬 스토리지에 값을 저장합니다.
+    if (activeLink) {
+      localStorage.setItem("activeLink", activeLink);
+    } else {
+      localStorage.setItem("activeLink", "home");
+    }
+  }, [activeLink]);
 
   const handleClickPlace = () => {
     setActiveLink("place");
