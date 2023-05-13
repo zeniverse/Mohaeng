@@ -24,7 +24,17 @@
 /* MEDIA QUERIES (tablets) */
 @media screen and (max-width: 1024px) {
   .nav {
+    flex-direction: column;
     gap: 0.6rem;
+  }
+  .link {
+    border-radius: 0.2rem;
+    padding: 1.2rem 0;
+  }
+  .link.active {
+    color: var(--color-text-basic);
+    background-color: var(--color-primary);
+    font-weight: bold;
   }
 }
 

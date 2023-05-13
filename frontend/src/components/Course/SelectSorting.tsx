@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { setSort } from "@/src/store/reducers/FilterSlice";
+import { setPage } from "@/src/store/reducers/pageSlice";
 import React, { useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import styles from "./SelectSorting.module.css";
@@ -29,6 +30,8 @@ const SelectSorting = () => {
 
   const handleOptionClick = (option: any) => {
     dispatch(setSort(option.value));
+    dispatch(setPage(1));
+
     setIsDropdownOpen(false);
   };
 
