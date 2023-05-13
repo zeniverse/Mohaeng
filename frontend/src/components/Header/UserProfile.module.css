@@ -13,11 +13,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  object-fit: cover;
 }
 
 .profile-img {
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .profile-name {
