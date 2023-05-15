@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-import { Navigation } from "swiper";
+import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import CourseCard from "@/src/components/Main/CourseCard";
@@ -54,7 +54,12 @@ const CourseCardSlider = () => {
     640: {
       slidesPerView: 1,
       slidesPerGroup: 1,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
     },
+
     // when window width is <= 768px
     768: {
       slidesPerView: 2,
@@ -74,10 +79,13 @@ const CourseCardSlider = () => {
 
   return (
     <Swiper
-      modules={[Navigation]}
+      modules={[Navigation, Pagination]}
+      pagination={{ clickable: true }}
       spaceBetween={0}
       navigation
       breakpoints={breakpoints}
+      // onSwiper={(swiper) => console.log(swiper)}
+      // onSlideChange={() => console.log("slide change")}
     >
       {recommandCourse.length > 0 &&
         recommandCourse?.map((course, idx) => (
