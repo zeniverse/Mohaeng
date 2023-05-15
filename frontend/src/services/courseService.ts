@@ -24,7 +24,7 @@ export const getCourseListApi = async (queryParams = {}) => {
       },
     });
 
-    return response;
+    return response.data.data;
   } catch (error) {
     console.error(error);
     throw error;
