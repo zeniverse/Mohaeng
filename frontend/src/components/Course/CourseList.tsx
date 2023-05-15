@@ -7,7 +7,6 @@ import { setPage } from "@/src/store/reducers/pageSlice";
 import Pagebar from "../Pagenation/Pagebar";
 import ListContainer from "../UI/ListContainer";
 import { getCourseListAction } from "@/src/store/thunks/courseThunks";
-import SelectSorting from "./SelectSorting";
 
 const CourseList = () => {
   const { courseList, totalPages } = useAppSelector((state) => state.course);

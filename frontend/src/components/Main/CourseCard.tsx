@@ -92,7 +92,7 @@ const CourseCard = ({
         />
       </div>
       <div className={styles["course-card-content"]}>
-        <span className={styles["card-title"]}>{title}</span>
+        <h3 className={styles["card-title"]}>{title}</h3>
         <p className={styles["card-desc"]}>{content}</p>
       </div>
     </div>

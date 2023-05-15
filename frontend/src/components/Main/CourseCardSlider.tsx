@@ -27,7 +27,6 @@ const CourseCardSlider = () => {
           {
             headers: {
               "Access-Token": accessToken,
-              withCredentials: true,
             },
           }
         );

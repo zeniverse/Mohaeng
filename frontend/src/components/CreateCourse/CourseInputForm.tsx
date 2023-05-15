@@ -20,6 +20,7 @@ const CourseInputForm = () => {
   const { course, errors } = useAppSelector((state) => {
     return state.courseForm;
   });
+  console.log(course);
   const { title, startDate, endDate, isPublished, region, content } = course;
   const dispatch = useAppDispatch();
   const [calcCourseDays, setCalcCourseDays] = useState("");
@@ -52,6 +53,7 @@ const CourseInputForm = () => {
     valueChangeHandler: regionChangedHandler,
     inputBlurHandler: regionBlurHandler,
   } = useValidateInput(validateIsSelected, region);
+
   const {
     value: enteredStartDate,
     isValid: enteredStartDateIsValid,
@@ -59,6 +61,7 @@ const CourseInputForm = () => {
     valueChangeHandler: startDateChangedHandler,
     inputBlurHandler: startDateBlurHandler,
   } = useValidateInput(validateIsSelected, startDate);
+
   const {
     value: enteredEndDate,
     isValid: enteredEndDateIsValid,
@@ -174,12 +177,12 @@ const CourseInputForm = () => {
           </label>
           {titleInputHasError && (
             <>
-              <p className={styles["error-text"]}>
-                4자 이상 20자 이하로 작성해 주세요.
+              <div className={styles["error-text"]}>
+                4자 이상 25자 이하로 작성해 주세요.
                 <p className={styles["valid-title-length"]}>
-                  ({enteredTitle.length}/20)
+                  ({enteredTitle.length}/25)
                 </p>
-              </p>
+              </div>
             </>
           )}
         </div>
