@@ -37,6 +37,7 @@ export const getCourseListAction = createAsyncThunk(
     }
   }
 );
+
 export const removeCourseAction = createAsyncThunk(
   "course/removeCourseAction",
   async (courseId: number, { rejectWithValue }) => {
