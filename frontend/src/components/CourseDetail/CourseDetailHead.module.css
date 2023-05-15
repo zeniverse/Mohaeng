@@ -18,6 +18,7 @@
 }
 
 .course-length {
+  flex: 0 0 4.5rem;
   padding: 0.3rem 0.7rem;
   color: var(--color-white);
   background-color: var(--color-primary);
@@ -88,4 +89,16 @@
   background-color: var(--color-text-semi);
   margin: auto;
   height: 50%;
+}
+
+/* MEDIA QUERIES (tablets) */
+@media screen and (max-width: 1024px) {
+  .detail-head-nav {
+    padding: 0.3rem 0;
+  }
+  .create-date {
+    font-size: 0.7rem;
+    margin-right: 0.1rem;
+    margin-bottom: 0.3rem;
+  }
 }

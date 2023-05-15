@@ -37,7 +37,7 @@ const PlaceCard = ({
         <Image src={firstImage} alt={name} width={320} height={320} priority />
       </div>
       <div className={styles["place-card-content"]}>
-        <span className={styles["card-name"]}>{name}</span>
+        <h3 className={styles["card-name"]}>{name}</h3>
         <FiveStarRating rating={averageRating} />
       </div>
     </div>

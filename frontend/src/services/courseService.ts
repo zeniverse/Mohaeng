@@ -3,16 +3,32 @@ import { ICourseSubmitForm } from "../interfaces/Course.type";
 import CourseApiConfig from "./ApiConfig";
 import cookie from "react-cookies";
 
+const api = axios.create({
+  baseURL: CourseApiConfig.course,
+  headers: {
+    "Cache-Control": "no-cache",
+  },
+});
+
 export const getCourseListApi = async (queryParams = {}) => {
-  const accessToken = cookie.load("accessToken");
-  return axios.get(CourseApiConfig.course, {
-    params: queryParams,
-    headers: {
-      "Cache-Control": "no-cache",
-      "Access-Token": accessToken,
-      withCredentials: true,
-    },
-  });
+  try {
+    const accessToken = cookie.load("accessToken");
+    if (!accessToken) {
+      throw new Error("Access token not found");
+    }
+
+    const response = await api.get("", {
+      params: queryParams,
+      headers: {
+        "Access-Token": accessToken,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 export const createCourseApi = async (data: ICourseSubmitForm) => {
@@ -21,7 +37,6 @@ export const createCourseApi = async (data: ICourseSubmitForm) => {
     const response = await axios.post(CourseApiConfig.course, data, {
       headers: {
         "Access-Token": accessToken,
-        withCredentials: true,
       },
     });
     return response.data.data;
@@ -38,7 +53,6 @@ export const editCourseApi = async (
   return await axios.put(`${CourseApiConfig.course}/${courseId}`, data, {
     headers: {
       "Access-Token": accessToken,
-      withCredentials: true,
     },
   });
 };
@@ -49,7 +63,6 @@ export const removeCourseApi = async (courseId: number) => {
     const config = {
       headers: {
         "Access-Token": accessToken,
-        withCredentials: true,
       },
     };
     const response = await axios.delete(
@@ -73,7 +86,6 @@ export const toggleBookmarkApi = async (
       data: {},
       headers: {
         "Access-Token": accessToken,
-        withCredentials: true,
       },
     };
     const response = await axios(
@@ -97,7 +109,6 @@ export const toggleLikeApi = async (
       data: {},
       headers: {
         "Access-Token": accessToken,
-        withCredentials: true,
       },
     };
     const response = await axios(`${CourseApiConfig.like}/${courseId}`, config);

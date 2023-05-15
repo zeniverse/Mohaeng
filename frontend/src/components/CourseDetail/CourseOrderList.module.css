@@ -1,4 +1,5 @@
 .course-orderlist-container {
+  max-height: 600px;
   padding: 0.4rem;
   flex-basis: 42%;
   background-color: var(--color-bg-gray);
@@ -25,9 +26,12 @@
 .course-item:nth-last-child(1) {
   margin-bottom: 0;
 }
+
 .order-number {
-  padding: 30px 0.7rem;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0.7rem;
   background-color: var(--color-primary);
   border-bottom-left-radius: 1rem;
   border-top-left-radius: 1rem;
@@ -93,4 +97,27 @@
 /* 스크롤바 뒷 배경 설정*/
 .course-list::-webkit-scrollbar-track {
   background-color: rgba(33, 133, 133, 0.33);
+}
+
+/* MEDIA QUERIES (phones) */
+@media screen and (max-width: 600px) {
+  .course-list {
+    padding: 0.4rem;
+  }
+
+  .order-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.4rem 0.3rem;
+    background-color: var(--color-primary);
+    border-bottom-left-radius: 1rem;
+    border-top-left-radius: 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-white);
+  }
+  .item-content {
+    width: 170px;
+  }
 }
