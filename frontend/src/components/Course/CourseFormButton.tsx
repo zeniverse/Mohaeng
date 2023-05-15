@@ -25,7 +25,7 @@ const CourseFormButton = ({ isEditMode }: CourseFormProps) => {
 
   const handleCourseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isFormValid) return window.alert("양식을 다시 확인해주세요");
+    if (!isFormValid) return window.alert("양식을 다시 확인해주세요.");
     if (!isEditMode) {
       await dispatch(createCourseAction(course));
       await router.push(`/course`);

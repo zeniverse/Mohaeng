@@ -20,7 +20,6 @@ const CourseInputForm = () => {
   const { course, errors } = useAppSelector((state) => {
     return state.courseForm;
   });
-  console.log(course);
   const { title, startDate, endDate, isPublished, region, content } = course;
   const dispatch = useAppDispatch();
   const [calcCourseDays, setCalcCourseDays] = useState("");
@@ -136,6 +135,18 @@ const CourseInputForm = () => {
     }
   }, [isValid, setIsFormValidTrueCallback, setIsFormValidFalseCallback]);
 
+  const minStartDate = enteredEndDate
+    ? new Date(new Date(enteredEndDate).getTime() - 30 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .slice(0, 10)
+    : undefined;
+
+  const maxEndDate = enteredStartDate
+    ? new Date(new Date(enteredStartDate).getTime() + 30 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .slice(0, 10)
+    : undefined;
+
   const toggleSwitchclassName = isPublished
     ? `${styles["toggle-switch"]} ${styles.publish}`
     : `${styles["toggle-switch"]} ${styles.private}`;
@@ -198,6 +209,8 @@ const CourseInputForm = () => {
               value={enteredStartDate}
               onChange={startDateChangedHandler}
               onBlur={startDateBlurHandler}
+              min={minStartDate}
+              max={enteredEndDate}
               required
             />
           </label>
@@ -217,6 +230,8 @@ const CourseInputForm = () => {
               value={enteredEndDate}
               onChange={endDateChangedHandler}
               onBlur={endDateBlurHandler}
+              min={enteredStartDate}
+              max={maxEndDate}
               required
             />
           </label>
