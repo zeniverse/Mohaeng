@@ -2,7 +2,7 @@ import styles from "./PlaceSelectList.module.css";
 import Image from "next/image";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
 import React, { useEffect, useRef, useState } from "react";
-import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { addPlaceObject } from "@/src/store/reducers/CourseFormSlice";
 
 const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
@@ -12,6 +12,7 @@ const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
   const [page, setPage] = useState(0);
 
   const dispatch = useAppDispatch();
+  const AddedPlaces = useAppSelector((state) => state.courseForm.course.places);
 
   const listRef = useRef<HTMLDivElement>(null)!;
 
@@ -72,7 +73,11 @@ const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
   }, [page]);
 
   const itemClickHandler = (place: any) => {
-    dispatch(addPlaceObject(place));
+    if (!(AddedPlaces.length >= 20)) {
+      dispatch(addPlaceObject(place));
+    } else {
+      window.alert("더 이상 추가하실 수 없습니다.");
+    }
   };
 
   return (
@@ -102,7 +107,11 @@ const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
           </div>
         );
       })}
-      {!hasNext && <p>더 이상 검색 결과가 존재하지 않습니다.</p>}
+      {!hasNext && (
+        <p className={styles["error"]}>
+          검색 결과가 더 이상 존재하지 않습니다.
+        </p>
+      )}
     </div>
   );
 };

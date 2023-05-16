@@ -23,7 +23,7 @@ const CourseInputForm = () => {
   const { title, startDate, endDate, isPublished, region, content } = course;
   const dispatch = useAppDispatch();
   const [calcCourseDays, setCalcCourseDays] = useState("");
-  const [dateIsValid, setDateIsValid] = useState(false);
+  const [dateIsValid, setDateIsValid] = useState(true);
 
   function calculateCoursePeriod(startDate: string, endDate: string) {
     const start = new Date(startDate);
@@ -52,6 +52,7 @@ const CourseInputForm = () => {
     valueChangeHandler: regionChangedHandler,
     inputBlurHandler: regionBlurHandler,
   } = useValidateInput(validateIsSelected, region);
+
   const {
     value: enteredStartDate,
     isValid: enteredStartDateIsValid,
@@ -59,6 +60,7 @@ const CourseInputForm = () => {
     valueChangeHandler: startDateChangedHandler,
     inputBlurHandler: startDateBlurHandler,
   } = useValidateInput(validateIsSelected, startDate);
+
   const {
     value: enteredEndDate,
     isValid: enteredEndDateIsValid,
@@ -133,6 +135,18 @@ const CourseInputForm = () => {
     }
   }, [isValid, setIsFormValidTrueCallback, setIsFormValidFalseCallback]);
 
+  const minStartDate = enteredEndDate
+    ? new Date(new Date(enteredEndDate).getTime() - 30 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .slice(0, 10)
+    : undefined;
+
+  const maxEndDate = enteredStartDate
+    ? new Date(new Date(enteredStartDate).getTime() + 30 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .slice(0, 10)
+    : undefined;
+
   const toggleSwitchclassName = isPublished
     ? `${styles["toggle-switch"]} ${styles.publish}`
     : `${styles["toggle-switch"]} ${styles.private}`;
@@ -173,9 +187,14 @@ const CourseInputForm = () => {
             />
           </label>
           {titleInputHasError && (
-            <p className={styles["error-text"]}>
-              4자 이상 20자 이하로 작성해 주세요.
-            </p>
+            <>
+              <div className={styles["error-text"]}>
+                4자 이상 25자 이하로 작성해 주세요.
+                <p className={styles["valid-title-length"]}>
+                  ({enteredTitle.length}/25)
+                </p>
+              </div>
+            </>
           )}
         </div>
       </div>
@@ -190,6 +209,8 @@ const CourseInputForm = () => {
               value={enteredStartDate}
               onChange={startDateChangedHandler}
               onBlur={startDateBlurHandler}
+              min={minStartDate}
+              max={enteredEndDate}
               required
             />
           </label>
@@ -209,6 +230,8 @@ const CourseInputForm = () => {
               value={enteredEndDate}
               onChange={endDateChangedHandler}
               onBlur={endDateBlurHandler}
+              min={enteredStartDate}
+              max={maxEndDate}
               required
             />
           </label>

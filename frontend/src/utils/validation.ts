@@ -2,7 +2,7 @@ import { IPlacesForm } from "./../interfaces/Course.type";
 
 export function validateTitle(title: string): boolean {
   const MIN_LENGTH = 4;
-  const MAX_LENGTH = 20;
+  const MAX_LENGTH = 25;
 
   if (MIN_LENGTH <= title.length && MAX_LENGTH >= title.length) {
     return true;

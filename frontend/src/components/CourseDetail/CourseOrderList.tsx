@@ -20,6 +20,7 @@ const CourseOrderList = ({ places, mode }: any) => {
             <p className={styles["order-number"]}>{idx + 1}</p>
             {place.imgUrl ? (
               <Image
+                className={styles.img}
                 src={place.imgUrl}
                 alt={place.name}
                 width={130}

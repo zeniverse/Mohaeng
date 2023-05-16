@@ -71,7 +71,7 @@ public class PlaceBookmarkService {
 
 
     private Member isMember(String memberEmail){
-        return memberRepository.findByEmail(memberEmail).orElseThrow(
+        return memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(
                 // TODO: Exception 처리
                 () -> new IllegalArgumentException("존재하지 않는 member 입니다.")
         );

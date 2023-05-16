@@ -1,23 +1,29 @@
 import Image from "next/image";
 import styles from "./UserProfile.module.css";
-import Dropdown from "../Mypage/Dropdown";
-import { useAppSelector } from "@/src/hooks/useReduxHooks";
-import { useState } from "react";
 
-const UserProfile = () => {
-  const imgUrl = useAppSelector((state) => state.imgUrl.imgUrl);
-  const nickName = useAppSelector((state) => state.nickName.nickName);
-
+const UserProfile = ({
+  url,
+  nickName,
+  size = "M",
+}: {
+  url: string;
+  nickName: string;
+  size?: "L" | "M" | "S";
+}) => {
   return (
     <>
-      <ul className={styles["profile-container"]}>
+      <ul
+        className={`${styles["profile-container"]} ${
+          styles[`tag-item-${size}`]
+        }`}
+      >
         <div className={styles["profile-img-box"]}>
           <Image
             className={styles["profile-img"]}
-            src={imgUrl}
+            src={url}
             alt="카카오프로필"
-            width={45}
-            height={45}
+            width={43}
+            height={43}
           />
         </div>
         <div className={styles["profile-name"]}>{nickName}</div>

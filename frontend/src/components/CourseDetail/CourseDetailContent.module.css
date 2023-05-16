@@ -9,22 +9,21 @@
   gap: 0.6rem;
   padding-top: 1rem;
 }
-.simple-info {
-  display: flex;
-  gap: 3rem;
-  align-items: center;
-}
-.date {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
+
+/* MEDIA QUERIES (tablets) */
+@media screen and (max-width: 1024px) {
+  .info {
+    flex-direction: column;
+    height: 110vh;
+  }
+  .content {
+    margin-bottom: 0.4rem;
+  }
 }
 
-.region {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-.text {
-  color: var(--color-text-basic);
+/* MEDIA QUERIES (phones) */
+@media screen and (max-width: 600px) {
+  .content {
+    margin-bottom: 0.3rem;
+  }
 }

@@ -63,7 +63,6 @@ public class MyPageController {
     public ResponseEntity userDropController(HttpServletRequest request) {
         String userEmail = findEmailFromHeader(request);
         Member findMember = memberService.findByEmail(userEmail);
-        courseService.deleteCourse(findMember.getEmail(), findMember.getCourseIds());
         memberService.deleteMember(findMember);
         return ResponseEntity.ok().body(BaseResponse.success("ok", ""));
     }

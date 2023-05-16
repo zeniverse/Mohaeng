@@ -5,6 +5,7 @@ import {
   setNickname,
   setToken,
   setImgUrl,
+  resetLog,
 } from "@/src/store/reducers/loginTokenSlice";
 import cookie from "react-cookies";
 import Link from "next/link";
@@ -18,19 +19,19 @@ import { getPlaceBookmark } from "@/src/store/reducers/PlaceBookmarkSlice";
 import { getMyCourse } from "@/src/store/reducers/myCourseSlice";
 import { getMyReview } from "@/src/store/reducers/myReviewSlice";
 import { useAppDispatch } from "@/src/hooks/useReduxHooks";
+import { useRef } from "react";
+import { useClickOutside } from "../../hooks/useClickOutSide";
 
-export default function Dropdown() {
+export default function Dropdown({ onClose }: any) {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const accessToken = cookie.load("accessToken");
+  const boxRef = useRef<HTMLDivElement>(null);
+  useClickOutside(boxRef, onClose);
 
   const handleLogout = () => {
     cookie.remove("accessToken", { path: "/" });
-    dispatch(setToken(""));
-    dispatch(setNickname(""));
-    dispatch(setEmail(""));
-    dispatch(setImgUrl(""));
-    dispatch(setId(0));
+    dispatch(resetLog());
     router.replace("/");
     window.alert("로그아웃되었습니다!");
   };
@@ -47,10 +48,14 @@ export default function Dropdown() {
     };
 
     dispatch(setCurrIdx(currComponent));
+    onClose();
+  };
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+    e.stopPropagation();
   };
 
   return (
-    <div className={styles.menu}>
+    <div className={styles.menu} ref={boxRef} onClick={handleClick}>
       <Link href="/mypage" onClick={ResetStatus}>
         <li className={styles.toli}>
           <FaUserCircle className={styles.mypage} />

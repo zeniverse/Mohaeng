@@ -28,9 +28,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -184,7 +182,7 @@ public class PlaceController {
             return null;
         }
         else{
-            return memberRepository.findByEmail(tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token")))
+            return memberRepository.findByEmailAndDeletedDateIsNull(tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token")))
                     .orElseThrow(MemberNotFoundException::new);
         }
     }
