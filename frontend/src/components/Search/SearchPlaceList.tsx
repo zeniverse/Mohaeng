@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { setSearchPlace } from "@/src/store/reducers/searchPlaceSlice";
 import { setPage } from "@/src/store/reducers/pageSlice";
-import apiInstance from "@/src/pages/api/auth/setting";
 
 export default function SearchPlaceList(): JSX.Element {
   const [searchResult, setSearchResult] = useState<Keyword[]>([]);

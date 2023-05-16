@@ -23,6 +23,7 @@ import UserProfile from "./UserProfile";
 import HeaderLogo from "./HeaderLogo";
 import Dropdown from "../Mypage/Dropdown";
 import HeaderSideMenu from "./HeaderSideMenu";
+import useDeleteToken from "@/src/hooks/useDeleteToken";
 type Props = {};
 
 function Header({}: Props) {
@@ -34,6 +35,9 @@ function Header({}: Props) {
   const id = useAppSelector((state) => state.nickName.nickName);
   const imgUrl = useAppSelector((state) => state.imgUrl.imgUrl);
   const nickName = useAppSelector((state) => state.nickName.nickName);
+
+  // 24시간 후 액세스토큰 자동 삭제
+  useDeleteToken();
 
   // * 로그인 정보 조회
   useEffect(() => {
