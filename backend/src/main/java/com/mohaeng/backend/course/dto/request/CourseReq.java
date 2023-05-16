@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CourseReq {
     @NotBlank
-    @Length(min = 4, max = 20)
+    @Length(min = 4, max = 25)
     private String title;
     @NotNull
     private String startDate;
