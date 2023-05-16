@@ -75,7 +75,7 @@ public class CourseBookmarkService {
     }
 
     private Member isMember(String memberEmail){
-        return memberRepository.findByEmail(memberEmail).orElseThrow(MemberNotFoundException::new);
+        return memberRepository.findByEmailAndDeletedDateIsNull(memberEmail).orElseThrow(MemberNotFoundException::new);
     }
 
     private Course isCourse(Long id){
