@@ -7,6 +7,7 @@ import { resetLog } from "../store/reducers/loginTokenSlice";
 function useDeleteToken() {
   const dispatch = useDispatch();
   const router = useRouter();
+  const accessToken = cookie.load("accessToken");
 
   useEffect(() => {
     const deleteToken = () => {
@@ -15,12 +16,14 @@ function useDeleteToken() {
       router.replace("/");
     };
 
-    const timer = setTimeout(deleteToken, 24 * 60 * 60 * 1000); // 24시간
+    if (accessToken) {
+      const timer = setTimeout(deleteToken, 24 * 60 * 60 * 1000); // 24시간
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [accessToken]);
 }
 
 export default useDeleteToken;
