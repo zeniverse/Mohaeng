@@ -53,7 +53,7 @@
 /* MEDIA QUERIES (tablets) */
 @media screen and (max-width: 1024px) {
   .title-nav {
-    padding: 0 0.3rem;
+    padding: 0;
   }
   .detail-nav {
     gap: 1rem;

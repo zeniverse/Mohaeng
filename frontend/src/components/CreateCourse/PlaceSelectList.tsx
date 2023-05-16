@@ -1,10 +1,9 @@
 import styles from "./PlaceSelectList.module.css";
 import Image from "next/image";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { addPlaceObject } from "@/src/store/reducers/CourseFormSlice";
-
 const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
   const [items, setItems] = useState([...places]);
   const [loading, setLoading] = useState(false);
@@ -20,19 +19,23 @@ const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
     setItems([...places]);
   }, [places]);
 
-  useEffect(() => {
-    function handleScroll() {
-      if (listRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = listRef.current;
-        if (scrollTop + clientHeight >= scrollHeight && hasNext && !loading) {
-          setLoading(true);
-          setPage((prevPage) => prevPage + 1);
-        } else {
-          // TODO: 해야 함
-        }
+  const handleScroll = () => {
+    if (listRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = listRef?.current;
+      if (
+        Math.ceil(scrollTop) + clientHeight >= scrollHeight &&
+        hasNext &&
+        !loading
+      ) {
+        setLoading(true);
+        setPage((prevPage) => prevPage + 1);
+      } else {
+        // TODO: 해야 함
       }
     }
+  };
 
+  useEffect(() => {
     if (listRef.current) {
       listRef.current.addEventListener("scroll", handleScroll);
     }
@@ -42,7 +45,7 @@ const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
         listRef.current.removeEventListener("scroll", handleScroll);
       }
     };
-  }, [hasNext, loading]);
+  }, [handleScroll]);
 
   useEffect(() => {
     if (page === 0) return;
@@ -56,6 +59,7 @@ const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
         );
         if (!placeSearchRes.ok) return;
         const placeSearchResult = await placeSearchRes.json();
+        console.log(placeSearchResult);
         setItems((prevItems) => [
           ...prevItems,
           ...placeSearchResult?.data.places,
