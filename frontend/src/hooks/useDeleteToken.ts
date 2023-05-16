@@ -12,7 +12,7 @@ function useDeleteToken() {
     const deleteToken = () => {
       cookie.remove("accessToken", { path: "/" });
       dispatch(resetLog());
-      router.push("/");
+      router.replace("/");
     };
 
     const timer = setTimeout(deleteToken, 24 * 60 * 60 * 1000); // 24시간
