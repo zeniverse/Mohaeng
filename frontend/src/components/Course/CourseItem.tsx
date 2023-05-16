@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import IsLikeState from "../UI/IsLikeState";
 import { openModal } from "@/src/store/reducers/modalSlice";
 import { kakaoShare } from "@/src/utils/kakao-share";
-import Link from "next/link";
+import { resetCourseDetail } from "@/src/store/reducers/CourseDetailSlice";
 
 declare global {
   interface Window {
@@ -112,6 +112,11 @@ const CourseItem = ({
     }
   };
 
+  const handleLinkClick = () => {
+    dispatch(resetCourseDetail());
+    router.push(`/course/${courseId}`, undefined, { shallow: true });
+  };
+
   const handleKakaoShare = () => {
     if (userId) {
       const param = {
@@ -134,10 +139,7 @@ const CourseItem = ({
 
   return (
     <div className={styles["course-item-container"]}>
-      <Link
-        className={styles["item-info-container"]}
-        href={`/course/${courseId}`}
-      >
+      <div className={styles["item-info-container"]} onClick={handleLinkClick}>
         <div className={styles["item-image"]}>
           <div className={styles["item-image-box"]}></div>
           {thumbnailUrl ? (
@@ -162,7 +164,7 @@ const CourseItem = ({
           <p className={styles.content}>{content}</p>
           {courseDays && <TagItem size="S" text={courseDays} />}
         </div>
-      </Link>
+      </div>
       <div className={styles["item-nav-container"]}>
         <div className={styles["item-nav"]} onClick={handleToggleBookmark}>
           {isBookmarked ? (

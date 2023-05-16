@@ -14,6 +14,7 @@ import {
 import { CourseFormProps } from "./CourseForm";
 
 import styles from "./CourseFormButton.module.css";
+import { resetCourseDetail } from "@/src/store/reducers/CourseDetailSlice";
 
 const CourseFormButton = ({ isEditMode }: CourseFormProps) => {
   const router = useRouter();
@@ -23,17 +24,30 @@ const CourseFormButton = ({ isEditMode }: CourseFormProps) => {
   );
   const id = useRouterQuery("courseId");
 
-  const handleCourseSubmit = async (e: React.FormEvent) => {
+  const createCourse = async () => {
+    await dispatch(createCourseAction(course));
+    await router.push(`/course`);
+  };
+
+  const editCourse = async () => {
+    if (!id) {
+      console.error("Invalid id value");
+      return;
+    }
+
+    await dispatch(editCourseAction({ formData: course, courseId: id }));
+    dispatch(resetCourseDetail());
+    await router.push(`/course/${id}`);
+  };
+
+  /** 코스 생성 또는 수정 후 목록 페이지로 이동 */
+  const handleCourseFormSubmission = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFormValid) return window.alert("양식을 다시 확인해주세요.");
     if (!isEditMode) {
-      await dispatch(createCourseAction(course));
-      await router.push(`/course`);
+      await createCourse();
     } else {
-      if (id) {
-        await dispatch(editCourseAction({ formData: course, courseId: id }));
-        await router.push(`/course/${id}`);
-      }
+      await editCourse();
     }
     dispatch(resetFormValue());
     dispatch(resetFilter());
@@ -55,7 +69,7 @@ const CourseFormButton = ({ isEditMode }: CourseFormProps) => {
       </button>
       <button
         className={`${styles["submit-btn"]} ${styles.btn}`}
-        onClick={handleCourseSubmit}
+        onClick={handleCourseFormSubmission}
       >
         {isEditMode ? "수정하기" : "작성하기"}
       </button>
