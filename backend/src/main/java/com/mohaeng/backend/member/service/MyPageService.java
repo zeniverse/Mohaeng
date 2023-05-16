@@ -2,7 +2,6 @@ package com.mohaeng.backend.member.service;
 
 import com.mohaeng.backend.course.domain.CourseBookmark;
 import com.mohaeng.backend.course.repository.CourseBookmarkRepository;
-import com.mohaeng.backend.course.repository.CourseRepository;
 import com.mohaeng.backend.exception.badrequest.NotMatchMemberCourseBookMark;
 import com.mohaeng.backend.exception.badrequest.NotMatchMemberPlaceBookMark;
 import com.mohaeng.backend.exception.badrequest.NotMatchMemberReview;
@@ -51,7 +50,7 @@ public class MyPageService {
     }
 
     public Member isMember(String email) {
-        return memberRepository.findByEmail(email)
+        return memberRepository.findByEmailAndDeletedDateIsNull(email)
                 .orElseThrow(() -> new MemberNotFoundException());
     }
 

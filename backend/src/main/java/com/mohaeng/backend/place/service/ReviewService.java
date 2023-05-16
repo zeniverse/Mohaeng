@@ -79,7 +79,7 @@ public class ReviewService {
     public void createReview(String email, Long placeId, CreateReviewRequest createReviewRequest, List<String> fileNameList) {
         Place findPlace = placeRepository.findById(placeId)
                 .orElseThrow(() -> new PlaceNotFoundException());
-        Member findMember = memberRepository.findByEmail(email)
+        Member findMember = memberRepository.findByEmailAndDeletedDateIsNull(email)
                 .orElseThrow(() -> new MemberNotFoundException());
 
         LocalDateTime createdDate = createReviewRequest.getCreatedDate();
