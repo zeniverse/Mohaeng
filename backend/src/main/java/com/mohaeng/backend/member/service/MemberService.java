@@ -49,7 +49,7 @@ public class MemberService {
 
 
     public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email)
+        return memberRepository.findByEmailAndDeletedDateIsNull(email)
                 .orElseThrow(() -> new IllegalArgumentException("INVALID_USER"));
     }
 
@@ -122,7 +122,7 @@ public class MemberService {
 
     public Member saveMember(String token) throws IOException {
         KakaoUserDto kakaoUser = findProfile(token);
-        Member member = memberRepository.findByEmail(kakaoUser.getEmail()).
+        Member member = memberRepository.findByEmailAndDeletedDateIsNull(kakaoUser.getEmail()).
                 orElse(null);
 
         if (member == null) {
