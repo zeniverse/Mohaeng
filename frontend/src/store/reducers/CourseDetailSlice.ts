@@ -34,7 +34,11 @@ const initialState: CourseDetailState = {
 export const CourseDetailSlice = createSlice({
   name: "coursedetail",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    resetCourseDetail: (state) => {
+      state.course = { ...initialState.course };
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getCourseDetailAction.pending, (state) => {});
     builder.addCase(getCourseDetailAction.fulfilled, (state, action) => {
@@ -72,5 +76,5 @@ export const CourseDetailSlice = createSlice({
   },
 });
 
-export const {} = CourseDetailSlice.actions;
+export const { resetCourseDetail } = CourseDetailSlice.actions;
 export default CourseDetailSlice.reducer;

@@ -1,11 +1,10 @@
 .menu {
-  width: 200px;
+  width: 160px;
   position: absolute;
   font-size: medium;
   color: #333;
   border-radius: 12px;
-  top: 100%;
-  right: 0px;
+  top: 120%;
   z-index: 3;
   list-style: none;
   text-align: center;
