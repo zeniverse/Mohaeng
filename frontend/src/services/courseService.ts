@@ -15,7 +15,7 @@ export const getCourseListApi = async (queryParams = {}) => {
     };
 
     const response = await axios.get(CourseApiConfig.course, config);
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.error("Error in getCourseListApi:", error);
     throw error;
