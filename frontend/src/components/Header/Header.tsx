@@ -102,8 +102,8 @@ function Header() {
               >
                 <UserProfile url={imgUrl} nickName={nickName} />
                 {view ? <MdOutlineArrowDropUp /> : <MdOutlineArrowDropDown />}
+                {view && <Dropdown onClose={DropDownClose} />}
               </div>
-              {view && <Dropdown onClose={DropDownClose} />}
             </>
           ) : (
             <>

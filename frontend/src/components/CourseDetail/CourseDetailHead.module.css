@@ -18,7 +18,6 @@
 }
 
 .course-length {
-  flex: 0 0 4.5rem;
   padding: 0.3rem 0.7rem;
   color: var(--color-white);
   background-color: var(--color-primary);
@@ -100,5 +99,13 @@
     font-size: 0.7rem;
     margin-right: 0.1rem;
     margin-bottom: 0.3rem;
+  }
+}
+
+/* MEDIA QUERIES (phones) */
+@media screen and (max-width: 600px) {
+  .title-wrapper {
+    flex-direction: column;
+    gap: 0.2rem;
   }
 }

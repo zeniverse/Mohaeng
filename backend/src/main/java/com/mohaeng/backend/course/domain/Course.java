@@ -33,7 +33,6 @@ public class Course extends BaseTimeEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
     @Column(nullable = false)
     private String title;
     private String region;
