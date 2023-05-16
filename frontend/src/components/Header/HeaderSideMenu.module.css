@@ -99,7 +99,7 @@
 /* MEDIA QUERIES (phones) */
 @media screen and (max-width: 600px) {
   .mobileMenu {
-    width: 50vw;
+    width: 58vw;
   }
   .my-btn {
     background-color: var(--color-primary);
