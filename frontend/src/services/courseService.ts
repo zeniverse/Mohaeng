@@ -3,30 +3,21 @@ import { ICourseSubmitForm } from "../interfaces/Course.type";
 import CourseApiConfig from "./ApiConfig";
 import cookie from "react-cookies";
 
-const api = axios.create({
-  baseURL: CourseApiConfig.course,
-  headers: {
-    "Cache-Control": "no-cache",
-  },
-});
-
 export const getCourseListApi = async (queryParams = {}) => {
   try {
     const accessToken = cookie.load("accessToken");
-    if (!accessToken) {
-      throw new Error("Access token not found");
-    }
 
-    const response = await api.get("", {
+    const config = {
       params: queryParams,
       headers: {
         "Access-Token": accessToken,
       },
-    });
+    };
 
-    return response.data.data;
+    const response = await axios.get(CourseApiConfig.course, config);
+    return response.data;
   } catch (error) {
-    console.error(error);
+    console.error("Error in getCourseListApi:", error);
     throw error;
   }
 };
