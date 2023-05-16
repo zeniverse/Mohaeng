@@ -60,6 +60,7 @@ export const CourseFormSlice = createSlice({
         state.course.places.map((place) => place.placeId)
       );
       if (placeIds.has(data.placeId)) {
+        window.alert("이미 추가된 장소입니다.");
         // 이미 같은 placeId를 가진 객체가 존재하므로 추가하지 않음
         return;
       }

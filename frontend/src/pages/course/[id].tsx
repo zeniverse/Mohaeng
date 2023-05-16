@@ -8,11 +8,11 @@ import React from "react";
 function CourseDetail() {
   return (
     <>
-      <div className={styles["course-id-container"]}>
+      <main className={styles["course-id-container"]}>
         <CourseDetailHead />
         <CourseDetailNav />
         <CourseDetailContent />
-      </div>
+      </main>
     </>
   );
 }

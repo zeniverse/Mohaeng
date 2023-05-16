@@ -19,7 +19,7 @@ const TagItem = ({
   const settingBgColor = bgColor ? palette[bgColor] : "var(--color-primary)";
   const settingBorder = isBorder
     ? "1px solid var(--color-border-semilight)"
-    : "";
+    : undefined;
   const settingColor =
     color === "white"
       ? "var(--color-white)"

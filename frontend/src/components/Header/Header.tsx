@@ -22,11 +22,8 @@ import HeaderNav from "./HeaderNav";
 import UserProfile from "./UserProfile";
 import HeaderLogo from "./HeaderLogo";
 import Dropdown from "../Mypage/Dropdown";
-import HeaderSideMenu from "./HeaderSideMenu";
 import useDeleteToken from "@/src/hooks/useDeleteToken";
-type Props = {};
-
-function Header({}: Props) {
+function Header() {
   const [activeLink, setActiveLink] = useState<string | null>(null);
   const [view, setView] = useState(false);
 
@@ -81,6 +78,15 @@ function Header({}: Props) {
     );
   };
 
+  const handleProfileClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+    e.stopPropagation();
+    setView((prev) => !prev);
+  };
+
+  const DropDownClose = () => {
+    setView(false);
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles["header-container"]}>
@@ -92,14 +98,12 @@ function Header({}: Props) {
             <>
               <div
                 className={styles["profile-wrapper"]}
-                onClick={() => {
-                  setView(!view);
-                }}
+                onClick={handleProfileClick}
               >
                 <UserProfile url={imgUrl} nickName={nickName} />
                 {view ? <MdOutlineArrowDropUp /> : <MdOutlineArrowDropDown />}
               </div>
-              {view && <Dropdown />}
+              {view && <Dropdown onClose={DropDownClose} />}
             </>
           ) : (
             <>
