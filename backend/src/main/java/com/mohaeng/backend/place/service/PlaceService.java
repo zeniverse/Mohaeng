@@ -279,7 +279,6 @@ public class PlaceService {
 
         stopWatch.stop();
         long totalTimeMillis = stopWatch.getTotalTimeMillis();
-        System.out.println("getPlaceOverview total time : " + totalTimeMillis);
         return overviews;
     }
 
