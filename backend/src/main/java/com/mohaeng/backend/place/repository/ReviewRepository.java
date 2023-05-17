@@ -14,7 +14,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Page<Review> findAllByPlaceId(Long placeId, Pageable pageable);
     List<Review> findAllByPlaceId(Long placeId);
 
-    @Query("SELECT COALESCE(AVG(CAST(r.rating AS double)), 0) FROM Review r WHERE r.place.id = :place_id")
+    @Query("SELECT  AVG(CAST(r.rating AS double))\n" +
+            "FROM Review r\n" +
+            "WHERE r.place.id = :place_id")
     double getAverageRatingByPlaceId(@Param("place_id") Long placeId);
 
 }
