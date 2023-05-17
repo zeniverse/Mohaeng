@@ -58,9 +58,6 @@ public class ReviewService {
 
 
     public Page<Review> getAllReviewByPage(Long id, int page) {
-        Place findPlace = placeRepository.findById(id)
-                .orElseThrow(() -> new PlaceNotFoundException());
-
         Pageable pageable = PageRequest.of(page - 1, 4);
         Page<Review> reviews = reviewRepository.findAllByPlaceId(id, pageable);
 //        List<FindAllReviewResponse> reviewResponses = reviews.map(FindAllReviewResponse::of).getContent();
@@ -91,7 +88,6 @@ public class ReviewService {
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedCreatedDate = createdDate.format(formatter);
         Review review = Review.builder()
                 .place(findPlace)
                 .member(findMember)
