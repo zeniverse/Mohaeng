@@ -17,6 +17,7 @@ import com.mohaeng.backend.place.repository.ReviewImageRepository;
 import com.mohaeng.backend.place.repository.ReviewRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReviewService {
 
     private final PlaceRepository placeRepository;
@@ -133,10 +135,10 @@ public class ReviewService {
     @Transactional
     public void updateReview(Long placeId, UpdateReviewRequest updateReviewRequest, List<String> fileNameList) {
         Place findPlace = placeRepository.findById(placeId)
-                .orElseThrow(() -> new PlaceNotFoundException());
+                .orElseThrow(PlaceNotFoundException::new);
 
         Review review = reviewRepository.findById(placeId)
-                .orElseThrow(() -> new ReviewNotFoundException());
+                .orElseThrow(ReviewNotFoundException::new);
         review.update(updateReviewRequest.getTitle(), updateReviewRequest.getContent(), updateReviewRequest.getRating());
 
         // Delete existing images
@@ -149,19 +151,24 @@ public class ReviewService {
         if (fileNameList != null) {
             registerImage(fileNameList, review);
         }
+        double averageRating = reviewRepository.getAverageRatingByPlaceId(review.getPlace().getId());
 
-        double averageRating = reviewRepository.getAverageRatingByPlaceId(placeId);
         findPlace.updateRating(averageRating);
+        placeRepository.save(findPlace);
+        // Check the value of the rating field in the DB
+        Place findPlaceInDB = placeRepository.findById(placeId).orElseThrow(PlaceNotFoundException::new);
+        log.info("Value of the rating field in the DB: {}", findPlaceInDB.getRating());
 //        registerImage(fileNameList, review); JPA 1차 캐시 문제 해결.
         entityManager.flush();
         entityManager.clear();
     }
 
     @Transactional
-    public void deleteReview(Long reviewId) {
+    public void deleteReview(Long reviewId, Long placeId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ReviewNotFoundException());
-
+                .orElseThrow(ReviewNotFoundException::new);
+        Place findPlace = placeRepository.findById(placeId)
+                .orElseThrow(PlaceNotFoundException::new);
 
         // Delete images from storage service
         for (ReviewImage reviewImage : review.getReviewImageList()) {
@@ -173,16 +180,17 @@ public class ReviewService {
 
         // Delete review and related images from database
         reviewRepository.delete(review);
+        double averageRating = reviewRepository.getAverageRatingByPlaceId(review.getPlace().getId());
+        findPlace.updateRating(averageRating);
+        placeRepository.save(findPlace);
+
         // Clear JPA cache
         entityManager.flush();
         entityManager.clear();
     }
 
-    public double getAverageRating(List<Review> reviews) {
-        return reviews.stream()
-                .mapToDouble(r -> Double.parseDouble(r.getRating()))
-                .average()
-                .orElse(0.0);
+    public double getAverageRating(Place place) {
+        return reviewRepository.getAverageRatingByPlaceId(place.getId());
     }
 
     public Review getReviewById(Long reviewId) {
