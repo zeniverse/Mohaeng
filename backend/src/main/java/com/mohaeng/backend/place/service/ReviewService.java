@@ -153,7 +153,6 @@ public class ReviewService {
         placeRepository.save(findPlace);
         // Check the value of the rating field in the DB
         Place findPlaceInDB = placeRepository.findById(placeId).orElseThrow(PlaceNotFoundException::new);
-        log.info("Value of the rating field in the DB: {}", findPlaceInDB.getRating());
 //        registerImage(fileNameList, review); JPA 1차 캐시 문제 해결.
         entityManager.flush();
         entityManager.clear();
