@@ -34,6 +34,7 @@ public class PlaceInitializer {
         log.info("init method start");
         placeService.saveInitImage();
         updatePlaces();
+        placeService.updatePlaceRatings();
     }
 
     public void updatePlaces() {
