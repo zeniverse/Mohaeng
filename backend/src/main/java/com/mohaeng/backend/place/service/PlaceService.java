@@ -13,6 +13,7 @@ import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
 import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
 import com.mohaeng.backend.place.repository.ReviewRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
@@ -62,6 +64,7 @@ public class PlaceService {
     private final AmazonS3Service amazonS3Service;
     private final ReviewService reviewService;
     private final ReviewRepository reviewRepository;
+    private final EntityManager entityManager;
 
     @Value("${API_KEY}")
     private String API_KEY;
@@ -324,8 +327,10 @@ public class PlaceService {
     }
 
     public double getAverageRatingForPlace(Long placeId) {
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(() -> new PlaceNotFoundException());
         List<Review> placeReviews = reviewService.getAllReviewById(placeId);
-        return Math.round(reviewService.getAverageRating(placeReviews) * 100.0) / 100.0;
+        return Math.round(reviewService.getAverageRating(place) * 100.0) / 100.0;
     }
 
     public Place getPlaceById(Long id) {
@@ -333,13 +338,20 @@ public class PlaceService {
                 .orElseThrow(PlaceNotFoundException::new);
     }
 
-//    public void updateAllPlaceRatings() {
-//        List<Object[]> averageRatings = reviewRepository.getAverageRatingsByPlaceId();
-//        for (Object[] averageRating : averageRatings) {
-//            Long placeId = (Long) averageRating[0];
-//            double avgRating = (double) averageRating[1];
-//            Place place = placeRepository.findById(placeId).orElseThrow(PlaceNotFoundException::new);
-//            place.updateRating(avgRating);
-//        }
-//    }
+    @Transactional
+    public void updatePlaceRatings() {
+        List<Review> reviews = reviewRepository.findAll();
+
+        for (Review review : reviews) {
+            entityManager.refresh(review);
+            Place place = review.getPlace();
+
+            if (place != null) {
+                double averageRating = reviewRepository.getAverageRatingByPlaceId(place.getId());
+                place.updateRating(averageRating);
+                placeRepository.save(place);
+            }
+        }
+        entityManager.flush();
+    }
 }
