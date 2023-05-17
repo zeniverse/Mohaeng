@@ -12,6 +12,7 @@ import com.mohaeng.backend.place.dto.response.FindAllReviewResponse;
 import com.mohaeng.backend.place.dto.response.FindReviewResponse;
 import com.mohaeng.backend.place.dto.response.FindSearchReviewsResponse;
 import com.mohaeng.backend.place.repository.PlaceRepository;
+import com.mohaeng.backend.place.repository.ReviewRepository;
 import com.mohaeng.backend.place.service.PlaceService;
 import com.mohaeng.backend.place.service.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +37,7 @@ public class ReviewController {
     private final TokenGenerator tokenGenerator;
     private final AmazonS3Service amazonS3Service;
     private final PlaceRepository placeRepository;
+    private final ReviewRepository reviewRepository;
 
     @GetMapping("/review/{placeId}")
     public ResponseEntity getPlaceReview(@PathVariable Long placeId,
@@ -44,7 +46,7 @@ public class ReviewController {
         Place findPlace = placeRepository.findById(placeId)
                 .orElseThrow(PlaceNotFoundException::new);
         List<FindAllReviewResponse> data = reviews.map(review -> FindAllReviewResponse.of(review, findPlace)).getContent();
-        double averageRating = Math.round(reviewService.getAverageRating(reviewService.getAllReviewById(placeId)) * 100 ) / 100.0;
+        double averageRating = Math.round(reviewRepository.getAverageRatingByPlaceId(placeId) * 100 ) / 100.0;
         FindSearchReviewsResponse response = new FindSearchReviewsResponse(data, reviews.getTotalPages(), reviews.getTotalElements(), averageRating);
         return ResponseEntity.ok(BaseResponse.success("ok", response));
     }
@@ -81,6 +83,7 @@ public class ReviewController {
         }
         reviewService.updateReview(reviewId, updateReviewRequest, fileNameList);
         Review review = reviewService.getReviewById(reviewId);
+        double averageRating = reviewRepository.getAverageRatingByPlaceId(review.getPlace().getId());
         Place findPlace = placeRepository.findById(review.getPlace().getId())
                 .orElseThrow(PlaceNotFoundException::new);
         FindAllReviewResponse response = FindAllReviewResponse.of(review, findPlace);
@@ -93,7 +96,7 @@ public class ReviewController {
         Place findPlace = placeRepository.findById(review.getPlace().getId())
                 .orElseThrow(PlaceNotFoundException::new);
         FindAllReviewResponse response = FindAllReviewResponse.of(review, findPlace);
-        reviewService.deleteReview(reviewId);
+        reviewService.deleteReview(reviewId, findPlace.getId());
         return ResponseEntity.ok(BaseResponse.success("ok", response));
     }
 
@@ -108,7 +111,7 @@ public class ReviewController {
         Place findPlace = placeRepository.findById(placeId)
                 .orElseThrow(PlaceNotFoundException::new);
         List<FindAllReviewResponse> data = reviews.map(review -> FindAllReviewResponse.of(review, findPlace)).getContent();
-        double averageRating = Math.round(reviewService.getAverageRating(reviewService.getAllReviewById(placeId)) * 100) / 100.0;
+        double averageRating = Math.round(reviewService.getAverageRating(findPlace) * 100) / 100.0;
         FindSearchReviewsResponse response = new FindSearchReviewsResponse(data, reviews.getTotalPages(), reviews.getTotalElements(), averageRating);
         return ResponseEntity.ok(BaseResponse.success("ok", response));
     }
@@ -120,7 +123,7 @@ public class ReviewController {
         Place findPlace = placeRepository.findById(placeId)
                 .orElseThrow(PlaceNotFoundException::new);
         List<FindAllReviewResponse> data = reviews.map(review -> FindAllReviewResponse.of(review, findPlace)).getContent();
-        double averageRating = Math.round(reviewService.getAverageRating(reviews.getContent()) * 100) / 100.0;
+        double averageRating = Math.round(reviewService.getAverageRating(findPlace) * 100) / 100.0;
         FindSearchReviewsResponse response = new FindSearchReviewsResponse(data, reviews.getTotalPages(), reviews.getTotalElements(), averageRating);
         return ResponseEntity.ok(BaseResponse.success("ok", response));
     }
