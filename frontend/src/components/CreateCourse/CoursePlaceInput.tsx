@@ -1,4 +1,5 @@
 import { useDebounce } from "@/src/hooks/useDebounce";
+import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
 import axios from "axios";
 
 import React, { useEffect, useState } from "react";
@@ -20,7 +21,7 @@ export interface Images {
 const CoursePlaceInput = () => {
   const [places, setPlaces] = useState<Places[]>([]);
   const [search, setSearch] = useState<string | null>(""); //<string | null>
-  const [isLoading, setIsLoading] = useState(false);
+  const [hasNext, setHasNext] = useState(false);
 
   const ChangePlaceHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -28,9 +29,16 @@ const CoursePlaceInput = () => {
 
   const debouncedSearch = useDebounce(search, 500);
 
+  const {
+    isLoading,
+    loadMoreCallback,
+    hasDynamicPosts,
+    dynamicPosts,
+    isLastPage,
+  } = useInfiniteScroll(places, hasNext, debouncedSearch);
+
   useEffect(() => {
     async function fetchData() {
-      setIsLoading(true);
       setPlaces([]);
       try {
         const placeSearchRes = await axios.get(
@@ -39,11 +47,11 @@ const CoursePlaceInput = () => {
         );
         const placeSearchResult = placeSearchRes.data;
         setPlaces(placeSearchResult.data.places);
+        setHasNext(placeSearchResult.data.hasNext);
       } catch (error) {
         console.error("Error fetching places:", error);
         setPlaces([]);
       } finally {
-        setIsLoading(false);
       }
     }
 
@@ -64,13 +72,15 @@ const CoursePlaceInput = () => {
           placeholder={"검색할 장소를 입력해주세요"}
         />
       </label>
-      {isLoading && <p>불러오는 중</p>}
-      {!isLoading && places.length > 0 && (
-        <PlaceSelectList
-          places={places}
-          isLoading={isLoading}
-          debouncedSearch={debouncedSearch}
-        />
+      {places.length > 0 && (
+        <>
+          <PlaceSelectList
+            places={hasDynamicPosts ? dynamicPosts : places}
+            isLoading={isLoading}
+            loadMoreCallback={loadMoreCallback}
+            isLastPage={isLastPage}
+          />
+        </>
       )}
     </div>
   );
