@@ -18,6 +18,22 @@ export interface Images {
   href: string;
 }
 
+export async function fetchData(
+  keyword: string
+): Promise<{ places: Places[]; hasNext: boolean }> {
+  try {
+    const response = await axios.get<{
+      data: { places: Places[]; hasNext: boolean };
+    }>(`${process.env.NEXT_PUBLIC_API_URL}/api/course/placeSearch?size=${10}`, {
+      params: { keyword },
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching places:", error);
+    throw error;
+  }
+}
+
 const CoursePlaceInput = () => {
   const [places, setPlaces] = useState<Places[]>([]);
   const [search, setSearch] = useState<string | null>(""); //<string | null>
@@ -38,28 +54,39 @@ const CoursePlaceInput = () => {
   } = useInfiniteScroll(places, hasNext, debouncedSearch);
 
   useEffect(() => {
-    async function fetchData() {
-      setPlaces([]);
+    let isMounted = true;
+
+    const fetchDataAsync = async (searchKeyword: string) => {
       try {
-        const placeSearchRes = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/course/placeSearch`,
-          { params: { keyword: debouncedSearch } }
-        );
-        const placeSearchResult = placeSearchRes.data;
-        setPlaces(placeSearchResult.data.places);
-        setHasNext(placeSearchResult.data.hasNext);
+        const placeSearchResult = await fetchData(searchKeyword);
+        if (isMounted) {
+          setPlaces(placeSearchResult.places);
+          setHasNext(placeSearchResult.hasNext);
+        }
       } catch (error) {
         console.error("Error fetching places:", error);
+        // 오류를 처리하는 로직 추가
+      }
+    };
+
+    let timeout: NodeJS.Timeout;
+
+    if (debouncedSearch) {
+      timeout = setTimeout(() => {
+        fetchDataAsync(debouncedSearch);
+      }, 300);
+    } else {
+      if (isMounted) {
         setPlaces([]);
-      } finally {
+        setHasNext(false);
       }
     }
 
-    if (debouncedSearch) {
-      fetchData();
-    }
+    return () => {
+      clearTimeout(timeout);
+      isMounted = false;
+    };
   }, [debouncedSearch]);
-
   return (
     <div className={styles["place-search-container"]}>
       <label className={styles["input"]}>
