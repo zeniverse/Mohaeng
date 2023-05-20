@@ -18,21 +18,21 @@ export interface Images {
   href: string;
 }
 
-export async function fetchData(
-  keyword: string
-): Promise<{ places: Places[]; hasNext: boolean }> {
-  try {
-    const response = await axios.get<{
-      data: { places: Places[]; hasNext: boolean };
-    }>(`${process.env.NEXT_PUBLIC_API_URL}/api/course/placeSearch?size=${10}`, {
-      params: { keyword },
-    });
-    return response.data.data;
-  } catch (error) {
-    console.error("Error fetching places:", error);
-    throw error;
-  }
-}
+// export async function fetchData(
+//   keyword: string
+// ): Promise<{ places: Places[]; hasNext: boolean }> {
+//   try {
+//     const response = await axios.get<{
+//       data: { places: Places[]; hasNext: boolean };
+//     }>(`${process.env.NEXT_PUBLIC_API_URL}/api/course/placeSearch`, {
+//       params: { keyword },
+//     });
+//     return response.data.data;
+//   } catch (error) {
+//     console.error("Error fetching places:", error);
+//     throw error;
+//   }
+// }
 
 const CoursePlaceInput = () => {
   const [places, setPlaces] = useState<Places[]>([]);
@@ -45,48 +45,37 @@ const CoursePlaceInput = () => {
 
   const debouncedSearch = useDebounce(search, 500);
 
+  useEffect(() => {
+    async function fetchData() {
+      setPlaces([]);
+      try {
+        const placeSearchRes = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/course/placeSearch`,
+          { params: { keyword: debouncedSearch } }
+        );
+        const placeSearchResult = placeSearchRes.data;
+        setPlaces(placeSearchResult.data.places);
+        setHasNext(placeSearchResult.data.hasNext);
+      } catch (error) {
+        console.error("Error fetching places:", error);
+        setPlaces([]);
+      } finally {
+      }
+    }
+
+    if (debouncedSearch) {
+      fetchData();
+    }
+  }, [debouncedSearch]);
+
   const {
     isLoading,
     loadMoreCallback,
-    hasDynamicPosts,
+    isInfiniteScrolling,
     dynamicPosts,
     isLastPage,
   } = useInfiniteScroll(places, hasNext, debouncedSearch);
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchDataAsync = async (searchKeyword: string) => {
-      try {
-        const placeSearchResult = await fetchData(searchKeyword);
-        if (isMounted) {
-          setPlaces(placeSearchResult.places);
-          setHasNext(placeSearchResult.hasNext);
-        }
-      } catch (error) {
-        console.error("Error fetching places:", error);
-        // 오류를 처리하는 로직 추가
-      }
-    };
-
-    let timeout: NodeJS.Timeout;
-
-    if (debouncedSearch) {
-      timeout = setTimeout(() => {
-        fetchDataAsync(debouncedSearch);
-      }, 300);
-    } else {
-      if (isMounted) {
-        setPlaces([]);
-        setHasNext(false);
-      }
-    }
-
-    return () => {
-      clearTimeout(timeout);
-      isMounted = false;
-    };
-  }, [debouncedSearch]);
   return (
     <div className={styles["place-search-container"]}>
       <label className={styles["input"]}>
@@ -102,7 +91,7 @@ const CoursePlaceInput = () => {
       {places.length > 0 && (
         <>
           <PlaceSelectList
-            places={hasDynamicPosts ? dynamicPosts : places}
+            places={isInfiniteScrolling ? dynamicPosts : places}
             isLoading={isLoading}
             loadMoreCallback={loadMoreCallback}
             isLastPage={isLastPage}

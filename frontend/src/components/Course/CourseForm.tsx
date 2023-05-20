@@ -24,19 +24,17 @@ const CourseForm = ({ isEditMode }: CourseFormProps) => {
   );
   return (
     <>
-      <div className={styles["course-form-container"]}>
-        <div className={styles["input-container"]}>
-          <CourseInputForm />
-          <CoursePlaceInput />
-        </div>
-        {course?.places?.length > 0 && (
-          <div className={styles.info}>
-            <KakaoMap mapData={course.places} />
-            <CourseOrderList places={course?.places} mode={"write"} />
-          </div>
-        )}
-        <CourseFormButton isEditMode={isEditMode} />
+      <div className={styles["input-container"]}>
+        <CourseInputForm />
+        <CoursePlaceInput />
       </div>
+      {course?.places?.length > 0 && (
+        <div className={styles.info}>
+          <KakaoMap mapData={course.places} />
+          <CourseOrderList places={course?.places} mode={"write"} />
+        </div>
+      )}
+      <CourseFormButton isEditMode={isEditMode} />
     </>
   );
 };

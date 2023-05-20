@@ -1,9 +1,3 @@
-.course-form-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 0.8rem;
-}
 .input-container {
   display: flex;
   gap: 0.8rem;
@@ -16,4 +10,16 @@
   position: relative;
   gap: 0.6rem;
   padding-top: 1rem;
+}
+
+/* MEDIA QUERIES (tablets) */
+@media screen and (max-width: 1024px) {
+  .input-container {
+    flex-direction: column;
+    height: 100%;
+  }
+}
+
+/* MEDIA QUERIES (phones) */
+@media screen and (max-width: 600px) {
 }

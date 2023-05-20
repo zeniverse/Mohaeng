@@ -23,7 +23,7 @@ const RotationAnimation = () => {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className={styles["loading-container"]}>
       <Image
         className={styles.img}
         src="/assets/loading.png"
@@ -44,10 +44,16 @@ export const Loader = ({
   isLastPage,
   loadMoreCallback,
 }: LoaderProps) => {
-  const ref = useRef<any>(null);
   if (isLoading) return <RotationAnimation />;
 
-  if (isLastPage) return <p>검색 결과가 더이상 존재하지 않습니다.</p>;
+  if (isLastPage)
+    return (
+      <p className={styles["no-results"]}>
+        검색 결과가 더 이상 존재하지 않습니다.
+      </p>
+    );
 
-  return <div ref={loadMoreCallback}>콜백 실행</div>;
+  return (
+    <div className={styles["loader-container"]} ref={loadMoreCallback}></div>
+  );
 };

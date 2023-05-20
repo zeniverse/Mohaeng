@@ -7,7 +7,7 @@ import CourseApiConfig from "../services/ApiConfig";
 export interface UseInfiniteScroll {
   isLoading: boolean;
   loadMoreCallback: (el: HTMLDivElement) => void;
-  hasDynamicPosts: boolean;
+  isInfiniteScrolling: boolean;
   dynamicPosts: Places[];
   isLastPage: boolean;
 }
@@ -18,10 +18,8 @@ export const useInfiniteScroll = (
   keyword: string | null
 ): UseInfiniteScroll => {
   const [dynamicPosts, setDynamicPosts] = useState<Places[]>(posts);
+  const [isInfiniteScrolling, setIsInfiniteScrolling] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [hasDynamicPosts, setHasDynamicPosts] = useState(false);
-
   const [isLastPage, setIsLastPage] = useState(false);
 
   const [lastItemId, setLastItemId] = useState<number | undefined>(undefined);
@@ -34,11 +32,11 @@ export const useInfiniteScroll = (
   const loadMoreTimeoutRef = useRef<NodeJS.Timeout>(loadMoreTimeout);
 
   useEffect(() => {
+    const lastIndex = posts.length - 1;
     // post가 변경되면 dynamicPosts에 저장하고 마지막 item의 id와 rating을 저장함.
     setDynamicPosts(posts);
-    setHasDynamicPosts(false);
-    setLastItemId(posts[posts.length - 1]?.placeId);
-    setLastItemRating(posts[posts.length - 1]?.rating);
+    setLastItemId(posts[lastIndex]?.placeId);
+    setLastItemRating(posts[lastIndex]?.rating);
     setIsLastPage(!hasNext);
   }, [posts]);
 
@@ -47,7 +45,6 @@ export const useInfiniteScroll = (
     (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
       // 감지된 요소와 관련된 정보를 포함하고 있는 첫 번째 요소 사용.
       const target = entries[0];
-      if (!hasDynamicPosts) observer.unobserve(target.target);
 
       // 관찰 대상 요소가 뷰포트에 진입했는지를 나타내는 불리언 값
       if (target.isIntersecting) {
@@ -57,7 +54,7 @@ export const useInfiniteScroll = (
           clearTimeout(loadMoreTimeoutRef.current);
         }
 
-        // this timeout debounces the intersection events
+        //새로운 타임아웃이 설정되기 전에 이전 타임아웃이 제거되어 중복 실행되는 이슈를 방지하고, Intersection Observer 이벤트를 디바운스하여 일정 시간 동안 여러 이벤트 중 마지막 이벤트만을 처리할 수 있도록 함.
         // intersection 이벤트를 디바운스한다. 500ms의 지연 시간 후에 함수 내의 코드 블록이 실행된다.
         loadMoreTimeoutRef.current = setTimeout(() => {
           axios
@@ -69,9 +66,9 @@ export const useInfiniteScroll = (
               if (places?.length > 0) {
                 const newDynamicPosts = [...dynamicPosts, ...places];
                 setDynamicPosts(newDynamicPosts);
-                setHasDynamicPosts(true);
-
+                setIsInfiniteScrolling(true);
                 setIsLastPage(!hasNext);
+
                 if (hasNext) {
                   const lastIndex = places.length - 1;
                   setLastItemId(places[lastIndex].placeId);
@@ -81,38 +78,43 @@ export const useInfiniteScroll = (
             })
             .finally(() => {
               setIsLoading(false);
+              const parentElement = target.target.parentNode;
+              if (
+                parentElement instanceof HTMLElement &&
+                !isInfiniteScrolling
+              ) {
+                // 부모 요소의 스크롤을 맨 위로 이동시킨다.
+                parentElement.scrollTop = 0;
+              }
             });
-        }, 500);
+        }, 2000);
       }
     },
-    [keyword, lastItemId, lastItemRating, hasDynamicPosts, setDynamicPosts]
+    [dynamicPosts]
   );
 
   const loadMoreCallback = useCallback(
-    // el: Intersection Observer의 대상 요소
-    (el: HTMLDivElement | null) => {
-      if (isLoading || !el) return;
-      // 이전에 관찰하던 요소를 중단하고 새로운 요소를 관찰하기 위해 이전에 생성된 IntersectionObserver 인스턴스를 해제한다.
+    (el: HTMLDivElement) => {
+      if (isLoading) return;
       if (observerRef.current) observerRef.current.disconnect();
 
       const option: IntersectionObserverInit = {
         root: null,
         rootMargin: "0px",
-        threshold: 1,
+        threshold: 1.0,
       };
-      // 새로운 IntersectionObserver 인스턴스를 생성
+
       observerRef.current = new IntersectionObserver(handleObserver, option);
 
-      // el을 관찰 대상으로 추가
-      observerRef.current.observe(el);
+      if (el) observerRef.current.observe(el);
     },
-    [handleObserver, isLoading, hasDynamicPosts]
+    [handleObserver, isLoading]
   );
 
   return {
     isLoading,
     loadMoreCallback,
-    hasDynamicPosts,
+    isInfiniteScrolling,
     dynamicPosts,
     isLastPage,
   };

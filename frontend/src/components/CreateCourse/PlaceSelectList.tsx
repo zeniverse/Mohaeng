@@ -57,4 +57,4 @@ const PlaceSelectList = ({
   );
 };
 
-export default PlaceSelectList;
+export default React.memo(PlaceSelectList);
