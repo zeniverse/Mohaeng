@@ -68,7 +68,7 @@
 
 ### 통합검색
 
-![통합검색](https://user-images.githubusercontent.com/108039645/232226951-039a6d45-bae0-42e5-aabf-3beacd3e50ff.gif)
+![통합검색](https://github.com/Mohaeng2023/Mohaeng/assets/108039645/66f4e194-26db-4be2-a84e-e525da82d574)
 
 - 검색창에 단어를 입력하면 해당 단어가 포함된 검색 결과를 확인할 수 있다.
 - 여행지와 코스 탭을 이동하면 해당하는 여행지 목록을 페이지네이션으로 보여준다.
@@ -85,7 +85,7 @@
 
 ### 여행지 상세
 
-![여행지 상세](https://user-images.githubusercontent.com/108039645/232228575-a5fca674-774a-4b7f-bec8-69fb746b7842.gif)
+![상세조회](https://github.com/sagesrkim/prgms-study/assets/108039645/b640d874-ace4-466a-a824-6e7f576191bc)
 
 - 여행 상세정보
   - 해당 여행지의 사진과 세부정보를 확인할 수 있다. 여행지의 장소는 카카오 맵으로 표시한다.
