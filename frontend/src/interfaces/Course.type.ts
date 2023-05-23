@@ -49,7 +49,7 @@ export interface ICourseForm {
   isLiked: boolean;
 }
 export interface ICourseOriginForm extends ICourseForm {
-  places: IPlacesForm[];
+  places: IPlace[];
 }
 
 export interface ICourseEditParam {
@@ -59,20 +59,6 @@ export interface ICourseEditParam {
 
 export interface ICourseSubmitForm extends ICourseForm {
   placeIds: number[];
-}
-// export interface IUpdateUserActionProps {
-//   id: number;
-//   data: IUserForm;
-// }
-
-export interface IPlacesForm {
-  placeId: number;
-  name: string;
-  mapX: string;
-  mapY: string;
-  imgUrl: string;
-  rating: string;
-  address: string;
 }
 
 export interface ICourseDetail {
@@ -90,16 +76,24 @@ export interface ICourseDetail {
   isBookmarked: boolean;
   isLiked: boolean;
   isPublished: boolean;
-  places: IPlaces[];
+  places: IPlace[];
 }
 
-export interface IPlaces {
+export interface IPlace {
   placeId: number;
   name: string;
   address: string;
   imgUrl: string;
   mapX: string;
   mapY: string;
+  rating?: string;
+}
+export interface IPlacesSearch {
+  placeId: number;
+  name: string;
+  address: string;
+  imgUrl: string;
+  rating: string;
 }
 
 export interface IRecommandCourse {
@@ -110,8 +104,11 @@ export interface IRecommandCourse {
   region: string;
   courseDays: string;
   likeCount: number;
-  isBookmarked: boolean;
   isLiked: boolean;
+}
+
+export interface IRecommandCourseProps extends IRecommandCourse {
+  onUpdateCourse: (updatedCourse: IRecommandCourse) => void;
 }
 
 export interface IFormErrors {

@@ -1,25 +1,18 @@
 import { useDebounce } from "@/src/hooks/useDebounce";
 import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
+import { IPlacesSearch } from "@/src/interfaces/Course.type";
 import axios from "axios";
 
 import React, { useEffect, useState } from "react";
 import styles from "./CoursePlaceInput.module.css";
 import PlaceSelectList from "./PlaceSelectList";
 
-export interface Places {
-  placeId: number;
-  imgUrl: string;
-  address: string;
-  name: string;
-  rating: string;
-}
-
 export interface Images {
   href: string;
 }
 
 const CoursePlaceInput = () => {
-  const [places, setPlaces] = useState<Places[]>([]);
+  const [places, setPlaces] = useState<IPlacesSearch[]>([]);
   const [search, setSearch] = useState<string | null>(""); //<string | null>
   const [hasNext, setHasNext] = useState(false);
 
@@ -28,14 +21,6 @@ const CoursePlaceInput = () => {
   };
 
   const debouncedSearch = useDebounce(search, 500);
-
-  const {
-    isLoading,
-    loadMoreCallback,
-    hasDynamicPosts,
-    dynamicPosts,
-    isLastPage,
-  } = useInfiniteScroll(places, hasNext, debouncedSearch);
 
   useEffect(() => {
     async function fetchData() {
@@ -60,6 +45,14 @@ const CoursePlaceInput = () => {
     }
   }, [debouncedSearch]);
 
+  const {
+    isLoading,
+    loadMoreCallback,
+    isInfiniteScrolling,
+    dynamicPosts,
+    isLastPage,
+  } = useInfiniteScroll(places, hasNext, debouncedSearch);
+
   return (
     <div className={styles["place-search-container"]}>
       <label className={styles["input"]}>
@@ -75,7 +68,7 @@ const CoursePlaceInput = () => {
       {places.length > 0 && (
         <>
           <PlaceSelectList
-            places={hasDynamicPosts ? dynamicPosts : places}
+            places={isInfiniteScrolling ? dynamicPosts : places}
             isLoading={isLoading}
             loadMoreCallback={loadMoreCallback}
             isLastPage={isLastPage}
@@ -86,4 +79,4 @@ const CoursePlaceInput = () => {
   );
 };
 
-export default CoursePlaceInput;
+export default React.memo(CoursePlaceInput);

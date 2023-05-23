@@ -12,7 +12,9 @@ import {
 import { addFormValue } from "@/src/store/reducers/CourseFormSlice";
 
 const CourseDetailHead = () => {
-  const [formattedDate, setFormattedDate] = useState("");
+  const [formattedDate, setFormattedDate] = useState(
+    getFormattedDate(new Date())
+  );
   const courseDetail = useAppSelector((state) => state.courseDetail.course);
   const { courseId, title, profileImgUrl, places, nickname, createdDate } =
     courseDetail;
@@ -26,16 +28,6 @@ const CourseDetailHead = () => {
       dispatch(getCourseDetailAction(id));
     }
   }, [id]);
-
-  const getFomattedDate = useCallback((date: Date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    return `${year}-${month < 10 ? "0" + month : month}-${
-      day < 10 ? "0" + day : day
-    }`;
-  }, []);
 
   const handleRemoveCourse = () => {
     if (confirm(`${title} 코스를 정말 삭제하시겠습니까?`)) {
@@ -68,9 +60,20 @@ const CourseDetailHead = () => {
     });
   };
 
+  function getFormattedDate(date: Date): string {
+    if (isNaN(date.getTime())) return " ";
+
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    return `${year}-${month < 10 ? "0" + month : month}-${
+      day < 10 ? "0" + day : day
+    }`;
+  }
+
   useEffect(() => {
-    const FormattedDate = getFomattedDate(new Date(createdDate));
-    setFormattedDate(FormattedDate);
+    setFormattedDate(getFormattedDate(new Date(createdDate)));
   }, [createdDate]);
 
   return (
@@ -95,7 +98,9 @@ const CourseDetailHead = () => {
           </div>
         )}
         <div className={styles["nav-right"]}>
-          <span className={styles["create-date"]}>{formattedDate}</span>
+          {formattedDate && (
+            <span className={styles["create-date"]}>{formattedDate}</span>
+          )}
           {nickName === nickname ? (
             <div className={styles["btn-wrapper"]}>
               <div

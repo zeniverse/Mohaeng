@@ -17,10 +17,13 @@ import useValidateInput from "@/src/hooks/useValidateInput";
 import { ResionOptions } from "@/src/utils/input-options";
 
 const CourseInputForm = () => {
-  const { course, errors } = useAppSelector((state) => {
+  const course = useAppSelector((state) => {
     return state.courseForm;
   });
-  const { title, startDate, endDate, isPublished, region, content } = course;
+  const { title, startDate, endDate, isPublished, region, content } =
+    course.course;
+  const { errors } = course;
+
   const dispatch = useAppDispatch();
   const [calcCourseDays, setCalcCourseDays] = useState("");
   const [dateIsValid, setDateIsValid] = useState(true);
@@ -156,7 +159,7 @@ const CourseInputForm = () => {
 
   return (
     <form className={styles.form}>
-      <div className={styles["first-line"]}>
+      <div className={styles["first-input-wrapper"]}>
         <label htmlFor="isPublished" className={styles["publish-label"]}>
           <span className={textclassName}>
             {isPublished ? "공개" : "비공개"}
@@ -168,24 +171,22 @@ const CourseInputForm = () => {
               name="isPublished"
               checked={isPublished}
               onChange={checkedChangeHandler}
-              className={styles.input}
+              className={styles.switch}
               required
             />
           </div>
         </label>
-        <div className={styles["input-group"]}>
-          <label>
-            <span className={styles["input-title"]}>코스 제목</span>
-            <input
-              type="text"
-              name="title"
-              value={enteredTitle}
-              onChange={titleChangedHandler}
-              onBlur={titleBlurHandler}
-              placeholder={"제목을 작성해주세요"}
-              required
-            />
-          </label>
+        <label className={styles["input-group"]}>
+          <span className={styles["input-title"]}>코스 제목</span>
+          <input
+            type="text"
+            name="title"
+            value={enteredTitle}
+            onChange={titleChangedHandler}
+            onBlur={titleBlurHandler}
+            placeholder={"제목을 작성해주세요"}
+            required
+          />
           {titleInputHasError && (
             <>
               <div className={styles["error-text"]}>
@@ -196,12 +197,13 @@ const CourseInputForm = () => {
               </div>
             </>
           )}
-        </div>
+        </label>
       </div>
+
       {errors?.startDate && <p>{errors?.startDate}</p>}
-      <div className={styles["second-line"]}>
-        <div className={styles["input-group"]}>
-          <label>
+      <div className={styles["second-input-wrapper"]}>
+        <div className={styles["col-wrapper"]}>
+          <label className={styles["input-group"]}>
             <span className={styles["input-title"]}>시작일자</span>
             <input
               type="date"
@@ -213,16 +215,15 @@ const CourseInputForm = () => {
               max={enteredEndDate}
               required
             />
+            {startDateInputHasError && (
+              <p className={styles["error-text"]}>선택해주세요.</p>
+            )}
           </label>
-          {startDateInputHasError && (
-            <p className={styles["error-text"]}>선택해주세요.</p>
-          )}
           {enteredStartDateIsValid && enteredEndDateIsValid && !dateIsValid && (
             <p className={styles["error-text"]}>유효하지 않은 날짜 입니다.</p>
           )}
-        </div>
-        <div className={styles["input-group"]}>
-          <label>
+
+          <label className={styles["input-group"]}>
             <span className={styles["input-title"]}>종료일자</span>
             <input
               type="date"
@@ -234,13 +235,13 @@ const CourseInputForm = () => {
               max={maxEndDate}
               required
             />
+            {endDateInputHasError && (
+              <p className={styles["error-text"]}>선택해주세요.</p>
+            )}
           </label>
-          {endDateInputHasError && (
-            <p className={styles["error-text"]}>선택해주세요.</p>
-          )}
         </div>
-        <div className={`${styles["input-group"]} ${styles.region}`}>
-          <label>
+        <div className={styles["col-wrapper"]}>
+          <label className={`${styles["input-group"]} ${styles.region}`}>
             <span className={styles["input-title"]}>지역</span>
             <select
               required
@@ -258,13 +259,11 @@ const CourseInputForm = () => {
                 </option>
               ))}
             </select>
+            {regionInputHasError && (
+              <p className={styles["error-text"]}>선택해주세요.</p>
+            )}
           </label>
-          {regionInputHasError && (
-            <p className={styles["error-text"]}>선택해주세요.</p>
-          )}
-        </div>
-        <div className={styles["input-group"]}>
-          <label>
+          <label className={`${styles["input-group"]} ${styles.courseDays}`}>
             <span className={styles["input-title"]}>소요일</span>
             <input
               disabled
@@ -272,21 +271,17 @@ const CourseInputForm = () => {
               value={calcCourseDays ? calcCourseDays : "자동"}
             ></input>
           </label>
-          {/* {contentInputHasError && (
-            <p className={styles["error-text"]}>내용이 일치하지 않음.</p>
-          )} */}
         </div>
       </div>
-      <div className={styles["input-group"]}>
-        <label>
-          <span className={styles["input-title"]}>코스 설명</span>
-          <textarea
-            name="content"
-            value={enteredContent}
-            onChange={contentChangedHandler}
-            onBlur={contentBlurHandler}
-          />
-        </label>
+      <label className={styles["input-group"]}>
+        <span className={styles["input-title"]}>코스 설명</span>
+        <textarea
+          name="content"
+          value={enteredContent}
+          onChange={contentChangedHandler}
+          onBlur={contentBlurHandler}
+          className={styles.content}
+        />
         {contentInputHasError && (
           <p className={styles["error-text"]}>
             10자 이상 200자 이하로 작성해 주세요.
@@ -295,7 +290,7 @@ const CourseInputForm = () => {
         <p className={styles["valid-text-length"]}>
           ({enteredContent.length}/200)
         </p>
-      </div>
+      </label>
     </form>
   );
 };

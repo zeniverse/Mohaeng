@@ -2,7 +2,6 @@ import styles from "./PlaceList.module.css";
 import React, { useEffect, useState } from "react";
 import { Place } from "@/src/interfaces/Place";
 import PlaceItem from "./PlaceItem";
-import PlaceFilter from "./PlaceFilter";
 import axios from "axios";
 import { placeState, content } from "@/src/store/reducers/PlaceSlice";
 import { useSelector } from "react-redux";

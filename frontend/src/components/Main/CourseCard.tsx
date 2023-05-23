@@ -8,6 +8,7 @@ import styles from "./CourseCard.module.css";
 import TagItem from "../UI/TagItem";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import React from "react";
+import { IRecommandCourseProps } from "@/src/interfaces/Course.type";
 
 const CourseCard = ({
   courseId,
@@ -19,7 +20,7 @@ const CourseCard = ({
   likeCount,
   isLiked,
   onUpdateCourse,
-}: any) => {
+}: IRecommandCourseProps) => {
   const handleToggleLike = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
@@ -32,8 +33,8 @@ const CourseCard = ({
         content,
         thumbnailUrl,
         isLiked: !isLiked,
-        region: region,
-        courseDays: courseDays,
+        region,
+        courseDays,
         likeCount: isLiked ? likeCount - 1 : likeCount + 1,
       });
     } else {
