@@ -65,12 +65,11 @@
   }
 }
 
-/* MEDIA QUERIES (middle) */
-@media screen and (max-width: 800px) {
-}
-
 /* MEDIA QUERIES (phones) */
 @media screen and (max-width: 600px) {
+  .header {
+    height: 70px;
+  }
   .header-container {
     gap: 0.6rem;
   }

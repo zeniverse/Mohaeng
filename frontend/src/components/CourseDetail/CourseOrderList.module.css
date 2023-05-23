@@ -72,7 +72,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.6rem;
   padding: 0.6rem;
   border-radius: 100%;
   border: 2px solid #ea5455;
@@ -99,6 +98,14 @@
   background-color: rgba(33, 133, 133, 0.33);
 }
 
+/* MEDIA QUERIES (tablets) */
+@media screen and (max-width: 1024px) {
+  .course-orderlist-container {
+    width: 100%;
+    height: calc(50% - 0.3rem);
+  }
+}
+
 /* MEDIA QUERIES (phones) */
 @media screen and (max-width: 600px) {
   .course-list {
@@ -118,6 +125,14 @@
     color: var(--color-white);
   }
   .item-content {
-    width: 170px;
+    width: 140px;
+  }
+
+  .remove-btn-wrapper {
+    font-size: 1.2rem;
+    padding: 0 0.3rem;
+  }
+  .remove-btn {
+    padding: 0.3rem;
   }
 }

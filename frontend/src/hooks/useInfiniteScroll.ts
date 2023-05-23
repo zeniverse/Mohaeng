@@ -87,7 +87,7 @@ export const useInfiniteScroll = (
                 parentElement.scrollTop = 0;
               }
             });
-        }, 2000);
+        }, 500);
       }
     },
     [dynamicPosts]

@@ -42,7 +42,6 @@ const PlaceSelectList = ({
             )}
             <div className={styles.notice_body}>
               <p>{place.name}</p>
-
               <FiveStarRating rating={place.rating} />
             </div>
           </div>
