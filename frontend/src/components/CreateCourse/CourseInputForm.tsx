@@ -17,10 +17,13 @@ import useValidateInput from "@/src/hooks/useValidateInput";
 import { ResionOptions } from "@/src/utils/input-options";
 
 const CourseInputForm = () => {
-  const { course, errors } = useAppSelector((state) => {
+  const course = useAppSelector((state) => {
     return state.courseForm;
   });
-  const { title, startDate, endDate, isPublished, region, content } = course;
+  const { title, startDate, endDate, isPublished, region, content } =
+    course.course;
+  const { errors } = course;
+
   const dispatch = useAppDispatch();
   const [calcCourseDays, setCalcCourseDays] = useState("");
   const [dateIsValid, setDateIsValid] = useState(true);

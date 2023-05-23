@@ -1,4 +1,4 @@
-import { IFormErrors } from "../../interfaces/Course.type";
+import { IFormErrors, IPlace } from "../../interfaces/Course.type";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICourseForm, ICourseOriginForm } from "../../interfaces/Course.type";
 import { createCourseAction } from "../thunks/courseThunks";
@@ -50,6 +50,9 @@ export const CourseFormSlice = createSlice({
       );
       state.course.places = newList;
     },
+    updatePlaces: (state, action: PayloadAction<IPlace[]>) => {
+      state.course.places = action.payload;
+    },
     resetFormValue: () => {
       return initialState;
     },
@@ -93,6 +96,7 @@ export const CourseFormSlice = createSlice({
 export const {
   setFormValue,
   resetFormValue,
+  updatePlaces,
   addPlaceObject,
   removePlace,
   addFormValue,

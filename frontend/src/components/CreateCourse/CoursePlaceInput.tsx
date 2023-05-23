@@ -11,22 +11,6 @@ export interface Images {
   href: string;
 }
 
-// export async function fetchData(
-//   keyword: string
-// ): Promise<{ places: Places[]; hasNext: boolean }> {
-//   try {
-//     const response = await axios.get<{
-//       data: { places: Places[]; hasNext: boolean };
-//     }>(`${process.env.NEXT_PUBLIC_API_URL}/api/course/placeSearch`, {
-//       params: { keyword },
-//     });
-//     return response.data.data;
-//   } catch (error) {
-//     console.error("Error fetching places:", error);
-//     throw error;
-//   }
-// }
-
 const CoursePlaceInput = () => {
   const [places, setPlaces] = useState<IPlacesSearch[]>([]);
   const [search, setSearch] = useState<string | null>(""); //<string | null>
@@ -95,4 +79,4 @@ const CoursePlaceInput = () => {
   );
 };
 
-export default CoursePlaceInput;
+export default React.memo(CoursePlaceInput);

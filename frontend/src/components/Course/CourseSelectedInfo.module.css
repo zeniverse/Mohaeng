@@ -1,14 +1,16 @@
-.input-container {
-  width: 100%;
+.info {
   display: flex;
-  gap: 0.8rem;
-  height: 390px;
+  height: 600px;
+  position: relative;
+  gap: 0.6rem;
+  padding-top: 1rem;
 }
 
 /* MEDIA QUERIES (tablets) */
 @media screen and (max-width: 1024px) {
-  .input-container {
+  .info {
     flex-direction: column;
     height: 800px;
+    gap: 0.4rem;
   }
 }

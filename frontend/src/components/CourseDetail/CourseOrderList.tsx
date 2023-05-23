@@ -1,22 +1,114 @@
 import Image from "next/image";
 import styles from "./CourseOrderList.module.css";
 import { AiOutlineMinus } from "react-icons/ai";
-import { useAppDispatch } from "@/src/hooks/useReduxHooks";
-import { removePlace } from "@/src/store/reducers/CourseFormSlice";
+import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
+import {
+  initialState,
+  removePlace,
+  updatePlaces,
+} from "@/src/store/reducers/CourseFormSlice";
 import TagItem from "../UI/TagItem";
-import React from "react";
+
 import { IPlace } from "@/src/interfaces/Course.type";
+import React, { DragEvent, TouchEvent, useRef, useState } from "react";
 const CourseOrderList = ({ places, mode }: any) => {
   const dispatch = useAppDispatch();
+
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+
+  const draggingItem = useRef<number | undefined>();
+  const dragOverItem = useRef<number | undefined>();
+
   const handleRemovePlace = (placeId: number) => {
+    if (!(mode === "write")) return;
     dispatch(removePlace(placeId));
+  };
+
+  const handleDragStart = (e: DragEvent<HTMLLIElement>, position: number) => {
+    if (!(mode === "write")) return;
+    draggingItem.current = position;
+    const targetElement = e.target as HTMLLIElement;
+    console.log(targetElement.innerHTML);
+  };
+
+  const handleDragEnter = (e: DragEvent<HTMLLIElement>, position: number) => {
+    if (!(mode === "write")) return;
+    setDragOverIndex(position);
+    dragOverItem.current = position;
+    const listCopy = [...places];
+    if (
+      draggingItem.current !== undefined &&
+      dragOverItem.current !== undefined
+    ) {
+      console.log(draggingItem.current, dragOverItem.current);
+      const draggingItemContent = listCopy[draggingItem.current];
+      listCopy.splice(draggingItem.current, 1);
+      listCopy.splice(dragOverItem.current, 0, draggingItemContent);
+    }
+
+    draggingItem.current = dragOverItem.current;
+    dragOverItem.current = undefined;
+
+    dispatch(updatePlaces(listCopy));
+  };
+
+  const handleTouchStart = (e: TouchEvent<HTMLLIElement>, position: number) => {
+    if (!(mode === "write")) return;
+    draggingItem.current = position;
+  };
+
+  const handleTouchMove = (e: TouchEvent<HTMLLIElement>) => {
+    if (!(mode === "write")) return;
+    const touch = e.touches[0];
+    const targetElement = document.elementFromPoint(
+      touch.clientX,
+      touch.clientY
+    );
+    if (targetElement instanceof HTMLLIElement) {
+      const position = parseInt(
+        targetElement.getAttribute("data-position") || ""
+      );
+      setDragOverIndex(position);
+      dragOverItem.current = position;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (!(mode === "write")) return;
+    const listCopy = [...places];
+    if (
+      draggingItem.current !== undefined &&
+      dragOverItem.current !== undefined
+    ) {
+      const draggingItemContent = listCopy[draggingItem.current];
+      listCopy.splice(draggingItem.current, 1);
+      listCopy.splice(dragOverItem.current, 0, draggingItemContent);
+    }
+
+    draggingItem.current = undefined;
+    dragOverItem.current = undefined;
+
+    dispatch(updatePlaces(listCopy));
   };
 
   return (
     <div className={styles["course-orderlist-container"]}>
       <ol className={styles["course-list"]}>
-        {places.map((place: IPlace, idx: any) => (
-          <li className={styles["course-item"]} key={place.placeId}>
+        {places?.map((place: IPlace, idx: number) => (
+          <li
+            className={`${styles["course-item"]} ${
+              dragOverIndex === idx ? styles["drag-over"] : ""
+            } 
+          `}
+            key={place.placeId}
+            onDragStart={(e) => handleDragStart(e, idx)}
+            onDragOver={(e) => e.preventDefault()}
+            onDragEnter={(e) => handleDragEnter(e, idx)}
+            onTouchStart={(e) => handleTouchStart(e, idx)}
+            onTouchMove={(e) => handleTouchMove(e)}
+            onTouchEnd={(e) => handleTouchEnd()}
+            draggable={mode === "write"}
+          >
             <p className={styles["order-number"]}>{idx + 1}</p>
             {place.imgUrl ? (
               <Image

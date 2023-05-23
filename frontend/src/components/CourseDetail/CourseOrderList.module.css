@@ -21,6 +21,8 @@
   margin-bottom: 0.8rem;
   border-radius: 1rem;
   position: relative;
+  transition: transform 0.3s ease-in-out;
+  cursor: grab;
 }
 
 .course-item:nth-last-child(1) {
@@ -80,6 +82,13 @@
 .remove-btn:hover {
   background-color: #ea5455;
   color: var(--color-white);
+}
+
+.drag-over {
+  /* 드래그 오버 효과 스타일 */
+  transform: translateX(-10px);
+  /* 예시: 배경색 변경 */
+  background-color: var(--color-primary);
 }
 
 .course-list::-webkit-scrollbar {
