@@ -5,7 +5,7 @@ import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { removePlace } from "@/src/store/reducers/CourseFormSlice";
 import TagItem from "../UI/TagItem";
 import React from "react";
-
+import { IPlace } from "@/src/interfaces/Course.type";
 const CourseOrderList = ({ places, mode }: any) => {
   const dispatch = useAppDispatch();
   const handleRemovePlace = (placeId: number) => {
@@ -15,7 +15,7 @@ const CourseOrderList = ({ places, mode }: any) => {
   return (
     <div className={styles["course-orderlist-container"]}>
       <ol className={styles["course-list"]}>
-        {places.map((place: any, idx: any) => (
+        {places.map((place: IPlace, idx: any) => (
           <li className={styles["course-item"]} key={place.placeId}>
             <p className={styles["order-number"]}>{idx + 1}</p>
             {place.imgUrl ? (

@@ -38,15 +38,22 @@ const CourseCardSlider = () => {
 
     fetchData();
   }, []);
+
   const updateRecommandCourse = (updatedCourse: IRecommandCourse) => {
     const updatedCourses = recommandCourse.map((course) => {
       if (course.courseId === updatedCourse.courseId) {
-        return updatedCourse;
+        return {
+          ...course,
+          isLiked: updatedCourse.isLiked,
+          likeCount: updatedCourse.likeCount,
+        };
       } else {
         return course;
       }
     });
-    setRecommandCourse(updatedCourses);
+    updatedCourses.sort((a, b) => b.likeCount - a.likeCount);
+
+    setRecommandCourse(updatedCourses); // 상태 업데이트
   };
 
   const breakpoints = {
@@ -88,10 +95,9 @@ const CourseCardSlider = () => {
       // onSlideChange={() => console.log("slide change")}
     >
       {recommandCourse.length > 0 &&
-        recommandCourse?.map((course, idx) => (
-          <SwiperSlide key={idx}>
+        recommandCourse.map((course) => (
+          <SwiperSlide key={course.courseId}>
             <CourseCard
-              key={course.courseId}
               courseId={course.courseId}
               title={course.title}
               region={course.region}

@@ -22,7 +22,9 @@ import { useAppDispatch } from "@/src/hooks/useReduxHooks";
 import { useRef } from "react";
 import { useClickOutside } from "../../hooks/useClickOutSide";
 
-export default function Dropdown({ onClose }: any) {
+type CloseHandler = () => void;
+
+export default function Dropdown({ onClose }: { onClose: CloseHandler }) {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const accessToken = cookie.load("accessToken");

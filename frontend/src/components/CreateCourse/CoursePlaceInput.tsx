@@ -1,18 +1,11 @@
 import { useDebounce } from "@/src/hooks/useDebounce";
 import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
+import { IPlacesSearch } from "@/src/interfaces/Course.type";
 import axios from "axios";
 
 import React, { useEffect, useState } from "react";
 import styles from "./CoursePlaceInput.module.css";
 import PlaceSelectList from "./PlaceSelectList";
-
-export interface Places {
-  placeId: number;
-  imgUrl: string;
-  address: string;
-  name: string;
-  rating: string;
-}
 
 export interface Images {
   href: string;
@@ -35,7 +28,7 @@ export interface Images {
 // }
 
 const CoursePlaceInput = () => {
-  const [places, setPlaces] = useState<Places[]>([]);
+  const [places, setPlaces] = useState<IPlacesSearch[]>([]);
   const [search, setSearch] = useState<string | null>(""); //<string | null>
   const [hasNext, setHasNext] = useState(false);
 

@@ -5,12 +5,21 @@ import React from "react";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { addPlaceObject } from "@/src/store/reducers/CourseFormSlice";
 import { Loader } from "./Loader";
+import { IPlacesSearch } from "@/src/interfaces/Course.type";
+
+interface ISelectListProps {
+  places: IPlacesSearch[];
+  isLoading: boolean;
+  loadMoreCallback: (el: HTMLDivElement) => void;
+  isLastPage: boolean;
+}
+
 const PlaceSelectList = ({
   places,
   isLoading,
   loadMoreCallback,
   isLastPage,
-}: any) => {
+}: ISelectListProps) => {
   const dispatch = useAppDispatch();
   const AddedPlaces = useAppSelector((state) => state.courseForm.course.places);
 

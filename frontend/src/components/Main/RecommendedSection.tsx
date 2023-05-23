@@ -7,7 +7,7 @@ import styles from "./RecommendedSection.module.css";
 
 interface SectionStyle {
   children: any;
-  title?: any;
+  title?: string;
   bgColor?: PaletteKeyTypes;
   linkUrl?: string;
 }

@@ -83,10 +83,9 @@ function Header() {
     setView((prev) => !prev);
   };
 
-  const DropDownClose = () => {
+  const handleDropDownClose = () => {
     setView(false);
   };
-
   return (
     <header className={styles.header}>
       <div className={styles["header-container"]}>
@@ -102,7 +101,7 @@ function Header() {
               >
                 <UserProfile url={imgUrl} nickName={nickName} />
                 {view ? <MdOutlineArrowDropUp /> : <MdOutlineArrowDropDown />}
-                {view && <Dropdown onClose={DropDownClose} />}
+                {view && <Dropdown onClose={handleDropDownClose} />}
               </div>
             </>
           ) : (

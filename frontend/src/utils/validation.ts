@@ -1,4 +1,4 @@
-import { IPlacesForm } from "./../interfaces/Course.type";
+import { IPlace } from "../interfaces/Course.type";
 
 export function validateTitle(title: string): boolean {
   const MIN_LENGTH = 4;
@@ -45,7 +45,7 @@ export function validateIsSelected(value: string): boolean {
   return false;
 }
 
-export function validatePlaces(places: IPlacesForm[]): boolean {
+export function validatePlaces(places: IPlace[]): boolean {
   // places 배열에 요소가 없으면 유효하지 않은 값입니다.
   if (places.length === 0) {
     return false;
