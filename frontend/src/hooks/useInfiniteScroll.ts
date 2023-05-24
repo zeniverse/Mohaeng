@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Places } from "../components/CreateCourse/CoursePlaceInput";
+import { IPlacesSearch } from "../interfaces/Course.type";
 import CourseApiConfig from "../services/ApiConfig";
 
 // useInfiniteScroll.ts
@@ -8,16 +8,16 @@ export interface UseInfiniteScroll {
   isLoading: boolean;
   loadMoreCallback: (el: HTMLDivElement) => void;
   isInfiniteScrolling: boolean;
-  dynamicPosts: Places[];
+  dynamicPosts: IPlacesSearch[];
   isLastPage: boolean;
 }
 
 export const useInfiniteScroll = (
-  posts: Places[],
+  posts: IPlacesSearch[],
   hasNext: boolean,
   keyword: string | null
 ): UseInfiniteScroll => {
-  const [dynamicPosts, setDynamicPosts] = useState<Places[]>(posts);
+  const [dynamicPosts, setDynamicPosts] = useState<IPlacesSearch[]>(posts);
   const [isInfiniteScrolling, setIsInfiniteScrolling] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isLastPage, setIsLastPage] = useState(false);
