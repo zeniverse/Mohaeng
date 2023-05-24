@@ -1,6 +1,7 @@
 package com.mohaeng.backend.place.service;
 
 import com.mohaeng.backend.Image.AmazonS3Service;
+import com.mohaeng.backend.exception.notfound.PlaceNotFoundException;
 import com.mohaeng.backend.member.domain.Member;
 import com.mohaeng.backend.member.repository.MemberRepository;
 import com.mohaeng.backend.place.domain.Place;
@@ -9,9 +10,10 @@ import com.mohaeng.backend.place.dto.PlaceDTO;
 import com.mohaeng.backend.place.dto.PlaceDetailsDto;
 import com.mohaeng.backend.place.dto.PlaceRatingDto;
 import com.mohaeng.backend.place.dto.response.PlaceDetailsResponse;
-import com.mohaeng.backend.place.exception.PlaceNotFoundException;
 import com.mohaeng.backend.place.repository.PlaceBookmarkRepository;
 import com.mohaeng.backend.place.repository.PlaceRepository;
+import com.mohaeng.backend.place.repository.ReviewRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +21,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
@@ -39,7 +42,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -58,6 +63,8 @@ public class PlaceService {
     private final MemberRepository memberRepository;
     private final AmazonS3Service amazonS3Service;
     private final ReviewService reviewService;
+    private final ReviewRepository reviewRepository;
+    private final EntityManager entityManager;
 
     @Value("${API_KEY}")
     private String API_KEY;
@@ -88,8 +95,6 @@ public class PlaceService {
         fileUrl = fileUrls.get(0);
     }
 
-
-    //    @Scheduled(cron = "0 0 5 * * ?") #TODO
     public List<Place> getPlaces() throws IOException, ParserConfigurationException, SAXException {
         Document doc = getXmlDocument(getBaseUrl());
         List<Place> places = new ArrayList<>();
@@ -117,18 +122,26 @@ public class PlaceService {
                 if (address == null || address.isEmpty()) {
                     address = addr2;
                 }
-                Place place = new Place(name, address, areaCode, sigunguCode, contentId, firstImage, firstImage2, mapX, mapY);
-                places.add(place);
+                if (isValidPlace(address, areaCode, mapX, mapY, sigunguCode)) {
+                    Place place = new Place(name, address, areaCode, sigunguCode, contentId, firstImage, firstImage2, mapX, mapY);
+                    places.add(place);
+                }
             }
         }
         if (places.isEmpty()) {
-            throw new PlaceNotFoundException("No place found.");
+            throw new PlaceNotFoundException();
         }
         return places;
     }
-//    List<String> excludedIds = Arrays.asList("2763773", "2784642", "2946071", "2930677", "2891338",
-//            "2725011", "2891349", "2777911", "2750886", "2946230",
-//            "2760807", "2930681");
+
+    private boolean isValidPlace(String address, String areaCode, String mapX, String mapY, String sigunguCode) {
+        return address != null && !address.isEmpty() &&
+                areaCode != null && !areaCode.isEmpty() &&
+                !mapX.equals("0") && !mapY.equals("0") &&
+                sigunguCode != null && !sigunguCode.isEmpty();
+    }
+
+
     public String getOverview(String contentId) {
         String urlStr = getBaseUrl2().replace("contentId=", "contentId=" + contentId);
         String overviewText = "";
@@ -156,7 +169,7 @@ public class PlaceService {
                                 }
                             }
                         }
-                        overviewText = overviewBuilder.toString();
+                        overviewText = overviewBuilder.toString().replaceAll("\\n|<br>|<br >|< br>|<br />|</br>|<br/>|<strong>|</ strong>|</strong>|&nbsp;", "");
                         break;
                     }
                 }
@@ -266,16 +279,19 @@ public class PlaceService {
 
         stopWatch.stop();
         long totalTimeMillis = stopWatch.getTotalTimeMillis();
-        System.out.println("getPlaceOverview total time : " + totalTimeMillis);
         return overviews;
     }
 
-    public PlaceDetailsResponse getPlaceDetailsByContentId(String contentId, Member member) {
-        Place currentPlace = null;
+    public PlaceDetailsResponse getPlaceDetailsByPlaceId(String placeId, Member member) {
         Boolean isBookmark = false;
 
-        List<Place> places = placeRepository.findByContentId(contentId);
-        List<String> overviews = getPlaceOverview(contentId);
+        List<Place> places = placeRepository.findById(placeId);
+        List<String> overviews = places.stream()
+                .map(Place::getContentId)
+                .map(this::getPlaceOverview)
+                .flatMap(List::stream)
+                .toList();
+
         List<PlaceDetailsDto> placeDetailsDtos = IntStream.range(0, places.size())
                 .mapToObj(i -> {
                     Place place = places.get(i);
@@ -283,12 +299,12 @@ public class PlaceService {
                     return new PlaceDetailsDto(place.getId(), place.getName(), place.getAreaCode(), place.getFirstImage(), place.getContentId(), place.getMapX(), place.getMapY(), place.getAddress(), overview);
                 })
                 .collect(Collectors.toList());
-
         if (member != null){
             isBookmark = placeBookmarkRepository.existsPlaceBookmarkByMemberAndPlace(member, places.get(0));
         }
 
-        PlaceDetailsResponse response = new PlaceDetailsResponse(placeDetailsDtos, isBookmark);
+
+        PlaceDetailsResponse response = new PlaceDetailsResponse(placeDetailsDtos,isBookmark);
         return response;
     }
 
@@ -310,7 +326,31 @@ public class PlaceService {
     }
 
     public double getAverageRatingForPlace(Long placeId) {
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(() -> new PlaceNotFoundException());
         List<Review> placeReviews = reviewService.getAllReviewById(placeId);
-        return Math.round(reviewService.getAverageRating(placeReviews) * 100.0) / 100.0;
+        return Math.round(reviewService.getAverageRating(place) * 100.0) / 100.0;
+    }
+
+    public Place getPlaceById(Long id) {
+        return placeRepository.findById(id)
+                .orElseThrow(PlaceNotFoundException::new);
+    }
+
+    @Transactional
+    public void updatePlaceRatings() {
+        List<Review> reviews = reviewRepository.findAll();
+
+        for (Review review : reviews) {
+            entityManager.refresh(review);
+            Place place = review.getPlace();
+
+            if (place != null) {
+                double averageRating = reviewRepository.getAverageRatingByPlaceId(place.getId());
+                place.updateRating(averageRating);
+                placeRepository.save(place);
+            }
+        }
+        entityManager.flush();
     }
 }

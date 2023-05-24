@@ -8,7 +8,6 @@
 
 ## 📝 관련 링크
 
-(담당하신 부분 전부 현재 버전으로 바꿔주세요)
 
 [Github](https://github.com/Mohaeng2023/Mohaeng)
 
@@ -25,11 +24,23 @@
 
 ## 📙 기획 의도
 
-![image](https://user-images.githubusercontent.com/94662639/232201100-dd23a0f9-5b6d-4b21-8b12-984aea1aabbd.png)
+![image](https://user-images.githubusercontent.com/77098586/235631768-53d71059-5710-4fcd-a396-95563157278f.png)
 
-## 🧑🏻‍💻 사용 기술
+## 💚💻 프론트엔드 기술 스택
 
-![image](https://user-images.githubusercontent.com/94662639/232202389-3d32497b-1c6c-42f2-a17c-447ef2502510.png)
+![image](https://user-images.githubusercontent.com/77098586/235633179-c5a5d4b8-6e58-4ec7-bb03-b934bc8f814b.png)
+
+## 💙💻 백엔드 기술 스택
+
+![image](https://user-images.githubusercontent.com/77098586/235633527-5128a6f3-5cc5-4ddb-81c7-d3bcdc20498a.png)
+
+## ⚙ 인프라 기술 스택
+
+![image](https://user-images.githubusercontent.com/77098586/235634416-3e305cae-b59c-41cb-bcac-f3f084456aa3.png)
+
+## 💡 인프라 구조
+
+![image](https://user-images.githubusercontent.com/77098586/236680931-15e830b3-0166-43f8-8cf7-b4909beba8c7.png)
 
 ## 📘 협업 툴
 
@@ -42,21 +53,22 @@
 
 ## 🌐 데이터베이스 구조
 
-(수정 후 추가)
+![image](https://user-images.githubusercontent.com/77098586/233893698-57a595b3-5a82-46b0-b66e-9eebfe7b5df1.png)
 
 ## 💡 주요 기능
 
--담당 프론트엔드 분들 screenGif 프로그램 까셔서 녹화 움짤 + 기능 추가 작성 해주시면 됩니다.
 
 ### 메인페이지
 
-- 모행에서 별점과 리뷰가 많이 달린 TOP10 여행지와 좋아요가 많은 코스 목록을 슬라이더로 보여주고 아이템을 클릭하면 해당 상세 페이지로 이동한다.
-- 여행지, 코스, 마이페이지를 클릭하여 각 페이지로 이동할 수 있다.
-- 메인 아이콘 클릭 시 홈페이지로 이동한다.
+![메인](https://github.com/Mohaeng2023/Mohaeng/assets/56632443/a3f5acf2-0184-46f8-bd30-ed5d5f33294a)
+
+- 모행에서 별점이 높고 리뷰가 많이 달린 TOP10 여행지와 좋아요가 많은 코스 목록을 슬라이더로 보여주고 아이템을 클릭하면 해당 상세 페이지로 이동한다.
+- 더보기 버튼을 클릭하여 각 페이지로 이동할 수 있다.
+- 코스 좋아요 토글 기능을 사용할 수 있다.
 
 ### 통합검색
 
-![통합검색](https://user-images.githubusercontent.com/108039645/232226951-039a6d45-bae0-42e5-aabf-3beacd3e50ff.gif)
+![통합검색](https://github.com/Mohaeng2023/Mohaeng/assets/108039645/66f4e194-26db-4be2-a84e-e525da82d574)
 
 - 검색창에 단어를 입력하면 해당 단어가 포함된 검색 결과를 확인할 수 있다.
 - 여행지와 코스 탭을 이동하면 해당하는 여행지 목록을 페이지네이션으로 보여준다.
@@ -73,7 +85,7 @@
 
 ### 여행지 상세
 
-![여행지 상세](https://user-images.githubusercontent.com/108039645/232228575-a5fca674-774a-4b7f-bec8-69fb746b7842.gif)
+![상세조회](https://github.com/sagesrkim/prgms-study/assets/108039645/b640d874-ace4-466a-a824-6e7f576191bc)
 
 - 여행 상세정보
   - 해당 여행지의 사진과 세부정보를 확인할 수 있다. 여행지의 장소는 카카오 맵으로 표시한다.
@@ -94,6 +106,8 @@
 
 ### 코스 목록 페이지
 
+![코스목록](https://github.com/Mohaeng2023/Mohaeng/assets/56632443/8e35f9db-9fdf-48a3-a9b0-4c5be392683c)
+
 - 지역, 키워드, 좋아요 많은 순/최신순으로 사용자가 원하는 조건에 맞게 코스를 조회할 수 있다.
 - 총 좋아요 수와, 좋아요 상태를 나타내는 좋아요 토글 기능 그리고 북마크 토글 기능을 사용할 수 있다.
 - 약도 보기를 통해 코스에 추가된 장소들을 약도로 확인할 수 있다.
@@ -111,6 +125,8 @@
 - 코스 작성 페이지와 동일하며, 기존 작성한 코스의 내용이 불러와지며 해당 내용을 수정할 수 있다.
 
 ### 코스 상세 페이지
+
+![코스상세](https://github.com/Mohaeng2023/Mohaeng/assets/56632443/4c41b32b-268a-4f8f-956f-0a6908e746c8)
 
 - 코스의 상세한 정보를 보여준다.
 - 총 좋아요 수와, 좋아요 상태를 나타내는 좋아요 토글 기능 그리고 북마크 토글 기능을 사용할 수 있다.

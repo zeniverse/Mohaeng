@@ -1,86 +1,39 @@
 import styles from "./PlaceSelectList.module.css";
 import Image from "next/image";
 import FiveStarRating from "../FiveStarRating/FiveStarRating";
-import { useEffect, useRef, useState } from "react";
+import React from "react";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/useReduxHooks";
 import { addPlaceObject } from "@/src/store/reducers/CourseFormSlice";
+import { Loader } from "./Loader";
+import { IPlacesSearch } from "@/src/interfaces/Course.type";
 
-const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
-  const [items, setItems] = useState([...places]);
-  const [loading, setLoading] = useState(false);
-  const [hasNext, setHasNext] = useState(true);
-  const [page, setPage] = useState(0);
+interface ISelectListProps {
+  places: IPlacesSearch[];
+  isLoading: boolean;
+  loadMoreCallback: (el: HTMLDivElement) => void;
+  isLastPage: boolean;
+}
 
+const PlaceSelectList = ({
+  places,
+  isLoading,
+  loadMoreCallback,
+  isLastPage,
+}: ISelectListProps) => {
   const dispatch = useAppDispatch();
-
-  const listRef = useRef<HTMLDivElement>(null)!;
-
-  useEffect(() => {
-    setItems([...places]);
-  }, [places]);
-
-  useEffect(() => {
-    function handleScroll() {
-      if (listRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = listRef.current;
-        if (
-          Math.floor(scrollHeight) - scrollTop <= clientHeight &&
-          hasNext &&
-          !loading
-        ) {
-          setLoading(true);
-          setPage((prevPage) => prevPage + 1);
-        }
-      }
-    }
-
-    if (listRef.current) {
-      listRef.current.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (listRef.current) {
-        listRef.current.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [hasNext, loading]);
-
-  useEffect(() => {
-    if (page === 0) return;
-    const lastItemIndex = items ? items.length - 1 : -1;
-    const lastid = items[lastItemIndex]?.placeId;
-    const lastRating = items[lastItemIndex]?.rating;
-    async function fetchItems() {
-      try {
-        const placeSearchRes = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/course/placeSearch?keyword=${debouncedSearch}&lastId=${lastid}&lastRating=${lastRating}`
-        );
-        if (!placeSearchRes.ok) return;
-        const placeSearchResult = await placeSearchRes.json();
-        setItems((prevItems) => [
-          ...prevItems,
-          ...placeSearchResult?.data.places,
-        ]);
-        //  placeSearchResult?.data 가 undefined 일 때 기본값 false 를 할당
-        setHasNext(placeSearchResult?.data?.hasNext || false);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchItems();
-  }, [page]);
+  const AddedPlaces = useAppSelector((state) => state.courseForm.course.places);
 
   const itemClickHandler = (place: any) => {
-    dispatch(addPlaceObject(place));
+    if (!(AddedPlaces.length >= 20)) {
+      dispatch(addPlaceObject(place));
+    } else {
+      window.alert("더 이상 추가하실 수 없습니다.");
+    }
   };
 
   return (
-    <div className={styles["search-list"]} ref={listRef}>
-      {isLoading && <p>Loading...</p>}
-      {items.map((place: any) => {
+    <div className={styles["search-list"]}>
+      {places?.map((place: any) => {
         return (
           <div
             key={place.placeId}
@@ -98,14 +51,18 @@ const PlaceSelectList = ({ places, isLoading, debouncedSearch }: any) => {
             )}
             <div className={styles.notice_body}>
               <p>{place.name}</p>
-
               <FiveStarRating rating={place.rating} />
             </div>
           </div>
         );
       })}
+      <Loader
+        isLoading={isLoading}
+        isLastPage={isLastPage}
+        loadMoreCallback={loadMoreCallback}
+      />
     </div>
   );
 };
 
-export default PlaceSelectList;
+export default React.memo(PlaceSelectList);

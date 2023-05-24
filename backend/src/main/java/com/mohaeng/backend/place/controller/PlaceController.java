@@ -28,9 +28,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -72,10 +70,17 @@ public class PlaceController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/place/overview/{contentId}")
-    public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String contentId,
+//    @GetMapping("/place/overview/{contentId}")
+//    public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String contentId,
+//                                                                             HttpServletRequest request) {
+//        PlaceDetailsResponse response = placeService.getPlaceDetailsByContentId(contentId, isAccessMember(request));
+//        return ResponseEntity.ok().body(BaseResponse.success("OK",response));
+//    }
+
+    @GetMapping("/place/overview/{placeId}")
+    public ResponseEntity<BaseResponse<PlaceDetailsResponse>> getPlaceDetail(@PathVariable String placeId,
                                                                              HttpServletRequest request) {
-        PlaceDetailsResponse response = placeService.getPlaceDetailsByContentId(contentId, isAccessMember(request));
+        PlaceDetailsResponse response = placeService.getPlaceDetailsByPlaceId(placeId, isAccessMember(request));
         return ResponseEntity.ok().body(BaseResponse.success("OK",response));
     }
 
@@ -155,18 +160,18 @@ public class PlaceController {
                 .collect(Collectors.toList());
 
         // getOverviews 메서드 호출
-        List<String> overviewsList = placeService.getOverviews(contentIds);
+//        List<String> overviewsList = placeService.getOverviews(contentIds);
 
         // 결과를 Map으로 변환
-        Map<String, String> overviews = new HashMap<>();
-        for (int i = 0; i < contentIds.size(); i++) {
-            String contentId = contentIds.get(i);
-            String overview = overviewsList.get(i);
-            overviews.put(contentId, overview);
-        }
+//        Map<String, String> overviews = new HashMap<>();
+//        for (int i = 0; i < contentIds.size(); i++) {
+//            String contentId = contentIds.get(i);
+//            String overview = overviewsList.get(i);
+//            overviews.put(contentId, overview);
+//        }
 
         List<MainPageDto> content = reviews.stream()
-                .map(review -> MainPageDto.Of(review.getPlace(), placeService, overviews))
+                .map(review -> MainPageDto.Of(review.getPlace(), placeService))
                 .collect(Collectors.toList());
         MainPageResponse response = MainPageResponse.from(content);
         return ResponseEntity.ok(BaseResponse.success("ok", response));
@@ -177,7 +182,7 @@ public class PlaceController {
             return null;
         }
         else{
-            return memberRepository.findByEmail(tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token")))
+            return memberRepository.findByEmailAndDeletedDateIsNull(tokenGenerator.parseEmailFromToken(request.getHeader("Access-Token")))
                     .orElseThrow(MemberNotFoundException::new);
         }
     }
